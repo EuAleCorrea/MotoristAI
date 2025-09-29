@@ -10,14 +10,14 @@ import Signup from "./pages/Signup";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Layout from "./components/Layout";
 
-// Import new placeholder pages for the new routes
+// Import pages
 import Rides from "./pages/Rides";
 import Expenses from "./pages/Expenses";
 import Maintenances from "./pages/Maintenances";
 import RiskZones from "./pages/RiskZones";
 import Summary from "./pages/Summary";
 import PerformanceGoals from "./pages/PerformanceGoals";
-import DriverActivity from "./pages/DriverActivity";
+import DriverIndicators from "./pages/DriverIndicators"; // Updated import
 import AlertsNotifications from "./pages/AlertsNotifications";
 import FeedbackReceived from "./pages/FeedbackReceived";
 import Vehicles from "./pages/Vehicles";
@@ -46,12 +46,11 @@ const App = () => (
               <Route path="/risk-zones" element={<RiskZones />} />
               <Route path="/summary" element={<Summary />} />
               <Route path="/performance/goals" element={<PerformanceGoals />} />
-              <Route path="/performance/activity" element={<DriverActivity />} />
+              <Route path="/performance/indicators" element={<DriverIndicators />} /> {/* Updated route */}
               <Route path="/monitoring/alerts" element={<AlertsNotifications />} />
               <Route path="/monitoring/feedback" element={<FeedbackReceived />} />
-              <Route path="/fleet/vehicles" element={<Vehicles />} />
-              <Route path="/fleet/maintenances" element={<Maintenances />} /> {/* Duplicate link */}
               <Route path="/account/profile" element={<Profile />} />
+              <Route path="/account/vehicles" element={<Vehicles />} /> {/* New route */}
               <Route path="/account/settings" element={<Settings />} />
             </Route>
           </Route>

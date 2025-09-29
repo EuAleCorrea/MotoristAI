@@ -1,4 +1,4 @@
-import { Home, Car, Fuel, Wrench, ShieldAlert, BarChart2, TrendingUp, Activity, Bell, MessageSquare, Truck, User, Settings } from 'lucide-react';
+import { Home, Car, Fuel, Wrench, ShieldAlert, BarChart2, TrendingUp, Activity, Bell, MessageSquare, User, Settings } from 'lucide-react';
 import { LucideIcon } from 'lucide-react';
 
 interface NavItem {
@@ -28,7 +28,7 @@ export const secondaryNavItems: CollapsibleNavItem[] = [
     icon: TrendingUp,
     subItems: [
       { href: '/performance/goals', label: 'Metas & Desempenho', icon: TrendingUp },
-      { href: '/performance/activity', label: 'Atividade do Motorista', icon: Activity },
+      { href: '/performance/indicators', label: 'Indicadores do Motorista', icon: Activity },
     ],
   },
   {
@@ -40,18 +40,11 @@ export const secondaryNavItems: CollapsibleNavItem[] = [
     ],
   },
   {
-    label: 'Frota',
-    icon: Truck,
-    subItems: [
-      { href: '/fleet/vehicles', label: 'Veículos', icon: Car },
-      { href: '/fleet/maintenances', label: 'Manutenções', icon: Wrench },
-    ],
-  },
-  {
     label: 'Conta',
     icon: User,
     subItems: [
       { href: '/account/profile', label: 'Perfil Motorista', icon: User },
+      { href: '/account/vehicles', label: 'Veículos', icon: Car },
       { href: '/account/settings', label: 'Configurações', icon: Settings },
     ],
   },
