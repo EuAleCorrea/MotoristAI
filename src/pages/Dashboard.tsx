@@ -6,10 +6,17 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { DollarSign, Car, Clock, PlusCircle } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Dashboard = () => {
+  const { user } = useAuth();
+
   return (
     <div>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold">Bem-vindo, {user?.email}!</h1>
+      </div>
+
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
