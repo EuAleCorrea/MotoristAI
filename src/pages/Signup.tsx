@@ -16,12 +16,15 @@ const Signup = () => {
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    // Para desenvolvimento, assumimos que a confirmação de e-mail está desativada nas configurações do Supabase.
     const { error } = await supabase.auth.signUp({ email, password });
     if (error) {
       showError(error.message);
     } else {
-      showSuccess('Signup successful! Please check your email to verify your account.');
-      navigate('/login');
+      // Após o cadastro bem-sucedido, o usuário é automaticamente logado se a confirmação de e-mail estiver desativada.
+      // Redirecionamos diretamente para o dashboard.
+      showSuccess('Cadastro realizado com sucesso! Redirecionando para o dashboard.');
+      navigate('/'); 
     }
     setLoading(false);
   };
@@ -30,25 +33,25 @@ const Signup = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle className="text-2xl">Sign Up</CardTitle>
-          <CardDescription>Enter your information to create an account</CardDescription>
+          <CardTitle className="text-2xl">Cadastre-se</CardTitle>
+          <CardDescription>Insira suas informações para criar uma conta</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSignup}>
             <div className="grid gap-4">
               <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">E-mail</Label>
                 <Input
                   id="email"
                   type="email"
-                  placeholder="m@example.com"
+                  placeholder="m@exemplo.com"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password">Senha</Label>
                 <Input
                   id="password"
                   type="password"
@@ -58,12 +61,12 @@ const Signup = () => {
                 />
               </div>
               <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? 'Creating account...' : 'Create an account'}
+                {loading ? 'Criando conta...' : 'Criar uma conta'}
               </Button>
             </div>
           </form>
           <div className="mt-4 text-center text-sm">
-            Already have an account?{' '}
+            Já tem uma conta?{' '}
             <Link to="/login" className="underline">
               Login
             </Link>
