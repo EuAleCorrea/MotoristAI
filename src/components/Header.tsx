@@ -9,9 +9,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/lib/supabase';
+import MobileSidebar from './sidebar/MobileSidebar.tsx'; // Importação corrigida
 
 const Header = () => {
   const { user } = useAuth();
@@ -32,22 +33,9 @@ const Header = () => {
           </Button>
         </SheetTrigger>
         <SheetContent side="left" className="flex flex-col">
-          <nav className="grid gap-2 text-lg font-medium">
-            <Link
-              to="#"
-              className="flex items-center gap-2 text-lg font-semibold mb-4"
-            >
-              <Car className="h-6 w-6" />
-              <span>MotoristAI</span>
-            </Link>
-            <Link
-              to="/"
-              className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-            >
-              Dashboard
-            </Link>
-            {/* Add other nav links for mobile here */}
-          </nav>
+          <SheetClose asChild>
+            <MobileSidebar onLinkClick={() => {}} />
+          </SheetClose>
         </SheetContent>
       </Sheet>
       <div className="w-full flex-1">

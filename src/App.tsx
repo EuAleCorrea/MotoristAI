@@ -10,6 +10,21 @@ import Signup from "./pages/Signup";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Layout from "./components/Layout";
 
+// Import new placeholder pages for the new routes
+import Rides from "./pages/Rides";
+import Expenses from "./pages/Expenses";
+import Maintenances from "./pages/Maintenances";
+import RiskZones from "./pages/RiskZones";
+import Summary from "./pages/Summary";
+import PerformanceGoals from "./pages/PerformanceGoals";
+import DriverActivity from "./pages/DriverActivity";
+import AlertsNotifications from "./pages/AlertsNotifications";
+import FeedbackReceived from "./pages/FeedbackReceived";
+import Vehicles from "./pages/Vehicles";
+import Profile from "./pages/Profile";
+import Settings from "./pages/Settings";
+
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -25,7 +40,19 @@ const App = () => (
           <Route element={<ProtectedRoute />}>
             <Route element={<Layout />}>
               <Route path="/" element={<Dashboard />} />
-              {/* Add other protected routes here later */}
+              <Route path="/rides" element={<Rides />} />
+              <Route path="/expenses" element={<Expenses />} />
+              <Route path="/maintenances" element={<Maintenances />} />
+              <Route path="/risk-zones" element={<RiskZones />} />
+              <Route path="/summary" element={<Summary />} />
+              <Route path="/performance/goals" element={<PerformanceGoals />} />
+              <Route path="/performance/activity" element={<DriverActivity />} />
+              <Route path="/monitoring/alerts" element={<AlertsNotifications />} />
+              <Route path="/monitoring/feedback" element={<FeedbackReceived />} />
+              <Route path="/fleet/vehicles" element={<Vehicles />} />
+              <Route path="/fleet/maintenances" element={<Maintenances />} /> {/* Duplicate link */}
+              <Route path="/account/profile" element={<Profile />} />
+              <Route path="/account/settings" element={<Settings />} />
             </Route>
           </Route>
 
