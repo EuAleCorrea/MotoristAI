@@ -12,7 +12,8 @@ import {
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/lib/supabase';
-import MobileSidebar from './sidebar/MobileSidebar.tsx'; // Importação corrigida
+import MobileSidebar from './sidebar/MobileSidebar.tsx';
+import { ThemeToggle } from './ThemeToggle'; // Importação do ThemeToggle
 
 const Header = () => {
   const { user } = useAuth();
@@ -41,6 +42,7 @@ const Header = () => {
       <div className="w-full flex-1">
         {/* Can add a search bar here later */}
       </div>
+      <ThemeToggle /> {/* Adicionando o ThemeToggle aqui */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="secondary" size="icon" className="rounded-full">
