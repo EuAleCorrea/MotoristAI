@@ -1,0 +1,79 @@
+@import url('https://api.fontshare.com/v2/css?f[]=satoshi@700,500,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 240 10% 3.9%; /* #0A0A0A */
+    --foreground: 0 0% 98%; /* #FAFAFA */
+
+    --card: 240 10% 10%; /* #1A1A1A */
+    --card-foreground: 0 0% 98%; /* #FAFAFA */
+
+    --popover: 240 10% 3.9%; /* #0A0A0A */
+    --popover-foreground: 0 0% 98%; /* #FAFAFA */
+
+    --primary: 160 100% 47.1%; /* #00F0A0 */
+    --primary-foreground: 160 100% 5%; /* Cor escura para texto em botões primários */
+
+    --secondary: 240 4.8% 12.9%; /* #1F1F22 - Um pouco diferente do card para diferenciação */
+    --secondary-foreground: 0 0% 98%; /* #FAFAFA */
+
+    --muted: 240 3.7% 15.9%; /* #27272A */
+    --muted-foreground: 240 5% 64.9%; /* #A1A1AA */
+
+    --accent: 160 100% 47.1%; /* #00F0A0 */
+    --accent-foreground: 160 100% 5%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 240 3.7% 20%; /* #333333 */
+    --input: 240 3.7% 20%; /* #333333 */
+    --ring: 160 100% 47.1%; /* #00F0A0 */
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+
+    --card: 240 10% 10%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 160 100% 47.1%;
+    --primary-foreground: 160 100% 5%;
+
+    --secondary: 240 4.8% 12.9%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+
+    --accent: 160 100% 47.1%;
+    --accent-foreground: 160 100% 5%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 240 3.7% 20%;
+    --input: 240 3.7% 20%;
+    --ring: 160 100% 47.1%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Satoshi', sans-serif;
+  }
+}
