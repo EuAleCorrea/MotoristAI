@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom';
 import { Car } from 'lucide-react';
-import SidebarLink from './SidebarLink.tsx'; // Importação corrigida
-import SidebarCollapsibleItem from './SidebarCollapsibleItem.tsx'; // Importação corrigida
-import { mainNavItems, secondaryNavItems } from './nav-items.ts'; // Importação corrigida
+import SidebarLink from './SidebarLink.tsx';
+import SidebarCollapsibleItem from './SidebarCollapsibleItem.tsx';
+import { mainNavItems, secondaryNavItems } from './nav-items.ts';
+import SidebarFooter from './SidebarFooter.tsx'; // Importação do SidebarFooter
 
 const DesktopSidebar = () => {
   return (
@@ -25,6 +26,7 @@ const DesktopSidebar = () => {
             ))}
           </nav>
         </div>
+        <SidebarFooter /> {/* Adicionando o SidebarFooter aqui */}
       </div>
     </aside>
   );
