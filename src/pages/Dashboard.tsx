@@ -61,7 +61,7 @@ const Dashboard = () => {
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <Button size="lg" className="flex items-center justify-start gap-2 h-12">
             <PlusCircle className="h-5 w-5" />
-            <span>Registrar Corrida</span>
+            <span>Registrar Receita</span>
           </Button>
           <Button size="lg" className="flex items-center justify-start gap-2 h-12">
             <PlusCircle className="h-5 w-5" />

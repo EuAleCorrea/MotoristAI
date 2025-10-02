@@ -15,7 +15,7 @@ interface CollapsibleNavItem {
 
 export const mainNavItems: NavItem[] = [
   { href: '/', label: 'Dashboard', icon: Home },
-  { href: '/rides', label: 'Corridas', icon: Car },
+  { href: '/revenues', label: 'Receitas', icon: Car },
   { href: '/expenses', label: 'Despesas', icon: Fuel },
   { href: '/maintenances', label: 'Manutenções', icon: Wrench },
   { href: '/risk-zones', label: 'Zonas de Risco', icon: ShieldAlert },

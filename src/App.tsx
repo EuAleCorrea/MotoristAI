@@ -11,13 +11,13 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Layout from "./components/Layout";
 
 // Import pages
-import Rides from "./pages/Rides";
+import Revenues from "./pages/Revenues"; // Updated import
 import Expenses from "./pages/Expenses";
 import Maintenances from "./pages/Maintenances";
 import RiskZones from "./pages/RiskZones";
 import Summary from "./pages/Summary";
 import PerformanceGoals from "./pages/PerformanceGoals";
-import DriverIndicators from "./pages/DriverIndicators"; // Updated import
+import DriverIndicators from "./pages/DriverIndicators";
 import AlertsNotifications from "./pages/AlertsNotifications";
 import FeedbackReceived from "./pages/FeedbackReceived";
 import Vehicles from "./pages/Vehicles";
@@ -40,17 +40,17 @@ const App = () => (
           <Route element={<ProtectedRoute />}>
             <Route element={<Layout />}>
               <Route path="/" element={<Dashboard />} />
-              <Route path="/rides" element={<Rides />} />
+              <Route path="/revenues" element={<Revenues />} /> {/* Updated route */}
               <Route path="/expenses" element={<Expenses />} />
               <Route path="/maintenances" element={<Maintenances />} />
               <Route path="/risk-zones" element={<RiskZones />} />
               <Route path="/summary" element={<Summary />} />
               <Route path="/performance/goals" element={<PerformanceGoals />} />
-              <Route path="/performance/indicators" element={<DriverIndicators />} /> {/* Updated route */}
+              <Route path="/performance/indicators" element={<DriverIndicators />} />
               <Route path="/monitoring/alerts" element={<AlertsNotifications />} />
               <Route path="/monitoring/feedback" element={<FeedbackReceived />} />
               <Route path="/account/profile" element={<Profile />} />
-              <Route path="/account/vehicles" element={<Vehicles />} /> {/* New route */}
+              <Route path="/account/vehicles" element={<Vehicles />} />
               <Route path="/account/settings" element={<Settings />} />
             </Route>
           </Route>
