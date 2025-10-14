@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Car, Wallet, Target, Plus } from 'lucide-react';
+import { LayoutDashboard, Car, Wallet, Target, Plus, Settings } from 'lucide-react';
 import { useModalStore } from '../store/modalStore';
 
 const BottomNavBar = () => {
@@ -11,6 +11,7 @@ const BottomNavBar = () => {
     { name: 'Corridas', href: '/corridas', icon: Car },
     { name: 'Despesas', href: '/despesas', icon: Wallet },
     { name: 'Metas', href: '/metas', icon: Target },
+    { name: 'Ajustes', href: '/ajustes', icon: Settings },
   ];
 
   const isActive = (href: string) => {
@@ -25,7 +26,7 @@ const BottomNavBar = () => {
           <Link
             key={item.name}
             to={item.href}
-            className={`flex flex-col items-center justify-center w-1/4 transition-colors ${
+            className={`flex flex-col items-center justify-center w-1/5 transition-colors ${
               isActive(item.href) ? 'text-primary-600' : 'text-gray-500 hover:text-primary-600'
             }`}
           >
@@ -36,11 +37,11 @@ const BottomNavBar = () => {
         
         <div className="w-1/5" /> 
 
-        {navItems.slice(2, 4).map((item) => (
+        {navItems.slice(2, 5).map((item) => (
           <Link
             key={item.name}
             to={item.href}
-            className={`flex flex-col items-center justify-center w-1/4 transition-colors ${
+            className={`flex flex-col items-center justify-center w-1/5 transition-colors ${
               isActive(item.href) ? 'text-primary-600' : 'text-gray-500 hover:text-primary-600'
             }`}
           >

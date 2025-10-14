@@ -67,8 +67,12 @@ const SettingsPage = () => {
 
   return (
     <div className="space-y-8">
-      <h1 className="text-2xl font-bold text-gray-900">Ajustes</h1>
-      <GlobalFilters />
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+        <h1 className="text-2xl font-bold text-gray-900">Ajustes</h1>
+        <div className="mt-4 sm:mt-0">
+            <GlobalFilters />
+        </div>
+      </div>
       {sections.map((section) => (
         <SectionGrid key={section.title} title={section.title} items={section.items} />
       ))}
