@@ -11,23 +11,23 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,ico,png,svg}']
       },
       manifest: {
-        name: 'DriverPay - Controle Financeiro',
-        short_name: 'DriverPay',
+        name: 'MotoristAI - Controle Financeiro',
+        short_name: 'MotoristAI',
         description: 'App de controle financeiro para motoristas de aplicativos como Uber, 99 e iFood',
-        theme_color: '#2563eb',
-        background_color: '#f8fafc',
+        theme_color: '#0057FF',
+        background_color: '#F5F6F8',
         display: 'standalone',
         scope: '/',
         start_url: '/',
         icons: [
           {
-            src: 'https://img-wrapper.vercel.app/image?url=https://img-wrapper.vercel.app/image?url=https://img-wrapper.vercel.app/image?url=https://placehold.co/192x192.png',
+            src: 'https://i.ibb.co/C7dMhXv/motoristai-192.png',
             sizes: '192x192',
             type: 'image/png',
             purpose: 'any maskable'
           },
           {
-            src: 'https://img-wrapper.vercel.app/image?url=https://img-wrapper.vercel.app/image?url=https://img-wrapper.vercel.app/image?url=https://placehold.co/512x512.png',
+            src: 'https://i.ibb.co/2Yx7k3p/motoristai-512.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any maskable'

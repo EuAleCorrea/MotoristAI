@@ -1,0 +1,9 @@
+const VehicleFinanceFormPage = () => {
+  return (
+    <div>
+      <h1 className="text-2xl font-bold text-gray-900">Financeiro do Veículo</h1>
+      <p className="mt-2 text-gray-600">Esta página está em construção.</p>
+    </div>
+  );
+};
+export default VehicleFinanceFormPage;
