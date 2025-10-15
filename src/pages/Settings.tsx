@@ -2,75 +2,117 @@ import { useNavigate } from 'react-router-dom';
 import SectionGrid from '../components/settings/SectionGrid';
 import GlobalFilters from '../components/settings/GlobalFilters';
 import { 
-  Receipt, Fuel, Gauge, Camera, Wrench, ParkingCircle, Landmark, TrendingDown, Home, ShoppingBasket, HeartPulse, GraduationCap, MoreHorizontal, PieChart, Layers3, FileText, Car, AppWindow, CalendarClock, Settings2, BellRing, Repeat, Clock
+  Receipt, Fuel, Gauge, Camera, Wrench, ParkingCircle, Landmark, TrendingDown, Home, ShoppingCart, HeartPulse, GraduationCap, MoreHorizontal, PieChart, Layers3, FileText, Car, AppWindow, CalendarClock, Settings2, Repeat, Drama
 } from 'lucide-react';
+import { LucideIcon } from 'lucide-react';
+import { useQuickLaunchStore } from '../store/quickLaunchStore';
+import { iconMap } from '../utils/iconMap';
+
+interface CardDefinition {
+  id: string;
+  title: string;
+  icon: LucideIcon;
+  iconName: keyof typeof iconMap;
+  route: string;
+  disabled?: boolean;
+}
 
 const SettingsPage = () => {
   const navigate = useNavigate();
+  const { recentCards, addRecentCard } = useQuickLaunchStore();
 
-  const sections = [
-    {
-      title: 'Lançamentos Rápidos',
-      items: [
-        { title: 'Nova Despesa', icon: Receipt, onClick: () => navigate('/despesas/nova') },
-        { title: 'Abastecer/Recargar', icon: Fuel, onClick: () => navigate('/despesas/nova', { state: { category: 'Combustível' } }) },
-        { title: 'Km do Odômetro', icon: Gauge, onClick: () => navigate('/lancamentos/odometro') },
-        { title: 'Foto da Nota', icon: Camera, onClick: () => navigate('/lancamentos/nota') },
-      ],
-    },
+  const handleCardClick = (card: CardDefinition) => {
+    if (card.disabled) return;
+
+    addRecentCard({
+      id: card.id,
+      title: card.title,
+      iconName: card.iconName,
+      route: card.route,
+    });
+    navigate(card.route);
+  };
+
+  const allSections: { title: string; items: CardDefinition[] }[] = [
     {
       title: 'Despesas do Veículo',
       items: [
-        { title: 'Energia/Combustível', icon: Fuel, onClick: () => navigate('/despesas?category=Combustível') },
-        { title: 'Manutenção', icon: Wrench, onClick: () => navigate('/despesas?category=Manutenção') },
-        { title: 'Pedágio/Estacionamento', icon: ParkingCircle, onClick: () => navigate('/despesas?category=Pedágio/Estacionamento') },
-        { title: 'Financeiro do Veículo', icon: Landmark, onClick: () => navigate('/despesas/veiculo/financeiro') },
-        { title: 'Depreciação', icon: TrendingDown, onClick: () => navigate('/despesas/veiculo/depreciacao') },
+        { id: 'Energia / Combustível', title: 'Energia / Combustível', icon: Fuel, iconName: 'Fuel', route: '/despesas/veiculo/energia-combustivel' },
+        { id: 'Manutenção', title: 'Manutenção', icon: Wrench, iconName: 'Wrench', route: '/despesas/veiculo/manutencao' },
+        { id: 'Pedágio / Estacionamento', title: 'Pedágio / Estacionamento', icon: ParkingCircle, iconName: 'ParkingCircle', route: '/despesas/veiculo/pedagio-estacionamento' },
+        { id: 'Financeiro do Veículo', title: 'Financeiro do Veículo', icon: Landmark, iconName: 'Landmark', route: '/despesas/veiculo/financeiro' },
+        { id: 'Depreciação', title: 'Depreciação', icon: TrendingDown, iconName: 'TrendingDown', route: '/despesas/veiculo/depreciacao' },
       ],
     },
     {
       title: 'Despesas da Família',
       items: [
-        { title: 'Moradia', icon: Home, onClick: () => navigate('/despesas?category=Moradia') },
-        { title: 'Alimentação', icon: ShoppingBasket, onClick: () => navigate('/despesas?category=Alimentação') },
-        { title: 'Saúde', icon: HeartPulse, onClick: () => navigate('/despesas?category=Saúde') },
-        { title: 'Educação', icon: GraduationCap, onClick: () => navigate('/despesas?category=Educação') },
-        { title: 'Outras', icon: MoreHorizontal, onClick: () => navigate('/despesas?category=Outros') },
+        { id: 'Moradia', title: 'Moradia', icon: Home, iconName: 'Home', route: '/despesas/familia/moradia' },
+        { id: 'Alimentação', title: 'Alimentação', icon: ShoppingCart, iconName: 'ShoppingCart', route: '/despesas/familia/alimentacao' },
+        { id: 'Saúde', title: 'Saúde', icon: HeartPulse, iconName: 'HeartPulse', route: '/despesas/familia/saude' },
+        { id: 'Educação', title: 'Educação', icon: GraduationCap, iconName: 'GraduationCap', route: '/despesas/familia/educacao' },
+        { id: 'Lazer', title: 'Lazer', icon: Drama, iconName: 'Drama', route: '/despesas/familia/lazer' },
+        { id: 'Outras', title: 'Outras', icon: MoreHorizontal, iconName: 'MoreHorizontal', route: '/despesas/familia/outras' },
       ],
     },
     {
       title: 'Relatórios de Custos',
       items: [
-        { title: 'Custos por Categoria', icon: PieChart, onClick: () => navigate('/relatorios?view=category') },
-        { title: 'Custo por Km e Energia', icon: Gauge, onClick: () => navigate('/relatorios?view=km_energy') },
-        { title: 'Plataformas e Categorias', icon: Layers3, onClick: () => navigate('/relatorios?view=platforms') },
-        { title: 'Resumo Mensal', icon: FileText, onClick: () => navigate('/relatorios?view=monthly') },
+        { id: 'Custos por Categoria', title: 'Custos por Categoria', icon: PieChart, iconName: 'PieChart', route: '/relatorios?view=category', disabled: true },
+        { id: 'Custo por Km e Energia', title: 'Custo por Km e Energia', icon: Gauge, iconName: 'Gauge', route: '/relatorios?view=km_energy', disabled: true },
+        { id: 'Plataformas e Categorias', title: 'Plataformas e Categorias', icon: Layers3, iconName: 'Layers3', route: '/relatorios?view=platforms', disabled: true },
+        { id: 'Resumo Mensal', title: 'Resumo Mensal', icon: FileText, iconName: 'FileText', route: '/relatorios?view=monthly', disabled: true },
       ],
     },
     {
       title: 'Cadastros e Parâmetros',
       items: [
-        { title: 'Veículos', icon: Car, onClick: () => navigate('/cadastros/veiculos') },
-        { title: 'Plataformas e Categorias', icon: AppWindow, onClick: () => navigate('/cadastros/plataformas') },
-        { title: 'Recorrências e Parcelas', icon: CalendarClock, onClick: () => navigate('/cadastros/recorrencias') },
-        { title: 'Preferências', icon: Settings2, onClick: () => navigate('/cadastros/preferencias') },
+        { id: 'Veículos', title: 'Veículos', icon: Car, iconName: 'Car', route: '/cadastros/veiculos' },
+        { id: 'Plataformas e Categorias', title: 'Plataformas e Categorias', icon: AppWindow, iconName: 'AppWindow', route: '/cadastros/plataformas', disabled: true },
+        { id: 'Recorrências e Parcelas', title: 'Recorrências e Parcelas', icon: CalendarClock, iconName: 'CalendarClock', route: '/cadastros/recorrencias', disabled: true },
+        { id: 'Preferências', title: 'Preferências', icon: Settings2, iconName: 'Settings2', route: '/cadastros/preferencias', disabled: true },
       ],
     },
     {
       title: 'Alertas e Automação',
       items: [
-        { title: 'Manutenção por km', icon: Wrench, onClick: () => navigate('/alertas/manutencao') },
-        { title: 'Despesas recorrentes', icon: Repeat, onClick: () => navigate('/alertas/despesas') },
+        { id: 'Manutenção por km', title: 'Manutenção por km', icon: Wrench, iconName: 'Wrench', route: '/alertas/manutencao', disabled: true },
+        { id: 'Despesas recorrentes', title: 'Despesas recorrentes', icon: Repeat, iconName: 'Repeat', route: '/alertas/despesas', disabled: true },
       ],
     },
   ];
 
+  const quickLaunchItems = recentCards.map(card => ({
+    ...card,
+    icon: iconMap[card.iconName],
+    onClick: () => handleCardClick(card as CardDefinition),
+  }));
+
   return (
     <div className="space-y-8">
-      <h1 className="text-2xl font-bold text-gray-900">Ajustes</h1>
-      <GlobalFilters />
-      {sections.map((section) => (
-        <SectionGrid key={section.title} title={section.title} items={section.items} />
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+        <h1 className="text-2xl font-bold text-gray-900">Ajustes</h1>
+        <div className="mt-4 sm:mt-0">
+            <GlobalFilters />
+        </div>
+      </div>
+      
+      {quickLaunchItems.length > 0 && (
+        <SectionGrid 
+          title="Lançamentos Rápidos" 
+          items={quickLaunchItems} 
+        />
+      )}
+
+      {allSections.map((section) => (
+        <SectionGrid 
+          key={section.title} 
+          title={section.title} 
+          items={section.items.map(item => ({
+            ...item,
+            onClick: () => handleCardClick(item)
+          }))} 
+        />
       ))}
     </div>
   );

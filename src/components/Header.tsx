@@ -10,9 +10,34 @@ const Header = () => {
     '/corridas/nova': 'Nova Corrida',
     '/despesas/nova': 'Nova Despesa',
     '/metas/nova': 'Nova Meta',
+    '/cadastros/veiculos': 'Novo Veículo',
     [`/corridas/${params.id}/editar`]: 'Editar Corrida',
     [`/despesas/${params.id}/editar`]: 'Editar Despesa',
     [`/metas/${params.id}/editar`]: 'Editar Meta',
+    // Despesas de veículo
+    '/despesas/veiculo/energia-combustivel': 'Energia / Combustível',
+    '/despesas/veiculo/manutencao': 'Manutenção',
+    '/despesas/veiculo/pedagio-estacionamento': 'Pedágio / Estacionamento',
+    '/despesas/veiculo/financeiro': 'Financeiro do Veículo',
+    '/despesas/veiculo/depreciacao': 'Depreciação',
+    [`/despesas/veiculo/energia-combustivel/${params.id}/editar`]: 'Editar Abastecimento',
+    [`/despesas/veiculo/manutencao/${params.id}/editar`]: 'Editar Manutenção',
+    [`/despesas/veiculo/pedagio-estacionamento/${params.id}/editar`]: 'Editar Pedágio/Estacionamento',
+    [`/despesas/veiculo/financeiro/${params.id}/editar`]: 'Editar Financeiro',
+    [`/despesas/veiculo/depreciacao/${params.id}/editar`]: 'Editar Depreciação',
+    // Despesas da família
+    '/despesas/familia/moradia': 'Despesa de Moradia',
+    [`/despesas/familia/moradia/${params.id}/editar`]: 'Editar Despesa de Moradia',
+    '/despesas/familia/alimentacao': 'Despesa de Alimentação',
+    [`/despesas/familia/alimentacao/${params.id}/editar`]: 'Editar Despesa de Alimentação',
+    '/despesas/familia/saude': 'Despesa de Saúde',
+    [`/despesas/familia/saude/${params.id}/editar`]: 'Editar Despesa de Saúde',
+    '/despesas/familia/educacao': 'Despesa de Educação',
+    [`/despesas/familia/educacao/${params.id}/editar`]: 'Editar Despesa de Educação',
+    '/despesas/familia/lazer': 'Despesa de Lazer',
+    [`/despesas/familia/lazer/${params.id}/editar`]: 'Editar Despesa de Lazer',
+    '/despesas/familia/outras': 'Outra Despesa',
+    [`/despesas/familia/outras/${params.id}/editar`]: 'Editar Outra Despesa',
   };
 
   const formTitle = formTitles[location.pathname];
@@ -34,7 +59,7 @@ const Header = () => {
           ) : (
             <div className="flex items-center">
               <Car className="h-8 w-8 text-primary-600" />
-              <span className="ml-2 text-xl font-bold text-gray-900">DriverPay</span>
+              <span className="ml-2 text-xl font-bold text-gray-900">MotoristAI</span>
             </div>
           )}
         </div>

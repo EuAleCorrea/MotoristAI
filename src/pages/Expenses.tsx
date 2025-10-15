@@ -49,6 +49,7 @@ function Expenses() {
     Moradia: 'bg-indigo-100 text-indigo-800',
     Saúde: 'bg-pink-100 text-pink-800',
     Educação: 'bg-cyan-100 text-cyan-800',
+    Lazer: 'bg-teal-100 text-teal-800',
     'Pedágio/Estacionamento': 'bg-purple-100 text-purple-800',
   };
 
