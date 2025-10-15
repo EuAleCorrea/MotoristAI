@@ -1,0 +1,144 @@
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useFamilyExpensesStore, HousingExpense } from '../../../store/familyExpensesStore';
+import FormSection from '../../../components/forms/FormSection';
+import FormInput from '../../../components/forms/FormInput';
+import FormSelect from '../../../components/forms/FormSelect';
+import FormTextArea from '../../../components/forms/FormTextArea';
+import { Home, Calendar, DollarSign } from 'lucide-react';
+import { isBefore, startOfToday } from 'date-fns';
+
+type Status = 'Pago' | 'Pendente';
+
+const HousingFormPage: React.FC = () => {
+  const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
+  const isEditing = !!id;
+
+  const { expenses, addExpense, updateExpense } = useFamilyExpensesStore();
+
+  const [expenseType, setExpenseType] = useState('Aluguel');
+  const [description, setDescription] = useState('');
+  const [totalValue, setTotalValue] = useState('');
+  const [dueDate, setDueDate] = useState(new Date().toISOString().slice(0, 10));
+  const [paymentDate, setPaymentDate] = useState('');
+  const [status, setStatus] = useState<Status>('Pendente');
+  const [paymentMethod, setPaymentMethod] = useState('Pix');
+  const [recurrence, setRecurrence] = useState('Única');
+  const [notes, setNotes] = useState('');
+
+  useEffect(() => {
+    if (isEditing) {
+      const expenseToEdit = expenses.find(e => e.id === id && e.category === 'Moradia') as HousingExpense | undefined;
+      if (expenseToEdit) {
+        setExpenseType(expenseToEdit.expenseType);
+        setDescription(expenseToEdit.description);
+        setTotalValue(expenseToEdit.totalValue.toString());
+        setDueDate(new Date(expenseToEdit.dueDate).toISOString().slice(0, 10));
+        setPaymentDate(expenseToEdit.paymentDate ? new Date(expenseToEdit.paymentDate).toISOString().slice(0, 10) : '');
+        setStatus(expenseToEdit.status);
+        setPaymentMethod(expenseToEdit.paymentMethod);
+        setRecurrence(expenseToEdit.recurrence);
+        setNotes(expenseToEdit.notes || '');
+      }
+    }
+  }, [id, isEditing, expenses]);
+
+  useEffect(() => {
+    if (!paymentDate && dueDate && isBefore(new Date(dueDate), startOfToday())) {
+      setStatus('Pendente'); // Should be 'Vencido' but we only have Pendente/Pago
+    } else if (paymentDate) {
+      setStatus('Pago');
+    } else {
+      setStatus('Pendente');
+    }
+  }, [paymentDate, dueDate]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const value = parseFloat(totalValue);
+    if (isNaN(value) || value <= 0) {
+      alert('O valor da despesa deve ser um número positivo.');
+      return;
+    }
+
+    const expenseData: Omit<HousingExpense, 'id' | 'createdAt' | 'updatedAt'> = {
+      category: 'Moradia',
+      expenseType: expenseType as HousingExpense['expenseType'],
+      description,
+      totalValue: value,
+      dueDate,
+      paymentDate: paymentDate || undefined,
+      status,
+      paymentMethod,
+      recurrence: recurrence as HousingExpense['recurrence'],
+      notes: notes || undefined,
+    };
+
+    if (isEditing && id) {
+      updateExpense(id, expenseData);
+    } else {
+      addExpense(expenseData);
+    }
+    alert('Despesa de moradia salva com sucesso!');
+    navigate(-1);
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6 pb-24">
+      <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 flex justify-between items-start">
+        <div>
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">Despesa de Moradia</h3>
+          <p className="text-sm text-gray-500">Registre os gastos da sua residência.</p>
+        </div>
+        <Home className="w-8 h-8 text-blue-500" />
+      </div>
+
+      <FormSection title="Detalhes da Despesa">
+        <FormSelect id="expenseType" label="Tipo de Despesa" value={expenseType} onChange={e => setExpenseType(e.target.value)}>
+          <option>Aluguel</option>
+          <option>Financiamento</option>
+          <option>Condomínio</option>
+          <option>Energia</option>
+          <option>Água</option>
+          <option>Internet</option>
+          <option>Manutenção</option>
+          <option>Outros</option>
+        </FormSelect>
+        <FormInput id="description" label="Descrição" type="text" placeholder="Ex: Conta de luz" value={description} onChange={e => setDescription(e.target.value)} required />
+        <FormInput id="totalValue" label="Valor (R$)" type="number" step="0.01" placeholder="350.00" value={totalValue} onChange={e => setTotalValue(e.target.value)} required icon={<DollarSign className="w-4 h-4 text-gray-400" />} />
+        <FormSelect id="recurrence" label="Recorrência" value={recurrence} onChange={e => setRecurrence(e.target.value)}>
+          <option>Única</option>
+          <option>Mensal</option>
+          <option>Anual</option>
+        </FormSelect>
+      </FormSection>
+
+      <FormSection title="Pagamento e Prazos">
+        <FormInput id="dueDate" label="Data de Vencimento" type="date" value={dueDate} onChange={e => setDueDate(e.target.value)} required icon={<Calendar className="w-4 h-4 text-gray-400" />} />
+        <FormInput id="paymentDate" label="Data de Pagamento (Opcional)" type="date" value={paymentDate} onChange={e => setPaymentDate(e.target.value)} icon={<Calendar className="w-4 h-4 text-gray-400" />} />
+        <FormSelect id="status" label="Status" value={status} onChange={e => setStatus(e.target.value as Status)}>
+          <option>Pendente</option>
+          <option>Pago</option>
+        </FormSelect>
+        <FormSelect id="paymentMethod" label="Forma de Pagamento" value={paymentMethod} onChange={e => setPaymentMethod(e.target.value)}>
+          <option>Pix</option>
+          <option>Cartão</option>
+          <option>Débito automático</option>
+          <option>Dinheiro</option>
+        </FormSelect>
+      </FormSection>
+
+      <FormSection title="Observações">
+        <FormTextArea id="notes" label="Notas Adicionais" placeholder="Detalhes sobre a despesa..." value={notes} onChange={e => setNotes(e.target.value)} />
+      </FormSection>
+
+      <div className="pt-6 flex items-center gap-4">
+        <button type="button" onClick={() => navigate(-1)} className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition">Cancelar</button>
+        <button type="submit" className="flex-1 px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition shadow-sm">Salvar</button>
+      </div>
+    </form>
+  );
+};
+
+export default HousingFormPage;

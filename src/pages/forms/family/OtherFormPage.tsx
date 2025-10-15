@@ -1,0 +1,115 @@
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useFamilyExpensesStore, OtherExpense } from '../../../store/familyExpensesStore';
+import FormSection from '../../../components/forms/FormSection';
+import FormInput from '../../../components/forms/FormInput';
+import FormSelect from '../../../components/forms/FormSelect';
+import FormTextArea from '../../../components/forms/FormTextArea';
+import { MoreHorizontal, Tag, Calendar, DollarSign } from 'lucide-react';
+
+const OtherFormPage: React.FC = () => {
+  const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
+  const isEditing = !!id;
+
+  const { expenses, addExpense, updateExpense } = useFamilyExpensesStore();
+
+  const [customCategory, setCustomCategory] = useState('');
+  const [description, setDescription] = useState('');
+  const [totalValue, setTotalValue] = useState('');
+  const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
+  const [paymentMethod, setPaymentMethod] = useState('Pix');
+  const [recurrence, setRecurrence] = useState('Única');
+  const [notes, setNotes] = useState('');
+
+  useEffect(() => {
+    if (isEditing) {
+      const expenseToEdit = expenses.find(e => e.id === id && e.category === 'Outras') as OtherExpense | undefined;
+      if (expenseToEdit) {
+        setCustomCategory(expenseToEdit.customCategory);
+        setDescription(expenseToEdit.description);
+        setTotalValue(expenseToEdit.totalValue.toString());
+        setDate(new Date(expenseToEdit.date).toISOString().slice(0, 10));
+        setPaymentMethod(expenseToEdit.paymentMethod);
+        setRecurrence(expenseToEdit.recurrence);
+        setNotes(expenseToEdit.notes || '');
+      }
+    }
+  }, [id, isEditing, expenses]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const value = parseFloat(totalValue);
+    if (!customCategory.trim()) {
+        alert('O campo "Categoria Personalizada" é obrigatório.');
+        return;
+    }
+    if (isNaN(value) || value <= 0) {
+      alert('O valor da despesa deve ser um número positivo.');
+      return;
+    }
+
+    const expenseData: Omit<OtherExpense, 'id' | 'createdAt' | 'updatedAt'> = {
+      category: 'Outras',
+      customCategory,
+      description,
+      totalValue: value,
+      date,
+      paymentMethod,
+      recurrence: recurrence as OtherExpense['recurrence'],
+      notes: notes || undefined,
+    };
+
+    if (isEditing && id) {
+      updateExpense(id, expenseData);
+    } else {
+      addExpense(expenseData);
+    }
+    alert('Despesa salva com sucesso!');
+    navigate(-1);
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6 pb-24">
+      <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 flex justify-between items-start">
+        <div>
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">Outra Despesa</h3>
+          <p className="text-sm text-gray-500">Registre despesas que não se encaixam nas outras categorias.</p>
+        </div>
+        <MoreHorizontal className="w-8 h-8 text-gray-500" />
+      </div>
+
+      <FormSection title="Detalhes da Despesa">
+        <FormInput id="customCategory" label="Categoria Personalizada" type="text" placeholder="Ex: Doação, Presente" value={customCategory} onChange={e => setCustomCategory(e.target.value)} required icon={<Tag className="w-4 h-4 text-gray-400" />} />
+        <FormInput id="description" label="Descrição" type="text" placeholder="Ex: Presente de aniversário para..." value={description} onChange={e => setDescription(e.target.value)} required />
+        <FormInput id="totalValue" label="Valor (R$)" type="number" step="0.01" placeholder="100.00" value={totalValue} onChange={e => setTotalValue(e.target.value)} required icon={<DollarSign className="w-4 h-4 text-gray-400" />} />
+        <FormInput id="date" label="Data" type="date" value={date} onChange={e => setDate(e.target.value)} required icon={<Calendar className="w-4 h-4 text-gray-400" />} />
+      </FormSection>
+
+      <FormSection title="Pagamento e Recorrência">
+        <FormSelect id="paymentMethod" label="Forma de Pagamento" value={paymentMethod} onChange={e => setPaymentMethod(e.target.value)}>
+          <option>Pix</option>
+          <option>Cartão</option>
+          <option>Dinheiro</option>
+          <option>Outro</option>
+        </FormSelect>
+        <FormSelect id="recurrence" label="Recorrência" value={recurrence} onChange={e => setRecurrence(e.target.value)}>
+          <option>Única</option>
+          <option>Mensal</option>
+          <option>Anual</option>
+        </FormSelect>
+      </FormSection>
+      
+      <FormSection title="Observações">
+        <FormTextArea id="notes" label="Notas Adicionais" placeholder="Detalhes sobre a despesa..." value={notes} onChange={e => setNotes(e.target.value)} />
+      </FormSection>
+
+      <div className="pt-6 flex items-center gap-4">
+        <button type="button" onClick={() => navigate(-1)} className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition">Cancelar</button>
+        <button type="submit" className="flex-1 px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition shadow-sm">Salvar</button>
+      </div>
+    </form>
+  );
+};
+
+export default OtherFormPage;

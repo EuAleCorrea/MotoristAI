@@ -150,7 +150,7 @@ function TripFormPage() {
             type="submit"
             className="flex-1 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
           >
-            {isEditing ? 'Salvar Alterações' : 'Adicionar Corrida'}
+            Salvar
           </button>
         </div>
       </form>

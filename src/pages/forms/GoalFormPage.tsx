@@ -78,7 +78,7 @@ function GoalFormPage() {
 
   return (
     <div className="bg-white rounded-lg shadow-sm p-6">
-      <form onSubmit={handleSubmit} className="p-6">
+      <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Ano</label>
@@ -123,7 +123,7 @@ function GoalFormPage() {
         </div>
         <div className="flex space-x-3 pt-6">
           <button type="button" onClick={() => navigate(-1)} className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50">Cancelar</button>
-          <button type="submit" className="flex-1 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700">{isEditing ? 'Salvar Alterações' : 'Salvar Meta'}</button>
+          <button type="submit" className="flex-1 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700">Salvar</button>
         </div>
       </form>
     </div>

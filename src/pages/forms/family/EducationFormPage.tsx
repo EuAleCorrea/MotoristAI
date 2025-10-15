@@ -1,0 +1,141 @@
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useFamilyExpensesStore, EducationExpense } from '../../../store/familyExpensesStore';
+import FormSection from '../../../components/forms/FormSection';
+import FormInput from '../../../components/forms/FormInput';
+import FormSelect from '../../../components/forms/FormSelect';
+import FormTextArea from '../../../components/forms/FormTextArea';
+import { GraduationCap, Calendar, DollarSign, Building } from 'lucide-react';
+
+type Status = 'Pago' | 'Pendente';
+
+const EducationFormPage: React.FC = () => {
+  const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
+  const isEditing = !!id;
+
+  const { expenses, addExpense, updateExpense } = useFamilyExpensesStore();
+
+  const [expenseType, setExpenseType] = useState('Mensalidade');
+  const [institution, setInstitution] = useState('');
+  const [description, setDescription] = useState('');
+  const [totalValue, setTotalValue] = useState('');
+  const [dueDate, setDueDate] = useState(new Date().toISOString().slice(0, 10));
+  const [paymentDate, setPaymentDate] = useState('');
+  const [status, setStatus] = useState<Status>('Pendente');
+  const [paymentMethod, setPaymentMethod] = useState('Boleto');
+  const [recurrence, setRecurrence] = useState('Mensal');
+  const [notes, setNotes] = useState('');
+
+  useEffect(() => {
+    if (isEditing) {
+      const expenseToEdit = expenses.find(e => e.id === id && e.category === 'Educação') as EducationExpense | undefined;
+      if (expenseToEdit) {
+        setExpenseType(expenseToEdit.expenseType);
+        setInstitution(expenseToEdit.institution);
+        setDescription(expenseToEdit.description);
+        setTotalValue(expenseToEdit.totalValue.toString());
+        setDueDate(new Date(expenseToEdit.dueDate).toISOString().slice(0, 10));
+        setPaymentDate(expenseToEdit.paymentDate ? new Date(expenseToEdit.paymentDate).toISOString().slice(0, 10) : '');
+        setStatus(expenseToEdit.status);
+        setPaymentMethod(expenseToEdit.paymentMethod);
+        setRecurrence(expenseToEdit.recurrence);
+        setNotes(expenseToEdit.notes || '');
+      }
+    }
+  }, [id, isEditing, expenses]);
+
+  useEffect(() => {
+    setStatus(paymentDate ? 'Pago' : 'Pendente');
+  }, [paymentDate]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const value = parseFloat(totalValue);
+    if (isNaN(value) || value <= 0) {
+      alert('O valor da despesa deve ser um número positivo.');
+      return;
+    }
+
+    const expenseData: Omit<EducationExpense, 'id' | 'createdAt' | 'updatedAt'> = {
+      category: 'Educação',
+      expenseType: expenseType as EducationExpense['expenseType'],
+      institution,
+      description,
+      totalValue: value,
+      dueDate,
+      paymentDate: paymentDate || undefined,
+      status,
+      paymentMethod,
+      recurrence: recurrence as EducationExpense['recurrence'],
+      notes: notes || undefined,
+    };
+
+    if (isEditing && id) {
+      updateExpense(id, expenseData);
+    } else {
+      addExpense(expenseData);
+    }
+    alert('Despesa de educação salva com sucesso!');
+    navigate(-1);
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6 pb-24">
+      <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 flex justify-between items-start">
+        <div>
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">Despesa de Educação</h3>
+          <p className="text-sm text-gray-500">Controle gastos com estudos e cursos.</p>
+        </div>
+        <GraduationCap className="w-8 h-8 text-purple-500" />
+      </div>
+
+      <FormSection title="Detalhes da Despesa">
+        <FormSelect id="expenseType" label="Tipo de Despesa" value={expenseType} onChange={e => setExpenseType(e.target.value)}>
+          <option>Mensalidade</option>
+          <option>Material escolar</option>
+          <option>Curso</option>
+          <option>Transporte escolar</option>
+          <option>Uniforme</option>
+          <option>Outros</option>
+        </FormSelect>
+        <FormInput id="institution" label="Instituição / Escola / Curso" type="text" placeholder="Ex: Colégio Aprender" value={institution} onChange={e => setInstitution(e.target.value)} required icon={<Building className="w-4 h-4 text-gray-400" />} />
+        <div className="md:col-span-2">
+            <FormInput id="description" label="Descrição" type="text" placeholder="Ex: Mensalidade de Março" value={description} onChange={e => setDescription(e.target.value)} required />
+        </div>
+      </FormSection>
+
+      <FormSection title="Valores e Prazos">
+        <FormInput id="totalValue" label="Valor (R$)" type="number" step="0.01" placeholder="850.00" value={totalValue} onChange={e => setTotalValue(e.target.value)} required icon={<DollarSign className="w-4 h-4 text-gray-400" />} />
+        <FormInput id="dueDate" label="Data de Vencimento" type="date" value={dueDate} onChange={e => setDueDate(e.target.value)} required icon={<Calendar className="w-4 h-4 text-gray-400" />} />
+        <FormInput id="paymentDate" label="Data de Pagamento (Opcional)" type="date" value={paymentDate} onChange={e => setPaymentDate(e.target.value)} icon={<Calendar className="w-4 h-4 text-gray-400" />} />
+        <FormSelect id="status" label="Status" value={status} onChange={() => {}} disabled>
+          <option>Pendente</option>
+          <option>Pago</option>
+        </FormSelect>
+      </FormSection>
+
+      <FormSection title="Pagamento e Recorrência">
+        <FormSelect id="paymentMethod" label="Forma de Pagamento" value={paymentMethod} onChange={e => setPaymentMethod(e.target.value)}>
+          <option>Boleto</option>
+          <option>Pix</option>
+          <option>Cartão</option>
+          <option>Transferência</option>
+        </FormSelect>
+        <FormSelect id="recurrence" label="Recorrência" value={recurrence} onChange={e => setRecurrence(e.target.value)}>
+          <option>Única</option>
+          <option>Mensal</option>
+          <option>Anual</option>
+        </FormSelect>
+        <FormTextArea id="notes" label="Observações Adicionais" placeholder="Detalhes sobre a despesa..." value={notes} onChange={e => setNotes(e.target.value)} />
+      </FormSection>
+
+      <div className="pt-6 flex items-center gap-4">
+        <button type="button" onClick={() => navigate(-1)} className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition">Cancelar</button>
+        <button type="submit" className="flex-1 px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition shadow-sm">Salvar</button>
+      </div>
+    </form>
+  );
+};
+
+export default EducationFormPage;
