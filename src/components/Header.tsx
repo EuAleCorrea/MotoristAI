@@ -1,42 +1,39 @@
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Car, ArrowLeft } from 'lucide-react';
 
 const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const params = useParams();
 
-  const formTitles: { [key: string]: string } = {
-    '/corridas/nova': 'Nova Corrida',
-    '/despesas/nova': 'Nova Despesa',
-    '/metas/nova': 'Nova Meta',
-    [`/corridas/${params.id}/editar`]: 'Editar Corrida',
-    [`/despesas/${params.id}/editar`]: 'Editar Despesa',
-    [`/metas/${params.id}/editar`]: 'Editar Meta',
-  };
+  // Defines paths that are considered form pages and should have a back button.
+  const formPagePatterns = [
+    /^\/corridas\/(nova|[\w-]+\/editar)$/,
+    /^\/despesas\/(nova|[\w-]+\/editar)$/,
+    /^\/metas\/(nova|[\w-]+\/editar)$/,
+    /^\/cadastros\/veiculos$/,
+    /^\/despesas\/veiculo\/.+$/,
+    /^\/despesas\/familia\/.+$/,
+  ];
 
-  const formTitle = formTitles[location.pathname];
-  const isFormPage = !!formTitle;
+  const isFormPage = formPagePatterns.some(pattern => pattern.test(location.pathname));
 
   return (
     <header className="fixed top-0 left-0 right-0 z-30 bg-slate-50/80 backdrop-blur-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="relative flex items-center h-16">
-          {isFormPage ? (
-            <div className="w-full flex items-center justify-center">
-              <button onClick={() => navigate(-1)} className="absolute left-0 flex items-center text-gray-800">
-                <ArrowLeft className="h-6 w-6" />
-              </button>
-              <h1 className="text-lg font-semibold text-gray-800">
-                {formTitle}
-              </h1>
-            </div>
-          ) : (
-            <div className="flex items-center">
-              <Car className="h-8 w-8 text-primary-600" />
-              <span className="ml-2 text-xl font-bold text-gray-900">DriverPay</span>
-            </div>
+        <div className="relative flex items-center justify-center h-16">
+          {isFormPage && (
+            <button 
+              onClick={() => navigate(-1)} 
+              className="absolute left-0 flex items-center text-gray-800 p-2 rounded-full hover:bg-gray-200 transition-colors"
+              aria-label="Voltar"
+            >
+              <ArrowLeft className="h-6 w-6" />
+            </button>
           )}
+          <div className="flex items-center">
+            <Car className="h-8 w-8 text-primary-600" />
+            <span className="ml-2 text-xl font-bold text-gray-900">MotoristAI</span>
+          </div>
         </div>
       </div>
     </header>

@@ -62,13 +62,13 @@ function DailyView() {
 
   return (
     <div className="space-y-6">
-      <div className="bg-white rounded-lg shadow-sm p-4 flex justify-between items-center">
-        <h2 className="text-lg font-semibold text-gray-800">Resumo Diário</h2>
+      <div className="bg-white rounded-lg shadow-sm p-4 flex flex-wrap justify-between md:justify-start items-center gap-4">
+        <h2 className="text-lg font-semibold text-gray-800">Resumo</h2>
         <input
           type="date"
           value={format(selectedDate, 'yyyy-MM-dd')}
           onChange={(e) => setSelectedDate(new Date(e.target.value))}
-          className="px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500"
+          className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 h-10"
         />
       </div>
       <PeriodSummary periodData={dailyData} />

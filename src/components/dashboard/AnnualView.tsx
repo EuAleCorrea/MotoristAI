@@ -47,12 +47,12 @@ function AnnualView() {
 
   return (
     <div className="space-y-6">
-      <div className="bg-white rounded-lg shadow-sm p-4 flex gap-4 items-center">
-        <h2 className="text-lg font-semibold text-gray-800">Resumo Anual</h2>
+      <div className="bg-white rounded-lg shadow-sm p-4 flex flex-wrap justify-between md:justify-start items-center gap-4">
+        <h2 className="text-lg font-semibold text-gray-800">Resumo</h2>
         <select
           value={selectedYear}
           onChange={(e) => setSelectedYear(Number(e.target.value))}
-          className="px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500"
+          className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 h-10"
         >
           {years.map(y => <option key={y} value={y}>{y}</option>)}
         </select>

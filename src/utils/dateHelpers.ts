@@ -10,6 +10,7 @@ import {
   startOfWeek,
   startOfYear,
   subMonths,
+  getDaysInMonth,
 } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
@@ -55,4 +56,11 @@ export const getYearInterval = (year: number) => {
         start: startOfYear(date),
         end: endOfYear(date),
     };
+};
+
+export const getWorkingWeeksInMonth = (year: number, month: number): number => {
+  const date = new Date(year, month - 1);
+  const daysInMonth = getDaysInMonth(date);
+  const weeks = daysInMonth / 7;
+  return parseFloat(weeks.toFixed(2));
 };

@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useExpenseStore } from '../../store/expenseStore';
+import FormPageLayout from '../../components/layouts/FormPageLayout';
+import { Wallet } from 'lucide-react';
 
 function ExpenseFormPage() {
   const { id } = useParams();
@@ -48,7 +50,7 @@ function ExpenseFormPage() {
       addExpense(expenseData);
     }
     
-    navigate('/despesas');
+    navigate(-1);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -57,91 +59,94 @@ function ExpenseFormPage() {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6">
-      <form onSubmit={handleSubmit} className="p-6 space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Categoria
-          </label>
-          <select
-            name="category"
-            value={formData.category}
-            onChange={handleInputChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-            required
-          >
-            <option value="Combustível">Combustível</option>
-            <option value="Manutenção">Manutenção</option>
-            <option value="Alimentação">Alimentação</option>
-            <option value="Pedágio/Estacionamento">Pedágio/Estacionamento</option>
-            <option value="Moradia">Moradia</option>
-            <option value="Saúde">Saúde</option>
-            <option value="Educação">Educação</option>
-            <option value="Outros">Outros</option>
-          </select>
-        </div>
+    <FormPageLayout title={isEditing ? 'Editar Despesa' : 'Nova Despesa'} icon={Wallet}>
+      <div className="bg-white rounded-lg shadow-sm p-6">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Categoria
+            </label>
+            <select
+              name="category"
+              value={formData.category}
+              onChange={handleInputChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              required
+            >
+              <option value="Combustível">Combustível</option>
+              <option value="Manutenção">Manutenção</option>
+              <option value="Alimentação">Alimentação</option>
+              <option value="Pedágio/Estacionamento">Pedágio/Estacionamento</option>
+              <option value="Moradia">Moradia</option>
+              <option value="Saúde">Saúde</option>
+              <option value="Educação">Educação</option>
+              <option value="Lazer">Lazer</option>
+              <option value="Outras">Outras</option>
+            </select>
+          </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Descrição
-          </label>
-          <input
-            type="text"
-            name="description"
-            value={formData.description}
-            onChange={handleInputChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-            placeholder="Ex: Gasolina do posto X"
-            required
-          />
-        </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Descrição
+            </label>
+            <input
+              type="text"
+              name="description"
+              value={formData.description}
+              onChange={handleInputChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              placeholder="Ex: Gasolina do posto X"
+              required
+            />
+          </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Valor (R$)
-          </label>
-          <input
-            type="number"
-            name="amount"
-            step="0.01"
-            value={formData.amount}
-            onChange={handleInputChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-            required
-          />
-        </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Valor (R$)
+            </label>
+            <input
+              type="number"
+              name="amount"
+              step="0.01"
+              value={formData.amount}
+              onChange={handleInputChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              required
+            />
+          </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Data
-          </label>
-          <input
-            type="date"
-            name="date"
-            value={formData.date}
-            onChange={handleInputChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-            required
-          />
-        </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Data
+            </label>
+            <input
+              type="date"
+              name="date"
+              value={formData.date}
+              onChange={handleInputChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              required
+            />
+          </div>
 
-        <div className="flex space-x-3 pt-4">
-          <button
-            type="button"
-            onClick={() => navigate(-1)}
-            className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
-          >
-            Cancelar
-          </button>
-          <button
-            type="submit"
-            className="flex-1 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
-          >
-            {isEditing ? 'Salvar Alterações' : 'Adicionar Despesa'}
-          </button>
-        </div>
-      </form>
-    </div>
+          <div className="flex space-x-3 pt-4">
+            <button
+              type="button"
+              onClick={() => navigate(-1)}
+              className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              className="flex-1 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
+            >
+              Salvar
+            </button>
+          </div>
+        </form>
+      </div>
+    </FormPageLayout>
   );
 }
 
