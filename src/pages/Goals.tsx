@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useGoalStore } from '../store/goalStore';
-import { useTripStore } from '../store/tripStore';
+import { useEntryStore } from '../store/entryStore';
 import { useExpenseStore } from '../store/expenseStore';
 import { useNavigate } from 'react-router-dom';
 import { Plus, Calendar, DollarSign, TrendingUp, TrendingDown, Edit2 } from 'lucide-react';
@@ -15,14 +15,14 @@ function Goals() {
   const [activeFilter, setActiveFilter] = useState('Mensal');
   
   const allGoals = useGoalStore((state) => state.goals);
-  const trips = useTripStore((state) => state.trips);
+  const entries = useEntryStore((state) => state.entries);
   const expenses = useExpenseStore((state) => state.expenses);
   const navigate = useNavigate();
 
-  const yearTrips = trips.filter(trip => new Date(trip.date).getFullYear() === selectedYear);
+  const yearEntries = entries.filter(entry => new Date(entry.date).getFullYear() === selectedYear);
   const yearExpenses = expenses.filter(expense => new Date(expense.date).getFullYear() === selectedYear);
 
-  const yearRevenue = yearTrips.reduce((sum, trip) => sum + trip.amount, 0);
+  const yearRevenue = yearEntries.reduce((sum, entry) => sum + entry.value, 0);
   const yearExpenseTotal = yearExpenses.reduce((sum, expense) => sum + expense.amount, 0);
   const yearProfit = yearRevenue - yearExpenseTotal;
 

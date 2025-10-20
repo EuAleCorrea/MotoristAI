@@ -7,7 +7,7 @@ const Header = () => {
 
   // Defines paths that are considered form pages and should have a back button.
   const formPagePatterns = [
-    /^\/corridas\/(nova|[\w-]+\/editar)$/,
+    /^\/entradas\/(nova|[\w-]+\/editar)$/,
     /^\/despesas\/(nova|[\w-]+\/editar)$/,
     /^\/metas\/(nova|[\w-]+\/editar)$/,
     /^\/cadastros\/veiculos$/,

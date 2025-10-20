@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import ReactECharts from 'echarts-for-react';
-import { useTripStore } from '../store/tripStore';
+import { useEntryStore } from '../store/entryStore';
 import { useExpenseStore } from '../store/expenseStore';
 import { format, startOfMonth, endOfMonth, eachMonthOfInterval, subMonths } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Calendar } from 'lucide-react';
 
 function Analytics() {
-  const trips = useTripStore((state) => state.trips);
+  const entries = useEntryStore((state) => state.entries);
   const expenses = useExpenseStore((state) => state.expenses);
   const [selectedPeriod, setSelectedPeriod] = useState('6months');
 
@@ -28,22 +28,23 @@ function Analytics() {
       const monthStart = startOfMonth(month);
       const monthEnd = endOfMonth(month);
 
-      const monthTrips = trips.filter(
-        (trip) => new Date(trip.date) >= monthStart && new Date(trip.date) <= monthEnd
+      const monthEntries = entries.filter(
+        (entry) => new Date(entry.date) >= monthStart && new Date(entry.date) <= monthEnd
       );
       const monthExpenses = expenses.filter(
         (expense) => new Date(expense.date) >= monthStart && new Date(expense.date) <= monthEnd
       );
 
-      const revenue = monthTrips.reduce((sum, trip) => sum + trip.amount, 0);
+      const revenue = monthEntries.reduce((sum, entry) => sum + entry.value, 0);
       const expenseTotal = monthExpenses.reduce((sum, expense) => sum + expense.amount, 0);
+      const tripCount = monthEntries.reduce((sum, entry) => sum + entry.tripCount, 0);
 
       return {
         month: format(month, 'MMM/yy', { locale: ptBR }),
         revenue,
         expenses: expenseTotal,
         profit: revenue - expenseTotal,
-        trips: monthTrips.length,
+        trips: tripCount,
       };
     });
   };
@@ -122,7 +123,7 @@ function Analytics() {
     },
     series: [
       {
-        name: 'Corridas',
+        name: 'Viagens',
         type: 'line',
         smooth: true,
         data: monthsData.map((d) => d.trips),
@@ -209,7 +210,7 @@ function Analytics() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-white rounded-lg shadow-sm p-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">
-            Número de Corridas por Mês
+            Número de Viagens por Mês
           </h2>
           <ReactECharts option={tripsCountOption} style={{ height: '300px' }} />
         </div>
@@ -245,12 +246,12 @@ function Analytics() {
           </div>
           <div className="p-4 bg-primary-50 rounded-lg">
             <p className="text-sm text-primary-600 font-medium">Lucro Total</p>
-            <p className="mt-2 text-2xl font-bold text-primary-700">
+            <p className="mt-1 text-2xl font-bold text-primary-700">
               R$ {monthsData.reduce((sum, d) => sum + d.profit, 0).toFixed(2)}
             </p>
           </div>
           <div className="p-4 bg-gray-50 rounded-lg">
-            <p className="text-sm text-gray-600 font-medium">Total de Corridas</p>
+            <p className="text-sm text-gray-600 font-medium">Total de Viagens</p>
             <p className="mt-2 text-2xl font-bold text-gray-700">
               {monthsData.reduce((sum, d) => sum + d.trips, 0)}
             </p>

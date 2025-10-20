@@ -1,11 +1,11 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
-import Trips from './pages/Trips';
+import Entries from './pages/Entries';
 import Expenses from './pages/Expenses';
 import Goals from './pages/Goals';
 import Settings from './pages/Settings';
-import TripFormPage from './pages/forms/TripFormPage';
+import EntryFormPage from './pages/forms/EntryFormPage';
 import ExpenseFormPage from './pages/forms/ExpenseFormPage';
 import GoalFormPage from './pages/forms/GoalFormPage';
 import VehiclesPage from './pages/settings/placeholders/VehiclesPage';
@@ -41,9 +41,9 @@ function App() {
       <Layout>
         <Routes>
           <Route path="/" element={<Dashboard />} />
-          <Route path="/corridas" element={<Trips />} />
-          <Route path="/corridas/nova" element={<TripFormPage />} />
-          <Route path="/corridas/:id/editar" element={<TripFormPage />} />
+          <Route path="/entradas" element={<Entries />} />
+          <Route path="/entradas/nova" element={<EntryFormPage />} />
+          <Route path="/entradas/:id/editar" element={<EntryFormPage />} />
           <Route path="/despesas" element={<Expenses />} />
           <Route path="/despesas/nova" element={<ExpenseFormPage />} />
           <Route path="/despesas/:id/editar" element={<ExpenseFormPage />} />

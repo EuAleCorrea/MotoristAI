@@ -1,4 +1,4 @@
-import { Car, Wallet, X, Target } from 'lucide-react';
+import { DollarSign, Wallet, X, Target } from 'lucide-react';
 import { useModalStore } from '../store/modalStore';
 import { useNavigate } from 'react-router-dom';
 
@@ -22,11 +22,11 @@ const AddChoiceModal = () => {
         </div>
         <div className="p-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
           <button
-            onClick={() => handleNavigate('/corridas/nova')}
+            onClick={() => handleNavigate('/entradas/nova')}
             className="flex flex-col items-center justify-center p-6 bg-primary-50 text-primary-700 rounded-lg hover:bg-primary-100 transition-colors"
           >
-            <Car className="h-8 w-8 mb-2" />
-            <span className="font-medium">Nova Corrida</span>
+            <DollarSign className="h-8 w-8 mb-2" />
+            <span className="font-medium">Nova Entrada</span>
           </button>
           <button
             onClick={() => handleNavigate('/despesas/nova')}

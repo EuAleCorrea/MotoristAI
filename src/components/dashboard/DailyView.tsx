@@ -1,14 +1,15 @@
 import { useState, useMemo } from 'react';
 import { format, startOfDay, endOfDay } from 'date-fns';
-import { useTripStore } from '../../store/tripStore';
+import { useEntryStore } from '../../store/entryStore';
 import { useExpenseStore } from '../../store/expenseStore';
 import { useGoalStore } from '../../store/goalStore';
 import PeriodSummary, { PeriodData } from './PeriodSummary';
+import { hhmmToHours } from '../../utils/dateHelpers';
 
 function DailyView() {
   const [selectedDate, setSelectedDate] = useState(new Date());
 
-  const trips = useTripStore((state) => state.trips);
+  const entries = useEntryStore((state) => state.entries);
   const expenses = useExpenseStore((state) => state.expenses);
   const { getGoalByMonth } = useGoalStore();
 
@@ -16,19 +17,19 @@ function DailyView() {
     const dayStart = startOfDay(selectedDate);
     const dayEnd = endOfDay(selectedDate);
 
-    const dayTrips = trips.filter(
-      (trip) => new Date(trip.date) >= dayStart && new Date(trip.date) <= dayEnd
+    const dayEntries = entries.filter(
+      (entry) => new Date(entry.date) >= dayStart && new Date(entry.date) <= dayEnd
     );
     const dayExpenses = expenses.filter(
       (expense) => new Date(expense.date) >= dayStart && new Date(expense.date) <= dayEnd
     );
 
-    const revenue = dayTrips.reduce((sum, trip) => sum + trip.amount, 0);
+    const revenue = dayEntries.reduce((sum, entry) => sum + entry.value, 0);
     const expenseTotal = dayExpenses.reduce((sum, expense) => sum + expense.amount, 0);
     const balance = revenue - expenseTotal;
-    const totalTrips = dayTrips.length;
-    const hoursWorked = dayTrips.reduce((sum, trip) => sum + trip.duration, 0) / 60;
-    const kmDriven = dayTrips.reduce((sum, trip) => sum + trip.distance, 0);
+    const totalTrips = dayEntries.reduce((sum, entry) => sum + entry.tripCount, 0);
+    const hoursWorked = dayEntries.reduce((sum, entry) => sum + hhmmToHours(entry.hoursWorked), 0);
+    const kmDriven = dayEntries.reduce((sum, entry) => sum + entry.kmDriven, 0);
 
     const currentMonthGoal = getGoalByMonth(selectedDate.getFullYear(), selectedDate.getMonth() + 1);
     const monthlyRevenueGoal = currentMonthGoal?.revenue || 0;
@@ -38,11 +39,11 @@ function DailyView() {
 
     const performance = periodGoal > 0 ? (revenue / periodGoal) * 100 : 0;
 
-    const revenueByApp = dayTrips.reduce((acc, trip) => {
-      if (!acc[trip.platform]) {
-        acc[trip.platform] = 0;
+    const revenueByApp = dayEntries.reduce((acc, entry) => {
+      if (!acc[entry.source]) {
+        acc[entry.source] = 0;
       }
-      acc[trip.platform] += trip.amount;
+      acc[entry.source] += entry.value;
       return acc;
     }, {} as Record<string, number>);
     
@@ -58,7 +59,7 @@ function DailyView() {
       revenueByApp,
       periodExpenses: dayExpenses,
     };
-  }, [selectedDate, trips, expenses, getGoalByMonth]);
+  }, [selectedDate, entries, expenses, getGoalByMonth]);
 
   return (
     <div className="space-y-6">

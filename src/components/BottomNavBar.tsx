@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Car, Wallet, Plus, Settings } from 'lucide-react';
+import { LayoutDashboard, DollarSign, Wallet, Plus, Settings } from 'lucide-react';
 import { useModalStore } from '../store/modalStore';
 
 const BottomNavBar = () => {
@@ -8,7 +8,7 @@ const BottomNavBar = () => {
 
   const navItems = [
     { name: 'Início', href: '/', icon: LayoutDashboard },
-    { name: 'Corridas', href: '/corridas', icon: Car },
+    { name: 'Entradas', href: '/entradas', icon: DollarSign },
     { name: 'Despesas', href: '/despesas', icon: Wallet },
     { name: 'Ajustes', href: '/ajustes', icon: Settings },
   ];

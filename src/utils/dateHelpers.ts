@@ -64,3 +64,14 @@ export const getWorkingWeeksInMonth = (year: number, month: number): number => {
   const weeks = daysInMonth / 7;
   return parseFloat(weeks.toFixed(2));
 };
+
+export const hhmmToHours = (time: string): number => {
+  if (!time || !time.includes(':')) {
+    return 0;
+  }
+  const [hours, minutes] = time.split(':').map(Number);
+  if (isNaN(hours) || isNaN(minutes)) {
+    return 0;
+  }
+  return hours + minutes / 60;
+};
