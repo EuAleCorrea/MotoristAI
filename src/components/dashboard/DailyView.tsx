@@ -46,7 +46,7 @@ function DailyView() {
       acc[entry.source] += entry.value;
       return acc;
     }, {} as Record<string, number>);
-    
+
     return {
       revenue,
       expenseTotal,
@@ -63,13 +63,13 @@ function DailyView() {
 
   return (
     <div className="space-y-6">
-      <div className="bg-white rounded-lg shadow-sm p-4 flex flex-wrap justify-between md:justify-start items-center gap-4">
-        <h2 className="text-lg font-semibold text-gray-800">Resumo</h2>
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 flex flex-wrap justify-between md:justify-start items-center gap-4">
+        <h2 className="text-lg font-semibold text-gray-800 dark:text-white">Resumo</h2>
         <input
           type="date"
           value={format(selectedDate, 'yyyy-MM-dd')}
           onChange={(e) => setSelectedDate(new Date(e.target.value))}
-          className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 h-10"
+          className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 h-10 bg-white dark:bg-gray-700 dark:text-white"
         />
       </div>
       <PeriodSummary periodData={dailyData} />

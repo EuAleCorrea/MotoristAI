@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import SectionGrid from '../components/settings/SectionGrid';
-import { 
+import {
   Receipt, Fuel, Gauge, Camera, Wrench, ParkingCircle, Landmark, TrendingDown, Home, ShoppingCart, HeartPulse, GraduationCap, MoreHorizontal, PieChart, Layers3, FileText, Car, AppWindow, CalendarClock, Settings2, Repeat, Drama, Target
 } from 'lucide-react';
 import { LucideIcon } from 'lucide-react';
@@ -90,23 +90,23 @@ const SettingsPage = () => {
 
   return (
     <div className="space-y-8">
-      <h1 className="text-2xl font-bold text-gray-900">Ajustes</h1>
-      
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Ajustes</h1>
+
       {quickLaunchItems.length > 0 && (
-        <SectionGrid 
-          title="Lançamentos Rápidos" 
-          items={quickLaunchItems} 
+        <SectionGrid
+          title="Lançamentos Rápidos"
+          items={quickLaunchItems}
         />
       )}
 
       {allSections.map((section) => (
-        <SectionGrid 
-          key={section.title} 
-          title={section.title} 
+        <SectionGrid
+          key={section.title}
+          title={section.title}
           items={section.items.map(item => ({
             ...item,
             onClick: () => handleCardClick(item)
-          }))} 
+          }))}
         />
       ))}
     </div>

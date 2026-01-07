@@ -7,16 +7,15 @@ const tabs: ('Diário' | 'Semanal' | 'Mensal' | 'Anual')[] = ['Diário', 'Semana
 
 function DashboardTabs({ activeView, setActiveView }: DashboardTabsProps) {
   return (
-    <div className="bg-white rounded-lg shadow-sm p-1 flex space-x-1">
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-1 flex space-x-1">
       {tabs.map((tab) => (
         <button
           key={tab}
           onClick={() => setActiveView(tab)}
-          className={`w-full py-2.5 text-sm font-semibold rounded-md transition-colors focus:outline-none ${
-            activeView === tab
+          className={`w-full py-2.5 text-sm font-semibold rounded-md transition-colors focus:outline-none ${activeView === tab
               ? 'bg-primary-600 text-white shadow'
-              : 'text-gray-600 hover:bg-gray-100'
-          }`}
+              : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+            }`}
         >
           {tab}
         </button>

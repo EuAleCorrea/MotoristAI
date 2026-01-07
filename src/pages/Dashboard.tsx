@@ -27,7 +27,7 @@ function Dashboard() {
 
   return (
     <div className="space-y-6">
-      <div className="sticky top-16 z-20 bg-slate-50 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-2">
+      <div className="sticky top-16 z-20 bg-slate-50 dark:bg-gray-900 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-2">
         <DashboardTabs activeView={activeView} setActiveView={setActiveView} />
       </div>
       <div className="pt-2">

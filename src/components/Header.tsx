@@ -1,5 +1,6 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Car, ArrowLeft } from 'lucide-react';
+import ThemeToggle from './ThemeToggle';
 
 const Header = () => {
   const location = useLocation();
@@ -18,22 +19,27 @@ const Header = () => {
   const isFormPage = formPagePatterns.some(pattern => pattern.test(location.pathname));
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-30 bg-slate-50/80 backdrop-blur-sm">
+    <header className="fixed top-0 left-0 right-0 z-30 bg-slate-50/80 dark:bg-gray-900/80 backdrop-blur-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="relative flex items-center justify-center h-16">
-          {isFormPage && (
-            <button 
-              onClick={() => navigate(-1)} 
-              className="absolute left-0 flex items-center text-gray-800 p-2 rounded-full hover:bg-gray-200 transition-colors"
+        <div className="relative flex items-center justify-between h-16">
+          {isFormPage ? (
+            <button
+              onClick={() => navigate(-1)}
+              className="flex items-center text-gray-800 dark:text-gray-200 p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
               aria-label="Voltar"
             >
               <ArrowLeft className="h-6 w-6" />
             </button>
+          ) : (
+            <div className="w-10" />
           )}
+
           <div className="flex items-center">
             <Car className="h-8 w-8 text-primary-600" />
-            <span className="ml-2 text-xl font-bold text-gray-900">MotoristAI</span>
+            <span className="ml-2 text-xl font-bold text-gray-900 dark:text-white">MotoristAI</span>
           </div>
+
+          <ThemeToggle />
         </div>
       </div>
     </header>
@@ -41,3 +47,4 @@ const Header = () => {
 };
 
 export default Header;
+

@@ -11,23 +11,23 @@ interface StatsCardProps {
 
 function StatsCard({ title, value, icon: Icon, trend, trendValue, color }: StatsCardProps) {
   const colorClasses = {
-    primary: 'bg-primary-50 text-primary-600',
-    success: 'bg-success-50 text-success-600',
-    danger: 'bg-danger-50 text-danger-600',
+    primary: 'bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400',
+    success: 'bg-success-50 dark:bg-success-900/30 text-success-600 dark:text-success-400',
+    danger: 'bg-danger-50 dark:bg-danger-900/30 text-danger-600 dark:text-danger-400',
   };
 
   const trendColors = {
-    up: 'text-success-600',
-    down: 'text-danger-600',
-    neutral: 'text-gray-600',
+    up: 'text-success-600 dark:text-success-400',
+    down: 'text-danger-600 dark:text-danger-400',
+    neutral: 'text-gray-600 dark:text-gray-400',
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
       <div className="flex items-center justify-between">
         <div className="flex-1">
-          <p className="text-sm font-medium text-gray-600">{title}</p>
-          <p className="mt-2 text-3xl font-bold text-gray-900">{value}</p>
+          <p className="text-sm font-medium text-gray-600 dark:text-gray-400">{title}</p>
+          <p className="mt-2 text-3xl font-bold text-gray-900 dark:text-white">{value}</p>
           <div className="mt-2 flex items-center text-sm">
             {trend === 'up' && <TrendingUp className="h-4 w-4 mr-1" />}
             {trend === 'down' && <TrendingDown className="h-4 w-4 mr-1" />}

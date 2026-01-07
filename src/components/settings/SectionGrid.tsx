@@ -18,7 +18,7 @@ interface SectionGridProps {
 const SectionGrid = ({ title, items }: SectionGridProps) => {
   return (
     <section>
-      <h4 className="text-lg font-semibold text-gray-800 mb-4">{title}</h4>
+      <h4 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">{title}</h4>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
         <AnimatePresence>
           {items.map((item, index) => (

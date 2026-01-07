@@ -20,29 +20,27 @@ const BottomNavBar = () => {
 
   return (
     <div className="fixed bottom-4 left-1/2 -translate-x-1/2 w-[95%] max-w-lg z-40">
-      <div className="relative h-16 bg-white rounded-2xl shadow-lg border border-gray-200 flex justify-around items-center">
+      <div className="relative h-16 bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 flex justify-around items-center">
         {navItems.slice(0, 2).map((item) => (
           <Link
             key={item.name}
             to={item.href}
-            className={`flex flex-col items-center justify-center w-1/4 transition-colors ${
-              isActive(item.href) ? 'text-primary-600' : 'text-gray-500 hover:text-primary-600'
-            }`}
+            className={`flex flex-col items-center justify-center w-1/4 transition-colors ${isActive(item.href) ? 'text-primary-600' : 'text-gray-500 dark:text-gray-400 hover:text-primary-600'
+              }`}
           >
             <item.icon className="h-6 w-6 mb-0.5" />
             <span className="text-xs font-medium">{item.name}</span>
           </Link>
         ))}
-        
-        <div className="w-0" /> 
+
+        <div className="w-0" />
 
         {navItems.slice(2, 4).map((item) => (
           <Link
             key={item.name}
             to={item.href}
-            className={`flex flex-col items-center justify-center w-1/4 transition-colors ${
-              isActive(item.href) ? 'text-primary-600' : 'text-gray-500 hover:text-primary-600'
-            }`}
+            className={`flex flex-col items-center justify-center w-1/4 transition-colors ${isActive(item.href) ? 'text-primary-600' : 'text-gray-500 dark:text-gray-400 hover:text-primary-600'
+              }`}
           >
             <item.icon className="h-6 w-6 mb-0.5" />
             <span className="text-xs font-medium">{item.name}</span>
@@ -50,7 +48,7 @@ const BottomNavBar = () => {
         ))}
 
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-[calc(50%+8px)]">
-           <button
+          <button
             onClick={() => openModal('add-choice')}
             className="w-16 h-16 bg-primary-600 rounded-full flex items-center justify-center text-white shadow-lg hover:bg-primary-700 transition-all transform hover:scale-110"
             aria-label="Adicionar novo"
