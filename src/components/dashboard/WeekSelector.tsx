@@ -42,14 +42,14 @@ const WeekSelector = ({ weeks, selectedWeek, onSelectWeek }: WeekSelectorProps) 
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full bg-white rounded-lg shadow-sm p-4 flex justify-between items-center text-left"
+        className="w-full bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 flex justify-between items-center text-left"
       >
         <div>
-            <p className="text-sm text-gray-500">Exibindo semana</p>
-            <p className="text-lg font-semibold text-gray-800">{formatWeekInterval(selectedWeek.start, selectedWeek.end)}</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">Exibindo semana</p>
+          <p className="text-lg font-semibold text-gray-800 dark:text-white">{formatWeekInterval(selectedWeek.start, selectedWeek.end)}</p>
         </div>
         <ChevronDown
-          className={`h-5 w-5 text-gray-500 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+          className={`h-5 w-5 text-gray-500 dark:text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`}
         />
       </button>
 
@@ -59,13 +59,13 @@ const WeekSelector = ({ weeks, selectedWeek, onSelectWeek }: WeekSelectorProps) 
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="absolute top-full mt-2 w-full bg-white rounded-lg shadow-lg z-10 overflow-hidden"
+            className="absolute top-full mt-2 w-full bg-white dark:bg-gray-800 rounded-lg shadow-lg z-10 overflow-hidden"
           >
-            <div className="p-4 border-b flex justify-between items-center bg-gray-50">
-                <h2 className="text-md font-semibold text-gray-800">Semanas</h2>
-                <div className="flex space-x-2 text-xs text-gray-500 font-semibold">
-                    {weekDayInitials.map((day, i) => <span key={i} className="w-6 text-center">{day}</span>)}
-                </div>
+            <div className="p-4 border-b dark:border-gray-700 flex justify-between items-center bg-gray-50 dark:bg-gray-700">
+              <h2 className="text-md font-semibold text-gray-800 dark:text-white">Semanas</h2>
+              <div className="flex space-x-2 text-xs text-gray-500 dark:text-gray-400 font-semibold">
+                {weekDayInitials.map((day, i) => <span key={i} className="w-6 text-center">{day}</span>)}
+              </div>
             </div>
             <div className="divide-y max-h-60 overflow-y-auto">
               {weeks.map((week) => {
@@ -75,13 +75,13 @@ const WeekSelector = ({ weeks, selectedWeek, onSelectWeek }: WeekSelectorProps) 
                   <button
                     key={week.start.toISOString()}
                     onClick={() => handleSelect(week)}
-                    className={`w-full text-left p-4 hover:bg-gray-50 ${isSelected ? 'bg-primary-50' : ''}`}
+                    className={`w-full text-left p-4 hover:bg-gray-50 dark:hover:bg-gray-700 ${isSelected ? 'bg-primary-50 dark:bg-primary-900/50' : ''}`}
                   >
                     <div className="flex justify-between items-center">
-                        <p className={`text-sm font-medium ${isSelected ? 'text-primary-700' : 'text-gray-700'}`}>{formatWeekInterval(week.start, week.end)}</p>
-                        <div className="flex space-x-2 text-xs text-gray-700">
-                            {days.map(day => <span key={day.toISOString()} className="w-6 text-center">{format(day, 'd')}</span>)}
-                        </div>
+                      <p className={`text-sm font-medium ${isSelected ? 'text-primary-700 dark:text-primary-400' : 'text-gray-700 dark:text-gray-200'}`}>{formatWeekInterval(week.start, week.end)}</p>
+                      <div className="flex space-x-2 text-xs text-gray-700 dark:text-gray-400">
+                        {days.map(day => <span key={day.toISOString()} className="w-6 text-center">{format(day, 'd')}</span>)}
+                      </div>
                     </div>
                   </button>
                 );

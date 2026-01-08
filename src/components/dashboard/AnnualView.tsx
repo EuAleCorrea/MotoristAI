@@ -17,7 +17,7 @@ function AnnualView() {
 
   const annualData: PeriodData = useMemo(() => {
     const { start, end } = getYearInterval(selectedYear);
-    
+
     const yearEntries = entries.filter(
       (entry) => new Date(entry.date) >= start && new Date(entry.date) <= end
     );
@@ -32,7 +32,7 @@ function AnnualView() {
     const totalTrips = yearEntries.reduce((sum, entry) => sum + entry.tripCount, 0);
     const hoursWorked = yearEntries.reduce((sum, entry) => sum + hhmmToHours(entry.hoursWorked), 0);
     const kmDriven = yearEntries.reduce((sum, entry) => sum + entry.kmDriven, 0);
-    
+
     const periodGoal = yearGoals.reduce((sum, goal) => sum + (goal.revenue || 0), 0);
     const performance = periodGoal > 0 ? (revenue / periodGoal) * 100 : 0;
 
@@ -41,18 +41,18 @@ function AnnualView() {
       acc[entry.source] += entry.value;
       return acc;
     }, {} as Record<string, number>);
-    
+
     return { revenue, expenseTotal, balance, totalTrips, hoursWorked, kmDriven, periodGoal, performance, revenueByApp, periodExpenses: yearExpenses };
   }, [selectedYear, entries, expenses, goals]);
 
   return (
     <div className="space-y-6">
-      <div className="bg-white rounded-lg shadow-sm p-4 flex flex-wrap justify-between md:justify-start items-center gap-4">
-        <h2 className="text-lg font-semibold text-gray-800">Resumo</h2>
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 flex flex-wrap justify-between md:justify-start items-center gap-4">
+        <h2 className="text-lg font-semibold text-gray-800 dark:text-white">Resumo Anual</h2>
         <select
           value={selectedYear}
           onChange={(e) => setSelectedYear(Number(e.target.value))}
-          className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 h-10"
+          className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 h-10 bg-white dark:bg-gray-700 dark:text-white"
         >
           {years.map(y => <option key={y} value={y}>{y}</option>)}
         </select>

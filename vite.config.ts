@@ -8,7 +8,8 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg}']
+        globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
+        maximumFileSizeToCacheInBytes: 4000000
       },
       manifest: {
         name: 'MotoristAI - Controle Financeiro',
@@ -36,7 +37,7 @@ export default defineConfig({
       },
     }),
   ],
-  
+
   optimizeDeps: {
     exclude: ['lucide-react'],
   },
