@@ -13,13 +13,15 @@ function Expenses() {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
+  const { fetchExpenses } = useExpenseStore();
 
   useEffect(() => {
+    fetchExpenses();
     const categoryFromUrl = searchParams.get('category');
     if (categoryFromUrl) {
       setCategoryFilter(categoryFromUrl);
     }
-  }, [searchParams]);
+  }, [fetchExpenses, searchParams]);
 
   const filteredExpenses = expenses.filter((expense) => {
     const matchesSearch =

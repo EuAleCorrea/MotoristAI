@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useGoalStore } from '../store/goalStore';
 import { useEntryStore } from '../store/entryStore';
 import { useExpenseStore } from '../store/expenseStore';
@@ -13,11 +13,17 @@ const years = Array.from({ length: 5 }, (_, i) => currentYear - 2 + i);
 function Goals() {
   const [selectedYear, setSelectedYear] = useState(currentYear);
   const [activeFilter, setActiveFilter] = useState('Mensal');
-  
-  const allGoals = useGoalStore((state) => state.goals);
-  const entries = useEntryStore((state) => state.entries);
-  const expenses = useExpenseStore((state) => state.expenses);
+
+  const { goals: allGoals, fetchGoals } = useGoalStore();
+  const { entries, fetchEntries } = useEntryStore();
+  const { expenses, fetchExpenses } = useExpenseStore();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchGoals();
+    fetchEntries();
+    fetchExpenses();
+  }, [fetchGoals, fetchEntries, fetchExpenses]);
 
   const yearEntries = entries.filter(entry => new Date(entry.date).getFullYear() === selectedYear);
   const yearExpenses = expenses.filter(expense => new Date(expense.date).getFullYear() === selectedYear);
@@ -35,8 +41,8 @@ function Goals() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Minhas Metas</h1>
-          <p className="mt-1 text-sm text-gray-600">Acompanhe seu progresso e defina novos objetivos</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Minhas Metas</h1>
+          <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">Acompanhe seu progresso e defina novos objetivos</p>
         </div>
         <button
           onClick={() => navigate('/metas/nova')}
@@ -47,24 +53,24 @@ function Goals() {
         </button>
       </div>
 
-      <div className="bg-white rounded-lg shadow-sm p-4">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-2">
             <Calendar className="h-5 w-5 text-gray-400" />
             <select
               value={selectedYear}
               onChange={(e) => setSelectedYear(Number(e.target.value))}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-gray-700 dark:text-white"
             >
               {years.map(y => <option key={y} value={y}>{y}</option>)}
             </select>
           </div>
-          <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg">
+          <div className="flex space-x-1 bg-gray-100 dark:bg-gray-700 p-1 rounded-lg">
             {['Semanal', 'Mensal', 'Anual'].map(filter => (
               <button
                 key={filter}
                 onClick={() => setActiveFilter(filter)}
-                className={`px-3 py-1 text-sm font-medium rounded-md ${activeFilter === filter ? 'bg-white text-primary-600 shadow' : 'text-gray-600'}`}
+                className={`px-3 py-1 text-sm font-medium rounded-md ${activeFilter === filter ? 'bg-white dark:bg-gray-600 text-primary-600 dark:text-primary-400 shadow' : 'text-gray-600 dark:text-gray-300'}`}
               >
                 {filter}
               </button>
@@ -73,8 +79,8 @@ function Goals() {
         </div>
       </div>
 
-      <div className="bg-white rounded-lg shadow-sm p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Subtotal de {selectedYear}</h2>
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Subtotal de {selectedYear}</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="p-4 bg-success-50 rounded-lg flex items-start space-x-4">
             <div className="bg-success-100 p-2 rounded-full"><DollarSign className="h-6 w-6 text-success-600" /></div>
@@ -101,34 +107,34 @@ function Goals() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="md:col-span-1 bg-white rounded-lg shadow-sm p-6">
-          <h3 className="font-semibold text-gray-900">Dias trabalhados na semana</h3>
-          <p className="text-sm text-gray-500">Meta para o mês atual</p>
-          <p className="text-5xl font-bold text-primary-600 mt-4">{currentMonthGoal?.daysWorkedPerWeek || '-'}</p>
+        <div className="md:col-span-1 bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+          <h3 className="font-semibold text-gray-900 dark:text-white">Dias trabalhados na semana</h3>
+          <p className="text-sm text-gray-500 dark:text-gray-400">Meta para o mês atual</p>
+          <p className="text-5xl font-bold text-primary-600 dark:text-primary-400 mt-4">{currentMonthGoal?.daysWorkedPerWeek || '-'}</p>
         </div>
 
-        <div className="md:col-span-2 bg-white rounded-lg shadow-sm">
-          <h3 className="font-semibold text-gray-900 p-6 border-b">Metas de {selectedYear}</h3>
+        <div className="md:col-span-2 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+          <h3 className="font-semibold text-gray-900 dark:text-white p-6 border-b dark:border-gray-700">Metas de {selectedYear}</h3>
           {yearGoals.length > 0 ? (
-            <div className="divide-y divide-gray-200">
+            <div className="divide-y divide-gray-200 dark:divide-gray-700">
               {yearGoals.map(goal => (
-                <div key={goal.id} className="p-4 hover:bg-gray-50 group relative">
-                  <p className="font-semibold text-primary-700">{format(new Date(goal.year, goal.month - 1), 'MMMM', { locale: ptBR })}</p>
+                <div key={goal.id} className="p-4 hover:bg-gray-50 dark:hover:bg-gray-700 group relative">
+                  <p className="font-semibold text-primary-700 dark:text-primary-400">{format(new Date(goal.year, goal.month - 1), 'MMMM', { locale: ptBR })}</p>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-sm mt-2">
-                    <p className="text-gray-600">Faturamento: <span className="font-medium text-gray-800">R$ {goal.revenue?.toFixed(2) || 'N/A'}</span></p>
-                    <p className="text-gray-600">Lucro: <span className="font-medium text-gray-800">R$ {goal.profit?.toFixed(2) || 'N/A'}</span></p>
-                    <p className="text-gray-600">Despesa: <span className="font-medium text-gray-800">R$ {goal.expense?.toFixed(2) || 'N/A'}</span></p>
-                    <p className="text-gray-600">Dias/Semana: <span className="font-medium text-gray-800">{goal.daysWorkedPerWeek || 'N/A'}</span></p>
+                    <p className="text-gray-600 dark:text-gray-400">Faturamento: <span className="font-medium text-gray-800 dark:text-gray-200">R$ {goal.revenue?.toFixed(2) || 'N/A'}</span></p>
+                    <p className="text-gray-600 dark:text-gray-400">Lucro: <span className="font-medium text-gray-800 dark:text-gray-200">R$ {goal.profit?.toFixed(2) || 'N/A'}</span></p>
+                    <p className="text-gray-600 dark:text-gray-400">Despesa: <span className="font-medium text-gray-800 dark:text-gray-200">R$ {goal.expense?.toFixed(2) || 'N/A'}</span></p>
+                    <p className="text-gray-600 dark:text-gray-400">Dias/Semana: <span className="font-medium text-gray-800 dark:text-gray-200">{goal.daysWorkedPerWeek || 'N/A'}</span></p>
                   </div>
-                   <button onClick={() => navigate(`/metas/${goal.id}/editar`)} className="absolute top-4 right-4 text-gray-400 hover:text-primary-600 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <Edit2 className="h-4 w-4" />
-                   </button>
+                  <button onClick={() => navigate(`/metas/${goal.id}/editar`)} className="absolute top-4 right-4 text-gray-400 hover:text-primary-600 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Edit2 className="h-4 w-4" />
+                  </button>
                 </div>
               ))}
             </div>
           ) : (
             <div className="text-center py-12 px-6">
-              <p className="text-gray-500">Nenhuma meta cadastrada para o ano selecionado.</p>
+              <p className="text-gray-500 dark:text-gray-400">Nenhuma meta cadastrada para o ano selecionado.</p>
             </div>
           )}
         </div>

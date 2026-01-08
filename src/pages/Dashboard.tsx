@@ -1,14 +1,26 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import DashboardTabs from '../components/dashboard/DashboardTabs';
 import DailyView from '../components/dashboard/DailyView';
 import WeeklyView from '../components/dashboard/WeeklyView';
 import MonthlyView from '../components/dashboard/MonthlyView';
 import AnnualView from '../components/dashboard/AnnualView';
+import { useEntryStore } from '../store/entryStore';
+import { useExpenseStore } from '../store/expenseStore';
+import { useGoalStore } from '../store/goalStore';
 
 type ViewType = 'Diário' | 'Semanal' | 'Mensal' | 'Anual';
 
 function Dashboard() {
   const [activeView, setActiveView] = useState<ViewType>('Diário');
+  const { fetchEntries } = useEntryStore();
+  const { fetchExpenses } = useExpenseStore();
+  const { fetchGoals } = useGoalStore();
+
+  useEffect(() => {
+    fetchEntries();
+    fetchExpenses();
+    fetchGoals();
+  }, [fetchEntries, fetchExpenses, fetchGoals]);
 
   const renderView = () => {
     switch (activeView) {

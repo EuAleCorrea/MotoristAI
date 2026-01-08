@@ -44,7 +44,7 @@ const EnergyFuelFormPage: React.FC = () => {
         setLiters(expenseToEdit.quantity?.toString() || '');
         setPricePerKwh(expenseToEdit.electricPricePerUnit?.toString() || '');
         setKwh(expenseToEdit.electricQuantity?.toString() || '');
-        
+
         const liquidTotal = expenseToEdit.pricePerUnit * expenseToEdit.quantity;
         const electricTotal = (expenseToEdit.electricPricePerUnit || 0) * (expenseToEdit.electricQuantity || 0);
         setTotalValue(liquidTotal > 0 ? liquidTotal.toFixed(2) : '');
@@ -60,7 +60,7 @@ const EnergyFuelFormPage: React.FC = () => {
       setTotalValue((priceNum * quantityNum).toFixed(2));
     }
   }, [pricePerLiter, liters, lastEdited]);
-  
+
   useEffect(() => {
     const priceNum = parseFloat(pricePerKwh);
     const quantityNum = parseFloat(kwh);
@@ -88,7 +88,7 @@ const EnergyFuelFormPage: React.FC = () => {
 
     return `R$ ${finalTotal.toFixed(2)} | ${parts.join(' | ')}`;
   }, [fuelType, totalValue, totalElectricValue, liters, kwh, odometer]);
-  
+
   const fuelTypeOptions = ['Gasolina', 'Etanol', 'Diesel', 'Elétrico', 'Híbrido'];
   const showLiquid = fuelType !== 'Elétrico';
   const showElectric = fuelType === 'Elétrico' || fuelType === 'Híbrido';
@@ -132,30 +132,30 @@ const EnergyFuelFormPage: React.FC = () => {
       <form onSubmit={handleSubmit} className="space-y-6 pb-24">
         <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6">
           <div className="flex justify-between items-start mb-6">
-              <div className="flex-1">
-                   <FormSelect id="fuelType" name="fuelType" label="Tipo de Combustível/Energia" value={fuelType} onChange={(e) => setFuelType(e.target.value as FuelType)}>
-                      {fuelTypeOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
-                  </FormSelect>
-              </div>
-              <div className="pl-4 pt-8">
-                  {getIconForFuelType()}
-              </div>
+            <div className="flex-1">
+              <FormSelect id="fuelType" name="fuelType" label="Tipo de Combustível/Energia" value={fuelType} onChange={(e) => setFuelType(e.target.value as FuelType)}>
+                {fuelTypeOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+              </FormSelect>
+            </div>
+            <div className="pl-4 pt-8">
+              {getIconForFuelType()}
+            </div>
           </div>
         </div>
 
         {showLiquid && (
           <FormSection title={fuelType === 'Híbrido' ? "Parte 1: Combustível Líquido" : "Detalhes do Abastecimento"}>
-              <FormInput id="pricePerLiter" name="pricePerLiter" label="Valor por Litro (R$)" type="number" step="0.001" placeholder="5.89" value={pricePerLiter} onChange={e => { setPricePerLiter(e.target.value); setLastEdited('price'); }} icon={<DollarSign className="w-4 h-4 text-gray-400" />} />
-              <FormInput id="liters" name="liters" label="Quantidade (L)" type="number" step="0.01" placeholder="40.5" value={liters} onChange={e => { setLiters(e.target.value); setLastEdited('quantity'); }} icon={<Droplets className="w-4 h-4 text-gray-400" />} />
-              <FormInput id="totalValue" name="totalValue" label="Valor Total (R$)" type="number" step="0.01" placeholder="238.55" value={totalValue} onChange={e => { setTotalValue(e.target.value); setLastEdited('total'); }} icon={<DollarSign className="w-4 h-4 text-gray-400" />} />
+            <FormInput id="pricePerLiter" name="pricePerLiter" label="Valor por Litro (R$)" type="number" step="0.001" placeholder="5.89" value={pricePerLiter} onChange={e => { setPricePerLiter(e.target.value); setLastEdited('price'); }} icon={<DollarSign className="w-4 h-4 text-gray-400" />} />
+            <FormInput id="liters" name="liters" label="Quantidade (L)" type="number" step="0.01" placeholder="40.5" value={liters} onChange={e => { setLiters(e.target.value); setLastEdited('quantity'); }} icon={<Droplets className="w-4 h-4 text-gray-400" />} />
+            <FormInput id="totalValue" name="totalValue" label="Valor Total (R$)" type="number" step="0.01" placeholder="238.55" value={totalValue} onChange={e => { setTotalValue(e.target.value); setLastEdited('total'); }} icon={<DollarSign className="w-4 h-4 text-gray-400" />} />
           </FormSection>
         )}
 
         {showElectric && (
           <FormSection title={fuelType === 'Híbrido' ? "Parte 2: Energia Elétrica" : "Detalhes da Recarga"}>
-              <FormInput id="pricePerKwh" name="pricePerKwh" label="Valor por kWh (R$)" type="number" step="0.01" placeholder="0.95" value={pricePerKwh} onChange={e => setPricePerKwh(e.target.value)} icon={<DollarSign className="w-4 h-4 text-gray-400" />} />
-              <FormInput id="kwh" name="kwh" label="Quantidade (kWh)" type="number" step="0.01" placeholder="50.2" value={kwh} onChange={e => setKwh(e.target.value)} icon={<Zap className="w-4 h-4 text-gray-400" />} />
-              <FormInput id="totalElectricValue" name="totalElectricValue" label="Valor Total da Recarga (R$)" type="number" step="0.01" placeholder="47.69" value={totalElectricValue} onChange={e => setTotalElectricValue(e.target.value)} icon={<DollarSign className="w-4 h-4 text-gray-400" />} />
+            <FormInput id="pricePerKwh" name="pricePerKwh" label="Valor por kWh (R$)" type="number" step="0.01" placeholder="0.95" value={pricePerKwh} onChange={e => setPricePerKwh(e.target.value)} icon={<DollarSign className="w-4 h-4 text-gray-400" />} />
+            <FormInput id="kwh" name="kwh" label="Quantidade (kWh)" type="number" step="0.01" placeholder="50.2" value={kwh} onChange={e => setKwh(e.target.value)} icon={<Zap className="w-4 h-4 text-gray-400" />} />
+            <FormInput id="totalElectricValue" name="totalElectricValue" label="Valor Total da Recarga (R$)" type="number" step="0.01" placeholder="47.69" value={totalElectricValue} onChange={e => setTotalElectricValue(e.target.value)} icon={<DollarSign className="w-4 h-4 text-gray-400" />} />
           </FormSection>
         )}
 
@@ -171,7 +171,7 @@ const EnergyFuelFormPage: React.FC = () => {
         </div>
 
         <div className="pt-6 flex items-center gap-4">
-          <button type="button" onClick={() => navigate(-1)} className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition">Cancelar</button>
+          <button type="button" onClick={() => navigate(-1)} className="flex-1 px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition">Cancelar</button>
           <button type="submit" className="flex-1 px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition shadow-sm">Salvar</button>
         </div>
       </form>

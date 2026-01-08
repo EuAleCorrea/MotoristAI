@@ -110,21 +110,21 @@ const VehicleFinanceFormPage: React.FC = () => {
             <option>Pago</option>
           </FormSelect>
           <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Comprovante (Opcional)</label>
-              <label htmlFor="payment-proof-upload" className="w-full flex items-center justify-center px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-primary-500 hover:bg-primary-50 transition">
-                  <Paperclip className="w-5 h-5 text-gray-500 mr-2" />
-                  <span className="text-sm font-medium text-gray-600">{paymentProof ? paymentProof.name : 'Clique para anexar comprovante'}</span>
-              </label>
-              <input id="payment-proof-upload" type="file" className="hidden" onChange={handleFileChange} accept="image/*,.pdf" />
-               <p className="text-xs text-gray-500 mt-1">A funcionalidade de upload requer integração.</p>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">Comprovante (Opcional)</label>
+            <label htmlFor="payment-proof-upload" className="w-full flex items-center justify-center px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-primary-500 hover:bg-primary-50 transition">
+              <Paperclip className="w-5 h-5 text-gray-500 mr-2" />
+              <span className="text-sm font-medium text-gray-600">{paymentProof ? paymentProof.name : 'Clique para anexar comprovante'}</span>
+            </label>
+            <input id="payment-proof-upload" type="file" className="hidden" onChange={handleFileChange} accept="image/*,.pdf" />
+            <p className="text-xs text-gray-500 mt-1">A funcionalidade de upload requer integração.</p>
           </div>
           <FormTextArea id="notes" name="notes" label="Observações (Opcional)" placeholder="Ex: Parcela 12 de 48." value={notes} onChange={e => setNotes(e.target.value)} />
         </FormSection>
 
         {dueDateAlert && (
-           <div className={`flex items-center p-4 rounded-lg ${dueDateAlert.level === 'danger' ? 'bg-danger-50 text-danger-700' : 'bg-yellow-50 text-yellow-700'}`}>
-              <AlertTriangle className="h-5 w-5 mr-3 flex-shrink-0" />
-              <p className="text-sm font-medium">{dueDateAlert.message}</p>
+          <div className={`flex items-center p-4 rounded-lg ${dueDateAlert.level === 'danger' ? 'bg-danger-50 text-danger-700' : 'bg-yellow-50 text-yellow-700'}`}>
+            <AlertTriangle className="h-5 w-5 mr-3 flex-shrink-0" />
+            <p className="text-sm font-medium">{dueDateAlert.message}</p>
           </div>
         )}
 
@@ -134,7 +134,7 @@ const VehicleFinanceFormPage: React.FC = () => {
         </div>
 
         <div className="pt-6 flex items-center gap-4">
-          <button type="button" onClick={() => navigate(-1)} className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition">Cancelar</button>
+          <button type="button" onClick={() => navigate(-1)} className="flex-1 px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition">Cancelar</button>
           <button type="submit" className="flex-1 px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition shadow-sm">Salvar</button>
         </div>
       </form>

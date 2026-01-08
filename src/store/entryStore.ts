@@ -1,6 +1,5 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import { faker } from '@faker-js/faker';
+import { supabase } from '../services/supabase';
 
 export interface Entry {
   id: string;
@@ -15,54 +14,116 @@ export interface Entry {
 
 interface EntryStore {
   entries: Entry[];
-  addEntry: (entry: Omit<Entry, 'id'>) => void;
-  updateEntry: (id: string, entry: Partial<Omit<Entry, 'id'>>) => void;
-  deleteEntry: (id: string) => void;
+  isLoading: boolean;
+  error: string | null;
+  fetchEntries: () => Promise<void>;
+  addEntry: (entry: Omit<Entry, 'id'>) => Promise<void>;
+  updateEntry: (id: string, entry: Partial<Omit<Entry, 'id'>>) => Promise<void>;
+  deleteEntry: (id: string) => Promise<void>;
 }
 
-const generateSampleEntries = (): Entry[] => {
-  const entries: Entry[] = [];
-  const sources = ['Uber', '99', 'inDrive'];
-  
-  for (let i = 0; i < 30; i++) {
-    const hours = faker.number.int({ min: 4, max: 10 });
-    const minutes = faker.helpers.arrayElement([0, 15, 30, 45]);
-    entries.push({
-      id: faker.string.uuid(),
-      date: faker.date.recent({ days: 30 }).toISOString(),
-      source: faker.helpers.arrayElement(sources),
-      value: parseFloat(faker.finance.amount({ min: 150, max: 400, dec: 2 })),
-      tripCount: faker.number.int({ min: 10, max: 25 }),
-      kmDriven: parseFloat(faker.number.float({ min: 80, max: 250, fractionDigits: 1 }).toFixed(1)),
-      hoursWorked: `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`,
-      notes: i % 5 === 0 ? faker.lorem.sentence() : undefined,
-    });
-  }
-  
-  return entries.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+const mapFromDB = (data: any): Entry => ({
+  id: data.id,
+  date: data.date,
+  source: data.source,
+  value: data.value,
+  tripCount: data.trip_count,
+  kmDriven: data.km_driven,
+  hoursWorked: data.hours_worked,
+  notes: data.notes,
+});
+
+const mapToDB = (data: Partial<Entry>) => {
+  const mapped: any = { ...data };
+  if (data.tripCount !== undefined) { mapped.trip_count = data.tripCount; delete mapped.tripCount; }
+  if (data.kmDriven !== undefined) { mapped.km_driven = data.kmDriven; delete mapped.kmDriven; }
+  if (data.hoursWorked !== undefined) { mapped.hours_worked = data.hoursWorked; delete mapped.hoursWorked; }
+  return mapped;
 };
 
-export const useEntryStore = create<EntryStore>()(
-  persist(
-    (set) => ({
-      entries: generateSampleEntries(),
-      addEntry: (entry) =>
-        set((state) => ({
-          entries: [{ ...entry, id: faker.string.uuid() }, ...state.entries].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()),
-        })),
-      updateEntry: (id, updatedEntry) =>
-        set((state) => ({
-          entries: state.entries.map((entry) =>
-            entry.id === id ? { ...entry, ...updatedEntry } : entry
-          ).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()),
-        })),
-      deleteEntry: (id) =>
-        set((state) => ({
-          entries: state.entries.filter((entry) => entry.id !== id),
-        })),
-    }),
-    {
-      name: 'entry-storage',
+export const useEntryStore = create<EntryStore>((set) => ({
+  entries: [],
+  isLoading: false,
+  error: null,
+
+  fetchEntries: async () => {
+    set({ isLoading: true, error: null });
+    try {
+      const { data, error } = await supabase
+        .from('entries')
+        .select('*')
+        .order('date', { ascending: false });
+
+      if (error) throw error;
+      set({ entries: data?.map(mapFromDB) || [] });
+    } catch (error: any) {
+      set({ error: error.message });
+    } finally {
+      set({ isLoading: false });
     }
-  )
-);
+  },
+
+  addEntry: async (entry) => {
+    set({ isLoading: true, error: null });
+    try {
+      const dbEntry = mapToDB(entry);
+      const { data, error } = await supabase
+        .from('entries')
+        .insert([dbEntry])
+        .select()
+        .single();
+
+      if (error) throw error;
+      set((state) => ({
+        entries: [mapFromDB(data), ...state.entries].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      }));
+    } catch (error: any) {
+      set({ error: error.message });
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
+  updateEntry: async (id, updatedEntry) => {
+    set({ isLoading: true, error: null });
+    try {
+      const dbEntry = mapToDB(updatedEntry);
+      const { data, error } = await supabase
+        .from('entries')
+        .update(dbEntry)
+        .eq('id', id)
+        .select()
+        .single();
+
+      if (error) throw error;
+      set((state) => ({
+        entries: state.entries.map((entry) =>
+          entry.id === id ? mapFromDB(data) : entry
+        ).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()),
+      }));
+    } catch (error: any) {
+      set({ error: error.message });
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
+  deleteEntry: async (id) => {
+    set({ isLoading: true, error: null });
+    try {
+      const { error } = await supabase
+        .from('entries')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+      set((state) => ({
+        entries: state.entries.filter((entry) => entry.id !== id),
+      }));
+    } catch (error: any) {
+      set({ error: error.message });
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+}));

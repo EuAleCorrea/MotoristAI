@@ -1,6 +1,5 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import { faker } from '@faker-js/faker';
+import { supabase } from '../services/supabase';
 
 interface Trip {
   id: string;
@@ -13,50 +12,91 @@ interface Trip {
 
 interface TripStore {
   trips: Trip[];
-  addTrip: (trip: Omit<Trip, 'id'>) => void;
-  updateTrip: (id: string, trip: Partial<Trip>) => void;
-  deleteTrip: (id: string) => void;
+  isLoading: boolean;
+  error: string | null;
+  fetchTrips: () => Promise<void>;
+  addTrip: (trip: Omit<Trip, 'id'>) => Promise<void>;
+  updateTrip: (id: string, trip: Partial<Trip>) => Promise<void>;
+  deleteTrip: (id: string) => Promise<void>;
 }
 
-const generateSampleTrips = (): Trip[] => {
-  const trips: Trip[] = [];
-  const platforms = ['Uber', '99', 'iFood', 'Rappi'];
-  
-  for (let i = 0; i < 30; i++) {
-    trips.push({
-      id: faker.string.uuid(),
-      platform: faker.helpers.arrayElement(platforms),
-      amount: parseFloat(faker.finance.amount({ min: 10, max: 80, dec: 2 })),
-      distance: parseFloat(faker.number.float({ min: 2, max: 30, fractionDigits: 1 }).toFixed(1)),
-      duration: faker.number.int({ min: 10, max: 60 }),
-      date: faker.date.recent({ days: 30 }).toISOString(),
-    });
-  }
-  
-  return trips.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-};
+export const useTripStore = create<TripStore>((set) => ({
+  trips: [],
+  isLoading: false,
+  error: null,
 
-export const useTripStore = create<TripStore>()(
-  persist(
-    (set) => ({
-      trips: generateSampleTrips(),
-      addTrip: (trip) =>
-        set((state) => ({
-          trips: [{ ...trip, id: faker.string.uuid() }, ...state.trips],
-        })),
-      updateTrip: (id, updatedTrip) =>
-        set((state) => ({
-          trips: state.trips.map((trip) =>
-            trip.id === id ? { ...trip, ...updatedTrip } : trip
-          ),
-        })),
-      deleteTrip: (id) =>
-        set((state) => ({
-          trips: state.trips.filter((trip) => trip.id !== id),
-        })),
-    }),
-    {
-      name: 'trip-storage',
+  fetchTrips: async () => {
+    set({ isLoading: true, error: null });
+    try {
+      const { data, error } = await supabase
+        .from('trips')
+        .select('*')
+        .order('date', { ascending: false });
+
+      if (error) throw error;
+      set({ trips: data || [] });
+    } catch (error: any) {
+      set({ error: error.message });
+    } finally {
+      set({ isLoading: false });
     }
-  )
-);
+  },
+
+  addTrip: async (trip) => {
+    set({ isLoading: true, error: null });
+    try {
+      const { data, error } = await supabase
+        .from('trips')
+        .insert([trip])
+        .select()
+        .single();
+
+      if (error) throw error;
+      set((state) => ({ trips: [data, ...state.trips] }));
+    } catch (error: any) {
+      set({ error: error.message });
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
+  updateTrip: async (id, updatedTrip) => {
+    set({ isLoading: true, error: null });
+    try {
+      const { error } = await supabase
+        .from('trips')
+        .update(updatedTrip)
+        .eq('id', id);
+
+      if (error) throw error;
+      set((state) => ({
+        trips: state.trips.map((trip) =>
+          trip.id === id ? { ...trip, ...updatedTrip } : trip
+        ),
+      }));
+    } catch (error: any) {
+      set({ error: error.message });
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
+  deleteTrip: async (id) => {
+    set({ isLoading: true, error: null });
+    try {
+      const { error } = await supabase
+        .from('trips')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+      set((state) => ({
+        trips: state.trips.filter((trip) => trip.id !== id),
+      }));
+    } catch (error: any) {
+      set({ error: error.message });
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+}));

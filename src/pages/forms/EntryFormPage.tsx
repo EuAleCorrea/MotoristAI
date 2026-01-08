@@ -16,7 +16,7 @@ function EntryFormPage() {
   const isEditing = Boolean(id);
 
   const { entries, addEntry, updateEntry } = useEntryStore();
-  
+
   const [formData, setFormData] = useState({
     date: new Date().toISOString().slice(0, 10),
     source: 'Uber',
@@ -62,10 +62,10 @@ function EntryFormPage() {
       }
     }
   }, [id, isEditing, entries, navigate]);
-  
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const entryData: Omit<Entry, 'id'> = {
       date: new Date(formData.date + 'T12:00:00').toISOString(),
       source: formData.source,
@@ -81,7 +81,7 @@ function EntryFormPage() {
     } else {
       addEntry(entryData);
     }
-    
+
     navigate('/entradas');
   };
 
@@ -114,11 +114,11 @@ function EntryFormPage() {
             disabled
             icon={<Calendar className="w-4 h-4 text-gray-400" />}
           />
-          <FormSelect 
-            id="source" 
-            name="source" 
-            label="Origem" 
-            value={formData.source} 
+          <FormSelect
+            id="source"
+            name="source"
+            label="Origem"
+            value={formData.source}
             onChange={handleInputChange}
             required
           >
@@ -191,7 +191,7 @@ function EntryFormPage() {
         </FormSection>
 
         <div className="pt-6 flex items-center gap-4">
-          <button type="button" onClick={() => navigate(-1)} className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition">
+          <button type="button" onClick={() => navigate(-1)} className="flex-1 px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition">
             Cancelar
           </button>
           <button type="submit" className="flex-1 px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition shadow-sm">

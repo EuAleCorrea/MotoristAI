@@ -1,6 +1,5 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import { faker } from '@faker-js/faker';
+import { supabase } from '../services/supabase';
 
 interface Expense {
   id: string;
@@ -12,50 +11,91 @@ interface Expense {
 
 interface ExpenseStore {
   expenses: Expense[];
-  addExpense: (expense: Omit<Expense, 'id'>) => void;
-  updateExpense: (id: string, expense: Partial<Expense>) => void;
-  deleteExpense: (id: string) => void;
+  isLoading: boolean;
+  error: string | null;
+  fetchExpenses: () => Promise<void>;
+  addExpense: (expense: Omit<Expense, 'id'>) => Promise<void>;
+  updateExpense: (id: string, expense: Partial<Expense>) => Promise<void>;
+  deleteExpense: (id: string) => Promise<void>;
 }
 
-const generateSampleExpenses = (): Expense[] => {
-  const expenses: Expense[] = [];
-  const categories = ['Combustível', 'Manutenção', 'Alimentação', 'Estacionamento', 'Pedágio'];
-  
-  for (let i = 0; i < 20; i++) {
-    const category = faker.helpers.arrayElement(categories);
-    expenses.push({
-      id: faker.string.uuid(),
-      category,
-      description: `${category} - ${faker.commerce.productName()}`,
-      amount: parseFloat(faker.finance.amount({ min: 20, max: 200, dec: 2 })),
-      date: faker.date.recent({ days: 30 }).toISOString(),
-    });
-  }
-  
-  return expenses.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-};
+export const useExpenseStore = create<ExpenseStore>((set) => ({
+  expenses: [],
+  isLoading: false,
+  error: null,
 
-export const useExpenseStore = create<ExpenseStore>()(
-  persist(
-    (set) => ({
-      expenses: generateSampleExpenses(),
-      addExpense: (expense) =>
-        set((state) => ({
-          expenses: [{ ...expense, id: faker.string.uuid() }, ...state.expenses],
-        })),
-      updateExpense: (id, updatedExpense) =>
-        set((state) => ({
-          expenses: state.expenses.map((expense) =>
-            expense.id === id ? { ...expense, ...updatedExpense } : expense
-          ),
-        })),
-      deleteExpense: (id) =>
-        set((state) => ({
-          expenses: state.expenses.filter((expense) => expense.id !== id),
-        })),
-    }),
-    {
-      name: 'expense-storage',
+  fetchExpenses: async () => {
+    set({ isLoading: true, error: null });
+    try {
+      const { data, error } = await supabase
+        .from('expenses')
+        .select('*')
+        .order('date', { ascending: false });
+
+      if (error) throw error;
+      set({ expenses: data || [] });
+    } catch (error: any) {
+      set({ error: error.message });
+    } finally {
+      set({ isLoading: false });
     }
-  )
-);
+  },
+
+  addExpense: async (expense) => {
+    set({ isLoading: true, error: null });
+    try {
+      const { data, error } = await supabase
+        .from('expenses')
+        .insert([expense])
+        .select()
+        .single();
+
+      if (error) throw error;
+      set((state) => ({ expenses: [data, ...state.expenses] }));
+    } catch (error: any) {
+      set({ error: error.message });
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
+  updateExpense: async (id, updatedExpense) => {
+    set({ isLoading: true, error: null });
+    try {
+      const { error } = await supabase
+        .from('expenses')
+        .update(updatedExpense)
+        .eq('id', id);
+
+      if (error) throw error;
+      set((state) => ({
+        expenses: state.expenses.map((expense) =>
+          expense.id === id ? { ...expense, ...updatedExpense } : expense
+        ),
+      }));
+    } catch (error: any) {
+      set({ error: error.message });
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
+  deleteExpense: async (id) => {
+    set({ isLoading: true, error: null });
+    try {
+      const { error } = await supabase
+        .from('expenses')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+      set((state) => ({
+        expenses: state.expenses.filter((expense) => expense.id !== id),
+      }));
+    } catch (error: any) {
+      set({ error: error.message });
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+}));

@@ -7,23 +7,23 @@ import { Car } from 'lucide-react';
 // --- Helper Components (Internal to this file) ---
 
 const FormSection: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => (
-  <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6">
-    <h3 className="text-lg font-semibold text-gray-900 mb-6">{title}</h3>
+  <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 sm:p-6">
+    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">{title}</h3>
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-6">{children}</div>
   </div>
 );
 
 const Input: React.FC<React.InputHTMLAttributes<HTMLInputElement> & { label: string }> = ({ label, id, ...props }) => (
   <div>
-    <label htmlFor={id} className="block text-sm font-medium text-gray-700 mb-1.5">{label}</label>
-    <input id={id} {...props} className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition" />
+    <label htmlFor={id} className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">{label}</label>
+    <input id={id} {...props} className="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500" />
   </div>
 );
 
 const Select: React.FC<React.SelectHTMLAttributes<HTMLSelectElement> & { label: string, children: React.ReactNode }> = ({ label, id, children, ...props }) => (
   <div>
-    <label htmlFor={id} className="block text-sm font-medium text-gray-700 mb-1.5">{label}</label>
-    <select id={id} {...props} className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition">
+    <label htmlFor={id} className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">{label}</label>
+    <select id={id} {...props} className="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition text-gray-900 dark:text-white">
       {children}
     </select>
   </div>
@@ -31,28 +31,28 @@ const Select: React.FC<React.SelectHTMLAttributes<HTMLSelectElement> & { label: 
 
 const Toggle: React.FC<{ label: string; checked: boolean; onChange: () => void }> = ({ label, checked, onChange }) => (
   <div className="flex items-center justify-between col-span-1 sm:col-span-2">
-    <span className="text-sm font-medium text-gray-700">{label}</span>
+    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{label}</span>
     <label className="relative inline-flex items-center cursor-pointer">
       <input type="checkbox" checked={checked} onChange={onChange} className="sr-only peer" />
-      <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary-300 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
+      <div className="w-11 h-6 bg-gray-200 dark:bg-gray-600 rounded-full peer peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary-300 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
     </label>
   </div>
 );
 
 const RadioGroup: React.FC<{ label: string; name: string; options: string[]; selected: string; onChange: (value: any) => void; }> = ({ label, name, options, selected, onChange }) => (
-    <div className="col-span-1 sm:col-span-2">
-        <label className="block text-sm font-medium text-gray-700 mb-2">{label}</label>
-        <div className="flex flex-wrap gap-3">
-            {options.map(option => (
-                <label key={option} className="flex items-center cursor-pointer">
-                    <input type="radio" name={name} value={option} checked={selected === option} onChange={e => onChange(e.target.value)} className="sr-only" />
-                    <div className={`px-4 py-2 rounded-lg border text-sm font-medium transition ${selected === option ? 'bg-primary-100 border-primary-500 text-primary-700' : 'bg-white border-gray-300 text-gray-600 hover:border-gray-400'}`}>
-                        {option}
-                    </div>
-                </label>
-            ))}
-        </div>
+  <div className="col-span-1 sm:col-span-2">
+    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{label}</label>
+    <div className="flex flex-wrap gap-3">
+      {options.map(option => (
+        <label key={option} className="flex items-center cursor-pointer">
+          <input type="radio" name={name} value={option} checked={selected === option} onChange={e => onChange(e.target.value)} className="sr-only" />
+          <div className={`px-4 py-2 rounded-lg border text-sm font-medium transition ${selected === option ? 'bg-primary-100 dark:bg-primary-900/50 border-primary-500 text-primary-700 dark:text-primary-300' : 'bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:border-gray-400'}`}>
+            {option}
+          </div>
+        </label>
+      ))}
     </div>
+  </div>
 );
 
 
@@ -61,7 +61,7 @@ const RadioGroup: React.FC<{ label: string; name: string; options: string[]; sel
 const VehicleFormPage = () => {
   const navigate = useNavigate();
   const { addVehicle } = useVehicleStore();
-  
+
   const [formData, setFormData] = useState<Omit<Vehicle, 'id'>>({
     brand: '',
     model: '',
@@ -106,42 +106,42 @@ const VehicleFormPage = () => {
         <FormSection title="Características">
           <Input name="color" label="Cor" value={formData.color} onChange={handleInputChange} placeholder="Ex: Prata" />
           <Select name="fuel" label="Combustível" value={formData.fuel} onChange={handleInputChange}>
-              <option>Gasolina</option>
-              <option>Etanol</option>
-              <option>Diesel</option>
-              <option>GNV</option>
-              <option>Elétrico</option>
-              <option>Híbrido</option>
+            <option>Gasolina</option>
+            <option>Etanol</option>
+            <option>Diesel</option>
+            <option>GNV</option>
+            <option>Elétrico</option>
+            <option>Híbrido</option>
           </Select>
           <Select name="transmission" label="Câmbio" value={formData.transmission} onChange={handleInputChange}>
-              <option>Manual</option>
-              <option>Automático</option>
+            <option>Manual</option>
+            <option>Automático</option>
           </Select>
           <Input name="doors" label="Portas" type="number" value={formData.doors} onChange={handleInputChange} min="2" />
           <Input name="mileage" label="Quilometragem" type="number" value={formData.mileage} onChange={handleInputChange} placeholder="Ex: 50000" />
-          <Toggle label="Ar-condicionado" checked={formData.hasAirConditioning} onChange={() => setFormData(p => ({...p, hasAirConditioning: !p.hasAirConditioning}))} />
+          <Toggle label="Ar-condicionado" checked={formData.hasAirConditioning} onChange={() => setFormData(p => ({ ...p, hasAirConditioning: !p.hasAirConditioning }))} />
         </FormSection>
 
         <FormSection title="Situação Financeira">
           <RadioGroup
-              label="Qual a situação do veículo?"
-              name="financialStatus"
-              options={['Financiado', 'Alugado', 'Quitado']}
-              selected={formData.financialStatus}
-              onChange={(value) => setFormData(p => ({...p, financialStatus: value as FinancialStatus}))}
+            label="Qual a situação do veículo?"
+            name="financialStatus"
+            options={['Financiado', 'Alugado', 'Quitado']}
+            selected={formData.financialStatus}
+            onChange={(value) => setFormData(p => ({ ...p, financialStatus: value as FinancialStatus }))}
           />
         </FormSection>
 
         {/* Action Buttons */}
         <div className="pt-6">
-            <div className="flex items-center gap-4">
-              <button type="button" onClick={() => navigate(-1)} className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition">
-                Cancelar
-              </button>
-              <button type="submit" className="flex-1 px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition shadow-sm">
-                Salvar
-              </button>
-            </div>
+          <div className="flex items-center gap-4">
+            <button type="button" onClick={() => navigate(-1)} className="flex-1 px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+              Cancelar
+            </button>
+            <button type="submit" className="flex-1 px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition shadow-sm">
+              Salvar
+            </button>
+          </div>
         </div>
       </form>
     </FormPageLayout>

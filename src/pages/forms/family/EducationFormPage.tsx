@@ -94,7 +94,7 @@ const EducationFormPage: React.FC = () => {
           </FormSelect>
           <FormInput id="institution" label="Instituição / Escola / Curso" type="text" placeholder="Ex: Colégio Aprender" value={institution} onChange={e => setInstitution(e.target.value)} required icon={<Building className="w-4 h-4 text-gray-400" />} />
           <div className="md:col-span-2">
-              <FormInput id="description" label="Descrição" type="text" placeholder="Ex: Mensalidade de Março" value={description} onChange={e => setDescription(e.target.value)} required />
+            <FormInput id="description" label="Descrição" type="text" placeholder="Ex: Mensalidade de Março" value={description} onChange={e => setDescription(e.target.value)} required />
           </div>
         </FormSection>
 
@@ -102,7 +102,7 @@ const EducationFormPage: React.FC = () => {
           <FormInput id="totalValue" label="Valor (R$)" type="number" step="0.01" placeholder="850.00" value={totalValue} onChange={e => setTotalValue(e.target.value)} required icon={<DollarSign className="w-4 h-4 text-gray-400" />} />
           <FormInput id="dueDate" label="Data de Vencimento" type="date" value={dueDate} onChange={e => setDueDate(e.target.value)} required icon={<Calendar className="w-4 h-4 text-gray-400" />} />
           <FormInput id="paymentDate" label="Data de Pagamento (Opcional)" type="date" value={paymentDate} onChange={e => setPaymentDate(e.target.value)} icon={<Calendar className="w-4 h-4 text-gray-400" />} />
-          <FormSelect id="status" label="Status" value={status} onChange={() => {}} disabled>
+          <FormSelect id="status" label="Status" value={status} onChange={() => { }} disabled>
             <option>Pendente</option>
             <option>Pago</option>
           </FormSelect>
@@ -124,7 +124,7 @@ const EducationFormPage: React.FC = () => {
         </FormSection>
 
         <div className="pt-6 flex items-center gap-4">
-          <button type="button" onClick={() => navigate(-1)} className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition">Cancelar</button>
+          <button type="button" onClick={() => navigate(-1)} className="flex-1 px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition">Cancelar</button>
           <button type="submit" className="flex-1 px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition shadow-sm">Salvar</button>
         </div>
       </form>

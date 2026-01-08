@@ -80,7 +80,7 @@ const TollParkingFormPage: React.FC = () => {
           <FormInput id="date" name="date" label="Data" type="date" value={date} onChange={e => setDate(e.target.value)} required icon={<Calendar className="w-4 h-4 text-gray-400" />} />
           <FormInput id="totalValue" name="totalValue" label="Valor Pago (R$)" type="number" step="0.01" placeholder="12.50" value={totalValue} onChange={e => setTotalValue(e.target.value)} required icon={<DollarSign className="w-4 h-4 text-gray-400" />} />
           <FormInput id="location" name="location" label="Local" type="text" placeholder={expenseType === 'Pedágio' ? "Ex: Praça de Itatiba" : "Ex: Shopping Central"} value={location} onChange={e => setLocation(e.target.value)} required icon={<MapPin className="w-4 h-4 text-gray-400" />} />
-          
+
           {expenseType === 'Pedágio' && (
             <FormInput id="highway" name="highway" label="Rodovia (Opcional)" type="text" placeholder="Ex: SP-330" value={highway} onChange={e => setHighway(e.target.value)} icon={<Route className="w-4 h-4 text-gray-400" />} />
           )}
@@ -96,7 +96,7 @@ const TollParkingFormPage: React.FC = () => {
               <option>App</option>
             </FormSelect>
           </div>
-          
+
           <FormTextArea id="notes" name="notes" label="Observações (Opcional)" placeholder="Detalhes adicionais sobre o gasto." value={notes} onChange={e => setNotes(e.target.value)} />
         </FormSection>
 
@@ -106,7 +106,7 @@ const TollParkingFormPage: React.FC = () => {
         </div>
 
         <div className="pt-6 flex items-center gap-4">
-          <button type="button" onClick={() => navigate(-1)} className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition">Cancelar</button>
+          <button type="button" onClick={() => navigate(-1)} className="flex-1 px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition">Cancelar</button>
           <button type="submit" className="flex-1 px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition shadow-sm">Salvar</button>
         </div>
       </form>

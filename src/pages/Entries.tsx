@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Plus, Search, Filter, Edit2, Trash2 } from 'lucide-react';
 import { useEntryStore } from '../store/entryStore';
 import { format } from 'date-fns';
@@ -6,8 +6,12 @@ import { ptBR } from 'date-fns/locale';
 import { useNavigate } from 'react-router-dom';
 
 function Entries() {
-  const { entries, deleteEntry } = useEntryStore();
+  const { entries, deleteEntry, fetchEntries } = useEntryStore();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchEntries();
+  }, [fetchEntries]);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [sourceFilter, setSourceFilter] = useState('all');

@@ -31,14 +31,14 @@ const MaintenanceFormPage: React.FC = () => {
     const expensesWithOdometer = expenses
       .filter(e => e.odometer && e.odometer > 0)
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-    
+
     if (isEditing && id) {
-        const expenseToEdit = expenses.find(e => e.id === id);
-        if (expenseToEdit) {
-            // Exclude the current entry from the check
-            const otherExpenses = expensesWithOdometer.filter(e => e.id !== id);
-            return otherExpenses.length > 0 ? otherExpenses[0].odometer : 0;
-        }
+      const expenseToEdit = expenses.find(e => e.id === id);
+      if (expenseToEdit) {
+        // Exclude the current entry from the check
+        const otherExpenses = expensesWithOdometer.filter(e => e.id !== id);
+        return otherExpenses.length > 0 ? otherExpenses[0].odometer : 0;
+      }
     }
 
     return expensesWithOdometer.length > 0 ? expensesWithOdometer[0].odometer : 0;
@@ -140,19 +140,19 @@ const MaintenanceFormPage: React.FC = () => {
 
         <FormSection title="Anexos e Observações">
           <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Nota Fiscal / Imagem</label>
-              <label htmlFor="invoice-upload" className="w-full flex items-center justify-center px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-primary-500 hover:bg-primary-50 transition">
-                  <Paperclip className="w-5 h-5 text-gray-500 mr-2" />
-                  <span className="text-sm font-medium text-gray-600">{invoiceFile ? invoiceFile.name : 'Clique para anexar um arquivo'}</span>
-              </label>
-              <input id="invoice-upload" type="file" className="hidden" onChange={handleFileChange} accept="image/*,.pdf" />
-              <p className="text-xs text-gray-500 mt-1">A funcionalidade de upload requer integração com um serviço de armazenamento.</p>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">Nota Fiscal / Imagem</label>
+            <label htmlFor="invoice-upload" className="w-full flex items-center justify-center px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-primary-500 hover:bg-primary-50 transition">
+              <Paperclip className="w-5 h-5 text-gray-500 mr-2" />
+              <span className="text-sm font-medium text-gray-600">{invoiceFile ? invoiceFile.name : 'Clique para anexar um arquivo'}</span>
+            </label>
+            <input id="invoice-upload" type="file" className="hidden" onChange={handleFileChange} accept="image/*,.pdf" />
+            <p className="text-xs text-gray-500 mt-1">A funcionalidade de upload requer integração com um serviço de armazenamento.</p>
           </div>
           <FormTextArea id="notes" name="notes" label="Observações Adicionais" placeholder="Ex: Garantia de 3 meses para o serviço." value={notes} onChange={e => setNotes(e.target.value)} />
         </FormSection>
 
         <div className="pt-6 flex items-center gap-4">
-          <button type="button" onClick={() => navigate(-1)} className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition">Cancelar</button>
+          <button type="button" onClick={() => navigate(-1)} className="flex-1 px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition">Cancelar</button>
           <button type="submit" className="flex-1 px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition shadow-sm">Salvar</button>
         </div>
       </form>
