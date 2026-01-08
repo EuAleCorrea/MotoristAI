@@ -1,0 +1,17 @@
+# Regras Globais do Projeto MotoristAI
+
+1.  **Planejamento e Aprovação**:
+    -   Sempre que criar um plano de implementação (`implementation_plan.md` ou similar), **PAUSE** e peça explicitamente o "ok" do usuário antes de executar qualquer código.
+    -   Nunca assuma aprovação tácita para mudanças complexas.
+
+2.  **Idioma**:
+    -   Responda **SEMPRE** em Português do Brasil (PT-BR).
+    -   Documentação e comentários de código podem ser em inglês se for o padrão técnico, mas a comunicação com o usuário deve ser em PT-BR.
+
+3.  **Consulta de Regras**:
+    -   Consulte este arquivo (`.cursorrules`) no início de cada tarefa para garantir conformidade.
+    -   Siga estritamente as instruções aqui definidas.
+
+4.  **Contexto do Projeto**:
+    -   Tech Stack: React 19, Vite, Tailwind CSS (darkMode: 'class'), Cloudflare Pages.
+    -   Mantenha a consistência visual (Dark Mode) e funcional (PWA).
