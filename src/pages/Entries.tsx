@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Plus, Search, Filter, Edit2, Trash2 } from 'lucide-react';
 import { useEntryStore } from '../store/entryStore';
 import { format } from 'date-fns';
@@ -27,6 +27,25 @@ function Entries() {
 
   const sources = Array.from(new Set(entries.map((entry) => entry.source)));
 
+  // Platform stats for summary cards
+  const platformStats = useMemo(() => {
+    const stats: Record<string, { revenue: number; trips: number; count: number }> = {};
+    entries.forEach((entry) => {
+      const platform = entry.source || 'Outros';
+      if (!stats[platform]) {
+        stats[platform] = { revenue: 0, trips: 0, count: 0 };
+      }
+      stats[platform].revenue += entry.value;
+      stats[platform].trips += entry.tripCount || 0;
+      stats[platform].count += 1;
+    });
+    return Object.entries(stats)
+      .map(([name, data]) => ({ name, ...data }))
+      .sort((a, b) => b.revenue - a.revenue);
+  }, [entries]);
+
+  const totalRevenue = platformStats.reduce((sum, p) => sum + p.revenue, 0);
+
   const handleEdit = (id: string) => {
     navigate(`/entradas/${id}/editar`);
   };
@@ -54,6 +73,37 @@ function Entries() {
           Nova Entrada
         </button>
       </div>
+
+      {/* Platform Summary Cards */}
+      {platformStats.length > 0 && (
+        <div className="flex gap-3 overflow-x-auto pb-2 -mx-2 px-2" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+          <button
+            onClick={() => setSourceFilter('all')}
+            className={`flex-shrink-0 px-4 py-3 rounded-xl transition-all ${sourceFilter === 'all'
+                ? 'bg-primary-600 text-white'
+                : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+              }`}
+          >
+            <p className="text-xs font-medium">Todas</p>
+            <p className="text-lg font-bold">R$ {totalRevenue.toFixed(0)}</p>
+          </button>
+          {platformStats.map((stat) => (
+            <button
+              key={stat.name}
+              onClick={() => setSourceFilter(stat.name)}
+              className={`flex-shrink-0 px-4 py-3 rounded-xl transition-all ${sourceFilter === stat.name
+                  ? 'bg-primary-600 text-white'
+                  : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+                }`}
+            >
+              <p className="text-xs font-medium">{stat.name}</p>
+              <p className="text-lg font-bold">R$ {stat.revenue.toFixed(0)}</p>
+              <p className="text-xs opacity-70">{stat.count} entradas</p>
+            </button>
+          ))}
+        </div>
+      )}
+
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
           <div className="relative">
