@@ -21,23 +21,23 @@ const SummaryCard: React.FC<SummaryCardProps> = ({
     const hasDecrease = percentChange !== undefined && percentChange < 0;
 
     return (
-        <div className={`relative flex-1 rounded-2xl p-4 pb-6 ${isRevenue
+        <div className={`relative flex-1 rounded-2xl p-4 ${isRevenue
             ? 'bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 border border-emerald-500/30'
             : 'bg-gradient-to-br from-rose-500/20 to-rose-600/10 border border-rose-500/30'
             }`}>
             <div className="flex flex-col">
-                <span className={`text-xs font-medium uppercase tracking-wide ${isRevenue ? 'text-emerald-400' : 'text-rose-400'
+                <span className={`text-xs font-medium uppercase tracking-wide ${isRevenue ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'
                     }`}>
                     {title}
                 </span>
 
-                <span className={`text-2xl font-bold mt-1 ${isRevenue ? 'text-emerald-300' : 'text-rose-300'
+                <span className={`text-2xl font-bold mt-1 ${isRevenue ? 'text-emerald-700 dark:text-emerald-300' : 'text-rose-700 dark:text-rose-300'
                     }`}>
                     R$ {value.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </span>
 
                 {percentChange !== undefined && (
-                    <div className={`flex items-center gap-1 mt-2 text-xs ${hasIncrease ? 'text-emerald-400' : hasDecrease ? 'text-rose-400' : 'text-gray-400'
+                    <div className={`flex items-center gap-1 mt-2 text-xs ${hasIncrease ? 'text-emerald-600 dark:text-emerald-400' : hasDecrease ? 'text-rose-600 dark:text-rose-400' : 'text-gray-500 dark:text-gray-400'
                         }`}>
                         {hasIncrease ? (
                             <TrendingUp className="w-3 h-3" />
@@ -51,11 +51,11 @@ const SummaryCard: React.FC<SummaryCardProps> = ({
                 )}
             </div>
 
-            {/* Quick action button */}
+            {/* Quick action button - positioned at bottom-right */}
             {onQuickAdd && (
                 <button
                     onClick={onQuickAdd}
-                    className={`absolute -bottom-3 left-1/2 -translate-x-1/2 w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-110 ${isRevenue
+                    className={`absolute bottom-3 right-3 w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-110 ${isRevenue
                         ? 'bg-emerald-500 hover:bg-emerald-600 text-white'
                         : 'bg-rose-500 hover:bg-rose-600 text-white'
                         }`}
