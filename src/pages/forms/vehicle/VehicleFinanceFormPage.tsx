@@ -122,7 +122,7 @@ const VehicleFinanceFormPage: React.FC = () => {
         </FormSection>
 
         {dueDateAlert && (
-          <div className={`flex items-center p-4 rounded-lg ${dueDateAlert.level === 'danger' ? 'bg-danger-50 dark:bg-danger-900/20 text-danger-700 dark:text-danger-200' : 'bg-yellow-50 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-200'}`}>
+          <div className={`flex items-center p-4 rounded-lg ${dueDateAlert.level === 'danger' ? 'bg-danger-50 dark:bg-red-900 text-danger-700 dark:text-red-100' : 'bg-yellow-50 dark:bg-yellow-900 text-yellow-700 dark:text-yellow-100'}`}>
             <AlertTriangle className="h-5 w-5 mr-3 flex-shrink-0" />
             <p className="text-sm font-medium">{dueDateAlert.message}</p>
           </div>
