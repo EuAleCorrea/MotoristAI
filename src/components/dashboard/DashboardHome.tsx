@@ -7,6 +7,8 @@ import LucroCentral from './LucroCentral';
 import SummaryCard from './SummaryCard';
 import WeeklyChart from './WeeklyChart';
 import QuickEntryModal from './QuickEntryModal';
+import PerformanceMetrics from './PerformanceMetrics';
+import BestPlatformCard from './BestPlatformCard';
 
 function DashboardHome() {
     const [quickEntryType, setQuickEntryType] = useState<'revenue' | 'expense' | null>(null);
@@ -134,6 +136,16 @@ function DashboardHome() {
             {/* Weekly Chart */}
             <div className="px-2">
                 <WeeklyChart entries={entries} expenses={expenses} />
+            </div>
+
+            {/* Performance Metrics */}
+            <div className="px-2">
+                <PerformanceMetrics />
+            </div>
+
+            {/* Best Platform Card */}
+            <div className="px-2">
+                <BestPlatformCard />
             </div>
 
             {/* Quick Entry Modal */}
