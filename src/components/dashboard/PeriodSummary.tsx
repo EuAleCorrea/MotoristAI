@@ -121,7 +121,7 @@ function PeriodSummary({ periodData }: PeriodSummaryProps) {
           <ViewToggle view={metricsView} setView={setMetricsView} />
         </div>
         {metricsView === 'cards' ? (
-          <div className="grid grid-cols-3 gap-2 sm:gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-4">
             {cardMetrics.map((metric) => (
               <MetricCard key={metric.label} {...metric} showIcon={false} />
             ))}
