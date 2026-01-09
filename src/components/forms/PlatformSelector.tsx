@@ -88,8 +88,15 @@ const PlatformSelector: React.FC<PlatformSelectorProps> = ({ value, onChange, la
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
                 {label}
             </label>
-            {/* Horizontal scrollable container */}
-            <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide -mx-2 px-2">
+            {/* Horizontal scrollable container - hidden scrollbar for mobile experience */}
+            <div
+                className="flex gap-4 overflow-x-auto pb-2 -mx-2 px-2"
+                style={{
+                    scrollbarWidth: 'none',
+                    msOverflowStyle: 'none',
+                    WebkitOverflowScrolling: 'touch',
+                }}
+            >
                 {PLATFORMS.map((platform) => {
                     const isSelected = value === platform.id;
                     return (
