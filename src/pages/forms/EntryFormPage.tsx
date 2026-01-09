@@ -5,9 +5,9 @@ import FormPageLayout from '../../components/layouts/FormPageLayout';
 import { DollarSign, Calendar, Hash, Route, Clock } from 'lucide-react';
 import FormSection from '../../components/forms/FormSection';
 import FormInput from '../../components/forms/FormInput';
-import FormSelect from '../../components/forms/FormSelect';
 import FormTextArea from '../../components/forms/FormTextArea';
-import { format, parseISO } from 'date-fns';
+import PlatformSelector from '../../components/forms/PlatformSelector';
+import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
 function EntryFormPage() {
@@ -90,6 +90,10 @@ function EntryFormPage() {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  const handlePlatformChange = (platform: string) => {
+    setFormData(prev => ({ ...prev, source: platform }));
+  };
+
   return (
     <FormPageLayout title={isEditing ? 'Editar Entrada' : 'Nova Entrada'} icon={DollarSign}>
       <form onSubmit={handleSubmit} className="space-y-6 pb-24">
@@ -114,21 +118,11 @@ function EntryFormPage() {
             disabled
             icon={<Calendar className="w-4 h-4 text-gray-400" />}
           />
-          <FormSelect
-            id="source"
-            name="source"
-            label="Origem"
+          <PlatformSelector
             value={formData.source}
-            onChange={handleInputChange}
-            required
-          >
-            <option value="Uber">Uber</option>
-            <option value="99">99</option>
-            <option value="inDrive">inDrive</option>
-            <option value="iFood">iFood</option>
-            <option value="Rappi">Rappi</option>
-            <option value="Outros">Outros</option>
-          </FormSelect>
+            onChange={handlePlatformChange}
+            label="Plataforma"
+          />
           <FormInput
             id="value"
             name="value"
