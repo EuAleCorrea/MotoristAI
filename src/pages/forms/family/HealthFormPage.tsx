@@ -128,9 +128,9 @@ const HealthFormPage: React.FC = () => {
               </motion.div>
             )}
           </AnimatePresence>
-          <div className="md:col-span-2 bg-blue-50 border-l-4 border-blue-400 p-4 rounded-r-lg">
-            <p className="text-sm font-medium text-blue-800">Valor Líquido (Custo Efetivo)</p>
-            <p className="text-xl font-bold text-blue-900">R$ {netValue.toFixed(2)}</p>
+          <div className="md:col-span-2 bg-blue-50 dark:bg-blue-900 border-l-4 border-blue-400 p-4 rounded-r-lg">
+            <p className="text-sm font-medium text-blue-800 dark:text-blue-200">Valor Líquido (Custo Efetivo)</p>
+            <p className="text-xl font-bold text-blue-900 dark:text-blue-100">R$ {netValue.toFixed(2)}</p>
           </div>
         </FormSection>
 
