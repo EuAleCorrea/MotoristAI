@@ -67,14 +67,14 @@ const DepreciationFormPage: React.FC = () => {
   return (
     <FormPageLayout title={isEditing ? 'Editar Depreciação' : 'Cálculo de Depreciação'} icon={TrendingDown}>
       <form onSubmit={handleSubmit} className="space-y-6 pb-24">
-        <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 space-y-6">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 sm:p-6 space-y-6">
           <FormInput id="purchaseValue" name="purchaseValue" label="Valor de Compra (R$)" type="number" step="0.01" placeholder="75000.00" value={purchaseValue} onChange={e => setPurchaseValue(e.target.value)} required icon={<DollarSign className="w-4 h-4 text-gray-400" />} />
           <FormInput id="purchaseDate" name="purchaseDate" label="Data de Compra" type="date" value={purchaseDate} onChange={e => setPurchaseDate(e.target.value)} required icon={<Calendar className="w-4 h-4 text-gray-400" />} />
           <FormInput id="currentValue" name="currentValue" label="Valor Atual Estimado (R$)" type="number" step="0.01" placeholder="60000.00" value={currentValue} onChange={e => setCurrentValue(e.target.value)} required icon={<DollarSign className="w-4 h-4 text-gray-400" />} />
           <FormTextArea id="notes" name="notes" label="Observações (Opcional)" placeholder="Ex: Valor baseado na tabela FIPE." value={notes} onChange={e => setNotes(e.target.value)} />
         </div>
 
-        <div className="bg-danger-50 border-l-4 border-danger-500 text-danger-800 p-4 rounded-r-lg shadow-sm text-center">
+        <div className="bg-danger-50 dark:bg-red-900 border-l-4 border-danger-500 text-danger-800 dark:text-red-100 p-4 rounded-r-lg shadow-sm text-center">
           <p className="font-semibold text-lg">Desvalorização</p>
           <p className="text-4xl font-bold mt-1">{depreciationPercentage.toFixed(2)}%</p>
         </div>
