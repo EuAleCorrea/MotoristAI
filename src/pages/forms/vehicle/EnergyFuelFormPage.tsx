@@ -165,7 +165,7 @@ const EnergyFuelFormPage: React.FC = () => {
           <FormTextArea id="notes" name="notes" label="Observações (Opcional)" placeholder="Ex: Posto Shell da Av. Principal, promoção de aditivo." value={notes} onChange={e => setNotes(e.target.value)} />
         </FormSection>
 
-        <div className="bg-primary-50 dark:bg-primary-900/20 border-l-4 border-primary-500 text-primary-800 dark:text-primary-200 p-4 rounded-r-lg shadow-sm">
+        <div className="bg-primary-50 dark:bg-gray-800 border-l-4 border-primary-500 text-primary-800 dark:text-primary-200 p-4 rounded-r-lg shadow-sm">
           <p className="font-semibold">Resumo</p>
           <p className="text-sm">{summary}</p>
         </div>

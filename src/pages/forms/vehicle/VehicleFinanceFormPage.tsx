@@ -128,7 +128,7 @@ const VehicleFinanceFormPage: React.FC = () => {
           </div>
         )}
 
-        <div className="bg-primary-50 dark:bg-primary-900/20 border-l-4 border-primary-500 text-primary-800 dark:text-primary-200 p-4 rounded-r-lg shadow-sm">
+        <div className="bg-primary-50 dark:bg-gray-800 border-l-4 border-primary-500 text-primary-800 dark:text-primary-200 p-4 rounded-r-lg shadow-sm">
           <p className="font-semibold">Resumo</p>
           <p className="text-sm">{summary}</p>
         </div>
