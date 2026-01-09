@@ -17,7 +17,7 @@ const LucroCentral: React.FC<LucroCentralProps> = ({ lucroLiquido, meta, periodo
         <div className="relative flex flex-col items-center justify-center py-8">
             {/* Outer glow effect */}
             <div className="absolute inset-0 flex items-center justify-center">
-                <div className={`w-56 h-56 rounded-full blur-2xl opacity-30 ${isPositive ? 'bg-primary-500' : 'bg-danger-500'}`} />
+                <div className={`w-56 h-56 rounded-full blur-2xl opacity-20 dark:opacity-30 ${isPositive ? 'bg-primary-500' : 'bg-danger-500'}`} />
             </div>
 
             {/* Progress ring */}
@@ -58,15 +58,15 @@ const LucroCentral: React.FC<LucroCentralProps> = ({ lucroLiquido, meta, periodo
                 <span className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">
                     {periodoLabel}
                 </span>
-                <span className={`text-3xl font-bold ${isPositive ? 'text-white' : 'text-danger-400'}`}>
+                <span className={`text-3xl font-bold ${isPositive ? 'text-gray-900 dark:text-white' : 'text-danger-600 dark:text-danger-400'}`}>
                     R$ {Math.abs(lucroLiquido).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </span>
-                <span className="text-sm text-gray-400 dark:text-gray-500 mt-1">
+                <span className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                     Lucro Líquido
                 </span>
                 {meta > 0 && (
-                    <div className="flex items-center gap-1 mt-2 px-3 py-1 bg-gray-800/50 dark:bg-gray-700/50 rounded-full">
-                        <span className="text-xs text-gray-300">
+                    <div className="flex items-center gap-1 mt-2 px-3 py-1 bg-gray-100 dark:bg-gray-800/50 rounded-full">
+                        <span className="text-xs text-gray-600 dark:text-gray-300">
                             Meta: R$ {meta.toLocaleString('pt-BR', { minimumFractionDigits: 0 })}
                         </span>
                         {lucroLiquido >= meta ? (
@@ -76,7 +76,7 @@ const LucroCentral: React.FC<LucroCentralProps> = ({ lucroLiquido, meta, periodo
                         )}
                     </div>
                 )}
-                <span className="text-xs text-primary-400 mt-2 font-medium">
+                <span className="text-xs text-primary-600 dark:text-primary-400 mt-2 font-medium">
                     {percentual.toFixed(0)}%
                 </span>
             </div>

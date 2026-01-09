@@ -19,17 +19,17 @@ interface MetricCardProps {
 }
 
 const MetricCard: React.FC<MetricCardProps> = ({ icon, label, value, subLabel, trend }) => (
-    <div className="bg-gray-800/50 rounded-xl p-4 flex items-center gap-3 border border-gray-700/50">
-        <div className="w-10 h-10 rounded-full bg-primary-500/20 flex items-center justify-center text-primary-400">
+    <div className="bg-gray-100 dark:bg-gray-800/50 rounded-xl p-4 flex items-center gap-3 border border-gray-200 dark:border-gray-700/50">
+        <div className="w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-500/20 flex items-center justify-center text-primary-600 dark:text-primary-400">
             {icon}
         </div>
         <div className="flex-1">
-            <p className="text-xs text-gray-400">{label}</p>
-            <p className="text-lg font-bold text-white">{value}</p>
-            {subLabel && <p className="text-xs text-gray-500">{subLabel}</p>}
+            <p className="text-xs text-gray-500 dark:text-gray-400">{label}</p>
+            <p className="text-lg font-bold text-gray-900 dark:text-white">{value}</p>
+            {subLabel && <p className="text-xs text-gray-400 dark:text-gray-500">{subLabel}</p>}
         </div>
         {trend && (
-            <div className={`text-xs ${trend === 'up' ? 'text-green-400' : trend === 'down' ? 'text-red-400' : 'text-gray-400'}`}>
+            <div className={`text-xs ${trend === 'up' ? 'text-green-500 dark:text-green-400' : trend === 'down' ? 'text-red-500 dark:text-red-400' : 'text-gray-400'}`}>
                 {trend === 'up' && <TrendingUp className="w-4 h-4" />}
             </div>
         )}
@@ -74,7 +74,7 @@ function PerformanceMetrics() {
 
     return (
         <div className="space-y-3">
-            <h3 className="text-sm font-medium text-gray-400 px-1">Métricas de Performance (Semana)</h3>
+            <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400 px-1">Métricas de Performance (Semana)</h3>
 
             <div className="grid grid-cols-2 gap-3">
                 <MetricCard

@@ -55,12 +55,12 @@ function BestPlatformCard() {
 
     if (!bestPlatform || totalRevenue === 0) {
         return (
-            <div className="bg-gradient-to-br from-amber-500/20 to-orange-500/20 rounded-xl p-4 border border-amber-500/30">
+            <div className="bg-gradient-to-br from-amber-100 to-orange-100 dark:from-amber-500/20 dark:to-orange-500/20 rounded-xl p-4 border border-amber-300 dark:border-amber-500/30">
                 <div className="flex items-center gap-2 mb-2">
-                    <Trophy className="w-5 h-5 text-amber-400" />
-                    <h3 className="text-sm font-medium text-gray-300">Melhor App da Semana</h3>
+                    <Trophy className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+                    <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">Melhor App da Semana</h3>
                 </div>
-                <p className="text-gray-400 text-sm">Nenhum dado registrado ainda.</p>
+                <p className="text-gray-600 dark:text-gray-400 text-sm">Nenhum dado registrado ainda.</p>
             </div>
         );
     }
@@ -68,35 +68,35 @@ function BestPlatformCard() {
     const percentage = ((bestPlatform.revenue / totalRevenue) * 100).toFixed(0);
 
     return (
-        <div className="bg-gradient-to-br from-amber-500/20 to-orange-500/20 rounded-xl p-4 border border-amber-500/30">
+        <div className="bg-gradient-to-br from-amber-100 to-orange-100 dark:from-amber-500/20 dark:to-orange-500/20 rounded-xl p-4 border border-amber-300 dark:border-amber-500/30">
             <div className="flex items-center gap-2 mb-3">
-                <Trophy className="w-5 h-5 text-amber-400" />
-                <h3 className="text-sm font-medium text-gray-300">Melhor App da Semana</h3>
+                <Trophy className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+                <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">Melhor App da Semana</h3>
             </div>
 
             {/* Best Platform Highlight */}
             <div className="flex items-center justify-between mb-4">
                 <div>
-                    <p className="text-2xl font-bold text-white">{bestPlatform.name}</p>
-                    <p className="text-sm text-gray-400">
+                    <p className="text-2xl font-bold text-gray-900 dark:text-white">{bestPlatform.name}</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
                         R$ {bestPlatform.revenue.toFixed(2)} ({percentage}% do total)
                     </p>
                 </div>
-                <div className="w-12 h-12 rounded-full bg-amber-500/30 flex items-center justify-center">
-                    <TrendingUp className="w-6 h-6 text-amber-400" />
+                <div className="w-12 h-12 rounded-full bg-amber-200 dark:bg-amber-500/30 flex items-center justify-center">
+                    <TrendingUp className="w-6 h-6 text-amber-600 dark:text-amber-400" />
                 </div>
             </div>
 
             {/* Other Platforms */}
             {platformRanking.length > 1 && (
-                <div className="space-y-2 pt-3 border-t border-gray-700/50">
+                <div className="space-y-2 pt-3 border-t border-amber-200 dark:border-gray-700/50">
                     <p className="text-xs text-gray-500 mb-2">Outros apps:</p>
                     {platformRanking.slice(1, 4).map((platform, index) => (
                         <div key={platform.name} className="flex items-center justify-between text-sm">
-                            <span className="text-gray-400">
+                            <span className="text-gray-600 dark:text-gray-400">
                                 {index + 2}. {platform.name}
                             </span>
-                            <span className="text-gray-300">R$ {platform.revenue.toFixed(2)}</span>
+                            <span className="text-gray-800 dark:text-gray-300">R$ {platform.revenue.toFixed(2)}</span>
                         </div>
                     ))}
                 </div>
