@@ -9,7 +9,7 @@ const BottomNavBar = () => {
 
   const navItems = [
     { name: 'Início', href: '/', icon: LayoutDashboard },
-    { name: 'Entradas', href: '/entradas', icon: DollarSign },
+    { name: 'Receitas', href: '/entradas', icon: DollarSign },
     { name: 'Despesas', href: '/despesas', icon: Wallet },
     { name: 'Ajustes', href: '/ajustes', icon: Settings },
   ];
