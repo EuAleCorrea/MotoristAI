@@ -130,7 +130,7 @@ const MaintenanceFormPage: React.FC = () => {
           <div>
             <FormInput id="odometer" name="odometer" label="Odômetro Atual (km)" type="number" placeholder="51200" value={odometer} onChange={e => setOdometer(e.target.value)} required icon={<Gauge className="w-4 h-4 text-gray-400" />} />
             {odometerWarning && (
-              <div className="mt-2 flex items-center text-sm text-yellow-700 bg-yellow-50 p-2 rounded-md">
+              <div className="mt-2 flex items-center text-sm text-yellow-700 dark:text-yellow-200 bg-yellow-50 dark:bg-yellow-900/20 p-2 rounded-md">
                 <AlertTriangle className="h-4 w-4 mr-2 flex-shrink-0" />
                 <span>{odometerWarning}</span>
               </div>
@@ -140,13 +140,13 @@ const MaintenanceFormPage: React.FC = () => {
 
         <FormSection title="Anexos e Observações">
           <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Nota Fiscal / Imagem</label>
-            <label htmlFor="invoice-upload" className="w-full flex items-center justify-center px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-primary-500 hover:bg-primary-50 transition">
-              <Paperclip className="w-5 h-5 text-gray-500 mr-2" />
-              <span className="text-sm font-medium text-gray-600">{invoiceFile ? invoiceFile.name : 'Clique para anexar um arquivo'}</span>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Nota Fiscal / Imagem</label>
+            <label htmlFor="invoice-upload" className="w-full flex items-center justify-center px-4 py-3 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:border-primary-500 hover:bg-primary-50 dark:hover:bg-primary-900/10 transition">
+              <Paperclip className="w-5 h-5 text-gray-500" />
+              <span className="text-sm font-medium text-gray-600 dark:text-gray-400 ml-2">{invoiceFile ? invoiceFile.name : 'Clique para anexar um arquivo'}</span>
             </label>
             <input id="invoice-upload" type="file" className="hidden" onChange={handleFileChange} accept="image/*,.pdf" />
-            <p className="text-xs text-gray-500 mt-1">A funcionalidade de upload requer integração com um serviço de armazenamento.</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">A funcionalidade de upload requer integração com um serviço de armazenamento.</p>
           </div>
           <FormTextArea id="notes" name="notes" label="Observações Adicionais" placeholder="Ex: Garantia de 3 meses para o serviço." value={notes} onChange={e => setNotes(e.target.value)} />
         </FormSection>

@@ -110,25 +110,25 @@ const VehicleFinanceFormPage: React.FC = () => {
             <option>Pago</option>
           </FormSelect>
           <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Comprovante (Opcional)</label>
-            <label htmlFor="payment-proof-upload" className="w-full flex items-center justify-center px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-primary-500 hover:bg-primary-50 transition">
-              <Paperclip className="w-5 h-5 text-gray-500 mr-2" />
-              <span className="text-sm font-medium text-gray-600">{paymentProof ? paymentProof.name : 'Clique para anexar comprovante'}</span>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Comprovante (Opcional)</label>
+            <label htmlFor="payment-proof-upload" className="w-full flex items-center justify-center px-4 py-3 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:border-primary-500 hover:bg-primary-50 dark:hover:bg-primary-900/10 transition">
+              <Paperclip className="w-5 h-5 text-gray-500" />
+              <span className="text-sm font-medium text-gray-600 dark:text-gray-400 ml-2">{paymentProof ? paymentProof.name : 'Clique para anexar comprovante'}</span>
             </label>
             <input id="payment-proof-upload" type="file" className="hidden" onChange={handleFileChange} accept="image/*,.pdf" />
-            <p className="text-xs text-gray-500 mt-1">A funcionalidade de upload requer integração.</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">A funcionalidade de upload requer integração.</p>
           </div>
           <FormTextArea id="notes" name="notes" label="Observações (Opcional)" placeholder="Ex: Parcela 12 de 48." value={notes} onChange={e => setNotes(e.target.value)} />
         </FormSection>
 
         {dueDateAlert && (
-          <div className={`flex items-center p-4 rounded-lg ${dueDateAlert.level === 'danger' ? 'bg-danger-50 text-danger-700' : 'bg-yellow-50 text-yellow-700'}`}>
+          <div className={`flex items-center p-4 rounded-lg ${dueDateAlert.level === 'danger' ? 'bg-danger-50 dark:bg-danger-900/20 text-danger-700 dark:text-danger-200' : 'bg-yellow-50 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-200'}`}>
             <AlertTriangle className="h-5 w-5 mr-3 flex-shrink-0" />
             <p className="text-sm font-medium">{dueDateAlert.message}</p>
           </div>
         )}
 
-        <div className="bg-primary-50 border-l-4 border-primary-500 text-primary-800 p-4 rounded-r-lg shadow-sm">
+        <div className="bg-primary-50 dark:bg-primary-900/20 border-l-4 border-primary-500 text-primary-800 dark:text-primary-200 p-4 rounded-r-lg shadow-sm">
           <p className="font-semibold">Resumo</p>
           <p className="text-sm">{summary}</p>
         </div>

@@ -130,7 +130,7 @@ const EnergyFuelFormPage: React.FC = () => {
   return (
     <FormPageLayout title={isEditing ? 'Editar Abastecimento' : 'Energia / Combustível'} icon={Fuel}>
       <form onSubmit={handleSubmit} className="space-y-6 pb-24">
-        <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 sm:p-6">
           <div className="flex justify-between items-start mb-6">
             <div className="flex-1">
               <FormSelect id="fuelType" name="fuelType" label="Tipo de Combustível/Energia" value={fuelType} onChange={(e) => setFuelType(e.target.value as FuelType)}>
@@ -165,7 +165,7 @@ const EnergyFuelFormPage: React.FC = () => {
           <FormTextArea id="notes" name="notes" label="Observações (Opcional)" placeholder="Ex: Posto Shell da Av. Principal, promoção de aditivo." value={notes} onChange={e => setNotes(e.target.value)} />
         </FormSection>
 
-        <div className="bg-primary-50 border-l-4 border-primary-500 text-primary-800 p-4 rounded-r-lg shadow-sm">
+        <div className="bg-primary-50 dark:bg-primary-900/20 border-l-4 border-primary-500 text-primary-800 dark:text-primary-200 p-4 rounded-r-lg shadow-sm">
           <p className="font-semibold">Resumo</p>
           <p className="text-sm">{summary}</p>
         </div>
