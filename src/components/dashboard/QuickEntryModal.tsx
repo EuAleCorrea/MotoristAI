@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { X, DollarSign, Calendar, Building } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { X, DollarSign, Calendar } from 'lucide-react';
 import { format } from 'date-fns';
 import { useEntryStore } from '../../store/entryStore';
 import { useExpenseStore } from '../../store/expenseStore';
@@ -32,9 +32,31 @@ const QuickEntryModal: React.FC<QuickEntryModalProps> = ({ isOpen, onClose, type
     const [category, setCategory] = useState('combustivel');
     const [description, setDescription] = useState('');
     const [date, setDate] = useState(format(new Date(), 'yyyy-MM-dd'));
+    const [isClosing, setIsClosing] = useState(false);
 
     const { addEntry } = useEntryStore();
     const { addExpense } = useExpenseStore();
+
+    useEffect(() => {
+        if (isOpen) {
+            setIsClosing(false);
+            // Lock body scroll
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => { document.body.style.overflow = 'unset'; };
+    }, [isOpen]);
+
+    const handleClose = () => {
+        setIsClosing(true);
+        setTimeout(() => {
+            onClose();
+            setIsClosing(false);
+            setValue('');
+            setDescription('');
+        }, 300); // Animation duration
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -60,9 +82,7 @@ const QuickEntryModal: React.FC<QuickEntryModalProps> = ({ isOpen, onClose, type
             });
         }
 
-        onClose();
-        setValue('');
-        setDescription('');
+        handleClose();
     };
 
     if (!isOpen) return null;
@@ -70,129 +90,143 @@ const QuickEntryModal: React.FC<QuickEntryModalProps> = ({ isOpen, onClose, type
     return (
         <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
             {/* Backdrop */}
-            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
+            <div
+                className={`absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300 ${isClosing ? 'opacity-0' : 'opacity-100'}`}
+                onClick={handleClose}
+            />
 
-            {/* Modal */}
-            <div className="relative w-full max-w-md bg-white dark:bg-gray-800 rounded-t-3xl sm:rounded-2xl shadow-2xl animate-slide-up">
+            {/* Modal / Bottom Sheet */}
+            <div
+                className={`relative w-full max-w-md bg-white dark:bg-gray-800 rounded-t-3xl sm:rounded-2xl shadow-2xl transform transition-transform duration-300 ${isClosing ? 'translate-y-full sm:scale-95 sm:opacity-0' : 'translate-y-0 sm:scale-100 sm:opacity-100'
+                    } animate-slide-up sm:animate-none`}
+            >
+                {/* Mobile Handle */}
+                <div className="flex justify-center pt-3 pb-1 sm:hidden">
+                    <div className="w-12 h-1.5 bg-gray-300 dark:bg-gray-600 rounded-full" />
+                </div>
+
                 {/* Header */}
-                <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-                    <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
-                        {type === 'revenue' ? 'Nova Entrada' : 'Nova Despesa'}
+                <div className="flex items-center justify-between px-6 pt-2 pb-4 border-b border-gray-100 dark:border-gray-700">
+                    <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                        {type === 'revenue' ? 'Nova Receita' : 'Nova Despesa'}
                     </h2>
                     <button
-                        onClick={onClose}
-                        className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                        onClick={handleClose}
+                        className="p-2 -mr-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition"
                     >
-                        <X className="w-5 h-5 text-gray-500" />
+                        <X className="w-6 h-6 text-gray-500" />
                     </button>
                 </div>
 
-                <form onSubmit={handleSubmit} className="p-4 space-y-4">
-                    {/* Platform/Category selector */}
-                    {type === 'revenue' ? (
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                Plataforma
-                            </label>
-                            <div className="flex flex-wrap gap-2">
-                                {PLATFORMS.map((p) => (
-                                    <button
-                                        key={p.id}
-                                        type="button"
-                                        onClick={() => setPlatform(p.id)}
-                                        className={`px-3 py-2 rounded-lg text-sm font-medium transition ${platform === p.id
-                                                ? 'bg-primary-600 text-white ring-2 ring-primary-400'
-                                                : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
-                                            }`}
-                                    >
-                                        {p.name}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-                    ) : (
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                Categoria
-                            </label>
-                            <div className="flex flex-wrap gap-2">
-                                {EXPENSE_CATEGORIES.map((c) => (
-                                    <button
-                                        key={c.id}
-                                        type="button"
-                                        onClick={() => setCategory(c.id)}
-                                        className={`px-3 py-2 rounded-lg text-sm font-medium transition ${category === c.id
-                                                ? 'bg-rose-600 text-white ring-2 ring-rose-400'
-                                                : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
-                                            }`}
-                                    >
-                                        {c.name}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Value input */}
+                <form onSubmit={handleSubmit} className="p-6 space-y-6">
+                    {/* Value input - Main Focus */}
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Valor (R$)
+                        <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wide">
+                            Valor
                         </label>
-                        <div className="relative">
-                            <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                        <div className="relative group">
+                            <div className={`absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none ${type === 'revenue' ? 'text-emerald-500' : 'text-rose-500'
+                                }`}>
+                                <DollarSign className="h-8 w-8" strokeWidth={2.5} />
+                            </div>
                             <input
                                 type="number"
+                                inputMode="decimal"
                                 step="0.01"
                                 value={value}
                                 onChange={(e) => setValue(e.target.value)}
                                 placeholder="0,00"
-                                className="w-full pl-10 pr-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl text-lg font-semibold text-gray-800 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                                className={`block w-full pl-14 pr-4 py-4 text-4xl font-bold bg-transparent border-b-2 focus:ring-0 focus:outline-none transition-colors ${type === 'revenue'
+                                        ? 'border-gray-200 dark:border-gray-700 focus:border-emerald-500 text-gray-900 dark:text-white placeholder-gray-300'
+                                        : 'border-gray-200 dark:border-gray-700 focus:border-rose-500 text-gray-900 dark:text-white placeholder-gray-300'
+                                    }`}
                                 required
                                 autoFocus
                             />
                         </div>
                     </div>
 
-                    {/* Date input */}
+                    {/* Platform/Category selector */}
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Data
+                        <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-3 uppercase tracking-wide">
+                            {type === 'revenue' ? 'Plataforma' : 'Categoria'}
                         </label>
-                        <div className="relative">
-                            <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                            <input
-                                type="date"
-                                value={date}
-                                onChange={(e) => setDate(e.target.value)}
-                                className="w-full pl-10 pr-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-800 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                            />
+                        <div className="flex flex-wrap gap-2">
+                            {type === 'revenue' ? (
+                                PLATFORMS.map((p) => (
+                                    <button
+                                        key={p.id}
+                                        type="button"
+                                        onClick={() => setPlatform(p.id)}
+                                        className={`px-4 py-2.5 rounded-xl text-sm font-semibold transition-all active:scale-95 ${platform === p.id
+                                            ? 'bg-gray-900 dark:bg-white text-white dark:text-gray-900 shadow-md transform scale-105'
+                                            : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                                            }`}
+                                    >
+                                        {p.name}
+                                    </button>
+                                ))
+                            ) : (
+                                EXPENSE_CATEGORIES.map((c) => (
+                                    <button
+                                        key={c.id}
+                                        type="button"
+                                        onClick={() => setCategory(c.id)}
+                                        className={`px-4 py-2.5 rounded-xl text-sm font-semibold transition-all active:scale-95 ${category === c.id
+                                            ? 'bg-gray-900 dark:bg-white text-white dark:text-gray-900 shadow-md transform scale-105'
+                                            : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                                            }`}
+                                    >
+                                        {c.name}
+                                    </button>
+                                ))
+                            )}
                         </div>
                     </div>
 
-                    {/* Description (optional) */}
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Descrição (opcional)
-                        </label>
-                        <input
-                            type="text"
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                            placeholder="Ex: Corrida para o aeroporto"
-                            className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-800 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                        />
+                    {/* Extra Fields Collapsible/Grid */}
+                    <div className="grid grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5 uppercase">
+                                Data
+                            </label>
+                            <div className="relative">
+                                <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                                <input
+                                    type="date"
+                                    value={date}
+                                    onChange={(e) => setDate(e.target.value)}
+                                    className="w-full pl-9 pr-3 py-2.5 bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl text-sm font-medium text-gray-800 dark:text-white focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500"
+                                />
+                            </div>
+                        </div>
+                        <div>
+                            <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5 uppercase">
+                                Descrição
+                            </label>
+                            <input
+                                type="text"
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                                placeholder="Opcional"
+                                className="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl text-sm font-medium text-gray-800 dark:text-white focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 placeholder-gray-400"
+                            />
+                        </div>
                     </div>
 
                     {/* Submit button */}
                     <button
                         type="submit"
-                        className={`w-full py-4 rounded-xl font-semibold text-white transition ${type === 'revenue'
-                                ? 'bg-emerald-600 hover:bg-emerald-700'
-                                : 'bg-rose-600 hover:bg-rose-700'
+                        className={`w-full py-4 rounded-xl text-lg font-bold text-white shadow-lg shadow-gray-200 dark:shadow-none transition-transform active:scale-[0.98] ${type === 'revenue'
+                            ? 'bg-emerald-600 hover:bg-emerald-500 shadow-emerald-200 dark:shadow-none'
+                            : 'bg-rose-600 hover:bg-rose-500 shadow-rose-200 dark:shadow-none'
                             }`}
                     >
-                        Salvar
+                        Salvar Lançamento
                     </button>
+
+                    {/* Padding for iPhone Home Indicator */}
+                    <div className="h-4 sm:hidden" />
                 </form>
             </div>
         </div>

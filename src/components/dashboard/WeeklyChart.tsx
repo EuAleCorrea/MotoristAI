@@ -48,19 +48,19 @@ const WeeklyChart: React.FC<WeeklyChartProps> = ({ entries, expenses }) => {
     }, [weekData]);
 
     return (
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-sm">
+        <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm">
             <div className="flex items-center justify-between mb-4">
-                <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300">
                     Semana Atual
                 </h3>
                 <div className="flex items-center gap-3 text-xs">
                     <div className="flex items-center gap-1">
                         <div className="w-2 h-2 rounded-full bg-emerald-500" />
-                        <span className="text-gray-500 dark:text-gray-400">Faturamento</span>
+                        <span className="text-slate-500 dark:text-slate-400">Faturamento</span>
                     </div>
                     <div className="flex items-center gap-1">
                         <div className="w-2 h-2 rounded-full bg-rose-500" />
-                        <span className="text-gray-500 dark:text-gray-400">Despesas</span>
+                        <span className="text-slate-500 dark:text-slate-400">Despesas</span>
                     </div>
                 </div>
             </div>
@@ -86,7 +86,7 @@ const WeeklyChart: React.FC<WeeklyChartProps> = ({ entries, expenses }) => {
                                 }}
                             />
                         </div>
-                        <span className="text-xs text-gray-500 dark:text-gray-400 capitalize">
+                        <span className="text-xs text-slate-500 dark:text-slate-400 capitalize">
                             {day.label}
                         </span>
                     </div>

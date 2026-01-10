@@ -37,7 +37,7 @@ const BottomNavBar = () => {
 
   return (
     <div className="fixed bottom-4 left-1/2 -translate-x-1/2 w-[95%] max-w-lg z-40">
-      <div className="relative h-16 bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 flex justify-between items-center">
+      <div className="relative h-16 bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 flex justify-between items-center">
         {navItems.slice(0, 2).map((item) => (
           <Link
             key={item.name}
