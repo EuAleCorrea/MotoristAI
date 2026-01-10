@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MotoristAI - O App do Motorista Profissional</title>
+    <meta name="description"
+        content="App de controle financeiro para motoristas de aplicativos como Uber, 99 e iFood. Saiba seu lucro real e aumente sua lucratividade.">
+    <meta name="author" content="MotoristAI">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="MotoristAI - O App do Motorista Profissional">
+    <meta property="og:description"
+        content="App de controle financeiro para motoristas de aplicativos. Saiba seu lucro real!">
+    <meta property="og:type" content="website">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">🚗</span>
+                    <span class="logo-text">MotoristAI</span>
+                </div>
+                <nav class="nav">
+                    <a href="#funcionalidades">Funcionalidades</a>
+                    <a href="#planos">Planos</a>
+                    <a href="#depoimentos">Depoimentos</a>
+                    <a href="#faq">FAQ</a>
+                </nav>
+                <a href="#planos" class="btn btn-primary">Começar Agora</a>
+                <button class="mobile-menu-btn" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Sua Lucratividade <span class="highlight">Real</span> Começa Agora!</h1>
+                    <p class="hero-subtitle">O único app que realmente mostra quanto você ganha como motorista de
+                        aplicativo. Controle suas finanças com inteligência artificial.</p>
+                    <div class="hero-cta">
+                        <a href="#planos" class="btn btn-success btn-lg">
+                            <span>🚀</span> Experimente Grátis por 15 Dias
+                        </a>
+                        <p class="cta-note">Sem cartão de crédito • Cancele quando quiser</p>
+                    </div>
+                    <div class="platforms">
+                        <span>Funciona com:</span>
+                        <div class="platform-logos">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png" alt="Uber"
+                                class="platform-logo">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/99_logo.png/600px-99_logo.png"
+                                alt="99" class="platform-logo">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/IFood_logo.svg/2560px-IFood_logo.svg.png"
+                                alt="iFood" class="platform-logo">
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <div class="phone-mockup">
+                        <div class="phone-screen">
+                            <div class="app-preview">
+                                <div class="app-header-preview">
+                                    <span>Dashboard</span>
+                                    <span>👤</span>
+                                </div>
+                                <div class="app-balance">
+                                    <span class="balance-label">Lucro Real do Mês</span>
+                                    <span class="balance-value">R$ 4.832,50</span>
+                                    <span class="balance-change positive">↑ 12% vs mês anterior</span>
+                                </div>
+                                <div class="app-stats">
+                                    <div class="stat-item">
+                                        <span class="stat-value">R$ 8.450</span>
+                                        <span class="stat-label">Faturamento</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <span class="stat-value">R$ 3.617</span>
+                                        <span class="stat-label">Despesas</span>
+                                    </div>
+                                </div>
+                                <div class="app-chart">
+                                    <div class="chart-bar" style="height: 60%"></div>
+                                    <div class="chart-bar" style="height: 80%"></div>
+                                    <div class="chart-bar" style="height: 45%"></div>
+                                    <div class="chart-bar" style="height: 90%"></div>
+                                    <div class="chart-bar" style="height: 70%"></div>
+                                    <div class="chart-bar active" style="height: 95%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-wave">
+            <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M0 120L60 105C120 90 240 60 360 45C480 30 600 30 720 37.5C840 45 960 60 1080 67.5C1200 75 1320 75 1380 75L1440 75V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z"
+                    fill="#f8fafc" />
+            </svg>
+        </div>
+    </section>
+
+    <!-- Problems Section -->
+    <section class="problems" id="problemas">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">😤 Você se identifica?</span>
+                <h2>Os <span class="highlight-danger">Problemas</span> que Todo Motorista Enfrenta</h2>
+            </div>
+            <div class="problems-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">💸</div>
+                    <h3>Não Sabe o Lucro Real</h3>
+                    <p>Você trabalha o dia todo, mas no final do mês não sabe quanto realmente sobrou no bolso.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">⛽</div>
+                    <h3>Gastos com Combustível</h3>
+                    <p>O combustível consome boa parte dos seus ganhos e você não tem controle exato desse gasto.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🔧</div>
+                    <h3>Manutenção Surpresa</h3>
+                    <p>Gastos inesperados com manutenção que acabam com todo o seu planejamento financeiro.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">📊</div>
+                    <h3>Falta de Controle</h3>
+                    <p>Sem organização, você não consegue identificar quais dias ou horários são mais lucrativos.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution" id="funcionalidades">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">✨ A Solução</span>
+                <h2>Conheça o <span class="highlight">MotoristAI</span></h2>
+                <p class="section-subtitle">Tudo que você precisa para ter controle total das suas finanças como
+                    motorista</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Controle Financeiro Completo</h3>
+                    <p>Registre todas as suas corridas, gastos com combustível, manutenção e muito mais em um só lugar.
+                    </p>
+                </div>
+                <div class="feature-card featured">
+                    <div class="feature-badge">🤖 IA</div>
+                    <div class="feature-icon">🧠</div>
+                    <h3>Inteligência Artificial</h3>
+                    <p>Nossa IA analisa seus dados e dá dicas personalizadas para você aumentar seus ganhos.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔔</div>
+                    <h3>Alertas de Manutenção</h3>
+                    <p>Receba lembretes de troca de óleo, revisão e outros serviços para evitar surpresas.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h3>Relatórios Detalhados</h3>
+                    <p>Visualize gráficos e relatórios para entender exatamente para onde vai seu dinheiro.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Metas de Ganhos</h3>
+                    <p>Defina metas diárias, semanais e mensais e acompanhe seu progresso em tempo real.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">☁️</div>
+                    <h3>Backup na Nuvem</h3>
+                    <p>Seus dados ficam seguros e sincronizados em todos os seus dispositivos.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- For Who Section -->
+    <section class="for-who">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">🎯 Para Quem?</span>
+                <h2>O MotoristAI é <span class="highlight">Perfeito</span> Para:</h2>
+            </div>
+            <div class="audience-grid">
+                <div class="audience-card">
+                    <span class="audience-emoji">🚗</span>
+                    <h3>Motoristas de Uber</h3>
+                </div>
+                <div class="audience-card">
+                    <span class="audience-emoji">🚕</span>
+                    <h3>Motoristas da 99</h3>
+                </div>
+                <div class="audience-card">
+                    <span class="audience-emoji">🛵</span>
+                    <h3>Entregadores iFood</h3>
+                </div>
+                <div class="audience-card">
+                    <span class="audience-emoji">📦</span>
+                    <h3>Entregadores Rappi</h3>
+                </div>
+                <div class="audience-card">
+                    <span class="audience-emoji">🚐</span>
+                    <h3>Motoristas de Van</h3>
+                </div>
+                <div class="audience-card">
+                    <span class="audience-emoji">🚚</span>
+                    <h3>Caminhoneiros</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-number">95%</span>
+                    <span class="stat-text">dos usuários aumentaram seu lucro</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">83%</span>
+                    <span class="stat-text">economizaram em combustível</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">98%</span>
+                    <span class="stat-text">de satisfação dos clientes</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing" id="planos">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">💰 Planos</span>
+                <h2>Escolha o Melhor <span class="highlight">Plano</span> Para Você</h2>
+                <p class="section-subtitle">Invista menos do que uma corrida por mês e multiplique seus ganhos</p>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3>Mensal</h3>
+                        <div class="price">
+                            <span class="currency">R$</span>
+                            <span class="amount">29</span>
+                            <span class="period">/mês</span>
+                        </div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>✅ Controle financeiro completo</li>
+                        <li>✅ Relatórios básicos</li>
+                        <li>✅ Alertas de manutenção</li>
+                        <li>✅ Suporte por email</li>
+                        <li>❌ Inteligência Artificial</li>
+                        <li>❌ Relatórios avançados</li>
+                    </ul>
+                    <a href="#" class="btn btn-outline">Assinar Agora</a>
+                </div>
+                <div class="pricing-card featured">
+                    <div class="pricing-badge">🔥 Mais Vendido</div>
+                    <div class="pricing-header">
+                        <h3>Semestral</h3>
+                        <div class="price">
+                            <span class="currency">R$</span>
+                            <span class="amount">19</span>
+                            <span class="period">/mês</span>
+                        </div>
+                        <span class="savings">Economize R$ 60</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>✅ Controle financeiro completo</li>
+                        <li>✅ Relatórios avançados</li>
+                        <li>✅ Alertas de manutenção</li>
+                        <li>✅ Inteligência Artificial</li>
+                        <li>✅ Suporte prioritário</li>
+                        <li>✅ Backup na nuvem</li>
+                    </ul>
+                    <a href="#" class="btn btn-success">Assinar Agora</a>
+                </div>
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3>Anual</h3>
+                        <div class="price">
+                            <span class="currency">R$</span>
+                            <span class="amount">14</span>
+                            <span class="period">/mês</span>
+                        </div>
+                        <span class="savings">Economize R$ 180</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>✅ Tudo do plano Semestral</li>
+                        <li>✅ Consultoria financeira</li>
+                        <li>✅ Acesso antecipado a novidades</li>
+                        <li>✅ Suporte via WhatsApp</li>
+                        <li>✅ Sem anúncios</li>
+                        <li>✅ 2 meses grátis</li>
+                    </ul>
+                    <a href="#" class="btn btn-outline">Assinar Agora</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials" id="depoimentos">
+        <div class="container">
+            <div class="section-header light">
+                <span class="section-tag">⭐ Depoimentos</span>
+                <h2>O Que Nossos <span class="highlight">Usuários</span> Dizem</h2>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <div class="testimonial-avatar">JC</div>
+                        <div class="testimonial-info">
+                            <h4>João Carlos</h4>
+                            <span>Motorista Uber - SP</span>
+                        </div>
+                    </div>
+                    <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                    <p>"Depois que comecei a usar o MotoristAI, descobri que estava perdendo R$ 800 por mês sem
+                        perceber. Agora meu lucro aumentou 25%!"</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <div class="testimonial-avatar">MS</div>
+                        <div class="testimonial-info">
+                            <h4>Maria Silva</h4>
+                            <span>Motorista 99 - RJ</span>
+                        </div>
+                    </div>
+                    <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                    <p>"A função de IA é incrível! Ela me mostrou os melhores horários para trabalhar. Agora ganho mais
+                        trabalhando menos!"</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <div class="testimonial-avatar">PS</div>
+                        <div class="testimonial-info">
+                            <h4>Pedro Santos</h4>
+                            <span>Entregador iFood - MG</span>
+                        </div>
+                    </div>
+                    <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                    <p>"Simples de usar e muito prático. Em 5 minutos por dia eu tenho controle total das minhas
+                        finanças. Recomendo muito!"</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq" id="faq">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">❓ Dúvidas</span>
+                <h2>Perguntas <span class="highlight">Frequentes</span></h2>
+            </div>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>O app funciona para todos os aplicativos de transporte?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Sim! O MotoristAI funciona com Uber, 99, iFood, Rappi, Loggi e qualquer outro aplicativo de
+                            transporte ou entrega. Você pode até cadastrar corridas particulares!</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Preciso pagar algo para testar?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Não! Oferecemos 7 dias grátis para você testar todas as funcionalidades. Não pedimos cartão
+                            de crédito para o período de teste.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Como a Inteligência Artificial me ajuda?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Nossa IA analisa seus padrões de trabalho, custos e ganhos para identificar oportunidades de
+                            economia e os melhores horários para você trabalhar, maximizando seu lucro.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Meus dados ficam seguros?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Com certeza! Utilizamos criptografia de ponta a ponta e seus dados ficam armazenados de forma
+                            segura na nuvem. Nunca compartilhamos suas informações com terceiros.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Posso cancelar a qualquer momento?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Sim! Você pode cancelar sua assinatura a qualquer momento, sem multas ou taxas. Basta acessar
+                            as configurações do app.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA Section -->
+    <section class="final-cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Pronto Para Aumentar Seu <span class="highlight">Lucro</span>?</h2>
+                <p>Junte-se a milhares de motoristas que já transformaram suas finanças com o MotoristAI</p>
+                <a href="#planos" class="btn btn-success btn-lg">
+                    <span>🚀</span> Começar Agora - 15 Dias Grátis
+                </a>
+                <p class="cta-guarantee">✅ Garantia de 30 dias ou seu dinheiro de volta</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <span class="logo-icon">🚗</span>
+                        <span class="logo-text">MotoristAI</span>
+                    </div>
+                    <p>O app mais completo para motoristas de aplicativo controlarem suas finanças.</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Links</h4>
+                        <a href="#funcionalidades">Funcionalidades</a>
+                        <a href="#planos">Planos</a>
+                        <a href="#depoimentos">Depoimentos</a>
+                        <a href="#faq">FAQ</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Legal</h4>
+                        <a href="#">Termos de Uso</a>
+                        <a href="#">Política de Privacidade</a>
+                        <a href="#">Contato</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Contato</h4>
+                        <a href="mailto:contato@motoristai.com.br">contato@motoristai.com.br</a>
+                        <a href="https://wa.me/5511999999999">WhatsApp</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 MotoristAI. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+</body>
+
+</html>
