@@ -24,7 +24,8 @@ interface EntryStore {
 
 const mapFromDB = (data: any): Entry => ({
   id: data.id,
-  date: data.date,
+  // Adiciona T12:00 para garantir que a data seja tratada corretamente independente do fuso horário
+  date: data.date && !data.date.includes('T') ? `${data.date}T12:00:00` : data.date,
   source: data.source,
   value: data.value,
   tripCount: data.trip_count,
@@ -66,7 +67,17 @@ export const useEntryStore = create<EntryStore>((set) => ({
   addEntry: async (entry) => {
     set({ isLoading: true, error: null });
     try {
-      const dbEntry = mapToDB(entry);
+      const { data: { user } } = await supabase.auth.getUser();
+
+      if (!user) {
+        throw new Error('Usuário não autenticado');
+      }
+
+      const dbEntry = {
+        ...mapToDB(entry),
+        user_id: user.id
+      };
+
       const { data, error } = await supabase
         .from('entries')
         .insert([dbEntry])

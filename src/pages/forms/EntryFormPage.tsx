@@ -15,7 +15,7 @@ function EntryFormPage() {
   const navigate = useNavigate();
   const isEditing = Boolean(id);
 
-  const { entries, addEntry, updateEntry } = useEntryStore();
+  const { entries, addEntry, updateEntry, isLoading } = useEntryStore();
 
   const [formData, setFormData] = useState({
     date: new Date().toISOString().slice(0, 10),
@@ -63,7 +63,7 @@ function EntryFormPage() {
     }
   }, [id, isEditing, entries, navigate]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const entryData: Omit<Entry, 'id'> = {
@@ -72,17 +72,21 @@ function EntryFormPage() {
       value: parseFloat(formData.value),
       tripCount: parseInt(formData.tripCount),
       kmDriven: parseFloat(formData.kmDriven),
-      hoursWorked: formData.hoursWorked,
+      hoursWorked: formData.hoursWorked || '00:00',
       notes: formData.notes,
     };
 
-    if (isEditing && id) {
-      updateEntry(id, entryData);
-    } else {
-      addEntry(entryData);
+    try {
+      if (isEditing && id) {
+        await updateEntry(id, entryData);
+      } else {
+        await addEntry(entryData);
+      }
+      navigate('/entradas');
+    } catch (error) {
+      console.error('Erro ao salvar:', error);
+      // O erro já é tratado na store, mas poderíamos mostrar um toast aqui
     }
-
-    navigate('/entradas');
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -188,8 +192,12 @@ function EntryFormPage() {
           <button type="button" onClick={() => navigate(-1)} className="flex-1 px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition">
             Cancelar
           </button>
-          <button type="submit" className="flex-1 px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition shadow-sm">
-            Salvar
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="flex-1 px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition shadow-sm disabled:opacity-70 disabled:cursor-not-allowed"
+          >
+            {isLoading ? 'Salvando...' : 'Salvar'}
           </button>
         </div>
       </form>

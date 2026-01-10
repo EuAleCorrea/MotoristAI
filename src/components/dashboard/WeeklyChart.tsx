@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { format, subDays, startOfDay, endOfDay } from 'date-fns';
+import { format, addDays, startOfWeek, startOfDay, endOfDay } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
 interface WeeklyChartProps {
@@ -10,10 +10,12 @@ interface WeeklyChartProps {
 const WeeklyChart: React.FC<WeeklyChartProps> = ({ entries, expenses }) => {
     const weekData = useMemo(() => {
         const today = new Date();
+        // Obtém a segunda-feira da semana atual (0 = Domingo, 1 = Segunda, ...)
+        const monday = startOfWeek(today, { weekStartsOn: 1 });
         const days = [];
 
-        for (let i = 6; i >= 0; i--) {
-            const date = subDays(today, i);
+        for (let i = 0; i < 7; i++) {
+            const date = addDays(monday, i);
             const dayStart = startOfDay(date);
             const dayEnd = endOfDay(date);
 
@@ -32,7 +34,7 @@ const WeeklyChart: React.FC<WeeklyChartProps> = ({ entries, expenses }) => {
                 .reduce((sum, e) => sum + e.amount, 0);
 
             days.push({
-                label: format(date, 'EEE', { locale: ptBR }),
+                label: format(date, 'EEEE', { locale: ptBR }).split('-')[0],
                 revenue: dayRevenue,
                 expense: dayExpenses,
                 date: date,
