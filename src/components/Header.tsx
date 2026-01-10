@@ -14,6 +14,9 @@ const Header = () => {
     /^\/cadastros\/veiculos$/,
     /^\/despesas\/veiculo\/.+$/,
     /^\/despesas\/familia\/.+$/,
+    /^\/faq$/,
+    /^\/suporte$/,
+    /^\/politicas\/.+$/,
   ];
 
   const isFormPage = formPagePatterns.some(pattern => pattern.test(location.pathname));

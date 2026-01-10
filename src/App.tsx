@@ -21,6 +21,13 @@ import RecurrencesPage from './pages/settings/placeholders/RecurrencesPage';
 import RecurringExpensesPage from './pages/settings/placeholders/RecurringExpensesPage';
 import VehicleFinancePage from './pages/forms/vehicle/VehicleFinanceFormPage';
 import ScrollToTop from './components/ScrollToTop';
+import FAQ from './pages/FAQ';
+import Support from './pages/Support';
+
+// Páginas de Políticas
+import PrivacyPolicy from './pages/policies/PrivacyPolicy';
+import TermsOfUse from './pages/policies/TermsOfUse';
+import LGPD from './pages/policies/LGPD';
 
 // Novas páginas de formulário de despesas do veículo
 import EnergyFuelFormPage from './pages/forms/vehicle/EnergyFuelFormPage';
@@ -55,6 +62,13 @@ function App() {
             <Route path="/metas/nova" element={<GoalFormPage />} />
             <Route path="/metas/:id/editar" element={<GoalFormPage />} />
             <Route path="/ajustes" element={<Settings />} />
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/suporte" element={<Support />} />
+
+            {/* Rotas de Políticas */}
+            <Route path="/politicas/privacidade" element={<PrivacyPolicy />} />
+            <Route path="/politicas/termos" element={<TermsOfUse />} />
+            <Route path="/politicas/lgpd" element={<LGPD />} />
 
             {/* Rotas de Despesas do Veículo */}
             <Route path="/despesas/veiculo/energia-combustivel" element={<EnergyFuelFormPage />} />

@@ -21,10 +21,10 @@ const DepreciationFormPage: React.FC = () => {
   useEffect(() => {
     if (isEditing) {
       const expenseToEdit = expenses.find(e => e.id === id && e.type === 'depreciation') as DepreciationExpense | undefined;
-      if (expenseToEdit) {
-        setPurchaseValue(expenseToEdit.purchaseValue.toString());
-        setPurchaseDate(new Date(expenseToEdit.purchaseDate).toISOString().slice(0, 10));
-        setCurrentValue(expenseToEdit.currentValue.toString());
+      if (expenseToEdit && expenseToEdit.details) {
+        setPurchaseValue(expenseToEdit.details.purchaseValue?.toString() || '');
+        setPurchaseDate(expenseToEdit.details.purchaseDate ? new Date(expenseToEdit.details.purchaseDate).toISOString().slice(0, 10) : '');
+        setCurrentValue(expenseToEdit.details.currentValue?.toString() || '');
         setNotes(expenseToEdit.notes || '');
       }
     }
@@ -48,12 +48,14 @@ const DepreciationFormPage: React.FC = () => {
       vehicleId: 'default',
       date: new Date().toISOString(),
       totalValue: (parseFloat(purchaseValue) || 0) - (parseFloat(currentValue) || 0),
-      purchaseValue: parseFloat(purchaseValue) || 0,
-      currentValue: parseFloat(currentValue) || 0,
-      purchaseDate,
-      evaluationDate: new Date().toISOString(),
-      depreciationPercentage,
       notes: notes || undefined,
+      details: {
+        purchaseValue: parseFloat(purchaseValue) || 0,
+        currentValue: parseFloat(currentValue) || 0,
+        purchaseDate,
+        evaluationDate: new Date().toISOString(),
+        depreciationPercentage,
+      }
     };
 
     if (isEditing && id) {
@@ -74,9 +76,24 @@ const DepreciationFormPage: React.FC = () => {
           <FormTextArea id="notes" name="notes" label="Observações (Opcional)" placeholder="Ex: Valor baseado na tabela FIPE." value={notes} onChange={e => setNotes(e.target.value)} />
         </div>
 
-        <div className="bg-danger-50 dark:bg-red-900 border-l-4 border-danger-500 text-danger-800 dark:text-red-100 p-4 rounded-r-lg shadow-sm text-center">
-          <p className="font-semibold text-lg">Desvalorização</p>
-          <p className="text-4xl font-bold mt-1">{depreciationPercentage.toFixed(2)}%</p>
+        <div className="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800/50 dark:to-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-2xl p-8 flex flex-col items-center justify-center shadow-inner">
+          <span className="text-xs font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2">
+            Desvalorização Estimada
+          </span>
+          <div className="relative">
+            <div className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-rose-500 to-orange-500">
+              {depreciationPercentage.toFixed(2)}%
+            </div>
+            <div className="absolute -right-8 -top-2">
+              <TrendingDown className="w-6 h-6 text-rose-500 animate-pulse" />
+            </div>
+          </div>
+          <div className="mt-4 flex flex-col items-center">
+            <span className="text-sm text-gray-400 dark:text-gray-500">Valor depreciado:</span>
+            <span className="text-lg font-bold text-gray-700 dark:text-gray-200">
+              R$ {((parseFloat(purchaseValue) || 0) - (parseFloat(currentValue) || 0)).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+            </span>
+          </div>
         </div>
 
         <div className="pt-6 flex items-center gap-4">

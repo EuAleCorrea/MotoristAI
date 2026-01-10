@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import SectionGrid from '../components/settings/SectionGrid';
 import {
-  Receipt, Fuel, Gauge, Camera, Wrench, ParkingCircle, Landmark, TrendingDown, Home, ShoppingCart, HeartPulse, GraduationCap, MoreHorizontal, PieChart, Layers3, FileText, Car, AppWindow, CalendarClock, Settings2, Repeat, Drama, Target
+  Receipt, Fuel, Gauge, Camera, Wrench, ParkingCircle, Landmark, TrendingDown, Home, ShoppingCart, HeartPulse, GraduationCap, MoreHorizontal, PieChart, Layers3, FileText, Car, AppWindow, CalendarClock, Settings2, Repeat, Drama, Target, HelpCircle, MessageCircle, Shield, ScrollText, ShieldCheck
 } from 'lucide-react';
 import { LucideIcon } from 'lucide-react';
 import { useQuickLaunchStore } from '../store/quickLaunchStore';
@@ -78,6 +78,21 @@ const SettingsPage = () => {
       items: [
         { id: 'Manutenção por km', title: 'Manutenção por km', icon: Wrench, iconName: 'Wrench', route: '/alertas/manutencao', disabled: true },
         { id: 'Despesas recorrentes', title: 'Despesas recorrentes', icon: Repeat, iconName: 'Repeat', route: '/alertas/despesas', disabled: true },
+      ],
+    },
+    {
+      title: 'Ajuda',
+      items: [
+        { id: 'FAQ', title: 'Perguntas Frequentes', icon: HelpCircle, iconName: 'HelpCircle', route: '/faq' },
+        { id: 'Suporte', title: 'Falar com o Suporte', icon: MessageCircle, iconName: 'MessageCircle', route: '/suporte' },
+      ],
+    },
+    {
+      title: 'Políticas',
+      items: [
+        { id: 'Privacidade', title: 'Política de Privacidade', icon: Shield, iconName: 'Shield', route: '/politicas/privacidade' },
+        { id: 'Termos', title: 'Termos de Uso', icon: ScrollText, iconName: 'ScrollText', route: '/politicas/termos' },
+        { id: 'LGPD', title: 'LGPD', icon: ShieldCheck, iconName: 'ShieldCheck', route: '/politicas/lgpd' },
       ],
     },
   ];
