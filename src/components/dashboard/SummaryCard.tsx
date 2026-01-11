@@ -1,5 +1,5 @@
-import React from 'react';
 import { TrendingUp, TrendingDown, Plus, Minus } from 'lucide-react';
+import { formatCurrency } from '../../utils/formatHelpers';
 
 interface SummaryCardProps {
     title: string;
@@ -33,7 +33,7 @@ const SummaryCard: React.FC<SummaryCardProps> = ({
 
                 <span className={`text-2xl font-bold mt-1 ${isRevenue ? 'text-emerald-700 dark:text-emerald-300' : 'text-rose-700 dark:text-rose-300'
                     }`}>
-                    R$ {value.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    {formatCurrency(value)}
                 </span>
 
                 {percentChange !== undefined && (

@@ -5,13 +5,13 @@ import FormSection from '../../../components/forms/FormSection';
 import FormInput from '../../../components/forms/FormInput';
 import FormSelect from '../../../components/forms/FormSelect';
 import FormTextArea from '../../../components/forms/FormTextArea';
-import { Landmark, Calendar, DollarSign, Paperclip, AlertTriangle, Building } from 'lucide-react';
+import { Landmark, Calendar, Paperclip, AlertTriangle, Building } from 'lucide-react';
 import { isBefore, addDays, isToday, formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import FormPageLayout from '../../../components/layouts/FormPageLayout';
 
-type CostType = 'Financiamento' | 'Seguro' | 'IPVA' | 'Licenciamento' | 'Outros';
-type Status = 'Pago' | 'Em aberto';
+type CostType = 'Financiamento' | 'Seguro' | 'IPVA' | 'Licenciamento' | 'Multa' | 'Outros';
+type Status = 'Pago' | 'Pendente';
 
 const VehicleFinanceFormPage: React.FC = () => {
   const navigate = useNavigate();
@@ -24,7 +24,7 @@ const VehicleFinanceFormPage: React.FC = () => {
   const [provider, setProvider] = useState('');
   const [totalValue, setTotalValue] = useState('');
   const [dueDate, setDueDate] = useState(new Date().toISOString().slice(0, 10));
-  const [status, setStatus] = useState<Status>('Em aberto');
+  const [status, setStatus] = useState<Status>('Pendente');
   const [notes, setNotes] = useState('');
   const [paymentProof, setPaymentProof] = useState<File | null>(null);
 
@@ -32,11 +32,11 @@ const VehicleFinanceFormPage: React.FC = () => {
     if (isEditing) {
       const expenseToEdit = expenses.find(e => e.id === id && e.type === 'finance') as FinanceExpense | undefined;
       if (expenseToEdit) {
-        setCostType(expenseToEdit.costType);
-        setProvider(expenseToEdit.description.split(' - ')[1] || '');
+        setCostType(expenseToEdit.details.costType);
+        setProvider(expenseToEdit.details.description.split(' - ')[1] || '');
         setTotalValue(expenseToEdit.totalValue.toString());
-        setDueDate(new Date(expenseToEdit.dueDate).toISOString().slice(0, 10));
-        setStatus(expenseToEdit.status);
+        setDueDate(new Date(expenseToEdit.details.dueDate).toISOString().slice(0, 10));
+        setStatus(expenseToEdit.details.status);
         setNotes(expenseToEdit.notes || '');
       }
     }
@@ -69,12 +69,15 @@ const VehicleFinanceFormPage: React.FC = () => {
     const expenseData: Omit<FinanceExpense, 'id' | 'createdAt' | 'updatedAt'> = {
       type: 'finance',
       vehicleId: 'default',
-      costType,
-      description: `${costType} - ${provider}`,
+      date: new Date().toISOString(), // Fallback
       totalValue: parseFloat(totalValue) || 0,
-      dueDate,
-      status,
       notes: notes || undefined,
+      details: {
+        costType,
+        description: `${costType} - ${provider}`,
+        dueDate,
+        status,
+      }
     };
 
     if (isEditing && id) {
@@ -100,13 +103,14 @@ const VehicleFinanceFormPage: React.FC = () => {
             <option>Seguro</option>
             <option>IPVA</option>
             <option>Licenciamento</option>
+            <option>Multa</option>
             <option>Outros</option>
           </FormSelect>
           <FormInput id="provider" name="provider" label="Instituição / Seguradora" type="text" placeholder="Ex: Banco XYZ" value={provider} onChange={e => setProvider(e.target.value)} required icon={<Building className="w-4 h-4 text-gray-400" />} />
-          <FormInput id="totalValue" name="totalValue" label="Valor (R$)" type="number" step="0.01" placeholder="1200.00" value={totalValue} onChange={e => setTotalValue(e.target.value)} required icon={<DollarSign className="w-4 h-4 text-gray-400" />} />
+          <FormInput id="totalValue" name="totalValue" label="Valor (R$)" type="number" step="0.01" placeholder="0,00" value={totalValue} onChange={e => setTotalValue(e.target.value)} required icon={<span className="text-sm font-semibold text-gray-500">R$</span>} />
           <FormInput id="dueDate" name="dueDate" label="Vencimento" type="date" value={dueDate} onChange={e => setDueDate(e.target.value)} required icon={<Calendar className="w-4 h-4 text-gray-400" />} />
           <FormSelect id="status" name="status" label="Situação" value={status} onChange={e => setStatus(e.target.value as Status)}>
-            <option>Em aberto</option>
+            <option>Pendente</option>
             <option>Pago</option>
           </FormSelect>
           <div className="md:col-span-2">

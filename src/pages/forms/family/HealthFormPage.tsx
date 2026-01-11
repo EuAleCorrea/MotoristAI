@@ -5,7 +5,7 @@ import FormSection from '../../../components/forms/FormSection';
 import FormInput from '../../../components/forms/FormInput';
 import FormSelect from '../../../components/forms/FormSelect';
 import FormTextArea from '../../../components/forms/FormTextArea';
-import { HeartPulse, Calendar, DollarSign, Building } from 'lucide-react';
+import { HeartPulse, Calendar, Building } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import FormPageLayout from '../../../components/layouts/FormPageLayout';
 
@@ -97,7 +97,7 @@ const HealthFormPage: React.FC = () => {
             <option>Outros</option>
           </FormSelect>
           <FormInput id="provider" label="Profissional / Clínica / Farmácia" type="text" placeholder="Ex: Dr. João Silva" value={provider} onChange={e => setProvider(e.target.value)} required icon={<Building className="w-4 h-4 text-gray-400" />} />
-          <FormInput id="totalValue" label="Valor (R$)" type="number" step="0.01" placeholder="250.00" value={totalValue} onChange={e => setTotalValue(e.target.value)} required icon={<DollarSign className="w-4 h-4 text-gray-400" />} />
+          <FormInput id="totalValue" label="Valor (R$)" type="number" step="0.01" placeholder="0,00" value={totalValue} onChange={e => setTotalValue(e.target.value)} required icon={<span className="text-sm font-semibold text-gray-500">R$</span>} />
           <FormInput id="date" label="Data" type="date" value={date} onChange={e => setDate(e.target.value)} required icon={<Calendar className="w-4 h-4 text-gray-400" />} />
         </FormSection>
 
@@ -123,7 +123,7 @@ const HealthFormPage: React.FC = () => {
                 exit={{ opacity: 0, height: 0 }}
                 className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6"
               >
-                <FormInput id="reimbursementValue" label="Valor do Reembolso (R$)" type="number" step="0.01" placeholder="100.00" value={reimbursementValue} onChange={e => setReimbursementValue(e.target.value)} icon={<DollarSign className="w-4 h-4 text-gray-400" />} />
+                <FormInput id="reimbursementValue" label="Valor do Reembolso (R$)" type="number" step="0.01" placeholder="0,00" value={reimbursementValue} onChange={e => setReimbursementValue(e.target.value)} icon={<span className="text-sm font-semibold text-gray-500">R$</span>} />
                 <FormInput id="reimbursementDate" label="Data do Reembolso" type="date" value={reimbursementDate} onChange={e => setReimbursementDate(e.target.value)} icon={<Calendar className="w-4 h-4 text-gray-400" />} />
               </motion.div>
             )}

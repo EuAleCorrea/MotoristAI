@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { format, addDays, startOfWeek, startOfDay, endOfDay } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { formatCurrency } from '../../utils/formatHelpers';
 
 interface WeeklyChartProps {
     entries: Array<{ date: string; value: number }>;

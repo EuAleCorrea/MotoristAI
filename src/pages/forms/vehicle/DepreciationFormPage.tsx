@@ -3,8 +3,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useVehicleExpensesStore, DepreciationExpense } from '../../../store/vehicleExpensesStore';
 import FormInput from '../../../components/forms/FormInput';
 import FormTextArea from '../../../components/forms/FormTextArea';
-import { TrendingDown, Calendar, DollarSign } from 'lucide-react';
+import { TrendingDown, Calendar } from 'lucide-react';
 import FormPageLayout from '../../../components/layouts/FormPageLayout';
+import { formatCurrency, formatNumber } from '../../../utils/formatHelpers';
 
 const DepreciationFormPage: React.FC = () => {
   const navigate = useNavigate();
@@ -70,9 +71,9 @@ const DepreciationFormPage: React.FC = () => {
     <FormPageLayout title={isEditing ? 'Editar Depreciação' : 'Cálculo de Depreciação'} icon={TrendingDown}>
       <form onSubmit={handleSubmit} className="space-y-6 pb-24">
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 sm:p-6 space-y-6">
-          <FormInput id="purchaseValue" name="purchaseValue" label="Valor de Compra (R$)" type="number" step="0.01" placeholder="75000.00" value={purchaseValue} onChange={e => setPurchaseValue(e.target.value)} required icon={<DollarSign className="w-4 h-4 text-gray-400" />} />
+          <FormInput id="purchaseValue" name="purchaseValue" label="Valor de Compra (R$)" type="number" step="0.01" placeholder="0,00" value={purchaseValue} onChange={e => setPurchaseValue(e.target.value)} required icon={<span className="text-sm font-semibold text-gray-500 dark:text-gray-400">R$</span>} />
           <FormInput id="purchaseDate" name="purchaseDate" label="Data de Compra" type="date" value={purchaseDate} onChange={e => setPurchaseDate(e.target.value)} required icon={<Calendar className="w-4 h-4 text-gray-400" />} />
-          <FormInput id="currentValue" name="currentValue" label="Valor Atual Estimado (R$)" type="number" step="0.01" placeholder="60000.00" value={currentValue} onChange={e => setCurrentValue(e.target.value)} required icon={<DollarSign className="w-4 h-4 text-gray-400" />} />
+          <FormInput id="currentValue" name="currentValue" label="Valor Atual Estimado (R$)" type="number" step="0.01" placeholder="0,00" value={currentValue} onChange={e => setCurrentValue(e.target.value)} required icon={<span className="text-sm font-semibold text-gray-500 dark:text-gray-400">R$</span>} />
           <FormTextArea id="notes" name="notes" label="Observações (Opcional)" placeholder="Ex: Valor baseado na tabela FIPE." value={notes} onChange={e => setNotes(e.target.value)} />
         </div>
 
@@ -82,7 +83,7 @@ const DepreciationFormPage: React.FC = () => {
           </span>
           <div className="relative">
             <div className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-rose-500 to-orange-500">
-              {depreciationPercentage.toFixed(2)}%
+              {formatNumber(depreciationPercentage, 2)}%
             </div>
             <div className="absolute -right-8 -top-2">
               <TrendingDown className="w-6 h-6 text-rose-500 animate-pulse" />
@@ -91,7 +92,7 @@ const DepreciationFormPage: React.FC = () => {
           <div className="mt-4 flex flex-col items-center">
             <span className="text-sm text-gray-400 dark:text-gray-500">Valor depreciado:</span>
             <span className="text-lg font-bold text-gray-700 dark:text-gray-200">
-              R$ {((parseFloat(purchaseValue) || 0) - (parseFloat(currentValue) || 0)).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+              {formatCurrency((parseFloat(purchaseValue) || 0) - (parseFloat(currentValue) || 0))}
             </span>
           </div>
         </div>

@@ -4,7 +4,7 @@ import { useGoalStore } from '../../store/goalStore';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import FormPageLayout from '../../components/layouts/FormPageLayout';
-import { Target, DollarSign, Hash } from 'lucide-react';
+import { Target, Hash } from 'lucide-react';
 import FormSection from '../../components/forms/FormSection';
 import FormInput from '../../components/forms/FormInput';
 import FormSelect from '../../components/forms/FormSelect';
@@ -128,8 +128,8 @@ function GoalFormPage() {
             step="0.01"
             value={formData.revenue}
             onChange={handleInputChange}
-            placeholder="5000.00"
-            icon={<DollarSign className="w-4 h-4 text-gray-400" />}
+            placeholder="0,00"
+            icon={<span className="text-sm font-semibold text-gray-500">R$</span>}
           />
           <FormInput
             id="profit"
@@ -139,8 +139,8 @@ function GoalFormPage() {
             step="0.01"
             value={formData.profit}
             onChange={handleInputChange}
-            placeholder="3500.00"
-            icon={<DollarSign className="w-4 h-4 text-gray-400" />}
+            placeholder="0,00"
+            icon={<span className="text-sm font-semibold text-gray-500">R$</span>}
           />
           <FormInput
             id="expense"
@@ -150,8 +150,8 @@ function GoalFormPage() {
             step="0.01"
             value={formData.expense}
             onChange={handleInputChange}
-            placeholder="1500.00"
-            icon={<DollarSign className="w-4 h-4 text-gray-400" />}
+            placeholder="0,00"
+            icon={<span className="text-sm font-semibold text-gray-500">R$</span>}
           />
         </FormSection>
 

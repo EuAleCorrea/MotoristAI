@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Fuel, Zap, Droplets, Calendar, DollarSign, Gauge } from 'lucide-react';
+import { Fuel, Zap, Droplets, Calendar, Gauge } from 'lucide-react';
 import { useVehicleExpensesStore, FuelExpense } from '../../../store/vehicleExpensesStore';
 import FormSection from '../../../components/forms/FormSection';
 import FormInput from '../../../components/forms/FormInput';
@@ -36,17 +36,17 @@ const EnergyFuelFormPage: React.FC = () => {
     if (isEditing) {
       const expenseToEdit = expenses.find(e => e.id === id && e.type === 'fuel') as FuelExpense | undefined;
       if (expenseToEdit) {
-        setFuelType(expenseToEdit.fuelType);
+        setFuelType(expenseToEdit.details.fuelType);
         setDate(new Date(expenseToEdit.date).toISOString().slice(0, 10));
         setOdometer(expenseToEdit.odometer?.toString() || '');
         setNotes(expenseToEdit.notes || '');
-        setPricePerLiter(expenseToEdit.pricePerUnit?.toString() || '');
-        setLiters(expenseToEdit.quantity?.toString() || '');
-        setPricePerKwh(expenseToEdit.electricPricePerUnit?.toString() || '');
-        setKwh(expenseToEdit.electricQuantity?.toString() || '');
+        setPricePerLiter(expenseToEdit.details.pricePerUnit?.toString() || '');
+        setLiters(expenseToEdit.details.quantity?.toString() || '');
+        setPricePerKwh(expenseToEdit.details.electricPricePerUnit?.toString() || '');
+        setKwh(expenseToEdit.details.electricQuantity?.toString() || '');
 
-        const liquidTotal = expenseToEdit.pricePerUnit * expenseToEdit.quantity;
-        const electricTotal = (expenseToEdit.electricPricePerUnit || 0) * (expenseToEdit.electricQuantity || 0);
+        const liquidTotal = (expenseToEdit.details.pricePerUnit || 0) * (expenseToEdit.details.quantity || 0);
+        const electricTotal = (expenseToEdit.details.electricPricePerUnit || 0) * (expenseToEdit.details.electricQuantity || 0);
         setTotalValue(liquidTotal > 0 ? liquidTotal.toFixed(2) : '');
         setTotalElectricValue(electricTotal > 0 ? electricTotal.toFixed(2) : '');
       }
@@ -97,19 +97,21 @@ const EnergyFuelFormPage: React.FC = () => {
     e.preventDefault();
     const finalTotal = (parseFloat(totalValue) || 0) + (parseFloat(totalElectricValue) || 0);
 
-    const expenseData = {
+    const expenseData: Omit<FuelExpense, 'id' | 'createdAt' | 'updatedAt'> = {
       type: 'fuel',
       vehicleId: 'default',
       date,
       totalValue: finalTotal,
       odometer: parseFloat(odometer) || undefined,
       notes: notes || undefined,
-      fuelType,
-      pricePerUnit: parseFloat(pricePerLiter) || 0,
-      quantity: parseFloat(liters) || 0,
-      electricPricePerUnit: parseFloat(pricePerKwh) || undefined,
-      electricQuantity: parseFloat(kwh) || undefined,
-    } as Omit<FuelExpense, 'id' | 'createdAt' | 'updatedAt'>;
+      details: {
+        fuelType,
+        pricePerUnit: parseFloat(pricePerLiter) || 0,
+        quantity: parseFloat(liters) || 0,
+        electricPricePerUnit: parseFloat(pricePerKwh) || undefined,
+        electricQuantity: parseFloat(kwh) || undefined,
+      }
+    };
 
     if (isEditing && id) {
       updateExpense(id, expenseData);
@@ -145,17 +147,17 @@ const EnergyFuelFormPage: React.FC = () => {
 
         {showLiquid && (
           <FormSection title={fuelType === 'Híbrido' ? "Parte 1: Combustível Líquido" : "Detalhes do Abastecimento"}>
-            <FormInput id="pricePerLiter" name="pricePerLiter" label="Valor por Litro (R$)" type="number" step="0.001" placeholder="5.89" value={pricePerLiter} onChange={e => { setPricePerLiter(e.target.value); setLastEdited('price'); }} icon={<DollarSign className="w-4 h-4 text-gray-400" />} />
-            <FormInput id="liters" name="liters" label="Quantidade (L)" type="number" step="0.01" placeholder="40.5" value={liters} onChange={e => { setLiters(e.target.value); setLastEdited('quantity'); }} icon={<Droplets className="w-4 h-4 text-gray-400" />} />
-            <FormInput id="totalValue" name="totalValue" label="Valor Total (R$)" type="number" step="0.01" placeholder="238.55" value={totalValue} onChange={e => { setTotalValue(e.target.value); setLastEdited('total'); }} icon={<DollarSign className="w-4 h-4 text-gray-400" />} />
+            <FormInput id="pricePerLiter" name="pricePerLiter" label="Valor por Litro (R$)" type="number" step="0.001" placeholder="0,000" value={pricePerLiter} onChange={e => { setPricePerLiter(e.target.value); setLastEdited('price'); }} icon={<span className="text-sm font-semibold text-gray-500">R$</span>} />
+            <FormInput id="liters" name="liters" label="Quantidade (L)" type="number" step="0.01" placeholder="0,00" value={liters} onChange={e => { setLiters(e.target.value); setLastEdited('quantity'); }} icon={<Droplets className="w-4 h-4 text-gray-400" />} />
+            <FormInput id="totalValue" name="totalValue" label="Valor Total (R$)" type="number" step="0.01" placeholder="0,00" value={totalValue} onChange={e => { setTotalValue(e.target.value); setLastEdited('total'); }} icon={<span className="text-sm font-semibold text-gray-500">R$</span>} />
           </FormSection>
         )}
 
         {showElectric && (
           <FormSection title={fuelType === 'Híbrido' ? "Parte 2: Energia Elétrica" : "Detalhes da Recarga"}>
-            <FormInput id="pricePerKwh" name="pricePerKwh" label="Valor por kWh (R$)" type="number" step="0.01" placeholder="0.95" value={pricePerKwh} onChange={e => setPricePerKwh(e.target.value)} icon={<DollarSign className="w-4 h-4 text-gray-400" />} />
-            <FormInput id="kwh" name="kwh" label="Quantidade (kWh)" type="number" step="0.01" placeholder="50.2" value={kwh} onChange={e => setKwh(e.target.value)} icon={<Zap className="w-4 h-4 text-gray-400" />} />
-            <FormInput id="totalElectricValue" name="totalElectricValue" label="Valor Total da Recarga (R$)" type="number" step="0.01" placeholder="47.69" value={totalElectricValue} onChange={e => setTotalElectricValue(e.target.value)} icon={<DollarSign className="w-4 h-4 text-gray-400" />} />
+            <FormInput id="pricePerKwh" name="pricePerKwh" label="Valor por kWh (R$)" type="number" step="0.01" placeholder="0,00" value={pricePerKwh} onChange={e => setPricePerKwh(e.target.value)} icon={<span className="text-sm font-semibold text-gray-500">R$</span>} />
+            <FormInput id="kwh" name="kwh" label="Quantidade (kWh)" type="number" step="0.01" placeholder="0,0" value={kwh} onChange={e => setKwh(e.target.value)} icon={<Zap className="w-4 h-4 text-gray-400" />} />
+            <FormInput id="totalElectricValue" name="totalElectricValue" label="Valor Total da Recarga (R$)" type="number" step="0.01" placeholder="0,00" value={totalElectricValue} onChange={e => setTotalElectricValue(e.target.value)} icon={<span className="text-sm font-semibold text-gray-500">R$</span>} />
           </FormSection>
         )}
 

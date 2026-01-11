@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { Clock, Route, DollarSign, TrendingUp, Car } from 'lucide-react';
 import { useEntryStore } from '../../store/entryStore';
 import { startOfWeek, endOfWeek } from 'date-fns';
+import { formatCurrency, formatNumber } from '../../utils/formatHelpers';
 
 // Helper to parse hours from "HH:MM" format
 const parseHoursWorked = (hoursStr: string | undefined): number => {
@@ -80,28 +81,28 @@ function PerformanceMetrics() {
                 <MetricCard
                     icon={<DollarSign className="w-5 h-5" />}
                     label="R$ / Hora"
-                    value={`R$ ${metrics.revenuePerHour.toFixed(2)}`}
-                    subLabel={`${metrics.totalHours.toFixed(1)}h trabalhadas`}
+                    value={formatCurrency(metrics.revenuePerHour)}
+                    subLabel={`${formatNumber(metrics.totalHours, 1)}h trabalhadas`}
                 />
 
                 <MetricCard
                     icon={<Route className="w-5 h-5" />}
                     label="R$ / KM"
-                    value={`R$ ${metrics.revenuePerKm.toFixed(2)}`}
-                    subLabel={`${metrics.totalKm.toFixed(0)} km rodados`}
+                    value={formatCurrency(metrics.revenuePerKm)}
+                    subLabel={`${formatNumber(metrics.totalKm, 0)} km rodados`}
                 />
 
                 <MetricCard
                     icon={<Car className="w-5 h-5" />}
                     label="R$ / Viagem"
-                    value={`R$ ${metrics.revenuePerTrip.toFixed(2)}`}
+                    value={formatCurrency(metrics.revenuePerTrip)}
                     subLabel={`${metrics.totalTrips} viagens`}
                 />
 
                 <MetricCard
                     icon={<Clock className="w-5 h-5" />}
                     label="KM / Hora"
-                    value={`${(metrics.totalHours > 0 ? metrics.totalKm / metrics.totalHours : 0).toFixed(1)} km`}
+                    value={`${formatNumber(metrics.totalHours > 0 ? metrics.totalKm / metrics.totalHours : 0, 1)} km`}
                     subLabel="Produtividade"
                 />
             </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, DollarSign, Calendar } from 'lucide-react';
+import { X, Calendar } from 'lucide-react';
 import { format } from 'date-fns';
 import { useEntryStore } from '../../store/entryStore';
 import { useExpenseStore } from '../../store/expenseStore';
@@ -125,9 +125,9 @@ const QuickEntryModal: React.FC<QuickEntryModalProps> = ({ isOpen, onClose, type
                             Valor
                         </label>
                         <div className="relative group">
-                            <div className={`absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none ${type === 'revenue' ? 'text-emerald-500' : 'text-rose-500'
+                            <div className={`absolute inset-y-0 left-0 pl-1 flex items-center pointer-events-none font-bold text-2xl ${type === 'revenue' ? 'text-emerald-500' : 'text-rose-500'
                                 }`}>
-                                <DollarSign className="h-8 w-8" strokeWidth={2.5} />
+                                R$
                             </div>
                             <input
                                 type="number"
@@ -136,9 +136,9 @@ const QuickEntryModal: React.FC<QuickEntryModalProps> = ({ isOpen, onClose, type
                                 value={value}
                                 onChange={(e) => setValue(e.target.value)}
                                 placeholder="0,00"
-                                className={`block w-full pl-14 pr-4 py-4 text-4xl font-bold bg-transparent border-b-2 focus:ring-0 focus:outline-none transition-colors ${type === 'revenue'
-                                        ? 'border-gray-200 dark:border-gray-700 focus:border-emerald-500 text-gray-900 dark:text-white placeholder-gray-300'
-                                        : 'border-gray-200 dark:border-gray-700 focus:border-rose-500 text-gray-900 dark:text-white placeholder-gray-300'
+                                className={`block w-full pl-10 pr-4 py-4 text-4xl font-bold bg-transparent border-b-2 focus:ring-0 focus:outline-none transition-colors ${type === 'revenue'
+                                    ? 'border-gray-200 dark:border-gray-700 focus:border-emerald-500 text-gray-900 dark:text-white placeholder-gray-300'
+                                    : 'border-gray-200 dark:border-gray-700 focus:border-rose-500 text-gray-900 dark:text-white placeholder-gray-300'
                                     }`}
                                 required
                                 autoFocus

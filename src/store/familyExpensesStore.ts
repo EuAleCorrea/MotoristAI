@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { supabase } from '../services/supabase';
-import { faker } from '@faker-js/faker';
+
 
 // --- Base Interface ---
 export interface FamilyExpense {
@@ -11,9 +11,9 @@ export interface FamilyExpense {
   paymentMethod: string;
   notes?: string;
   // Specific fields (stored in details JSONB in DB)
-  details: Record<string, any>;
+  details?: Record<string, any>;
   // Dates (mapped from DB date column or details)
-  date: string;
+  date?: string;
   dueDate?: string;
   purchaseDate?: string;
   createdAt: string;
@@ -23,13 +23,58 @@ export interface FamilyExpense {
 // --- Specific Expense Types Support (for UI consumption) ---
 export interface HousingExpense extends FamilyExpense {
   category: 'Moradia';
-  details: {
-    expenseType: 'Aluguel' | 'Financiamento' | 'Condomínio' | 'Energia' | 'Água' | 'Internet' | 'Manutenção' | 'Outros';
-    dueDate: string;
-    paymentDate?: string;
-    status: 'Pago' | 'Pendente';
-    recurrence: 'Única' | 'Mensal' | 'Anual';
-  }
+  expenseType: 'Aluguel' | 'Financiamento' | 'Condomínio' | 'Energia' | 'Água' | 'Internet' | 'Manutenção' | 'Outros';
+  dueDate: string;
+  paymentDate?: string;
+  status: 'Pago' | 'Pendente';
+  recurrence: 'Única' | 'Mensal' | 'Anual';
+}
+
+export interface FoodExpense extends FamilyExpense {
+  category: 'Alimentação';
+  expenseType: 'Supermercado' | 'Delivery' | 'Restaurante' | 'Alimentação escolar' | 'Assinaturas' | 'Outros';
+  purchaseDate: string;
+  location: string;
+  recurrence: 'Única' | 'Semanal' | 'Mensal';
+  productList?: string;
+}
+
+export interface HealthExpense extends FamilyExpense {
+  category: 'Saúde';
+  expenseType: 'Plano de Saúde' | 'Consulta' | 'Exame' | 'Medicamento' | 'Odontologia' | 'Academia' | 'Outros';
+  provider: string;
+  date: string;
+  hasReimbursement: boolean;
+  reimbursementValue?: number;
+  reimbursementDate?: string;
+}
+
+export interface EducationExpense extends FamilyExpense {
+  category: 'Educação';
+  expenseType: 'Mensalidade' | 'Material escolar' | 'Curso' | 'Transporte escolar' | 'Uniforme' | 'Outros';
+  institution: string;
+  dueDate: string;
+  paymentDate?: string;
+  status: 'Pago' | 'Pendente';
+  recurrence: 'Única' | 'Mensal' | 'Anual';
+}
+
+export interface LeisureExpense extends FamilyExpense {
+  category: 'Lazer';
+  expenseType: 'Viagem' | 'Cinema' | 'Restaurante' | 'Passeio' | 'Streaming' | 'Academia' | 'Outros';
+  location: string;
+  date: string;
+  participants?: string;
+  periodicity?: 'Mensal' | 'Anual';
+  destination?: string;
+  durationInDays?: number;
+}
+
+export interface OtherExpense extends FamilyExpense {
+  category: 'Outras';
+  customCategory: string;
+  date: string;
+  recurrence: 'Única' | 'Mensal' | 'Anual';
 }
 
 // ... (Other interfaces are effectively handled by the generic structure + details, 

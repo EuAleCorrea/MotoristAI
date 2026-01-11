@@ -5,7 +5,7 @@ import FormSection from '../../../components/forms/FormSection';
 import FormInput from '../../../components/forms/FormInput';
 import FormSelect from '../../../components/forms/FormSelect';
 import FormTextArea from '../../../components/forms/FormTextArea';
-import { ParkingCircle, Caravan, Calendar, DollarSign, MapPin, Route, Clock } from 'lucide-react';
+import { ParkingCircle, Calendar, MapPin, Route, Clock } from 'lucide-react';
 import FormPageLayout from '../../../components/layouts/FormPageLayout';
 
 type ExpenseType = 'Pedágio' | 'Estacionamento';
@@ -30,12 +30,10 @@ const TollParkingFormPage: React.FC = () => {
     if (isEditing) {
       const expenseToEdit = expenses.find(e => e.id === id && e.type === 'toll_parking') as TollParkingExpense | undefined;
       if (expenseToEdit) {
-        setExpenseType(expenseToEdit.expenseType);
+        setExpenseType(expenseToEdit.details.expenseType);
         setDate(new Date(expenseToEdit.date).toISOString().slice(0, 10));
         setTotalValue(expenseToEdit.totalValue.toString());
-        setLocation(expenseToEdit.location || '');
-        // Note: Conditional fields (highway, duration) and paymentMethod are not stored in the current model.
-        // They would need to be added to the TollParkingExpense type in the store to be persisted.
+        setLocation(expenseToEdit.details.location || '');
         setNotes(expenseToEdit.notes || '');
       }
     }
@@ -52,13 +50,15 @@ const TollParkingFormPage: React.FC = () => {
     const expenseData: Omit<TollParkingExpense, 'id' | 'createdAt' | 'updatedAt'> = {
       type: 'toll_parking',
       vehicleId: 'default',
-      expenseType,
       date,
       totalValue: parseFloat(totalValue) || 0,
-      description: `${expenseType} - ${location}`,
-      chargeType: 'Avulso', // Placeholder, can be linked to paymentMethod
-      location: location || undefined,
       notes: notes || undefined,
+      details: {
+        expenseType,
+        description: `${expenseType} - ${location}`,
+        chargeType: 'Avulso',
+        location: location || undefined,
+      }
     };
 
     if (isEditing && id) {
@@ -78,7 +78,7 @@ const TollParkingFormPage: React.FC = () => {
             <option>Estacionamento</option>
           </FormSelect>
           <FormInput id="date" name="date" label="Data" type="date" value={date} onChange={e => setDate(e.target.value)} required icon={<Calendar className="w-4 h-4 text-gray-400" />} />
-          <FormInput id="totalValue" name="totalValue" label="Valor Pago (R$)" type="number" step="0.01" placeholder="12.50" value={totalValue} onChange={e => setTotalValue(e.target.value)} required icon={<DollarSign className="w-4 h-4 text-gray-400" />} />
+          <FormInput id="totalValue" name="totalValue" label="Valor Pago (R$)" type="number" step="0.01" placeholder="0,00" value={totalValue} onChange={e => setTotalValue(e.target.value)} required icon={<span className="text-sm font-semibold text-gray-500">R$</span>} />
           <FormInput id="location" name="location" label="Local" type="text" placeholder={expenseType === 'Pedágio' ? "Ex: Praça de Itatiba" : "Ex: Shopping Central"} value={location} onChange={e => setLocation(e.target.value)} required icon={<MapPin className="w-4 h-4 text-gray-400" />} />
 
           {expenseType === 'Pedágio' && (

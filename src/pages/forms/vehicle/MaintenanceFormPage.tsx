@@ -5,7 +5,7 @@ import FormSection from '../../../components/forms/FormSection';
 import FormInput from '../../../components/forms/FormInput';
 import FormSelect from '../../../components/forms/FormSelect';
 import FormTextArea from '../../../components/forms/FormTextArea';
-import { Wrench, Calendar, DollarSign, Gauge, Paperclip, AlertTriangle, Building } from 'lucide-react';
+import { Wrench, Calendar, Gauge, Paperclip, AlertTriangle, Building } from 'lucide-react';
 import FormPageLayout from '../../../components/layouts/FormPageLayout';
 
 const MaintenanceFormPage: React.FC = () => {
@@ -48,12 +48,12 @@ const MaintenanceFormPage: React.FC = () => {
     if (isEditing) {
       const expenseToEdit = expenses.find(e => e.id === id && e.type === 'maintenance') as MaintenanceExpense | undefined;
       if (expenseToEdit) {
-        setMaintenanceType(expenseToEdit.description); // Assuming description holds the type for now
+        setMaintenanceType(expenseToEdit.details.description);
         setDate(new Date(expenseToEdit.date).toISOString().slice(0, 10));
-        setProvider(expenseToEdit.provider);
-        setPartsReplaced(expenseToEdit.partsReplaced || '');
-        setPartsCost(expenseToEdit.partsCost.toString());
-        setLaborCost(expenseToEdit.laborCost.toString());
+        setProvider(expenseToEdit.details.provider);
+        setPartsReplaced(expenseToEdit.details.partsReplaced || '');
+        setPartsCost(expenseToEdit.details.partsCost.toString());
+        setLaborCost(expenseToEdit.details.laborCost.toString());
         setOdometer(expenseToEdit.odometer?.toString() || '');
         setNotes(expenseToEdit.notes || '');
       }
@@ -87,15 +87,17 @@ const MaintenanceFormPage: React.FC = () => {
       type: 'maintenance',
       vehicleId: 'default',
       date,
-      maintenanceType: 'Corretiva', // Placeholder
-      description: maintenanceType,
-      provider,
-      partsReplaced: partsReplaced || undefined,
-      laborCost: parseFloat(laborCost) || 0,
-      partsCost: parseFloat(partsCost) || 0,
       totalValue: parseFloat(totalValue) || 0,
       odometer: parseFloat(odometer) || undefined,
       notes: notes || undefined,
+      details: {
+        maintenanceType: 'Corretiva', // Placeholder
+        description: maintenanceType,
+        provider,
+        partsReplaced: partsReplaced || undefined,
+        laborCost: parseFloat(laborCost) || 0,
+        partsCost: parseFloat(partsCost) || 0,
+      }
     };
 
     if (isEditing && id) {
@@ -124,9 +126,9 @@ const MaintenanceFormPage: React.FC = () => {
         </FormSection>
 
         <FormSection title="Custos e Odômetro">
-          <FormInput id="partsCost" name="partsCost" label="Custo de Peças (R$)" type="number" step="0.01" placeholder="150.00" value={partsCost} onChange={e => setPartsCost(e.target.value)} icon={<DollarSign className="w-4 h-4 text-gray-400" />} />
-          <FormInput id="laborCost" name="laborCost" label="Custo de Mão de Obra (R$)" type="number" step="0.01" placeholder="100.00" value={laborCost} onChange={e => setLaborCost(e.target.value)} icon={<DollarSign className="w-4 h-4 text-gray-400" />} />
-          <FormInput id="totalValue" name="totalValue" label="Valor Total (R$)" type="number" value={totalValue} readOnly disabled icon={<DollarSign className="w-4 h-4 text-gray-400" />} />
+          <FormInput id="partsCost" name="partsCost" label="Custo de Peças (R$)" type="number" step="0.01" placeholder="0,00" value={partsCost} onChange={e => setPartsCost(e.target.value)} icon={<span className="text-sm font-semibold text-gray-500">R$</span>} />
+          <FormInput id="laborCost" name="laborCost" label="Custo de Mão de Obra (R$)" type="number" step="0.01" placeholder="0,00" value={laborCost} onChange={e => setLaborCost(e.target.value)} icon={<span className="text-sm font-semibold text-gray-500">R$</span>} />
+          <FormInput id="totalValue" name="totalValue" label="Valor Total (R$)" type="number" value={totalValue} readOnly disabled icon={<span className="text-sm font-semibold text-gray-500">R$</span>} />
           <div>
             <FormInput id="odometer" name="odometer" label="Odômetro Atual (km)" type="number" placeholder="51200" value={odometer} onChange={e => setOdometer(e.target.value)} required icon={<Gauge className="w-4 h-4 text-gray-400" />} />
             {odometerWarning && (

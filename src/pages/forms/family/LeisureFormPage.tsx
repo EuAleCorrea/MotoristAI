@@ -5,7 +5,7 @@ import FormSection from '../../../components/forms/FormSection';
 import FormInput from '../../../components/forms/FormInput';
 import FormSelect from '../../../components/forms/FormSelect';
 import FormTextArea from '../../../components/forms/FormTextArea';
-import { Drama, Calendar, DollarSign, MapPin, Users, Plane, Film, Utensils, Mountain, Tv, Dumbbell, MoreHorizontal, Clock } from 'lucide-react';
+import { Drama, Calendar, MapPin, Users, Plane, Film, Utensils, Mountain, Tv, Dumbbell, MoreHorizontal, Clock } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import FormPageLayout from '../../../components/layouts/FormPageLayout';
 
@@ -125,7 +125,7 @@ const LeisureFormPage: React.FC = () => {
         </AnimatePresence>
 
         <FormSection title="Valores e Participantes">
-          <FormInput id="totalValue" label="Valor Total (R$)" type="number" step="0.01" placeholder="150.00" value={totalValue} onChange={e => setTotalValue(e.target.value)} required icon={<DollarSign className="w-4 h-4 text-gray-400" />} />
+          <FormInput id="totalValue" label="Valor Total (R$)" type="number" step="0.01" placeholder="0,00" value={totalValue} onChange={e => setTotalValue(e.target.value)} required icon={<span className="text-sm font-semibold text-gray-500">R$</span>} />
           <FormSelect id="paymentMethod" label="Forma de Pagamento" value={paymentMethod} onChange={e => setPaymentMethod(e.target.value)}>
             <option>Cartão</option>
             <option>Pix</option>

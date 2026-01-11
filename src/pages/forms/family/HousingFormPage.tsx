@@ -5,7 +5,7 @@ import FormSection from '../../../components/forms/FormSection';
 import FormInput from '../../../components/forms/FormInput';
 import FormSelect from '../../../components/forms/FormSelect';
 import FormTextArea from '../../../components/forms/FormTextArea';
-import { Home, Calendar, DollarSign } from 'lucide-react';
+import { Home, Calendar } from 'lucide-react';
 import { isBefore, startOfToday } from 'date-fns';
 import FormPageLayout from '../../../components/layouts/FormPageLayout';
 
@@ -99,7 +99,7 @@ const HousingFormPage: React.FC = () => {
             <option>Outros</option>
           </FormSelect>
           <FormInput id="description" label="Descrição" type="text" placeholder="Ex: Conta de luz" value={description} onChange={e => setDescription(e.target.value)} required />
-          <FormInput id="totalValue" label="Valor (R$)" type="number" step="0.01" placeholder="350.00" value={totalValue} onChange={e => setTotalValue(e.target.value)} required icon={<DollarSign className="w-4 h-4 text-gray-400" />} />
+          <FormInput id="totalValue" label="Valor (R$)" type="number" step="0.01" placeholder="0,00" value={totalValue} onChange={e => setTotalValue(e.target.value)} required icon={<span className="text-sm font-semibold text-gray-500">R$</span>} />
           <FormSelect id="recurrence" label="Recorrência" value={recurrence} onChange={e => setRecurrence(e.target.value)}>
             <option>Única</option>
             <option>Mensal</option>

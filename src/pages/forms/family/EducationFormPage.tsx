@@ -5,7 +5,7 @@ import FormSection from '../../../components/forms/FormSection';
 import FormInput from '../../../components/forms/FormInput';
 import FormSelect from '../../../components/forms/FormSelect';
 import FormTextArea from '../../../components/forms/FormTextArea';
-import { GraduationCap, Calendar, DollarSign, Building } from 'lucide-react';
+import { GraduationCap, Calendar, Building } from 'lucide-react';
 import FormPageLayout from '../../../components/layouts/FormPageLayout';
 
 type Status = 'Pago' | 'Pendente';
@@ -99,7 +99,7 @@ const EducationFormPage: React.FC = () => {
         </FormSection>
 
         <FormSection title="Valores e Prazos">
-          <FormInput id="totalValue" label="Valor (R$)" type="number" step="0.01" placeholder="850.00" value={totalValue} onChange={e => setTotalValue(e.target.value)} required icon={<DollarSign className="w-4 h-4 text-gray-400" />} />
+          <FormInput id="totalValue" label="Valor (R$)" type="number" step="0.01" placeholder="0,00" value={totalValue} onChange={e => setTotalValue(e.target.value)} required icon={<span className="text-sm font-semibold text-gray-500">R$</span>} />
           <FormInput id="dueDate" label="Data de Vencimento" type="date" value={dueDate} onChange={e => setDueDate(e.target.value)} required icon={<Calendar className="w-4 h-4 text-gray-400" />} />
           <FormInput id="paymentDate" label="Data de Pagamento (Opcional)" type="date" value={paymentDate} onChange={e => setPaymentDate(e.target.value)} icon={<Calendar className="w-4 h-4 text-gray-400" />} />
           <FormSelect id="status" label="Status" value={status} onChange={() => { }} disabled>

@@ -1,5 +1,5 @@
-import React from 'react';
 import { TrendingUp, TrendingDown } from 'lucide-react';
+import { formatCurrency } from '../../utils/formatHelpers';
 
 interface LucroCentralProps {
     lucroLiquido: number;
@@ -59,7 +59,7 @@ const LucroCentral: React.FC<LucroCentralProps> = ({ lucroLiquido, meta, periodo
                     {periodoLabel}
                 </span>
                 <span className={`text-3xl font-bold ${isPositive ? 'text-gray-900 dark:text-white' : 'text-danger-600 dark:text-danger-400'}`}>
-                    R$ {Math.abs(lucroLiquido).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    {formatCurrency(lucroLiquido)}
                 </span>
                 <span className="text-sm text-slate-500 dark:text-slate-400 mt-1">
                     Lucro Líquido
@@ -67,7 +67,7 @@ const LucroCentral: React.FC<LucroCentralProps> = ({ lucroLiquido, meta, periodo
                 {meta > 0 && (
                     <div className="flex items-center gap-1 mt-2 px-3 py-1 bg-slate-100 dark:bg-slate-800/50 rounded-full">
                         <span className="text-xs text-slate-600 dark:text-slate-300">
-                            Meta: R$ {meta.toLocaleString('pt-BR', { minimumFractionDigits: 0 })}
+                            Meta: {formatCurrency(meta, true)}
                         </span>
                         {lucroLiquido >= meta ? (
                             <TrendingUp className="w-3 h-3 text-success-500" />

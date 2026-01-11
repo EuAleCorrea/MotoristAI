@@ -3,6 +3,7 @@ import MetricCard from './MetricCard';
 import ProgressBar from './ProgressBar';
 import ViewToggle from './ViewToggle';
 import { Target, TrendingDown, Wallet, Car, Clock, Route, DollarSign, BarChart, Shield, Sparkles, Award } from 'lucide-react';
+import { formatCurrency, formatNumber } from '../../utils/formatHelpers';
 
 export interface PeriodData {
   revenue: number;
@@ -42,32 +43,32 @@ function PeriodSummary({ periodData }: PeriodSummaryProps) {
 
   const cardMetrics = [
     { icon: Car, label: "Total de Viagens", value: totalTrips.toString() },
-    { icon: Clock, label: "Horas Trabalhadas", value: `${hoursWorked.toFixed(1)}h` },
-    { icon: Route, label: "KM Rodados", value: `${kmDriven.toFixed(1)}km` },
-    { icon: DollarSign, label: "Fat. por Viagem", value: `R$ ${(totalTrips > 0 ? revenue / totalTrips : 0).toFixed(2)}` },
-    { icon: BarChart, label: "Fat. Médio / Hora", value: `R$ ${(hoursWorked > 0 ? revenue / hoursWorked : 0).toFixed(2)}` },
-    { icon: Shield, label: "Fat. Médio / KM", value: `R$ ${(kmDriven > 0 ? revenue / kmDriven : 0).toFixed(2)}` },
-    { icon: TrendingDown, label: "Custo por Viagem", value: `R$ ${(totalTrips > 0 ? expenseTotal / totalTrips : 0).toFixed(2)}` },
-    { icon: Wallet, label: "Custo por Hora", value: `R$ ${(hoursWorked > 0 ? expenseTotal / hoursWorked : 0).toFixed(2)}` },
-    { icon: Sparkles, label: "Custo por KM", value: `R$ ${(kmDriven > 0 ? expenseTotal / kmDriven : 0).toFixed(2)}` },
-    { icon: Award, label: "Lucro por Viagem", value: `R$ ${(totalTrips > 0 ? balance / totalTrips : 0).toFixed(2)}` },
-    { icon: Target, label: "Lucro por Hora", value: `R$ ${(hoursWorked > 0 ? balance / hoursWorked : 0).toFixed(2)}` },
-    { icon: Sparkles, label: "Lucro por KM", value: `R$ ${(kmDriven > 0 ? balance / kmDriven : 0).toFixed(2)}` },
+    { icon: Clock, label: "Horas Trabalhadas", value: `${formatNumber(hoursWorked, 1)}h` },
+    { icon: Route, label: "KM Rodados", value: `${formatNumber(kmDriven, 1)}km` },
+    { icon: DollarSign, label: "Fat. por Viagem", value: formatCurrency(totalTrips > 0 ? revenue / totalTrips : 0) },
+    { icon: BarChart, label: "Fat. Médio / Hora", value: formatCurrency(hoursWorked > 0 ? revenue / hoursWorked : 0) },
+    { icon: Shield, label: "Fat. Médio / KM", value: formatCurrency(kmDriven > 0 ? revenue / kmDriven : 0) },
+    { icon: TrendingDown, label: "Custo por Viagem", value: formatCurrency(totalTrips > 0 ? expenseTotal / totalTrips : 0) },
+    { icon: Wallet, label: "Custo por Hora", value: formatCurrency(hoursWorked > 0 ? expenseTotal / hoursWorked : 0) },
+    { icon: Sparkles, label: "Custo por KM", value: formatCurrency(kmDriven > 0 ? expenseTotal / kmDriven : 0) },
+    { icon: Award, label: "Lucro por Viagem", value: formatCurrency(totalTrips > 0 ? balance / totalTrips : 0) },
+    { icon: Target, label: "Lucro por Hora", value: formatCurrency(hoursWorked > 0 ? balance / hoursWorked : 0) },
+    { icon: Sparkles, label: "Lucro por KM", value: formatCurrency(kmDriven > 0 ? balance / kmDriven : 0) },
   ];
 
   const listMetrics = [
     { icon: Car, label: "Total de Viagens", value: totalTrips.toString() },
-    { icon: DollarSign, label: "Fat. por Viagem", value: `R$ ${(totalTrips > 0 ? revenue / totalTrips : 0).toFixed(2)}` },
-    { icon: TrendingDown, label: "Custo por Viagem", value: `R$ ${(totalTrips > 0 ? expenseTotal / totalTrips : 0).toFixed(2)}` },
-    { icon: Award, label: "Lucro por Viagem", value: `R$ ${(totalTrips > 0 ? balance / totalTrips : 0).toFixed(2)}` },
-    { icon: Clock, label: "Horas Trabalhadas", value: `${hoursWorked.toFixed(1)}h` },
-    { icon: BarChart, label: "Fat. Médio / Hora", value: `R$ ${(hoursWorked > 0 ? revenue / hoursWorked : 0).toFixed(2)}` },
-    { icon: Wallet, label: "Custo por Hora", value: `R$ ${(hoursWorked > 0 ? expenseTotal / hoursWorked : 0).toFixed(2)}` },
-    { icon: Target, label: "Lucro por Hora", value: `R$ ${(hoursWorked > 0 ? balance / hoursWorked : 0).toFixed(2)}` },
-    { icon: Route, label: "KM Rodados", value: `${kmDriven.toFixed(1)}km` },
-    { icon: Shield, label: "Fat. Médio / KM", value: `R$ ${(kmDriven > 0 ? revenue / kmDriven : 0).toFixed(2)}` },
-    { icon: Sparkles, label: "Custo por KM", value: `R$ ${(kmDriven > 0 ? expenseTotal / kmDriven : 0).toFixed(2)}` },
-    { icon: Sparkles, label: "Lucro por KM", value: `R$ ${(kmDriven > 0 ? balance / kmDriven : 0).toFixed(2)}` },
+    { icon: DollarSign, label: "Fat. por Viagem", value: formatCurrency(totalTrips > 0 ? revenue / totalTrips : 0) },
+    { icon: TrendingDown, label: "Custo por Viagem", value: formatCurrency(totalTrips > 0 ? expenseTotal / totalTrips : 0) },
+    { icon: Award, label: "Lucro por Viagem", value: formatCurrency(totalTrips > 0 ? balance / totalTrips : 0) },
+    { icon: Clock, label: "Horas Trabalhadas", value: `${formatNumber(hoursWorked, 1)}h` },
+    { icon: BarChart, label: "Fat. Médio / Hora", value: formatCurrency(hoursWorked > 0 ? revenue / hoursWorked : 0) },
+    { icon: Wallet, label: "Custo por Hora", value: formatCurrency(hoursWorked > 0 ? expenseTotal / hoursWorked : 0) },
+    { icon: Target, label: "Lucro por Hora", value: formatCurrency(hoursWorked > 0 ? balance / hoursWorked : 0) },
+    { icon: Route, label: "KM Rodados", value: `${formatNumber(kmDriven, 1)}km` },
+    { icon: Shield, label: "Fat. Médio / KM", value: formatCurrency(kmDriven > 0 ? revenue / kmDriven : 0) },
+    { icon: Sparkles, label: "Custo por KM", value: formatCurrency(kmDriven > 0 ? expenseTotal / kmDriven : 0) },
+    { icon: Sparkles, label: "Lucro por KM", value: formatCurrency(kmDriven > 0 ? balance / kmDriven : 0) },
   ];
 
   const appColors: Record<string, string> = {
@@ -87,32 +88,32 @@ function PeriodSummary({ periodData }: PeriodSummaryProps) {
         </div>
         <div className="text-right">
           <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Meta do Período</p>
-          <p className="text-2xl font-bold text-danger-600 dark:text-danger-400">R$ {periodGoal.toFixed(2)}</p>
+          <p className="text-2xl font-bold text-danger-600 dark:text-danger-400">{formatCurrency(periodGoal)}</p>
         </div>
       </div>
 
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
         <div className="flex justify-between text-sm font-medium mb-1">
-          <span className="text-gray-700 dark:text-gray-300">Faturamento: R$ {revenue.toFixed(2)}</span>
+          <span className="text-gray-700 dark:text-gray-300">Faturamento: {formatCurrency(revenue)}</span>
         </div>
         <ProgressBar value={revenue} max={periodGoal} color="bg-green-500" />
         <div className="flex justify-end text-sm font-medium mt-1">
-          <span className="text-gray-500 dark:text-gray-400">Pendente: R$ {Math.max(0, periodGoal - revenue).toFixed(2)}</span>
+          <span className="text-gray-500 dark:text-gray-400">Pendente: {formatCurrency(Math.max(0, periodGoal - revenue))}</span>
         </div>
       </div>
 
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 text-center">
         <p className="text-md font-medium text-gray-600 dark:text-gray-400">Faturamento Total</p>
-        <p className="text-4xl font-bold text-gray-900 dark:text-white mt-1">R$ {revenue.toFixed(2)}</p>
+        <p className="text-4xl font-bold text-gray-900 dark:text-white mt-1">{formatCurrency(revenue)}</p>
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div className="text-center p-4 bg-danger-50 dark:bg-danger-900/30 rounded-lg">
           <p className="text-sm font-medium text-danger-600 dark:text-danger-400">Despesas</p>
-          <p className="text-xl sm:text-2xl font-bold text-danger-700 dark:text-danger-300">R$ {expenseTotal.toFixed(2)}</p>
+          <p className="text-xl sm:text-2xl font-bold text-danger-700 dark:text-danger-300">{formatCurrency(expenseTotal)}</p>
         </div>
         <div className="text-center p-4 bg-primary-50 dark:bg-primary-900/30 rounded-lg">
           <p className="text-sm font-medium text-primary-600 dark:text-primary-400">Saldo</p>
-          <p className="text-xl sm:text-2xl font-bold text-primary-700 dark:text-primary-300">R$ {balance.toFixed(2)}</p>
+          <p className="text-xl sm:text-2xl font-bold text-primary-700 dark:text-primary-300">{formatCurrency(balance)}</p>
         </div>
       </div>
 
@@ -148,7 +149,7 @@ function PeriodSummary({ periodData }: PeriodSummaryProps) {
             <div key={app}>
               <div className="flex justify-between text-sm font-medium">
                 <span className="dark:text-gray-300">{app}</span>
-                <span className="dark:text-gray-300">R$ {amount.toFixed(2)}</span>
+                <span className="dark:text-gray-300">{formatCurrency(amount)}</span>
               </div>
               <ProgressBar value={amount} max={revenue} color={appColors[app] || 'bg-gray-400'} />
             </div>
@@ -173,12 +174,12 @@ function PeriodSummary({ periodData }: PeriodSummaryProps) {
               {expensesToDisplay.map(expense => (
                 <li key={expense.id} className="flex items-center justify-between">
                   <p className="font-medium text-gray-800 dark:text-gray-200">{expense.category}</p>
-                  <p className="font-semibold text-danger-600 dark:text-danger-400">- R$ {expense.amount.toFixed(2)}</p>
+                  <p className="font-semibold text-danger-600 dark:text-danger-400">- {formatCurrency(expense.amount)}</p>
                 </li>
               ))}
               <li className="flex justify-between font-bold border-t dark:border-gray-700 pt-3 mt-3 text-gray-900 dark:text-white">
                 <span>Total</span>
-                <span>R$ {expenseTotal.toFixed(2)}</span>
+                <span>{formatCurrency(expenseTotal)}</span>
               </li>
             </ul>
           ) : (

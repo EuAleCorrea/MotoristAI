@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEntryStore, Entry } from '../../store/entryStore';
 import FormPageLayout from '../../components/layouts/FormPageLayout';
-import { DollarSign, Calendar, Hash, Route, Clock } from 'lucide-react';
+import { Calendar, Hash, Route, Clock } from 'lucide-react';
 import FormSection from '../../components/forms/FormSection';
 import FormInput from '../../components/forms/FormInput';
 import FormTextArea from '../../components/forms/FormTextArea';
@@ -99,7 +99,7 @@ function EntryFormPage() {
   };
 
   return (
-    <FormPageLayout title={isEditing ? 'Editar Entrada' : 'Nova Entrada'} icon={DollarSign}>
+    <FormPageLayout title={isEditing ? 'Editar Entrada' : 'Nova Entrada'} icon={Calendar}>
       <form onSubmit={handleSubmit} className="space-y-6 pb-24">
         <FormSection title="Informações da Entrada">
           <FormInput
@@ -135,9 +135,9 @@ function EntryFormPage() {
             step="0.01"
             value={formData.value}
             onChange={handleInputChange}
-            placeholder="250.00"
+            placeholder="0,00"
             required
-            icon={<DollarSign className="w-4 h-4 text-gray-400" />}
+            icon={<span className="text-sm font-semibold text-gray-500">R$</span>}
           />
         </FormSection>
 

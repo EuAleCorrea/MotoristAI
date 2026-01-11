@@ -104,15 +104,19 @@ function ExpenseFormPage() {
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Valor (R$)
             </label>
-            <input
-              type="number"
-              name="amount"
-              step="0.01"
-              value={formData.amount}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-gray-700 dark:text-white"
-              required
-            />
+            <div className="relative">
+              <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-500 dark:text-gray-400 text-sm font-semibold">R$</span>
+              <input
+                type="number"
+                name="amount"
+                step="0.01"
+                value={formData.amount}
+                onChange={handleInputChange}
+                className="w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-gray-700 dark:text-white"
+                placeholder="0,00"
+                required
+              />
+            </div>
           </div>
 
           <div>

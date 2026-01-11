@@ -5,7 +5,7 @@ import FormSection from '../../../components/forms/FormSection';
 import FormInput from '../../../components/forms/FormInput';
 import FormSelect from '../../../components/forms/FormSelect';
 import FormTextArea from '../../../components/forms/FormTextArea';
-import { ShoppingCart, Calendar, DollarSign, MapPin } from 'lucide-react';
+import { ShoppingCart, Calendar, MapPin } from 'lucide-react';
 import FormPageLayout from '../../../components/layouts/FormPageLayout';
 
 const FoodFormPage: React.FC = () => {
@@ -89,7 +89,7 @@ const FoodFormPage: React.FC = () => {
         </FormSection>
 
         <FormSection title="Valores e Pagamento">
-          <FormInput id="totalValue" label="Valor Total (R$)" type="number" step="0.01" placeholder="450.75" value={totalValue} onChange={e => setTotalValue(e.target.value)} required icon={<DollarSign className="w-4 h-4 text-gray-400" />} />
+          <FormInput id="totalValue" label="Valor Total (R$)" type="number" step="0.01" placeholder="0,00" value={totalValue} onChange={e => setTotalValue(e.target.value)} required icon={<span className="text-sm font-semibold text-gray-500">R$</span>} />
           <FormSelect id="paymentMethod" label="Forma de Pagamento" value={paymentMethod} onChange={e => setPaymentMethod(e.target.value)}>
             <option>Cartão</option>
             <option>Pix</option>

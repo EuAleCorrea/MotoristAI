@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { Trophy, TrendingUp } from 'lucide-react';
 import { useEntryStore } from '../../store/entryStore';
 import { startOfWeek, endOfWeek } from 'date-fns';
+import { formatCurrency, formatNumber } from '../../utils/formatHelpers';
 
 interface PlatformStats {
     name: string;
@@ -65,7 +66,7 @@ function BestPlatformCard() {
         );
     }
 
-    const percentage = ((bestPlatform.revenue / totalRevenue) * 100).toFixed(0);
+    const percentage = formatNumber((bestPlatform.revenue / totalRevenue) * 100, 0);
 
     return (
         <div className="bg-gradient-to-br from-amber-100 to-orange-100 dark:from-amber-500/20 dark:to-orange-500/20 rounded-xl p-4 border border-amber-300 dark:border-amber-500/30">
@@ -79,7 +80,7 @@ function BestPlatformCard() {
                 <div>
                     <p className="text-2xl font-bold text-slate-900 dark:text-white">{bestPlatform.name}</p>
                     <p className="text-sm text-slate-600 dark:text-slate-400">
-                        R$ {bestPlatform.revenue.toFixed(2)} ({percentage}% do total)
+                        {formatCurrency(bestPlatform.revenue)} ({percentage}% do total)
                     </p>
                 </div>
                 <div className="w-12 h-12 rounded-full bg-amber-200 dark:bg-amber-500/30 flex items-center justify-center">
@@ -96,7 +97,7 @@ function BestPlatformCard() {
                             <span className="text-slate-600 dark:text-slate-400">
                                 {index + 2}. {platform.name}
                             </span>
-                            <span className="text-slate-800 dark:text-slate-300">R$ {platform.revenue.toFixed(2)}</span>
+                            <span className="text-slate-800 dark:text-slate-300">{formatCurrency(platform.revenue)}</span>
                         </div>
                     ))}
                 </div>
