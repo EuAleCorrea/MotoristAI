@@ -13,6 +13,7 @@ const Header = () => {
     /^\/metas$/,
     /^\/metas\/(nova|[\w-]+\/editar)$/,
     /^\/cadastros\/veiculos$/,
+    /^\/cadastros\/plataformas$/,
     /^\/despesas\/veiculo\/.+$/,
     /^\/despesas\/familia\/.+$/,
     /^\/faq$/,

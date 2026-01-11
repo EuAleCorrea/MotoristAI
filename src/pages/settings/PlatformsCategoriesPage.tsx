@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Layers3, Plus, Edit2, Trash2, Check, X, Car, Tag } from 'lucide-react';
+import { Layers3, Plus, Edit2, Trash2, Check, X, Car, Tag } from 'lucide-react';
 import { usePlatformStore, Platform } from '../../store/platformStore';
 import { useCategoryStore, Category } from '../../store/categoryStore';
 
@@ -17,7 +16,6 @@ const PLATFORM_COLORS = [
 ];
 
 function PlatformsCategoriesPage() {
-    const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState<'platforms' | 'categories'>('platforms');
 
     // Platform state
@@ -110,22 +108,14 @@ function PlatformsCategoriesPage() {
 
     return (
         <div className="space-y-6">
-            {/* Header */}
-            <div className="flex items-center gap-4">
-                <button
-                    onClick={() => navigate('/ajustes')}
-                    className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition"
-                >
-                    <ArrowLeft className="h-5 w-5 text-gray-600 dark:text-gray-300" />
-                </button>
-                <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-xl bg-primary-100 dark:bg-primary-900/30">
-                        <Layers3 className="h-6 w-6 text-primary-600 dark:text-primary-400" />
-                    </div>
-                    <h1 className="text-xl font-bold text-gray-900 dark:text-white">
-                        Plataformas e Categorias
-                    </h1>
+            {/* Page Title */}
+            <div className="flex items-center gap-3">
+                <div className="p-2 rounded-xl bg-primary-100 dark:bg-primary-900/30">
+                    <Layers3 className="h-6 w-6 text-primary-600 dark:text-primary-400" />
                 </div>
+                <h1 className="text-xl font-bold text-gray-900 dark:text-white">
+                    Plataformas e Categorias
+                </h1>
             </div>
 
             {/* Tabs */}
@@ -133,8 +123,8 @@ function PlatformsCategoriesPage() {
                 <button
                     onClick={() => setActiveTab('platforms')}
                     className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium rounded-lg transition ${activeTab === 'platforms'
-                            ? 'bg-white dark:bg-gray-600 text-primary-600 dark:text-primary-400 shadow-sm'
-                            : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
+                        ? 'bg-white dark:bg-gray-600 text-primary-600 dark:text-primary-400 shadow-sm'
+                        : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
                         }`}
                 >
                     <Car className="h-4 w-4" />
@@ -143,8 +133,8 @@ function PlatformsCategoriesPage() {
                 <button
                     onClick={() => setActiveTab('categories')}
                     className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium rounded-lg transition ${activeTab === 'categories'
-                            ? 'bg-white dark:bg-gray-600 text-primary-600 dark:text-primary-400 shadow-sm'
-                            : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
+                        ? 'bg-white dark:bg-gray-600 text-primary-600 dark:text-primary-400 shadow-sm'
+                        : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
                         }`}
                 >
                     <Tag className="h-4 w-4" />
