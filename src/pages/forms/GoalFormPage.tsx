@@ -119,11 +119,11 @@ function GoalFormPage() {
           />
         </FormSection>
 
-        <FormSection title="Valores da Meta">
+        <FormSection title="Valores da Meta Mensal">
           <FormInput
             id="revenue"
             name="revenue"
-            label="Faturamento (R$)"
+            label="Faturamento Mensal (R$)"
             type="number"
             step="0.01"
             value={formData.revenue}
@@ -134,7 +134,7 @@ function GoalFormPage() {
           <FormInput
             id="profit"
             name="profit"
-            label="Lucro (R$)"
+            label="Lucro Mensal (R$)"
             type="number"
             step="0.01"
             value={formData.profit}
@@ -145,7 +145,7 @@ function GoalFormPage() {
           <FormInput
             id="expense"
             name="expense"
-            label="Despesa (R$)"
+            label="Despesa Mensal (R$)"
             type="number"
             step="0.01"
             value={formData.expense}
