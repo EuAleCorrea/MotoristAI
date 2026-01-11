@@ -10,6 +10,66 @@ interface FAQItem {
     detailedContent?: React.ReactNode;
 }
 
+const GoalsExplanation = () => (
+    <div className="space-y-6">
+        <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+            O MotoristAI possui um sistema inteligente que converte seus objetivos mensais em metas diárias realistas. Entenda como funciona:
+        </p>
+
+        {/* Cadastro Mensal */}
+        <div className="p-4 rounded-xl bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 border border-emerald-100 dark:border-emerald-800/30">
+            <div className="flex items-center gap-2 mb-2">
+                <Target className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                <h4 className="font-bold text-emerald-700 dark:text-emerald-300">1. Cadastro Mensal</h4>
+            </div>
+            <p className="text-sm text-gray-600 dark:text-gray-300">
+                Você define quanto quer faturar no <strong>mês inteiro</strong> e quantos <strong>dias por semana</strong> pretende trabalhar.
+            </p>
+        </div>
+
+        {/* Cálculo de Dias Úteis */}
+        <div className="p-4 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border border-blue-100 dark:border-blue-800/30">
+            <div className="flex items-center gap-2 mb-2">
+                <Calculator className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                <h4 className="font-bold text-blue-700 dark:text-blue-300">2. Cálculo de Dias Úteis</h4>
+            </div>
+            <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
+                O sistema calcula quantos dias você trabalhará baseado no mês atual:
+            </p>
+            <div className="bg-white/50 dark:bg-black/20 p-2 rounded-lg text-xs font-mono text-gray-700 dark:text-gray-300">
+                (Dias no Mês ÷ 7) × Dias Trabalhados na Semana
+            </div>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 italic">
+                Ex: Em um mês de 31 dias, trabalhando 5 dias por semana, você terá 22,14 dias úteis.
+            </p>
+        </div>
+
+        {/* Meta Diária */}
+        <div className="p-4 rounded-xl bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border border-amber-100 dark:border-amber-800/30">
+            <div className="flex items-center gap-2 mb-2">
+                <TrendingUp className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+                <h4 className="font-bold text-amber-700 dark:text-amber-300">3. Meta Diária (Dashboard)</h4>
+            </div>
+            <p className="text-sm text-gray-600 dark:text-gray-300">
+                Sua meta exibida no círculo principal é:
+            </p>
+            <div className="bg-white/50 dark:bg-black/20 p-2 rounded-lg text-xs font-mono text-gray-700 dark:text-gray-300">
+                Faturamento Mensal ÷ Dias Úteis
+            </div>
+            <p className="text-xs text-amber-700 dark:text-amber-400 mt-2 font-medium">
+                💡 Isso garante que sua meta seja justa e leve em conta suas folgas semanais!
+            </p>
+        </div>
+
+        {/* Histórico */}
+        <div className="p-4 rounded-xl bg-gradient-to-r from-slate-100 to-gray-100 dark:from-slate-800 dark:to-gray-800 border border-gray-200 dark:border-gray-700 text-center">
+            <p className="text-sm text-gray-700 dark:text-gray-300">
+                📅 Você pode ver todo o seu <strong>Histórico de Metas</strong> clicando em <em>Ajustes {" > "} Metas</em>. Lá você consegue ver o que planejou para cada mês do ano.
+            </p>
+        </div>
+    </div>
+);
+
 const MetricsExplanation = () => (
     <div className="space-y-6">
         <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
@@ -140,9 +200,11 @@ const faqData: FAQItem[] = [
     },
     {
         id: '4',
-        question: 'Como defino minhas metas financeiras?',
-        answer: 'Acesse a seção de Metas no menu principal. Lá você pode definir objetivos de faturamento diário, semanal ou mensal, e acompanhar seu progresso em tempo real.',
+        question: 'Como as minhas metas são calculadas e onde vejo o histórico?',
+        answer: '',
         category: 'Metas',
+        isDetailed: true,
+        detailedContent: <GoalsExplanation />,
     },
     {
         id: '5',

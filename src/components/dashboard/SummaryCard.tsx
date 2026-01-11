@@ -21,9 +21,9 @@ const SummaryCard: React.FC<SummaryCardProps> = ({
     const hasDecrease = percentChange !== undefined && percentChange < 0;
 
     return (
-        <div className={`relative flex-1 rounded-2xl p-4 ${isRevenue
-            ? 'bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 border border-emerald-500/30'
-            : 'bg-gradient-to-br from-rose-500/20 to-rose-600/10 border border-rose-500/30'
+        <div className={`relative flex-1 rounded-2xl p-4 transition-all duration-300 shadow-sm hover:shadow-md ${isRevenue
+            ? 'bg-gradient-to-br from-emerald-500/10 to-emerald-600/5 border border-emerald-500/20 dark:border-emerald-500/30'
+            : 'bg-gradient-to-br from-rose-500/10 to-rose-600/5 border border-rose-500/20 dark:border-rose-500/30'
             }`}>
             <div className="flex flex-col">
                 <span className={`text-xs font-medium uppercase tracking-wide ${isRevenue ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'

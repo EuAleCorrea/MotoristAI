@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from 'react';
-import { format, startOfDay, endOfDay, subDays, startOfWeek, endOfWeek } from 'date-fns';
+import { useState, useMemo } from 'react';
+import { startOfDay, endOfDay, subDays, startOfWeek, endOfWeek } from 'date-fns';
 import { useEntryStore } from '../../store/entryStore';
 import { useExpenseStore } from '../../store/expenseStore';
 import { useGoalStore } from '../../store/goalStore';
@@ -9,6 +9,7 @@ import WeeklyChart from './WeeklyChart';
 import QuickEntryModal from './QuickEntryModal';
 import PerformanceMetrics from './PerformanceMetrics';
 import BestPlatformCard from './BestPlatformCard';
+import AIInsightCard from './AIInsightCard';
 
 function DashboardHome() {
     const [quickEntryType, setQuickEntryType] = useState<'revenue' | 'expense' | null>(null);
@@ -114,6 +115,11 @@ function DashboardHome() {
                 meta={todayData.dailyGoal}
                 periodoLabel="Hoje"
             />
+
+            {/* AI Insights - Próximos passos e inteligência */}
+            <div className="px-2">
+                <AIInsightCard />
+            </div>
 
             {/* Summary Cards */}
             <div className="flex gap-4 px-2">

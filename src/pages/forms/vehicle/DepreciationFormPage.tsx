@@ -47,14 +47,14 @@ const DepreciationFormPage: React.FC = () => {
     const expenseData: Omit<DepreciationExpense, 'id' | 'createdAt' | 'updatedAt'> = {
       type: 'depreciation',
       vehicleId: 'default',
-      date: new Date().toISOString(),
+      date: new Date().toISOString().split('T')[0] + 'T12:00:00',
       totalValue: (parseFloat(purchaseValue) || 0) - (parseFloat(currentValue) || 0),
       notes: notes || undefined,
       details: {
         purchaseValue: parseFloat(purchaseValue) || 0,
         currentValue: parseFloat(currentValue) || 0,
-        purchaseDate,
-        evaluationDate: new Date().toISOString(),
+        purchaseDate: purchaseDate + 'T12:00:00',
+        evaluationDate: new Date().toISOString().split('T')[0] + 'T12:00:00',
         depreciationPercentage,
       }
     };
