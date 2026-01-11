@@ -100,7 +100,7 @@ const EnergyFuelFormPage: React.FC = () => {
     const expenseData: Omit<FuelExpense, 'id' | 'createdAt' | 'updatedAt'> = {
       type: 'fuel',
       vehicleId: 'default',
-      date,
+      date: new Date(date + 'T12:00:00').toISOString(),
       totalValue: finalTotal,
       odometer: parseFloat(odometer) || undefined,
       notes: notes || undefined,

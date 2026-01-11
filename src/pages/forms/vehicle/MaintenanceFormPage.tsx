@@ -86,7 +86,7 @@ const MaintenanceFormPage: React.FC = () => {
     const expenseData: Omit<MaintenanceExpense, 'id' | 'createdAt' | 'updatedAt'> = {
       type: 'maintenance',
       vehicleId: 'default',
-      date,
+      date: new Date(date + 'T12:00:00').toISOString(),
       totalValue: parseFloat(totalValue) || 0,
       odometer: parseFloat(odometer) || undefined,
       notes: notes || undefined,

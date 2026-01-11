@@ -65,7 +65,7 @@ const QuickEntryModal: React.FC<QuickEntryModalProps> = ({ isOpen, onClose, type
 
         if (type === 'revenue') {
             await addEntry({
-                date,
+                date: new Date(date + 'T00:00:00').toISOString(),
                 value: numValue,
                 source: platform,
                 tripCount: 1,
@@ -75,7 +75,7 @@ const QuickEntryModal: React.FC<QuickEntryModalProps> = ({ isOpen, onClose, type
             });
         } else {
             await addExpense({
-                date,
+                date: new Date(date + 'T00:00:00').toISOString(),
                 amount: numValue,
                 category: EXPENSE_CATEGORIES.find(c => c.id === category)?.name || 'Outros',
                 description: description || `Despesa rápida - ${category}`,

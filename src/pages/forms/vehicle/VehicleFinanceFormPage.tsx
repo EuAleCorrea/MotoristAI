@@ -69,13 +69,13 @@ const VehicleFinanceFormPage: React.FC = () => {
     const expenseData: Omit<FinanceExpense, 'id' | 'createdAt' | 'updatedAt'> = {
       type: 'finance',
       vehicleId: 'default',
-      date: new Date().toISOString(), // Fallback
+      date: new Date(dueDate + 'T12:00:00').toISOString(), // Usando dueDate como base para 'date' no registro principal
       totalValue: parseFloat(totalValue) || 0,
       notes: notes || undefined,
       details: {
         costType,
         description: `${costType} - ${provider}`,
-        dueDate,
+        dueDate: new Date(dueDate + 'T12:00:00').toISOString(),
         status,
       }
     };

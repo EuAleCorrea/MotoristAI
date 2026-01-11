@@ -41,7 +41,7 @@ function ExpenseFormPage() {
       category: formData.category,
       description: formData.description,
       amount: parseFloat(formData.amount),
-      date: new Date(formData.date).toISOString(),
+      date: new Date(formData.date + 'T00:00:00').toISOString(),
     };
 
     if (isEditing && id) {

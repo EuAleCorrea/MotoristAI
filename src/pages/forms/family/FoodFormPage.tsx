@@ -55,7 +55,7 @@ const FoodFormPage: React.FC = () => {
       expenseType: expenseType as FoodExpense['expenseType'],
       description,
       totalValue: value,
-      purchaseDate,
+      purchaseDate: new Date(purchaseDate + 'T12:00:00').toISOString(),
       location,
       paymentMethod,
       recurrence: recurrence as FoodExpense['recurrence'],

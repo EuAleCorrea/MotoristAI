@@ -50,7 +50,7 @@ const TollParkingFormPage: React.FC = () => {
     const expenseData: Omit<TollParkingExpense, 'id' | 'createdAt' | 'updatedAt'> = {
       type: 'toll_parking',
       vehicleId: 'default',
-      date,
+      date: new Date(date + 'T12:00:00').toISOString(),
       totalValue: parseFloat(totalValue) || 0,
       notes: notes || undefined,
       details: {

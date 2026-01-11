@@ -64,7 +64,7 @@ const LeisureFormPage: React.FC = () => {
       description,
       location,
       totalValue: value,
-      date,
+      date: new Date(date + 'T12:00:00').toISOString(),
       paymentMethod,
       participants: participants || undefined,
       notes: notes || undefined,

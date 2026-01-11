@@ -67,11 +67,11 @@ const HealthFormPage: React.FC = () => {
       provider,
       description: `${expenseType} - ${provider}`,
       totalValue: value,
-      date,
+      date: new Date(date + 'T12:00:00').toISOString(),
       paymentMethod,
       hasReimbursement,
       reimbursementValue: hasReimbursement ? (parseFloat(reimbursementValue) || undefined) : undefined,
-      reimbursementDate: hasReimbursement ? (reimbursementDate || undefined) : undefined,
+      reimbursementDate: hasReimbursement ? (reimbursementDate ? new Date(reimbursementDate + 'T12:00:00').toISOString() : undefined) : undefined,
       notes: notes || undefined,
     };
 

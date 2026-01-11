@@ -25,12 +25,14 @@ function MonthlyView() {
   const monthlyData: PeriodData = useMemo(() => {
     const { start, end } = getMonthInterval(selectedYear, selectedMonth);
 
-    const monthEntries = entries.filter(
-      (entry) => new Date(entry.date) >= start && new Date(entry.date) <= end
-    );
-    const monthExpenses = expenses.filter(
-      (expense) => new Date(expense.date) >= start && new Date(expense.date) <= end
-    );
+    const monthEntries = entries.filter(e => {
+      const entryDate = new Date(e.date.split('T')[0] + 'T00:00:00');
+      return entryDate >= start && entryDate <= end;
+    });
+    const monthExpenses = expenses.filter(e => {
+      const expenseDate = new Date(e.date.split('T')[0] + 'T00:00:00');
+      return expenseDate >= start && expenseDate <= end;
+    });
 
     const revenue = monthEntries.reduce((sum, entry) => sum + entry.value, 0);
     const expenseTotal = monthExpenses.reduce((sum, expense) => sum + expense.amount, 0);

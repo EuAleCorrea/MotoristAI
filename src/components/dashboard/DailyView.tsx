@@ -17,12 +17,14 @@ function DailyView() {
     const dayStart = startOfDay(selectedDate);
     const dayEnd = endOfDay(selectedDate);
 
-    const dayEntries = entries.filter(
-      (entry) => new Date(entry.date) >= dayStart && new Date(entry.date) <= dayEnd
-    );
-    const dayExpenses = expenses.filter(
-      (expense) => new Date(expense.date) >= dayStart && new Date(expense.date) <= dayEnd
-    );
+    const dayEntries = entries.filter(e => {
+      const entryDate = new Date(e.date.split('T')[0] + 'T00:00:00');
+      return entryDate >= dayStart && entryDate <= dayEnd;
+    });
+    const dayExpenses = expenses.filter(e => {
+      const expenseDate = new Date(e.date.split('T')[0] + 'T00:00:00');
+      return expenseDate >= dayStart && expenseDate <= dayEnd;
+    });
 
     const revenue = dayEntries.reduce((sum, entry) => sum + entry.value, 0);
     const expenseTotal = dayExpenses.reduce((sum, expense) => sum + expense.amount, 0);
@@ -68,7 +70,7 @@ function DailyView() {
         <input
           type="date"
           value={format(selectedDate, 'yyyy-MM-dd')}
-          onChange={(e) => setSelectedDate(new Date(e.target.value))}
+          onChange={(e) => setSelectedDate(new Date(e.target.value + 'T00:00:00'))}
           className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 h-10 bg-white dark:bg-gray-700 dark:text-white"
         />
       </div>

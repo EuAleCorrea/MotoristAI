@@ -18,12 +18,14 @@ function AnnualView() {
   const annualData: PeriodData = useMemo(() => {
     const { start, end } = getYearInterval(selectedYear);
 
-    const yearEntries = entries.filter(
-      (entry) => new Date(entry.date) >= start && new Date(entry.date) <= end
-    );
-    const yearExpenses = expenses.filter(
-      (expense) => new Date(expense.date) >= start && new Date(expense.date) <= end
-    );
+    const yearEntries = entries.filter(e => {
+      const entryDate = new Date(e.date.split('T')[0] + 'T00:00:00');
+      return entryDate >= start && entryDate <= end;
+    });
+    const yearExpenses = expenses.filter(e => {
+      const expenseDate = new Date(e.date.split('T')[0] + 'T00:00:00');
+      return expenseDate >= start && expenseDate <= end;
+    });
     const yearGoals = goals.filter(g => g.year === selectedYear);
 
     const revenue = yearEntries.reduce((sum, entry) => sum + entry.value, 0);

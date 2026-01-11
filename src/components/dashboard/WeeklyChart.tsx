@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { format, addDays, startOfWeek, startOfDay, endOfDay } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { formatCurrency } from '../../utils/formatHelpers';
+
 
 interface WeeklyChartProps {
     entries: Array<{ date: string; value: number }>;
@@ -22,14 +22,14 @@ const WeeklyChart: React.FC<WeeklyChartProps> = ({ entries, expenses }) => {
 
             const dayRevenue = entries
                 .filter(e => {
-                    const entryDate = new Date(e.date);
+                    const entryDate = new Date(e.date.split('T')[0] + 'T00:00:00');
                     return entryDate >= dayStart && entryDate <= dayEnd;
                 })
                 .reduce((sum, e) => sum + e.value, 0);
 
             const dayExpenses = expenses
                 .filter(e => {
-                    const expenseDate = new Date(e.date);
+                    const expenseDate = new Date(e.date.split('T')[0] + 'T00:00:00');
                     return expenseDate >= dayStart && expenseDate <= dayEnd;
                 })
                 .reduce((sum, e) => sum + e.amount, 0);

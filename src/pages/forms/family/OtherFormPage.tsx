@@ -55,7 +55,7 @@ const OtherFormPage: React.FC = () => {
       customCategory,
       description,
       totalValue: value,
-      date,
+      date: new Date(date + 'T12:00:00').toISOString(),
       paymentMethod,
       recurrence: recurrence as OtherExpense['recurrence'],
       notes: notes || undefined,
