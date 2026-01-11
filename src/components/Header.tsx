@@ -10,6 +10,7 @@ const Header = () => {
   const formPagePatterns = [
     /^\/entradas\/(nova|[\w-]+\/editar)$/,
     /^\/despesas\/(nova|[\w-]+\/editar)$/,
+    /^\/metas$/,
     /^\/metas\/(nova|[\w-]+\/editar)$/,
     /^\/cadastros\/veiculos$/,
     /^\/despesas\/veiculo\/.+$/,
@@ -27,7 +28,13 @@ const Header = () => {
         <div className="relative flex items-center justify-between h-16">
           {isFormPage ? (
             <button
-              onClick={() => navigate(-1)}
+              onClick={() => {
+                if (window.history.length > 1) {
+                  navigate(-1);
+                } else {
+                  navigate('/');
+                }
+              }}
               className="flex items-center text-gray-800 dark:text-gray-200 p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
               aria-label="Voltar"
             >

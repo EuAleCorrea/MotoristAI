@@ -22,6 +22,7 @@ interface GoalStore {
   fetchGoals: () => Promise<void>;
   addGoal: (goal: Omit<Goal, 'id'>) => Promise<void>;
   updateGoal: (id: string, goal: Partial<Goal>) => Promise<void>;
+  deleteGoal: (id: string) => Promise<void>;
   getGoalByMonth: (year: number, month: number) => Goal | undefined;
 }
 
@@ -72,25 +73,28 @@ export const useGoalStore = create<GoalStore>((set, get) => ({
     set({ isLoading: true, error: null });
     try {
       const dbGoal = mapToDB(goal);
+
+      // Use upsert to prevent duplicates - if a goal for this year/month exists, update it
       const { data, error } = await supabase
         .from('goals')
-        .insert([dbGoal])
+        .upsert([dbGoal], {
+          onConflict: 'user_id,year,month',
+          ignoreDuplicates: false
+        })
         .select()
         .single();
 
       if (error) throw error;
 
-      // Check if goal exists in state via year/month to update or add?
-      // Logic in original store handle check. Supabase insert will fail if unique constraint violated?
-      // We didn't set unique constraint on year/month. So it will insert duplicate.
-      // We should probably check if it exists or use upsert.
-      // For now, sticking to simple insert as per original logic which checked existence.
-
       set((state) => {
         const newGoal = mapFromDB(data);
-        // Original logic replaced existing goal if match. Here we just push.
-        // Ideally we should handle this better, but proceeding with simple list update.
-        return { goals: [newGoal, ...state.goals].sort((a, b) => b.year - a.year || b.month - a.month) };
+        // Remove any existing goal for this month/year before adding
+        const filteredGoals = state.goals.filter(
+          g => !(g.year === newGoal.year && g.month === newGoal.month)
+        );
+        return {
+          goals: [newGoal, ...filteredGoals].sort((a, b) => b.year - a.year || b.month - a.month)
+        };
       });
     } catch (error: any) {
       set({ error: error.message });
@@ -115,6 +119,25 @@ export const useGoalStore = create<GoalStore>((set, get) => ({
         goals: state.goals.map((goal) =>
           goal.id === id ? mapFromDB(data) : goal
         ),
+      }));
+    } catch (error: any) {
+      set({ error: error.message });
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
+  deleteGoal: async (id) => {
+    set({ isLoading: true, error: null });
+    try {
+      const { error } = await supabase
+        .from('goals')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+      set((state) => ({
+        goals: state.goals.filter((goal) => goal.id !== id),
       }));
     } catch (error: any) {
       set({ error: error.message });

@@ -68,7 +68,7 @@ const SettingsPage = () => {
       items: [
         { id: 'Veículos', title: 'Veículos', icon: Car, iconName: 'Car', route: '/cadastros/veiculos' },
         { id: 'Metas', title: 'Metas', icon: Target, iconName: 'Target', route: '/metas' },
-        { id: 'Plataformas e Categorias', title: 'Plataformas e Categorias', icon: AppWindow, iconName: 'AppWindow', route: '/cadastros/plataformas', disabled: true },
+        { id: 'Plataformas e Categorias', title: 'Plataformas e Categorias', icon: AppWindow, iconName: 'AppWindow', route: '/cadastros/plataformas' },
         { id: 'Recorrências e Parcelas', title: 'Recorrências e Parcelas', icon: CalendarClock, iconName: 'CalendarClock', route: '/cadastros/recorrencias', disabled: true },
         { id: 'Preferências', title: 'Preferências', icon: Settings2, iconName: 'Settings2', route: '/cadastros/preferencias', disabled: true },
       ],

@@ -3,7 +3,7 @@ import { useGoalStore } from '../store/goalStore';
 import { useEntryStore } from '../store/entryStore';
 import { useExpenseStore } from '../store/expenseStore';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Calendar, DollarSign, TrendingUp, TrendingDown, Edit2 } from 'lucide-react';
+import { Plus, Calendar, DollarSign, TrendingUp, TrendingDown, Edit2, Trash2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
@@ -14,10 +14,12 @@ function Goals() {
   const [selectedYear, setSelectedYear] = useState(currentYear);
   const [activeFilter, setActiveFilter] = useState('Mensal');
 
-  const { goals: allGoals, fetchGoals } = useGoalStore();
+  const { goals: allGoals, fetchGoals, deleteGoal } = useGoalStore();
   const { entries, fetchEntries } = useEntryStore();
   const { expenses, fetchExpenses } = useExpenseStore();
   const navigate = useNavigate();
+
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchGoals();
@@ -126,9 +128,31 @@ function Goals() {
                     <p className="text-gray-600 dark:text-gray-400">Despesa: <span className="font-medium text-gray-800 dark:text-gray-200">R$ {goal.expense?.toFixed(2) || 'N/A'}</span></p>
                     <p className="text-gray-600 dark:text-gray-400">Dias/Semana: <span className="font-medium text-gray-800 dark:text-gray-200">{goal.daysWorkedPerWeek || 'N/A'}</span></p>
                   </div>
-                  <button onClick={() => navigate(`/metas/${goal.id}/editar`)} className="absolute top-4 right-4 text-gray-400 hover:text-primary-600 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Edit2 className="h-4 w-4" />
-                  </button>
+                  <div className="absolute top-4 right-4 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button onClick={() => navigate(`/metas/${goal.id}/editar`)} className="text-gray-400 hover:text-primary-600">
+                      <Edit2 className="h-4 w-4" />
+                    </button>
+                    <button onClick={() => setDeleteConfirmId(goal.id)} className="text-gray-400 hover:text-red-600">
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                  {deleteConfirmId === goal.id && (
+                    <div className="absolute inset-0 bg-red-50 dark:bg-red-900/30 flex items-center justify-center gap-4 rounded-lg">
+                      <span className="text-sm text-red-700 dark:text-red-300 font-medium">Excluir esta meta?</span>
+                      <button
+                        onClick={() => { deleteGoal(goal.id); setDeleteConfirmId(null); }}
+                        className="px-3 py-1 bg-red-600 text-white text-sm font-semibold rounded-lg hover:bg-red-700"
+                      >
+                        Sim
+                      </button>
+                      <button
+                        onClick={() => setDeleteConfirmId(null)}
+                        className="px-3 py-1 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm font-semibold rounded-lg hover:bg-gray-300 dark:hover:bg-gray-500"
+                      >
+                        Não
+                      </button>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>

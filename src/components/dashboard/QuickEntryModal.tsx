@@ -3,6 +3,8 @@ import { X, Calendar } from 'lucide-react';
 import { format } from 'date-fns';
 import { useEntryStore } from '../../store/entryStore';
 import { useExpenseStore } from '../../store/expenseStore';
+import { usePlatformStore } from '../../store/platformStore';
+import { useCategoryStore } from '../../store/categoryStore';
 
 interface QuickEntryModalProps {
     isOpen: boolean;
@@ -10,32 +12,55 @@ interface QuickEntryModalProps {
     type: 'revenue' | 'expense';
 }
 
-const PLATFORMS = [
-    { id: 'uber', name: 'Uber', color: 'bg-black' },
+// Fallback para plataformas padrão
+const DEFAULT_PLATFORMS = [
+    { id: 'Uber', name: 'Uber', color: 'bg-black' },
     { id: '99', name: '99', color: 'bg-yellow-500' },
-    { id: 'indrive', name: 'InDrive', color: 'bg-green-500' },
-    { id: 'ifood', name: 'iFood', color: 'bg-red-500' },
-    { id: 'rappi', name: 'Rappi', color: 'bg-orange-500' },
-    { id: 'particular', name: 'Particular', color: 'bg-blue-500' },
 ];
 
-const EXPENSE_CATEGORIES = [
+// Fallback para categorias padrão
+const DEFAULT_CATEGORIES = [
     { id: 'combustivel', name: 'Combustível' },
-    { id: 'manutencao', name: 'Manutenção' },
-    { id: 'alimentacao', name: 'Alimentação' },
-    { id: 'outros', name: 'Outros' },
+    { id: 'eletricidade', name: 'Eletricidade' },
 ];
 
 const QuickEntryModal: React.FC<QuickEntryModalProps> = ({ isOpen, onClose, type }) => {
     const [value, setValue] = useState('');
-    const [platform, setPlatform] = useState('uber');
-    const [category, setCategory] = useState('combustivel');
+    const [platform, setPlatform] = useState('');
+    const [category, setCategory] = useState('');
     const [description, setDescription] = useState('');
     const [date, setDate] = useState(format(new Date(), 'yyyy-MM-dd'));
     const [isClosing, setIsClosing] = useState(false);
 
     const { addEntry } = useEntryStore();
     const { addExpense } = useExpenseStore();
+    const { platforms: storePlatforms, fetchPlatforms } = usePlatformStore();
+    const { categories: storeCategories, fetchCategories } = useCategoryStore();
+
+    // Carrega dados do store
+    useEffect(() => {
+        fetchPlatforms();
+        fetchCategories();
+    }, [fetchPlatforms, fetchCategories]);
+
+    // Usa dados do store ou fallback
+    const PLATFORMS = storePlatforms.length > 0
+        ? storePlatforms.filter(p => p.isActive).map(p => ({ id: p.name, name: p.name, color: p.color }))
+        : DEFAULT_PLATFORMS;
+
+    const EXPENSE_CATEGORIES = storeCategories.length > 0
+        ? storeCategories.filter(c => c.isActive).map(c => ({ id: c.name.toLowerCase(), name: c.name }))
+        : DEFAULT_CATEGORIES;
+
+    // Define valores iniciais quando os dados carregam
+    useEffect(() => {
+        if (PLATFORMS.length > 0 && !platform) {
+            setPlatform(PLATFORMS[0].id);
+        }
+        if (EXPENSE_CATEGORIES.length > 0 && !category) {
+            setCategory(EXPENSE_CATEGORIES[0].id);
+        }
+    }, [PLATFORMS, EXPENSE_CATEGORIES, platform, category]);
 
     useEffect(() => {
         if (isOpen) {

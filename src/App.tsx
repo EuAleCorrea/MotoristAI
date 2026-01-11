@@ -15,7 +15,7 @@ import DepreciationPage from './pages/forms/vehicle/DepreciationFormPage';
 import MaintenanceAlertsPage from './pages/settings/placeholders/MaintenanceAlertsPage';
 import OdometerPage from './pages/settings/placeholders/OdometerPage';
 import PhotoNotePage from './pages/settings/placeholders/PhotoNotePage';
-import PlatformsCategoriesPage from './pages/settings/placeholders/PlatformsCategoriesPage';
+import PlatformsCategoriesPage from './pages/settings/PlatformsCategoriesPage';
 import PreferencesPage from './pages/settings/placeholders/PreferencesPage';
 import RecurrencesPage from './pages/settings/placeholders/RecurrencesPage';
 import RecurringExpensesPage from './pages/settings/placeholders/RecurringExpensesPage';
