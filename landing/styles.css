@@ -494,11 +494,26 @@ ol {
 /* ===== HERO SECTION ===== */
 .hero {
     position: relative;
-    padding: 140px 0 80px;
+    padding: 140px 0 140px;
     background: linear-gradient(135deg, var(--primary-900) 0%, var(--primary-700) 50%, var(--primary-500) 100%);
     background-size: 200% 200%;
     animation: gradientShift 15s ease infinite;
     overflow: hidden;
+}
+
+/* Hero Wave Transition */
+.hero-wave {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    line-height: 0;
+    z-index: 2;
+}
+
+.hero-wave svg {
+    width: 100%;
+    height: auto;
 }
 
 .hero::before {
