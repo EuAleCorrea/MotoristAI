@@ -560,12 +560,16 @@ ol {
     gap: 1rem;
     font-size: 0.875rem;
     opacity: 0.9;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
 }
 
 .platform-logos {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
+    gap: 1rem;
+    flex-wrap: wrap;
 }
 
 .platform-logo {
