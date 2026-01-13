@@ -27,6 +27,16 @@ document.addEventListener('DOMContentLoaded', function () {
         link.addEventListener('click', function (e) {
             e.preventDefault();
             const targetId = this.getAttribute('href');
+
+            // Special case: # alone means scroll to top
+            if (targetId === '#') {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+                return;
+            }
+
             const targetElement = document.querySelector(targetId);
 
             if (targetElement) {
