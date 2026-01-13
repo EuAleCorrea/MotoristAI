@@ -437,14 +437,23 @@ ol {
     transition: var(--transition);
 }
 
-/* Mobile Navigation */
+/* Mobile Navigation - Modern Glassmorphism */
 .mobile-nav {
     display: none;
     flex-direction: column;
-    background: white;
-    padding: 1rem 0;
-    border-top: 1px solid var(--slate-200);
-    animation: fadeInUp 0.3s ease;
+    position: absolute;
+    top: 70px;
+    right: 1rem;
+    min-width: 220px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.5);
+    padding: 0.5rem;
+    z-index: 100;
+    animation: scaleIn 0.2s ease;
+    transform-origin: top right;
 }
 
 .mobile-nav.active {
@@ -452,22 +461,34 @@ ol {
 }
 
 .mobile-nav a {
-    padding: 1rem 1.5rem;
+    padding: 0.875rem 1.25rem;
     font-weight: 600;
+    font-size: 0.95rem;
     color: var(--slate-700);
-    border-bottom: 1px solid var(--slate-100);
+    border-radius: var(--radius-md);
     transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .mobile-nav a:hover {
-    background: var(--primary-50);
+    background: linear-gradient(135deg, var(--primary-50) 0%, var(--primary-100) 100%);
     color: var(--primary-600);
+    transform: translateX(4px);
 }
 
 .mobile-nav .mobile-cta {
-    margin: 1rem;
-    text-align: center;
-    border-bottom: none;
+    margin-top: 0.5rem;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--success-500) 0%, var(--success-600) 100%);
+    color: white;
+}
+
+.mobile-nav .mobile-cta:hover {
+    background: linear-gradient(135deg, var(--success-600) 0%, var(--success-700) 100%);
+    color: white;
+    transform: translateX(0) scale(1.02);
 }
 
 /* ===== HERO SECTION ===== */
