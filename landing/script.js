@@ -119,16 +119,16 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // ===== Counter Animation for Stats =====
-    const animateCounter = (element, target) => {
+    const animateCounter = (element, target, prefix = '', suffix = '') => {
         let current = 0;
         const increment = target / 50;
         const timer = setInterval(() => {
             current += increment;
             if (current >= target) {
-                element.textContent = target + '%';
+                element.textContent = prefix + target + suffix;
                 clearInterval(timer);
             } else {
-                element.textContent = Math.floor(current) + '%';
+                element.textContent = prefix + Math.floor(current) + suffix;
             }
         }, 30);
     };
@@ -138,13 +138,42 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const checkStatsVisibility = () => {
         if (statsAnimated) return;
+        if (!statsSection) return;
 
         const sectionTop = statsSection.getBoundingClientRect().top;
         if (sectionTop < window.innerHeight - 100) {
             const statNumbers = document.querySelectorAll('.stat-number');
             statNumbers.forEach(stat => {
-                const value = parseInt(stat.textContent);
-                animateCounter(stat, value);
+                const text = stat.textContent.trim();
+
+                // Check for R$ prefix
+                if (text.startsWith('R$')) {
+                    const value = parseInt(text.replace('R$', '').replace(/\s/g, ''));
+                    if (!isNaN(value)) {
+                        animateCounter(stat, value, 'R$ ', '');
+                    }
+                }
+                // Check for % suffix
+                else if (text.endsWith('%')) {
+                    const value = parseInt(text.replace('%', ''));
+                    if (!isNaN(value)) {
+                        animateCounter(stat, value, '', '%');
+                    }
+                }
+                // Check for min suffix
+                else if (text.includes('min')) {
+                    const value = parseInt(text);
+                    if (!isNaN(value)) {
+                        animateCounter(stat, value, '', ' min');
+                    }
+                }
+                // Default: just animate number
+                else {
+                    const value = parseInt(text);
+                    if (!isNaN(value)) {
+                        animateCounter(stat, value, '', '');
+                    }
+                }
             });
             statsAnimated = true;
         }
