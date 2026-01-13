@@ -1423,11 +1423,11 @@ section {
 
     /* Em mobile, TEXTO primeiro, PHONE depois */
     .hero-text {
-        order: 1;
+        order: 1 !important;
     }
 
     .hero-image {
-        order: 2;
+        order: 2 !important;
     }
 
     .phone-mockup {
