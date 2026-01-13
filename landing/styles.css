@@ -520,6 +520,22 @@ ol {
     opacity: 0.8;
 }
 
+.platform-name {
+    font-weight: 700;
+    font-size: 1rem;
+    color: white;
+    opacity: 0.9;
+    padding: 0.25rem 0.75rem;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: var(--radius-full);
+    transition: var(--transition);
+}
+
+.platform-name:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: scale(1.05);
+}
+
 /* Phone Mockup */
 .hero-image {
     display: flex;
