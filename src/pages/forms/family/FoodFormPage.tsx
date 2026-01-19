@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useFamilyExpensesStore, FoodExpense } from '../../../store/familyExpensesStore';
 import FormSection from '../../../components/forms/FormSection';
 import FormInput from '../../../components/forms/FormInput';
+import MoneyInput from '../../../components/forms/MoneyInput';
 import FormSelect from '../../../components/forms/FormSelect';
 import FormTextArea from '../../../components/forms/FormTextArea';
 import { ShoppingCart, Calendar, MapPin } from 'lucide-react';
@@ -89,7 +90,7 @@ const FoodFormPage: React.FC = () => {
         </FormSection>
 
         <FormSection title="Valores e Pagamento">
-          <FormInput id="totalValue" label="Valor Total (R$)" type="number" step="0.01" placeholder="0,00" value={totalValue} onChange={e => setTotalValue(e.target.value)} required icon={<span className="text-sm font-semibold text-gray-500">R$</span>} />
+          <MoneyInput id="totalValue" label="Valor Total (R$)" placeholder="0,00" value={totalValue} onChange={e => setTotalValue(e.target.value)} required icon={<span className="text-sm font-semibold text-gray-500">R$</span>} />
           <FormSelect id="paymentMethod" label="Forma de Pagamento" value={paymentMethod} onChange={e => setPaymentMethod(e.target.value)}>
             <option>Cartão</option>
             <option>Pix</option>

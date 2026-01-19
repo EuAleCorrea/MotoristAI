@@ -5,6 +5,7 @@ import { useExpenseStore } from '../store/expenseStore';
 import { format, startOfMonth, endOfMonth, eachMonthOfInterval, subMonths } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Calendar } from 'lucide-react';
+import { formatCurrency, formatChartCurrency } from '../utils/formatters';
 
 function Analytics() {
   const entries = useEntryStore((state) => state.entries);
@@ -56,9 +57,9 @@ function Analytics() {
       trigger: 'axis',
       formatter: (params: any) => {
         return `${params[0].axisValue}<br/>
-                Receita: R$ ${params[0].value.toFixed(2)}<br/>
-                Despesas: R$ ${params[1].value.toFixed(2)}<br/>
-                Lucro: R$ ${params[2].value.toFixed(2)}`;
+                Receita: ${formatChartCurrency(params[0].value)}<br/>
+                Despesas: ${formatChartCurrency(params[1].value)}<br/>
+                Lucro: ${formatChartCurrency(params[2].value)}`;
       },
     },
     legend: {
@@ -78,7 +79,7 @@ function Analytics() {
     yAxis: {
       type: 'value',
       axisLabel: {
-        formatter: 'R$ {value}',
+        formatter: (value: number) => formatChartCurrency(value),
       },
     },
     series: [
@@ -235,19 +236,19 @@ function Analytics() {
           <div className="p-4 bg-success-50 rounded-lg">
             <p className="text-sm text-success-600 font-medium">Receita Total</p>
             <p className="mt-2 text-2xl font-bold text-success-700">
-              R$ {monthsData.reduce((sum, d) => sum + d.revenue, 0).toFixed(2)}
+              {formatCurrency(monthsData.reduce((sum, d) => sum + d.revenue, 0))}
             </p>
           </div>
           <div className="p-4 bg-danger-50 rounded-lg">
             <p className="text-sm text-danger-600 font-medium">Despesas Totais</p>
             <p className="mt-2 text-2xl font-bold text-danger-700">
-              R$ {monthsData.reduce((sum, d) => sum + d.expenses, 0).toFixed(2)}
+              {formatCurrency(monthsData.reduce((sum, d) => sum + d.expenses, 0))}
             </p>
           </div>
           <div className="p-4 bg-primary-50 rounded-lg">
             <p className="text-sm text-primary-600 font-medium">Lucro Total</p>
             <p className="mt-1 text-2xl font-bold text-primary-700">
-              R$ {monthsData.reduce((sum, d) => sum + d.profit, 0).toFixed(2)}
+              {formatCurrency(monthsData.reduce((sum, d) => sum + d.profit, 0))}
             </p>
           </div>
           <div className="p-4 bg-gray-50 rounded-lg">

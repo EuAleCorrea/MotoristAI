@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { Trophy, TrendingUp } from 'lucide-react';
 import { useEntryStore } from '../../store/entryStore';
 import { startOfWeek, endOfWeek } from 'date-fns';
-import { formatCurrency, formatNumber } from '../../utils/formatHelpers';
+import { formatCurrency, formatNumber } from '../../utils/formatters';
 
 interface PlatformStats {
     name: string;

@@ -7,6 +7,7 @@ import FormPageLayout from '../../components/layouts/FormPageLayout';
 import { Target, Hash, AlertTriangle, Edit3, RefreshCw, X } from 'lucide-react';
 import FormSection from '../../components/forms/FormSection';
 import FormInput from '../../components/forms/FormInput';
+import MoneyInput from '../../components/forms/MoneyInput';
 import FormSelect from '../../components/forms/FormSelect';
 import { getWorkingWeeksInMonth } from '../../utils/dateHelpers';
 
@@ -268,34 +269,28 @@ function GoalFormPage() {
           </FormSection>
 
           <FormSection title="Valores da Meta Mensal">
-            <FormInput
+            <MoneyInput
               id="revenue"
               name="revenue"
               label="Faturamento Mensal (R$)"
-              type="number"
-              step="0.01"
               value={formData.revenue}
               onChange={handleInputChange}
               placeholder="0,00"
               icon={<span className="text-sm font-semibold text-gray-500">R$</span>}
             />
-            <FormInput
+            <MoneyInput
               id="profit"
               name="profit"
               label="Lucro Mensal (R$)"
-              type="number"
-              step="0.01"
               value={formData.profit}
               onChange={handleInputChange}
               placeholder="0,00"
               icon={<span className="text-sm font-semibold text-gray-500">R$</span>}
             />
-            <FormInput
+            <MoneyInput
               id="expense"
               name="expense"
               label="Despesa Mensal (R$)"
-              type="number"
-              step="0.01"
               value={formData.expense}
               onChange={handleInputChange}
               placeholder="0,00"

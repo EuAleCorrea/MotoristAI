@@ -3,7 +3,7 @@ import MetricCard from './MetricCard';
 import ProgressBar from './ProgressBar';
 import ViewToggle from './ViewToggle';
 import { Target, TrendingDown, Wallet, Car, Clock, Route, DollarSign, BarChart, Shield, Sparkles, Award } from 'lucide-react';
-import { formatCurrency, formatNumber } from '../../utils/formatHelpers';
+import { formatCurrency, formatNumber, formatPercent } from '../../utils/formatters';
 
 export interface PeriodData {
   revenue: number;
@@ -84,7 +84,7 @@ function PeriodSummary({ periodData }: PeriodSummaryProps) {
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 flex justify-between items-center">
         <div>
           <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Performance</p>
-          <p className="text-2xl font-bold text-primary-600 dark:text-primary-400">{performance.toFixed(0)}%</p>
+          <p className="text-2xl font-bold text-primary-600 dark:text-primary-400">{formatPercent(performance)}</p>
         </div>
         <div className="text-right">
           <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Meta do Período</p>

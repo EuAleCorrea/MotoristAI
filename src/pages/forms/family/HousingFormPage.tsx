@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useFamilyExpensesStore, HousingExpense } from '../../../store/familyExpensesStore';
 import FormSection from '../../../components/forms/FormSection';
 import FormInput from '../../../components/forms/FormInput';
+import MoneyInput from '../../../components/forms/MoneyInput';
 import FormSelect from '../../../components/forms/FormSelect';
 import FormTextArea from '../../../components/forms/FormTextArea';
 import { Home, Calendar } from 'lucide-react';
@@ -99,7 +100,7 @@ const HousingFormPage: React.FC = () => {
             <option>Outros</option>
           </FormSelect>
           <FormInput id="description" label="Descrição" type="text" placeholder="Ex: Conta de luz" value={description} onChange={e => setDescription(e.target.value)} required />
-          <FormInput id="totalValue" label="Valor (R$)" type="number" step="0.01" placeholder="0,00" value={totalValue} onChange={e => setTotalValue(e.target.value)} required icon={<span className="text-sm font-semibold text-gray-500">R$</span>} />
+          <MoneyInput id="totalValue" label="Valor (R$)" placeholder="0,00" value={totalValue} onChange={e => setTotalValue(e.target.value)} required icon={<span className="text-sm font-semibold text-gray-500">R$</span>} />
           <FormSelect id="recurrence" label="Recorrência" value={recurrence} onChange={e => setRecurrence(e.target.value)}>
             <option>Única</option>
             <option>Mensal</option>

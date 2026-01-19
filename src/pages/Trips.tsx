@@ -4,6 +4,7 @@ import { useTripStore } from '../store/tripStore';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { useNavigate } from 'react-router-dom';
+import { formatCurrency } from '../utils/formatters';
 
 function Trips() {
   const trips = useTripStore((state) => state.trips);
@@ -118,7 +119,7 @@ function Trips() {
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-success-600">
-                    R$ {trip.amount.toFixed(2)}
+                    {formatCurrency(trip.amount)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                     {trip.distance} km

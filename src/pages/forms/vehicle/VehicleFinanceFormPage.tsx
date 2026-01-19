@@ -3,12 +3,14 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useVehicleExpensesStore, FinanceExpense } from '../../../store/vehicleExpensesStore';
 import FormSection from '../../../components/forms/FormSection';
 import FormInput from '../../../components/forms/FormInput';
+import MoneyInput from '../../../components/forms/MoneyInput';
 import FormSelect from '../../../components/forms/FormSelect';
 import FormTextArea from '../../../components/forms/FormTextArea';
 import { Landmark, Calendar, Paperclip, AlertTriangle, Building } from 'lucide-react';
 import { isBefore, addDays, isToday, formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import FormPageLayout from '../../../components/layouts/FormPageLayout';
+import { formatCurrency } from '../../../utils/formatters';
 
 type CostType = 'Financiamento' | 'Seguro' | 'IPVA' | 'Licenciamento' | 'Multa' | 'Outros';
 type Status = 'Pago' | 'Pendente';
@@ -61,7 +63,7 @@ const VehicleFinanceFormPage: React.FC = () => {
   const summary = useMemo(() => {
     const value = parseFloat(totalValue) || 0;
     if (value === 0) return "Preencha os campos para ver o resumo.";
-    return `R$ ${value.toFixed(2)} — ${costType} — ${status}`;
+    return `${formatCurrency(value)} — ${costType} — ${status}`;;
   }, [totalValue, costType, status]);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -107,7 +109,7 @@ const VehicleFinanceFormPage: React.FC = () => {
             <option>Outros</option>
           </FormSelect>
           <FormInput id="provider" name="provider" label="Instituição / Seguradora" type="text" placeholder="Ex: Banco XYZ" value={provider} onChange={e => setProvider(e.target.value)} required icon={<Building className="w-4 h-4 text-gray-400" />} />
-          <FormInput id="totalValue" name="totalValue" label="Valor (R$)" type="number" step="0.01" placeholder="0,00" value={totalValue} onChange={e => setTotalValue(e.target.value)} required icon={<span className="text-sm font-semibold text-gray-500">R$</span>} />
+          <MoneyInput id="totalValue" name="totalValue" label="Valor (R$)" placeholder="0,00" value={totalValue} onChange={e => setTotalValue(e.target.value)} required icon={<span className="text-sm font-semibold text-gray-500">R$</span>} />
           <FormInput id="dueDate" name="dueDate" label="Vencimento" type="date" value={dueDate} onChange={e => setDueDate(e.target.value)} required icon={<Calendar className="w-4 h-4 text-gray-400" />} />
           <FormSelect id="status" name="status" label="Situação" value={status} onChange={e => setStatus(e.target.value as Status)}>
             <option>Pendente</option>

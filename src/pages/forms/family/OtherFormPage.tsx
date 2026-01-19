@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useFamilyExpensesStore, OtherExpense } from '../../../store/familyExpensesStore';
 import FormSection from '../../../components/forms/FormSection';
 import FormInput from '../../../components/forms/FormInput';
+import MoneyInput from '../../../components/forms/MoneyInput';
 import FormSelect from '../../../components/forms/FormSelect';
 import FormTextArea from '../../../components/forms/FormTextArea';
 import { MoreHorizontal, Tag, Calendar } from 'lucide-react';
@@ -75,7 +76,7 @@ const OtherFormPage: React.FC = () => {
         <FormSection title="Detalhes da Despesa">
           <FormInput id="customCategory" label="Categoria Personalizada" type="text" placeholder="Ex: Doação, Presente" value={customCategory} onChange={e => setCustomCategory(e.target.value)} required icon={<Tag className="w-4 h-4 text-gray-400" />} />
           <FormInput id="description" label="Descrição" type="text" placeholder="Ex: Presente de aniversário para..." value={description} onChange={e => setDescription(e.target.value)} required />
-          <FormInput id="totalValue" label="Valor (R$)" type="number" step="0.01" placeholder="0,00" value={totalValue} onChange={e => setTotalValue(e.target.value)} required icon={<span className="text-sm font-semibold text-gray-500">R$</span>} />
+          <MoneyInput id="totalValue" label="Valor (R$)" placeholder="0,00" value={totalValue} onChange={e => setTotalValue(e.target.value)} required icon={<span className="text-sm font-semibold text-gray-500">R$</span>} />
           <FormInput id="date" label="Data" type="date" value={date} onChange={e => setDate(e.target.value)} required icon={<Calendar className="w-4 h-4 text-gray-400" />} />
         </FormSection>
 

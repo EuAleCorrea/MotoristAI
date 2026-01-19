@@ -57,10 +57,10 @@ const SettingsPage = () => {
     {
       title: 'Relatórios de Custos',
       items: [
-        { id: 'Custos por Categoria', title: 'Custos por Categoria', icon: PieChart, iconName: 'PieChart', route: '/relatorios?view=category', disabled: true },
-        { id: 'Custo por Km e Energia', title: 'Custo por Km e Energia', icon: Gauge, iconName: 'Gauge', route: '/relatorios?view=km_energy', disabled: true },
-        { id: 'Plataformas e Categorias', title: 'Plataformas e Categorias', icon: Layers3, iconName: 'Layers3', route: '/relatorios?view=platforms', disabled: true },
-        { id: 'Resumo Mensal', title: 'Resumo Mensal', icon: FileText, iconName: 'FileText', route: '/relatorios?view=monthly', disabled: true },
+        { id: 'Custos por Categoria', title: 'Custos por Categoria', icon: PieChart, iconName: 'PieChart', route: '/relatorios?view=category' },
+        { id: 'Custo por Km e Energia', title: 'Custo por Km e Energia', icon: Gauge, iconName: 'Gauge', route: '/relatorios?view=km_energy' },
+        { id: 'Plataformas e Categorias', title: 'Plataformas e Categorias', icon: Layers3, iconName: 'Layers3', route: '/relatorios?view=platforms' },
+        { id: 'Resumo Mensal', title: 'Resumo Mensal', icon: FileText, iconName: 'FileText', route: '/relatorios?view=monthly' },
       ],
     },
     {

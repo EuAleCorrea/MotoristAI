@@ -2,7 +2,10 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTripStore } from '../../store/tripStore';
 import FormPageLayout from '../../components/layouts/FormPageLayout';
-import { Car } from 'lucide-react';
+import FormInput from '../../components/forms/FormInput';
+import MoneyInput from '../../components/forms/MoneyInput';
+import FormSelect from '../../components/forms/FormSelect';
+import { Car, Calendar, Route, Clock } from 'lucide-react';
 
 function TripFormPage() {
   const { id } = useParams();
@@ -62,100 +65,79 @@ function TripFormPage() {
 
   return (
     <FormPageLayout title={isEditing ? 'Editar Corrida' : 'Nova Corrida'} icon={Car}>
-      <div className="bg-white rounded-lg shadow-sm p-6">
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Plataforma
-            </label>
-            <select
-              name="platform"
-              value={formData.platform}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              required
-            >
-              <option value="Uber">Uber</option>
-              <option value="99">99</option>
-              <option value="iFood">iFood</option>
-              <option value="Rappi">Rappi</option>
-              <option value="Outros">Outros</option>
-            </select>
-          </div>
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 overflow-hidden">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <FormSelect
+            label="Plataforma"
+            id="platform"
+            name="platform"
+            value={formData.platform}
+            onChange={handleInputChange}
+            required
+          >
+            <option value="Uber">Uber</option>
+            <option value="99">99</option>
+            <option value="iFood">iFood</option>
+            <option value="Rappi">Rappi</option>
+            <option value="Outros">Outros</option>
+          </FormSelect>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Valor (R$)
-            </label>
-            <div className="relative">
-              <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-500 dark:text-gray-400 text-sm font-semibold">R$</span>
-              <input
-                type="number"
-                name="amount"
-                step="0.01"
-                value={formData.amount}
-                onChange={handleInputChange}
-                className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                placeholder="0,00"
-                required
-              />
-            </div>
-          </div>
+          <MoneyInput
+            label="Valor (R$)"
+            id="amount"
+            name="amount"
+            value={formData.amount}
+            onChange={handleInputChange}
+            placeholder="0,00"
+            required
+            icon={<span className="text-sm font-semibold text-gray-500">R$</span>}
+          />
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Distância (km)
-            </label>
-            <input
-              type="number"
-              name="distance"
-              step="0.1"
-              value={formData.distance}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              required
-            />
-          </div>
+          <FormInput
+            label="Distância (km)"
+            id="distance"
+            name="distance"
+            type="number"
+            step="0.1"
+            value={formData.distance}
+            onChange={handleInputChange}
+            required
+            icon={<Route className="w-4 h-4 text-gray-400" />}
+          />
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Duração (minutos)
-            </label>
-            <input
-              type="number"
-              name="duration"
-              value={formData.duration}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              required
-            />
-          </div>
+          <FormInput
+            label="Duração (minutos)"
+            id="duration"
+            name="duration"
+            type="number"
+            value={formData.duration}
+            onChange={handleInputChange}
+            required
+            icon={<Clock className="w-4 h-4 text-gray-400" />}
+          />
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Data e Hora
-            </label>
-            <input
-              type="datetime-local"
-              name="date"
-              value={formData.date}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              required
-            />
-          </div>
+          <FormInput
+            label="Data e Hora"
+            id="date"
+            name="date"
+            type="datetime-local"
+            value={formData.date}
+            onChange={handleInputChange}
+            required
+            icon={<Calendar className="w-4 h-4 text-gray-400" />}
+          />
 
-          <div className="flex space-x-3 pt-4">
+          <div className="flex items-center gap-4 pt-4">
             <button
               type="button"
               onClick={() => navigate(-1)}
-              className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+              className="flex-1 px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition"
             >
               Cancelar
             </button>
             <button
               type="submit"
-              className="flex-1 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
+              className="flex-1 px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition shadow-sm"
             >
               Salvar
             </button>

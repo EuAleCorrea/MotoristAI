@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { Plus, Calendar, DollarSign, TrendingUp, TrendingDown, Edit2, Trash2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { formatCurrency } from '../utils/formatters';
 
 const currentYear = new Date().getFullYear();
 const years = Array.from({ length: 5 }, (_, i) => currentYear - 2 + i);
@@ -88,21 +89,21 @@ function Goals() {
             <div className="bg-success-100 p-2 rounded-full"><DollarSign className="h-6 w-6 text-success-600" /></div>
             <div>
               <p className="text-sm text-success-600 font-medium">Faturamento</p>
-              <p className="mt-1 text-2xl font-bold text-success-700">R$ {yearRevenue.toFixed(2)}</p>
+              <p className="mt-1 text-2xl font-bold text-success-700">{formatCurrency(yearRevenue)}</p>
             </div>
           </div>
           <div className="p-4 bg-primary-50 rounded-lg flex items-start space-x-4">
             <div className="bg-primary-100 p-2 rounded-full"><TrendingUp className="h-6 w-6 text-primary-600" /></div>
             <div>
               <p className="text-sm text-primary-600 font-medium">Lucro</p>
-              <p className="mt-1 text-2xl font-bold text-primary-700">R$ {yearProfit.toFixed(2)}</p>
+              <p className="mt-1 text-2xl font-bold text-primary-700">{formatCurrency(yearProfit)}</p>
             </div>
           </div>
           <div className="p-4 bg-danger-50 rounded-lg flex items-start space-x-4">
             <div className="bg-danger-100 p-2 rounded-full"><TrendingDown className="h-6 w-6 text-danger-600" /></div>
             <div>
               <p className="text-sm text-danger-600 font-medium">Despesa</p>
-              <p className="mt-1 text-2xl font-bold text-danger-700">R$ {yearExpenseTotal.toFixed(2)}</p>
+              <p className="mt-1 text-2xl font-bold text-danger-700">{formatCurrency(yearExpenseTotal)}</p>
             </div>
           </div>
         </div>
@@ -123,9 +124,9 @@ function Goals() {
                 <div key={goal.id} className="p-4 hover:bg-gray-50 dark:hover:bg-gray-700 group relative">
                   <p className="font-semibold text-primary-700 dark:text-primary-400">{format(new Date(goal.year, goal.month - 1), 'MMMM', { locale: ptBR })}</p>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-sm mt-2">
-                    <p className="text-gray-600 dark:text-gray-400">Faturamento: <span className="font-medium text-gray-800 dark:text-gray-200">R$ {goal.revenue?.toFixed(2) || 'N/A'}</span></p>
-                    <p className="text-gray-600 dark:text-gray-400">Lucro: <span className="font-medium text-gray-800 dark:text-gray-200">R$ {goal.profit?.toFixed(2) || 'N/A'}</span></p>
-                    <p className="text-gray-600 dark:text-gray-400">Despesa: <span className="font-medium text-gray-800 dark:text-gray-200">R$ {goal.expense?.toFixed(2) || 'N/A'}</span></p>
+                    <p className="text-gray-600 dark:text-gray-400">Faturamento: <span className="font-medium text-gray-800 dark:text-gray-200">{goal.revenue ? formatCurrency(goal.revenue) : 'N/A'}</span></p>
+                    <p className="text-gray-600 dark:text-gray-400">Lucro: <span className="font-medium text-gray-800 dark:text-gray-200">{goal.profit ? formatCurrency(goal.profit) : 'N/A'}</span></p>
+                    <p className="text-gray-600 dark:text-gray-400">Despesa: <span className="font-medium text-gray-800 dark:text-gray-200">{goal.expense ? formatCurrency(goal.expense) : 'N/A'}</span></p>
                     <p className="text-gray-600 dark:text-gray-400">Dias/Semana: <span className="font-medium text-gray-800 dark:text-gray-200">{goal.daysWorkedPerWeek || 'N/A'}</span></p>
                   </div>
                   <div className="absolute top-4 right-4 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">

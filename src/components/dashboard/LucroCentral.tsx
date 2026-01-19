@@ -1,5 +1,5 @@
 import { TrendingUp, TrendingDown } from 'lucide-react';
-import { formatCurrency } from '../../utils/formatHelpers';
+import { formatCurrency, formatPercent } from '../../utils/formatters';
 
 interface LucroCentralProps {
     lucroLiquido: number;
@@ -8,10 +8,20 @@ interface LucroCentralProps {
 }
 
 const LucroCentral: React.FC<LucroCentralProps> = ({ lucroLiquido, meta, periodoLabel = 'Hoje' }) => {
-    const percentual = meta > 0 ? Math.min((lucroLiquido / meta) * 100, 100) : 0;
+    // Garantir que o percentual fique entre 0 e 100 para o círculo de progresso
+    const rawPercentual = meta > 0 ? (lucroLiquido / meta) * 100 : 0;
+    const percentual = Math.max(0, Math.min(rawPercentual, 100));
     const isPositive = lucroLiquido >= 0;
     const circumference = 2 * Math.PI * 90; // radius = 90
     const strokeDashoffset = circumference - (percentual / 100) * circumference;
+
+    // Calcular tamanho dinâmico do texto baseado no valor
+    const getTextSize = () => {
+        const absValue = Math.abs(lucroLiquido);
+        if (absValue >= 100000) return 'text-xl';
+        if (absValue >= 10000) return 'text-2xl';
+        return 'text-3xl';
+    };
 
     return (
         <div className="relative flex flex-col items-center justify-center py-8">
@@ -58,7 +68,7 @@ const LucroCentral: React.FC<LucroCentralProps> = ({ lucroLiquido, meta, periodo
                 <span className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-1">
                     {periodoLabel}
                 </span>
-                <span className={`text-3xl font-bold ${isPositive ? 'text-gray-900 dark:text-white' : 'text-danger-600 dark:text-danger-400'}`}>
+                <span className={`${getTextSize()} font-bold ${isPositive ? 'text-gray-900 dark:text-white' : 'text-danger-600 dark:text-danger-400'}`}>
                     {formatCurrency(lucroLiquido)}
                 </span>
                 <span className="text-sm text-slate-500 dark:text-slate-400 mt-1">
@@ -76,9 +86,11 @@ const LucroCentral: React.FC<LucroCentralProps> = ({ lucroLiquido, meta, periodo
                         )}
                     </div>
                 )}
-                <span className="text-xs text-primary-600 dark:text-primary-400 mt-2 font-medium">
-                    {percentual.toFixed(0)}%
-                </span>
+                {meta > 0 && (
+                    <span className="text-xs text-primary-600 dark:text-primary-400 mt-2 font-medium">
+                        {formatPercent(Math.max(0, rawPercentual), rawPercentual >= 100 ? 0 : 1)}
+                    </span>
+                )}
             </div>
         </div>
     );

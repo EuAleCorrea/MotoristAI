@@ -3,6 +3,7 @@ import { Sparkles, TrendingUp, Lightbulb, Target } from 'lucide-react';
 import { useEntryStore } from '../../store/entryStore';
 import { useGoalStore } from '../../store/goalStore';
 import { startOfDay, endOfDay } from 'date-fns';
+import { formatCurrency, formatPercent } from '../../utils/formatters';
 
 const AIInsightCard: React.FC = () => {
     const entries = useEntryStore((state) => state.entries);
@@ -40,7 +41,7 @@ const AIInsightCard: React.FC = () => {
             return {
                 title: "Inicie seu dia!",
                 message: dailyGoal > 0
-                    ? `Sua meta hoje é de R$ ${dailyGoal.toFixed(2)}. Vamos buscar bater esse objetivo?`
+                    ? `Sua meta hoje é de ${formatCurrency(dailyGoal)}. Vamos buscar bater esse objetivo?`
                     : "Ainda não registrou ganhos hoje. Que tal começar?",
                 type: 'info',
                 icon: <Target className="w-5 h-5" />
@@ -50,7 +51,7 @@ const AIInsightCard: React.FC = () => {
         if (dailyGoal > 0 && revenue >= dailyGoal) {
             return {
                 title: "Meta Batida! 🚀",
-                message: `Parabéns! Você superou sua meta diária. Seu faturamento extra hoje já é de R$ ${(revenue - dailyGoal).toFixed(2)}.`,
+                message: `Parabéns! Você superou sua meta diária. Seu faturamento extra hoje já é de ${formatCurrency(revenue - dailyGoal)}.`,
                 type: 'success',
                 icon: <Sparkles className="w-5 h-5" />
             };
@@ -68,7 +69,7 @@ const AIInsightCard: React.FC = () => {
         return {
             title: "Dica do MotoristAI",
             message: dailyGoal > 0
-                ? `Você já completou ${((revenue / dailyGoal) * 100).toFixed(0)}% da sua meta diária. Faltam R$ ${(dailyGoal - revenue).toFixed(2)}.`
+                ? `Você já completou ${formatPercent((revenue / dailyGoal) * 100)} da sua meta diária. Faltam ${formatCurrency(dailyGoal - revenue)}.`
                 : "Seu faturamento está crescendo. Lembre-se de registrar suas despesas para ver seu lucro real!",
             type: 'tip',
             icon: <Lightbulb className="w-5 h-5" />

@@ -4,6 +4,7 @@ import { useExpenseStore } from '../store/expenseStore';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { formatCurrency } from '../utils/formatters';
 
 function Expenses() {
   const expenses = useExpenseStore((state) => state.expenses);
@@ -140,7 +141,7 @@ function Expenses() {
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-danger-600 dark:text-danger-400">
-                    R$ {expense.amount.toFixed(2)}
+                    {formatCurrency(expense.amount)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <button

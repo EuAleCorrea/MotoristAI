@@ -76,6 +76,15 @@ export const usePlatformStore = create<PlatformStore>((set, get) => ({
     addPlatform: async (platform) => {
         set({ isLoading: true, error: null });
         try {
+            // Verificar se já existe uma plataforma com o mesmo nome
+            const existing = get().platforms.find(
+                p => p.name.toLowerCase() === platform.name.toLowerCase()
+            );
+            if (existing) {
+                set({ error: 'Já existe uma plataforma com este nome.' });
+                return;
+            }
+
             const dbPlatform = mapToDB(platform);
             const { data, error } = await supabase
                 .from('platforms')
@@ -139,14 +148,45 @@ export const usePlatformStore = create<PlatformStore>((set, get) => ({
 
     seedDefaultPlatforms: async () => {
         try {
-            const dbPlatforms = DEFAULT_PLATFORMS.map(mapToDB);
+            // Verificar quais plataformas já existem no banco
+            const { data: existingData } = await supabase
+                .from('platforms')
+                .select('name');
+
+            const existingNames = new Set(
+                (existingData || []).map((p: any) => p.name.toLowerCase())
+            );
+
+            // Filtrar apenas as plataformas que ainda não existem
+            const newPlatforms = DEFAULT_PLATFORMS.filter(
+                p => !existingNames.has(p.name.toLowerCase())
+            );
+
+            if (newPlatforms.length === 0) {
+                // Se todas já existem, apenas buscar do banco
+                const { data } = await supabase
+                    .from('platforms')
+                    .select('*')
+                    .order('sort_order', { ascending: true });
+                set({ platforms: data?.map(mapFromDB) || [] });
+                return;
+            }
+
+            const dbPlatforms = newPlatforms.map(mapToDB);
             const { data, error } = await supabase
                 .from('platforms')
                 .insert(dbPlatforms)
                 .select();
 
             if (error) throw error;
-            set({ platforms: data?.map(mapFromDB) || [] });
+
+            // Buscar todas as plataformas após o insert
+            const { data: allData } = await supabase
+                .from('platforms')
+                .select('*')
+                .order('sort_order', { ascending: true });
+
+            set({ platforms: allData?.map(mapFromDB) || [] });
         } catch (error: any) {
             set({ error: error.message });
         }

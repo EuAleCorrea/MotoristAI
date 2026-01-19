@@ -23,6 +23,7 @@ import VehicleFinancePage from './pages/forms/vehicle/VehicleFinanceFormPage';
 import ScrollToTop from './components/ScrollToTop';
 import FAQ from './pages/FAQ';
 import Support from './pages/Support';
+import Reports from './pages/Reports';
 
 // Páginas de Políticas
 import PrivacyPolicy from './pages/policies/PrivacyPolicy';
@@ -64,6 +65,7 @@ function App() {
             <Route path="/ajustes" element={<Settings />} />
             <Route path="/faq" element={<FAQ />} />
             <Route path="/suporte" element={<Support />} />
+            <Route path="/relatorios" element={<Reports />} />
 
             {/* Rotas de Políticas */}
             <Route path="/politicas/privacidade" element={<PrivacyPolicy />} />

@@ -41,7 +41,7 @@ function DashboardHome() {
         const workingDaysInMonth = currentMonthGoal?.daysWorkedPerWeek
             ? (daysInMonth / 7) * currentMonthGoal.daysWorkedPerWeek
             : daysInMonth;
-        const dailyGoal = monthlyRevenueGoal > 0 ? (monthlyRevenueGoal / workingDaysInMonth) : 300;
+        const dailyGoal = monthlyRevenueGoal > 0 ? (monthlyRevenueGoal / workingDaysInMonth) : 0;
 
         return { revenue, expenseTotal, lucro, dailyGoal };
     }, [entries, expenses, getGoalByMonth]);

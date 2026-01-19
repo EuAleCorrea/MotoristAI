@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useFamilyExpensesStore, LeisureExpense } from '../../../store/familyExpensesStore';
 import FormSection from '../../../components/forms/FormSection';
 import FormInput from '../../../components/forms/FormInput';
+import MoneyInput from '../../../components/forms/MoneyInput';
 import FormSelect from '../../../components/forms/FormSelect';
 import FormTextArea from '../../../components/forms/FormTextArea';
 import { Drama, Calendar, MapPin, Users, Plane, Film, Utensils, Mountain, Tv, Dumbbell, MoreHorizontal, Clock } from 'lucide-react';
@@ -125,7 +126,7 @@ const LeisureFormPage: React.FC = () => {
         </AnimatePresence>
 
         <FormSection title="Valores e Participantes">
-          <FormInput id="totalValue" label="Valor Total (R$)" type="number" step="0.01" placeholder="0,00" value={totalValue} onChange={e => setTotalValue(e.target.value)} required icon={<span className="text-sm font-semibold text-gray-500">R$</span>} />
+          <MoneyInput id="totalValue" label="Valor Total (R$)" placeholder="0,00" value={totalValue} onChange={e => setTotalValue(e.target.value)} required icon={<span className="text-sm font-semibold text-gray-500">R$</span>} />
           <FormSelect id="paymentMethod" label="Forma de Pagamento" value={paymentMethod} onChange={e => setPaymentMethod(e.target.value)}>
             <option>Cartão</option>
             <option>Pix</option>

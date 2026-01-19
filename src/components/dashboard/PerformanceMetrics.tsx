@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { Clock, Route, DollarSign, TrendingUp, Car } from 'lucide-react';
 import { useEntryStore } from '../../store/entryStore';
 import { startOfWeek, endOfWeek } from 'date-fns';
-import { formatCurrency, formatNumber } from '../../utils/formatHelpers';
+import { formatCurrency, formatNumber } from '../../utils/formatters';
 
 // Helper to parse hours from "HH:MM" format
 const parseHoursWorked = (hoursStr: string | undefined): number => {

@@ -4,6 +4,7 @@ import { useEntryStore } from '../store/entryStore';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { useNavigate } from 'react-router-dom';
+import { formatCurrency } from '../utils/formatters';
 
 function Entries() {
   const { entries, deleteEntry, fetchEntries } = useEntryStore();
@@ -80,24 +81,24 @@ function Entries() {
           <button
             onClick={() => setSourceFilter('all')}
             className={`flex-shrink-0 px-4 py-3 rounded-xl transition-all ${sourceFilter === 'all'
-                ? 'bg-primary-600 text-white'
-                : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+              ? 'bg-primary-600 text-white'
+              : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
               }`}
           >
             <p className="text-xs font-medium">Todas</p>
-            <p className="text-lg font-bold">R$ {totalRevenue.toFixed(0)}</p>
+            <p className="text-lg font-bold">{formatCurrency(totalRevenue)}</p>
           </button>
           {platformStats.map((stat) => (
             <button
               key={stat.name}
               onClick={() => setSourceFilter(stat.name)}
               className={`flex-shrink-0 px-4 py-3 rounded-xl transition-all ${sourceFilter === stat.name
-                  ? 'bg-primary-600 text-white'
-                  : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+                ? 'bg-primary-600 text-white'
+                : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
                 }`}
             >
               <p className="text-xs font-medium">{stat.name}</p>
-              <p className="text-lg font-bold">R$ {stat.revenue.toFixed(0)}</p>
+              <p className="text-lg font-bold">{formatCurrency(stat.revenue)}</p>
               <p className="text-xs opacity-70">{stat.count} entradas</p>
             </button>
           ))}
@@ -174,7 +175,7 @@ function Entries() {
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-success-600 dark:text-success-400">
-                    R$ {entry.value.toFixed(2)}
+                    {formatCurrency(entry.value)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                     {entry.tripCount}

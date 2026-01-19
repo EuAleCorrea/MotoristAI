@@ -3,11 +3,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useFamilyExpensesStore, HealthExpense } from '../../../store/familyExpensesStore';
 import FormSection from '../../../components/forms/FormSection';
 import FormInput from '../../../components/forms/FormInput';
+import MoneyInput from '../../../components/forms/MoneyInput';
 import FormSelect from '../../../components/forms/FormSelect';
 import FormTextArea from '../../../components/forms/FormTextArea';
 import { HeartPulse, Calendar, Building } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import FormPageLayout from '../../../components/layouts/FormPageLayout';
+import { formatCurrency } from '../../../utils/formatters';
 
 const HealthFormPage: React.FC = () => {
   const navigate = useNavigate();
@@ -97,7 +99,7 @@ const HealthFormPage: React.FC = () => {
             <option>Outros</option>
           </FormSelect>
           <FormInput id="provider" label="Profissional / Clínica / Farmácia" type="text" placeholder="Ex: Dr. João Silva" value={provider} onChange={e => setProvider(e.target.value)} required icon={<Building className="w-4 h-4 text-gray-400" />} />
-          <FormInput id="totalValue" label="Valor (R$)" type="number" step="0.01" placeholder="0,00" value={totalValue} onChange={e => setTotalValue(e.target.value)} required icon={<span className="text-sm font-semibold text-gray-500">R$</span>} />
+          <MoneyInput id="totalValue" label="Valor (R$)" placeholder="0,00" value={totalValue} onChange={e => setTotalValue(e.target.value)} required icon={<span className="text-sm font-semibold text-gray-500">R$</span>} />
           <FormInput id="date" label="Data" type="date" value={date} onChange={e => setDate(e.target.value)} required icon={<Calendar className="w-4 h-4 text-gray-400" />} />
         </FormSection>
 
@@ -123,14 +125,14 @@ const HealthFormPage: React.FC = () => {
                 exit={{ opacity: 0, height: 0 }}
                 className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6"
               >
-                <FormInput id="reimbursementValue" label="Valor do Reembolso (R$)" type="number" step="0.01" placeholder="0,00" value={reimbursementValue} onChange={e => setReimbursementValue(e.target.value)} icon={<span className="text-sm font-semibold text-gray-500">R$</span>} />
+                <MoneyInput id="reimbursementValue" label="Valor do Reembolso (R$)" placeholder="0,00" value={reimbursementValue} onChange={e => setReimbursementValue(e.target.value)} icon={<span className="text-sm font-semibold text-gray-500">R$</span>} />
                 <FormInput id="reimbursementDate" label="Data do Reembolso" type="date" value={reimbursementDate} onChange={e => setReimbursementDate(e.target.value)} icon={<Calendar className="w-4 h-4 text-gray-400" />} />
               </motion.div>
             )}
           </AnimatePresence>
           <div className="md:col-span-2 bg-blue-50 dark:bg-blue-900 border-l-4 border-blue-400 p-4 rounded-r-lg">
             <p className="text-sm font-medium text-blue-800 dark:text-blue-200">Valor Líquido (Custo Efetivo)</p>
-            <p className="text-xl font-bold text-blue-900 dark:text-blue-100">R$ {netValue.toFixed(2)}</p>
+            <p className="text-xl font-bold text-blue-900 dark:text-blue-100">{formatCurrency(netValue)}</p>
           </div>
         </FormSection>
 

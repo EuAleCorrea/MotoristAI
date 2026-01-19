@@ -97,7 +97,7 @@ export default function Login() {
                         <form onSubmit={handleAuth} className="space-y-5">
                             {/* Email field */}
                             <div className="relative">
-                                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/60" />
+                                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/90" />
                                 <input
                                     type="email"
                                     required
@@ -110,7 +110,7 @@ export default function Login() {
 
                             {/* Password field */}
                             <div className="relative">
-                                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/60" />
+                                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/90" />
                                 <input
                                     type={showPassword ? 'text' : 'password'}
                                     required
@@ -122,7 +122,7 @@ export default function Login() {
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-white/60 hover:text-white transition-colors"
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-white/90 hover:text-white transition-colors"
                                 >
                                     {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                                 </button>

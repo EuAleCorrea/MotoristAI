@@ -5,6 +5,7 @@ import FormPageLayout from '../../components/layouts/FormPageLayout';
 import { Calendar, Hash, Route, Clock } from 'lucide-react';
 import FormSection from '../../components/forms/FormSection';
 import FormInput from '../../components/forms/FormInput';
+import MoneyInput from '../../components/forms/MoneyInput';
 import FormTextArea from '../../components/forms/FormTextArea';
 import PlatformSelector from '../../components/forms/PlatformSelector';
 import { format } from 'date-fns';
@@ -127,12 +128,10 @@ function EntryFormPage() {
             onChange={handlePlatformChange}
             label="Plataforma"
           />
-          <FormInput
+          <MoneyInput
             id="value"
             name="value"
             label="Valor da Entrada"
-            type="number"
-            step="0.01"
             value={formData.value}
             onChange={handleInputChange}
             placeholder="0,00"

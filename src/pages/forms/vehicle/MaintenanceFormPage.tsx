@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useVehicleExpensesStore, MaintenanceExpense } from '../../../store/vehicleExpensesStore';
 import FormSection from '../../../components/forms/FormSection';
 import FormInput from '../../../components/forms/FormInput';
+import MoneyInput from '../../../components/forms/MoneyInput';
 import FormSelect from '../../../components/forms/FormSelect';
 import FormTextArea from '../../../components/forms/FormTextArea';
 import { Wrench, Calendar, Gauge, Paperclip, AlertTriangle, Building } from 'lucide-react';
@@ -126,9 +127,9 @@ const MaintenanceFormPage: React.FC = () => {
         </FormSection>
 
         <FormSection title="Custos e Odômetro">
-          <FormInput id="partsCost" name="partsCost" label="Custo de Peças (R$)" type="number" step="0.01" placeholder="0,00" value={partsCost} onChange={e => setPartsCost(e.target.value)} icon={<span className="text-sm font-semibold text-gray-500">R$</span>} />
-          <FormInput id="laborCost" name="laborCost" label="Custo de Mão de Obra (R$)" type="number" step="0.01" placeholder="0,00" value={laborCost} onChange={e => setLaborCost(e.target.value)} icon={<span className="text-sm font-semibold text-gray-500">R$</span>} />
-          <FormInput id="totalValue" name="totalValue" label="Valor Total (R$)" type="number" value={totalValue} readOnly disabled icon={<span className="text-sm font-semibold text-gray-500">R$</span>} />
+          <MoneyInput id="partsCost" name="partsCost" label="Custo de Peças (R$)" placeholder="0,00" value={partsCost} onChange={e => setPartsCost(e.target.value)} icon={<span className="text-sm font-semibold text-gray-500">R$</span>} />
+          <MoneyInput id="laborCost" name="laborCost" label="Custo de Mão de Obra (R$)" placeholder="0,00" value={laborCost} onChange={e => setLaborCost(e.target.value)} icon={<span className="text-sm font-semibold text-gray-500">R$</span>} />
+          <MoneyInput id="totalValue" name="totalValue" label="Valor Total (R$)" value={totalValue} readOnly disabled icon={<span className="text-sm font-semibold text-gray-500">R$</span>} />
           <div>
             <FormInput id="odometer" name="odometer" label="Odômetro Atual (km)" type="number" placeholder="51200" value={odometer} onChange={e => setOdometer(e.target.value)} required icon={<Gauge className="w-4 h-4 text-gray-400" />} />
             {odometerWarning && (

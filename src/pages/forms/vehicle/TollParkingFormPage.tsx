@@ -3,10 +3,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useVehicleExpensesStore, TollParkingExpense } from '../../../store/vehicleExpensesStore';
 import FormSection from '../../../components/forms/FormSection';
 import FormInput from '../../../components/forms/FormInput';
+import MoneyInput from '../../../components/forms/MoneyInput';
 import FormSelect from '../../../components/forms/FormSelect';
 import FormTextArea from '../../../components/forms/FormTextArea';
 import { ParkingCircle, Calendar, MapPin, Route, Clock } from 'lucide-react';
 import FormPageLayout from '../../../components/layouts/FormPageLayout';
+import { formatCurrency } from '../../../utils/formatters';
 
 type ExpenseType = 'Pedágio' | 'Estacionamento';
 
@@ -42,7 +44,7 @@ const TollParkingFormPage: React.FC = () => {
   const summary = useMemo(() => {
     const value = parseFloat(totalValue) || 0;
     if (value === 0 && !location) return "Preencha os campos para ver o resumo.";
-    return `R$ ${value.toFixed(2)} em ${expenseType} — ${location || 'Local não informado'}`;
+    return `${formatCurrency(value)} em ${expenseType} — ${location || 'Local não informado'}`;;
   }, [totalValue, expenseType, location]);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -78,7 +80,7 @@ const TollParkingFormPage: React.FC = () => {
             <option>Estacionamento</option>
           </FormSelect>
           <FormInput id="date" name="date" label="Data" type="date" value={date} onChange={e => setDate(e.target.value)} required icon={<Calendar className="w-4 h-4 text-gray-400" />} />
-          <FormInput id="totalValue" name="totalValue" label="Valor Pago (R$)" type="number" step="0.01" placeholder="0,00" value={totalValue} onChange={e => setTotalValue(e.target.value)} required icon={<span className="text-sm font-semibold text-gray-500">R$</span>} />
+          <MoneyInput id="totalValue" name="totalValue" label="Valor Pago (R$)" placeholder="0,00" value={totalValue} onChange={e => setTotalValue(e.target.value)} required icon={<span className="text-sm font-semibold text-gray-500">R$</span>} />
           <FormInput id="location" name="location" label="Local" type="text" placeholder={expenseType === 'Pedágio' ? "Ex: Praça de Itatiba" : "Ex: Shopping Central"} value={location} onChange={e => setLocation(e.target.value)} required icon={<MapPin className="w-4 h-4 text-gray-400" />} />
 
           {expenseType === 'Pedágio' && (

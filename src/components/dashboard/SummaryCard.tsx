@@ -1,5 +1,5 @@
 import { TrendingUp, TrendingDown, Plus, Minus } from 'lucide-react';
-import { formatCurrency } from '../../utils/formatHelpers';
+import { formatCurrency, formatPercent } from '../../utils/formatters';
 
 interface SummaryCardProps {
     title: string;
@@ -45,7 +45,7 @@ const SummaryCard: React.FC<SummaryCardProps> = ({
                             <TrendingDown className="w-3 h-3" />
                         ) : null}
                         <span>
-                            {hasIncrease ? '+' : ''}{percentChange.toFixed(0)}% vs semana
+                            {hasIncrease ? '+' : ''}{formatPercent(percentChange)} vs semana
                         </span>
                     </div>
                 )}
