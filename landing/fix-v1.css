@@ -1,0 +1,24 @@
+/* Version: 3.0 - Mobile Fix Force */
+@media (max-width: 768px) {
+    .container .hero-content {
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    /* FORÇAR ordem: Texto (1), Imagem (2) */
+    .container .hero-content .hero-text {
+        order: 1 !important;
+        margin-bottom: 2rem !important;
+    }
+
+    .container .hero-content .hero-image {
+        order: 2 !important;
+        margin-top: 1rem !important;
+    }
+
+    /* Reduzir imagem no mobile */
+    .phone-mockup {
+        width: 180px !important;
+        height: 360px !important;
+    }
+}

@@ -1,4 +1,5 @@
 /* ===== CSS VARIABLES - MotoristAI Visual Identity ===== */
+/* Version: 2.0 - Mobile First Responsive */
 :root {
     /* Primary Colors (Blue) */
     --primary-50: #eff6ff;
@@ -609,142 +610,341 @@ ol {
     transform: scale(1.05);
 }
 
-/* Phone Mockup */
-.hero-image {
+/* ===== APP DASHBOARD PREVIEW ===== */
+.app-dashboard-card {
+    background: #ffffff;
+    border-radius: 2rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05);
+    padding: 1.5rem;
+    width: 100%;
+    max-width: 380px;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+    z-index: 10;
+    transition: transform 0.3s ease;
+}
+
+.app-dashboard-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Header Tabs */
+.app-header-tabs {
+    display: flex;
+    justify-content: space-between;
+    background: #f8fafc;
+    padding: 0.5rem;
+    border-radius: 1rem;
+    margin-bottom: 2rem;
+}
+
+.app-header-tabs .tab {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--slate-500);
+    cursor: pointer;
+    border-radius: 0.75rem;
+    transition: all 0.2s;
+}
+
+.app-header-tabs .tab.active {
+    background: var(--primary-600);
+    color: white;
+    box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+}
+
+/* Main Display - Circle */
+.app-main-display {
     display: flex;
     justify-content: center;
-    animation: fadeInRight 1s ease 0.3s forwards;
-    opacity: 0;
-}
-
-.phone-mockup {
-    width: 280px;
-    height: 560px;
-    background: #1a1a1a;
-    border-radius: 40px;
-    padding: 12px;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 60px rgba(59, 130, 246, 0.3);
+    margin-bottom: 2rem;
     position: relative;
-    animation: float 6s ease-in-out infinite;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.phone-mockup:hover {
-    transform: translateY(-10px) scale(1.02);
-    box-shadow: 0 35px 60px -15px rgba(0, 0, 0, 0.6), 0 0 80px rgba(59, 130, 246, 0.5);
+.profit-circle {
+    width: 200px;
+    height: 200px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.phone-mockup::before {
-    content: '';
+.progress-ring {
     position: absolute;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80px;
-    height: 24px;
-    background: #000;
-    border-radius: 20px;
+    top: 0;
+    left: 0;
+    transform: rotate(-90deg);
 }
 
-.phone-screen {
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(180deg, var(--primary-900) 0%, var(--slate-900) 100%);
-    border-radius: 32px;
-    overflow: hidden;
-    padding: 50px 16px 20px;
+.progress-ring circle {
+    fill: none;
+    stroke-width: 8;
+    stroke-linecap: round;
 }
 
-.app-preview {
+.progress-ring .bg {
+    stroke: var(--primary-100);
+}
+
+.progress-ring .progress {
+    stroke: var(--primary-500);
+    transition: stroke-dashoffset 1s ease;
+}
+
+.profit-content {
+    text-align: center;
+    z-index: 2;
+    background: radial-gradient(circle at center, rgba(239, 246, 255, 0.8) 0%, rgba(255, 255, 255, 0) 70%);
+    width: 160px;
+    height: 160px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.profit-content .label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--slate-400);
+    margin-bottom: 0.25rem;
+}
+
+.profit-content .value {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--slate-900);
+    line-height: 1.2;
+}
+
+.profit-content .subtitle {
+    font-size: 0.85rem;
+    color: var(--slate-500);
+    margin-bottom: 0.5rem;
+}
+
+.profit-content .meta-tag {
+    font-size: 0.7rem;
+    background: #e0e7ff;
+    color: var(--primary-700);
+    padding: 0.25rem 0.5rem;
+    border-radius: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin: 0 auto;
+}
+
+/* Action Banner */
+.app-action-banner {
+    background: linear-gradient(135deg, var(--primary-600), var(--primary-500));
+    border-radius: 1.25rem;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: white;
+    margin-bottom: 1rem;
+    box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
+}
+
+.app-action-banner .icon-box {
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.app-action-banner .text {
+    display: flex;
+    flex-direction: column;
+}
+
+.app-action-banner .text strong {
+    font-size: 0.95rem;
+}
+
+.app-action-banner .text span {
+    font-size: 0.8rem;
+    opacity: 0.9;
+}
+
+/* Stats Row */
+.app-stats-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Dashbard Stats (Renomeado) */
+.dashboard-stat {
+    background: #f8fafc;
+    border-radius: 1.25rem;
+    padding: 1rem;
+    border: 1px solid #e2e8f0;
+}
+
+.dashboard-stat.green {
+    background: #f0fdf4;
+    border-color: #dcfce7;
+}
+
+.dashboard-stat.red {
+    background: #fef2f2;
+    border-color: #fee2e2;
+}
+
+.dashboard-stat .label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-stat.green .label {
+    color: #15803d;
+}
+
+.dashboard-stat.red .label {
+    color: #b91c1c;
+}
+
+.dashboard-stat .value {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--slate-900);
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.dashboard-stat .trend {
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.dashboard-stat.green .trend {
+    color: #15803d;
+}
+
+.dashboard-stat.red .trend {
+    color: #b91c1c;
+}
+
+/* ===== GLOBAL STATS SECTION (Fix visual mobile) ===== */
+.stats {
+    background: linear-gradient(135deg, var(--slate-800) 0%, var(--slate-900) 100%);
+    padding: 60px 0;
     color: white;
 }
 
-.app-header-preview {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 24px;
-    font-weight: 600;
-}
-
-.app-balance {
-    background: linear-gradient(135deg, var(--primary-600) 0%, var(--primary-700) 100%);
-    border-radius: var(--radius-lg);
-    padding: 20px;
-    margin-bottom: 16px;
-    text-align: center;
-}
-
-.balance-label {
-    display: block;
-    font-size: 0.75rem;
-    opacity: 0.8;
-    margin-bottom: 4px;
-}
-
-.balance-value {
-    display: block;
-    font-size: 1.75rem;
-    font-weight: 800;
-}
-
-.balance-change {
-    display: inline-block;
-    font-size: 0.75rem;
-    margin-top: 8px;
-    padding: 4px 8px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: var(--radius-full);
-}
-
-.balance-change.positive {
-    color: var(--success-400);
-}
-
-.app-stats {
+.stats-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 20px;
-}
-
-.stat-item {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: var(--radius);
-    padding: 12px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
     text-align: center;
 }
 
-.stat-item .stat-value {
+.stats .stat-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    transition: transform 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.stats .stat-card:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.stat-number {
     display: block;
-    font-size: 1.125rem;
-    font-weight: 700;
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--success-400);
+    margin-bottom: 0.5rem;
+    line-height: 1;
 }
 
-.stat-item .stat-label {
-    font-size: 0.625rem;
-    opacity: 0.7;
+.stat-text {
+    font-size: 1rem;
+    color: var(--slate-300);
+    line-height: 1.4;
+    font-weight: 500;
 }
 
-.app-chart {
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .stat-number {
+        font-size: 2.5rem;
+    }
+
+    .stats .stat-card {
+        padding: 1.5rem;
+        margin: 0 1rem;
+    }
+}
+
+/* Bottom Nav */
+.app-bottom-nav {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    background: white;
+    padding: 1rem 0 0.5rem;
+    border-top: 1px solid #f1f5f9;
+}
+
+.nav-item {
     display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    height: 80px;
-    gap: 8px;
-    padding: 0 8px;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.7rem;
+    color: var(--slate-400);
+    cursor: pointer;
 }
 
-.chart-bar {
-    flex: 1;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 4px 4px 0 0;
-    transition: var(--transition);
+.nav-item.active {
+    color: var(--primary-600);
 }
 
-.chart-bar.active {
-    background: var(--success-500);
+.nav-item i {
+    font-size: 1.2rem;
 }
+
+.nav-item.action-btn .plus-btn {
+    width: 48px;
+    height: 48px;
+    background: var(--primary-600);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.2rem;
+    margin-top: -24px;
+    box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.4);
+    border: 4px solid white;
+}
+
+/* CSS Mockup Removido */
 
 .hero-wave {
     position: absolute;
@@ -1343,6 +1543,8 @@ section {
     .hero-content {
         grid-template-columns: 1fr;
         text-align: center;
+        gap: 3rem;
+        /* Espaço entre texto e card */
     }
 
     .hero-text h1 {
@@ -1354,15 +1556,9 @@ section {
         flex-wrap: wrap;
     }
 
-    /* Em tablets, imagem vem primeiro */
-    .hero-image {
-        order: -1;
-    }
-
-    .phone-mockup {
-        width: 220px;
-        height: 440px;
-    }
+    /* O Phone Mockup foi removido, não precisamos mais reordenar ou redimensionar aqui 
+       A ordem natural (Texto -> Imagem) funcionará bem para o Dashboard Card
+    */
 
     .problems-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -1421,27 +1617,15 @@ section {
         padding: 100px 0 120px;
     }
 
-    /* Em mobile, TEXTO primeiro, PHONE depois */
-    .hero-text {
-        order: 1 !important;
-    }
-
-    .hero-image {
-        order: 2 !important;
-    }
-
-    .phone-mockup {
-        width: 180px;
-        height: 360px;
-    }
+    /* Removemos os hacks de order! */
 
     .hero-text h1 {
-        font-size: 1.75rem;
-        line-height: 1.3;
+        font-size: 2rem;
+        line-height: 1.2;
     }
 
     .hero-subtitle {
-        font-size: 0.95rem;
+        font-size: 1rem;
     }
 
     .section-header h2 {
@@ -1491,11 +1675,6 @@ section {
     .btn-lg {
         padding: 0.875rem 1.5rem;
         font-size: 1rem;
-    }
-
-    .phone-mockup {
-        width: 200px;
-        height: 400px;
     }
 
     .audience-grid {

@@ -23,6 +23,8 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Cache Bust: 2026-01-13-10:45 -->
 </head>
 
 <body>
@@ -58,61 +60,117 @@
     </header>
 
     <!-- Hero Section -->
-    <section class="hero">
+    <section class="hero" id="inicio">
         <div class="container">
             <div class="hero-content">
                 <div class="hero-text">
-                    <h1>Pare de Fazer Planilhas.<br><span class="highlight">Comece a Lucrar Mais.</span></h1>
-                    <p class="hero-subtitle">Nossa IA calcula seu lucro real automaticamente, descontando combustível,
-                        manutenção, IPVA, seguro e cada centavo que você gasta. <strong>Você só precisa
-                            dirigir.</strong></p>
-                    <div class="hero-cta">
-                        <a href="#planos" class="btn btn-success btn-lg">
-                            <span>🚀</span> Comece AGORA - 15 Dias Grátis
+                    <span class="badge-new">✨ Nova Versão 2.0</span>
+                    <h1>Pare de Fazer Planilhas. <br><span class="gradient-text">Comece a Lucrar Mais.</span></h1>
+                    <p class="hero-subtitle">O único app que calcula seu lucro real descontando combustível, manutenção
+                        e
+                        depreciação automaticamente.</p>
+                    <div class="cta-group">
+                        <a href="#download" class="btn btn-primary btn-lg pulse">
+                            <i class="fab fa-google-play"></i>
+                            Baixar Agora Grátis
                         </a>
-                        <p class="cta-note">Descubra hoje quanto você está perdendo sem saber • Sem cartão</p>
+                        <div class="cta-note">
+                            <span class="stars">★★★★★</span>
+                            <span>4.9/5 na Play Store</span>
+                        </div>
                     </div>
+
+                    <!-- Platforms Badges -->
                     <div class="platforms">
                         <span>Funciona com:</span>
                         <div class="platform-logos">
-                            <span class="platform-name">Uber</span>
-                            <span class="platform-name">99</span>
-                            <span class="platform-name">iFood</span>
-                            <span class="platform-name">Rappi</span>
+                            <div class="platform-badge uber">Uber</div>
+                            <div class="platform-badge 99">99</div>
+                            <div class="platform-badge ifood">iFood</div>
+                            <div class="platform-badge rappi">Rappi</div>
                         </div>
                     </div>
                 </div>
+
                 <div class="hero-image">
-                    <div class="phone-mockup">
-                        <div class="phone-screen">
-                            <div class="app-preview">
-                                <div class="app-header-preview">
-                                    <span>Dashboard</span>
-                                    <span>👤</span>
-                                </div>
-                                <div class="app-balance">
-                                    <span class="balance-label">Lucro Real do Mês</span>
-                                    <span class="balance-value">R$ 4.832,50</span>
-                                    <span class="balance-change positive">↑ 12% vs mês anterior</span>
-                                </div>
-                                <div class="app-stats">
-                                    <div class="stat-item">
-                                        <span class="stat-value">R$ 8.450</span>
-                                        <span class="stat-label">Faturamento</span>
+                    <!-- New App Dashboard Preview -->
+                    <div class="app-dashboard-card fade-in-up">
+                        <!-- App Header Tabs -->
+                        <div class="app-header-tabs">
+                            <div class="tab active">Hoje</div>
+                            <div class="tab">Diário</div>
+                            <div class="tab">Semanal</div>
+                            <div class="tab">Mensal</div>
+                        </div>
+
+                        <!-- Main Circle Area -->
+                        <div class="app-main-display">
+                            <div class="profit-circle">
+                                <div class="profit-content">
+                                    <span class="label">HOJE</span>
+                                    <span class="value">R$ 342,50</span>
+                                    <span class="subtitle">Lucro Líquido</span>
+                                    <div class="meta-tag">
+                                        Meta: R$ 300,00 <i class="fas fa-check-circle"></i>
                                     </div>
-                                    <div class="stat-item">
-                                        <span class="stat-value">R$ 3.617</span>
-                                        <span class="stat-label">Despesas</span>
-                                    </div>
                                 </div>
-                                <div class="app-chart">
-                                    <div class="chart-bar" style="height: 60%"></div>
-                                    <div class="chart-bar" style="height: 80%"></div>
-                                    <div class="chart-bar" style="height: 45%"></div>
-                                    <div class="chart-bar" style="height: 90%"></div>
-                                    <div class="chart-bar" style="height: 70%"></div>
-                                    <div class="chart-bar active" style="height: 95%"></div>
+                                <svg class="progress-ring" width="100%" height="100%" viewBox="0 0 100 100">
+                                    <circle class="bg" cx="50" cy="50" r="45" />
+                                    <circle class="progress" cx="50" cy="50" r="45" stroke-dasharray="283"
+                                        stroke-dashoffset="40" />
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Action Banner -->
+                        <div class="app-action-banner">
+                            <div class="icon-box">
+                                <i class="fas fa-steering-wheel"></i>
+                            </div>
+                            <div class="text">
+                                <strong>Dia produtivo!</strong>
+                                <span>Você já bateu sua meta diária.</span>
+                            </div>
+                        </div>
+
+                        <!-- Stats Row -->
+                        <div class="app-stats-row">
+                            <div class="dashboard-stat green">
+                                <span class="label">FATURAMENTO</span>
+                                <span class="value">R$ 520,00</span>
+                                <div class="trend up">
+                                    <i class="fas fa-arrow-up"></i> 12% vs ontem
                                 </div>
+                            </div>
+                            <div class="dashboard-stat red">
+                                <span class="label">DESPESAS</span>
+                                <span class="value">R$ 177,50</span>
+                                <div class="trend down">
+                                    <i class="fas fa-gas-pump"></i> Combustível
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bottom Nav Simulation -->
+                        <div class="app-bottom-nav">
+                            <div class="nav-item active">
+                                <i class="fas fa-th-large"></i>
+                                <span>Início</span>
+                            </div>
+                            <div class="nav-item">
+                                <i class="fas fa-wallet"></i>
+                                <span>Receitas</span>
+                            </div>
+                            <div class="nav-item action-btn">
+                                <div class="plus-btn"><i class="fas fa-microphone"></i></div>
+                            </div>
+                            <div class="nav-item">
+                                <i class="fas fa-file-invoice-dollar"></i>
+                                <span>Despesas</span>
+                            </div>
+                            <div class="nav-item">
+                                <i class="fas fa-cog"></i>
+                                <span>Ajustes</span>
                             </div>
                         </div>
                     </div>
