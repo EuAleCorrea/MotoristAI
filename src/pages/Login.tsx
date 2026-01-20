@@ -169,6 +169,11 @@ export default function Login() {
                                 )}
                             </button>
                         </div>
+
+                        {/* Version indicator */}
+                        <div className="mt-4 text-center">
+                            <span className="text-white/40 text-xs">v2.0.4</span>
+                        </div>
                     </div>
 
                     {/* Footer text */}
