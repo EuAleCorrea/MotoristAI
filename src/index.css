@@ -77,3 +77,22 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+
+/* Override browser autofill styling to maintain custom design */
+.autofill-override:-webkit-autofill,
+.autofill-override:-webkit-autofill:hover,
+.autofill-override:-webkit-autofill:focus,
+.autofill-override:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px rgba(255, 255, 255, 0.1) inset !important;
+  -webkit-text-fill-color: white !important;
+  transition: background-color 5000s ease-in-out 0s;
+  caret-color: white;
+}
+
+/* For Firefox */
+.autofill-override:-moz-autofill,
+.autofill-override:-moz-autofill:hover,
+.autofill-override:-moz-autofill:focus {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  color: white !important;
+}
