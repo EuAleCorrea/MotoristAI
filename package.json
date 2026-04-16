@@ -1,7 +1,10 @@
 {
-  "name": "vite-react-typescript-starter",
+  "name": "motoristai",
   "private": true,
-  "version": "0.0.0",
+  "version": "2.0.4",
+  "description": "Aplicativo de gestão financeira inteligente para motoristas de aplicativo",
+  "author": "Alessandro Correa",
+  "license": "UNLICENSED",
   "type": "module",
   "scripts": {
     "dev": "vite",

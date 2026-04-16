@@ -1,4 +1,36 @@
+# Dependencies
 node_modules/
+
+# Build output
 dist/
+.output/
+
+# Environment
 .env
 .env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+deploy_log.txt
+projects.txt
+
+# Capacitor (gerado)
+android/app/build/
+
+# Supabase local
+.supabase/
+
+# Package manager
+yarn.lock
+package-lock.json
