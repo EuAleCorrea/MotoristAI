@@ -34,3 +34,6 @@ android/app/build/
 # Package manager
 yarn.lock
 package-lock.json
+
+# Antigravity Kit (local tooling)
+.agent/
