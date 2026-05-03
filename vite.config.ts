@@ -9,7 +9,7 @@ export default defineConfig({
       registerType: 'autoUpdate',
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
-        maximumFileSizeToCacheInBytes: 4000000
+        maximumFileSizeToCacheInBytes: 4000000,
       },
       manifest: {
         name: 'MotoristAI - Controle Financeiro',

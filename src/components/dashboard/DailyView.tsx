@@ -6,77 +6,81 @@ import { useGoalStore } from '../../store/goalStore';
 import PeriodSummary, { PeriodData } from './PeriodSummary';
 import { hhmmToHours } from '../../utils/dateHelpers';
 
-function DailyView() {
-  const [selectedDate, setSelectedDate] = useState(new Date());
+interface DailyViewProps {
+  selectedVehicleId?: string;
+}
 
-  const entries = useEntryStore((state) => state.entries);
-  const expenses = useExpenseStore((state) => state.expenses);
-  const { getGoalByMonth } = useGoalStore();
+function DailyView({ selectedVehicleId }: DailyViewProps) {
+ const [selectedDate, setSelectedDate] = useState(new Date());
 
-  const dailyData: PeriodData = useMemo(() => {
-    const dayStart = startOfDay(selectedDate);
-    const dayEnd = endOfDay(selectedDate);
+ const entries = useEntryStore((state) => state.entries);
+ const expenses = useExpenseStore((state) => state.expenses);
+ const { getGoalByMonth } = useGoalStore();
 
-    const dayEntries = entries.filter(e => {
-      const entryDate = new Date(e.date.split('T')[0] + 'T00:00:00');
-      return entryDate >= dayStart && entryDate <= dayEnd;
-    });
-    const dayExpenses = expenses.filter(e => {
-      const expenseDate = new Date(e.date.split('T')[0] + 'T00:00:00');
-      return expenseDate >= dayStart && expenseDate <= dayEnd;
-    });
+ const dailyData: PeriodData = useMemo(() => {
+ const dayStart = startOfDay(selectedDate);
+ const dayEnd = endOfDay(selectedDate);
 
-    const revenue = dayEntries.reduce((sum, entry) => sum + entry.value, 0);
-    const expenseTotal = dayExpenses.reduce((sum, expense) => sum + expense.amount, 0);
-    const balance = revenue - expenseTotal;
-    const totalTrips = dayEntries.reduce((sum, entry) => sum + entry.tripCount, 0);
-    const hoursWorked = dayEntries.reduce((sum, entry) => sum + hhmmToHours(entry.hoursWorked), 0);
-    const kmDriven = dayEntries.reduce((sum, entry) => sum + entry.kmDriven, 0);
+ const dayEntries = entries.filter(e => {
+ const entryDate = new Date(e.date.split('T')[0] + 'T00:00:00');
+ return entryDate >= dayStart && entryDate <= dayEnd;
+ });
+ const dayExpenses = expenses.filter(e => {
+ const expenseDate = new Date(e.date.split('T')[0] + 'T00:00:00');
+ return expenseDate >= dayStart && expenseDate <= dayEnd;
+ });
 
-    const currentMonthGoal = getGoalByMonth(selectedDate.getFullYear(), selectedDate.getMonth() + 1);
-    const monthlyRevenueGoal = currentMonthGoal?.revenue || 0;
-    const daysInMonth = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 0).getDate();
-    const workingDaysInMonth = currentMonthGoal?.daysWorkedPerWeek ? (daysInMonth / 7) * currentMonthGoal.daysWorkedPerWeek : daysInMonth;
-    const periodGoal = monthlyRevenueGoal > 0 ? (monthlyRevenueGoal / workingDaysInMonth) : 0;
+ const revenue = dayEntries.reduce((sum, entry) => sum + entry.value, 0);
+ const expenseTotal = dayExpenses.reduce((sum, expense) => sum + expense.amount, 0);
+ const balance = revenue - expenseTotal;
+ const totalTrips = dayEntries.reduce((sum, entry) => sum + entry.tripCount, 0);
+ const hoursWorked = dayEntries.reduce((sum, entry) => sum + hhmmToHours(entry.hoursWorked), 0);
+ const kmDriven = dayEntries.reduce((sum, entry) => sum + entry.kmDriven, 0);
 
-    const performance = periodGoal > 0 ? (revenue / periodGoal) * 100 : 0;
+ const currentMonthGoal = getGoalByMonth(selectedDate.getFullYear(), selectedDate.getMonth() + 1);
+ const monthlyRevenueGoal = currentMonthGoal?.revenue || 0;
+ const daysInMonth = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 0).getDate();
+ const workingDaysInMonth = currentMonthGoal?.daysWorkedPerWeek ? (daysInMonth / 7) * currentMonthGoal.daysWorkedPerWeek : daysInMonth;
+ const periodGoal = monthlyRevenueGoal > 0 ? (monthlyRevenueGoal / workingDaysInMonth) : 0;
 
-    const revenueByApp = dayEntries.reduce((acc, entry) => {
-      if (!acc[entry.source]) {
-        acc[entry.source] = 0;
-      }
-      acc[entry.source] += entry.value;
-      return acc;
-    }, {} as Record<string, number>);
+ const performance = periodGoal > 0 ? (revenue / periodGoal) * 100 : 0;
 
-    return {
-      revenue,
-      expenseTotal,
-      balance,
-      totalTrips,
-      hoursWorked,
-      kmDriven,
-      periodGoal,
-      performance,
-      revenueByApp,
-      periodExpenses: dayExpenses,
-    };
-  }, [selectedDate, entries, expenses, getGoalByMonth]);
+ const revenueByApp = dayEntries.reduce((acc, entry) => {
+ if (!acc[entry.source]) {
+ acc[entry.source] = 0;
+ }
+ acc[entry.source] += entry.value;
+ return acc;
+ }, {} as Record<string, number>);
 
-  return (
-    <div className="space-y-6">
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 flex flex-wrap justify-between md:justify-start items-center gap-4">
-        <h2 className="text-lg font-semibold text-gray-800 dark:text-white">Resumo</h2>
-        <input
-          type="date"
-          value={format(selectedDate, 'yyyy-MM-dd')}
-          onChange={(e) => setSelectedDate(new Date(e.target.value + 'T00:00:00'))}
-          className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 h-10 bg-white dark:bg-gray-700 dark:text-white"
-        />
-      </div>
-      <PeriodSummary periodData={dailyData} />
-    </div>
-  );
+ return {
+ revenue,
+ expenseTotal,
+ balance,
+ totalTrips,
+ hoursWorked,
+ kmDriven,
+ periodGoal,
+ performance,
+ revenueByApp,
+ periodExpenses: dayExpenses,
+ };
+ }, [selectedDate, entries, expenses, getGoalByMonth]);
+
+ return (
+ <div className="space-y-6">
+ <div className="bg-[var(--ios-card)] rounded-lg shadow-sm p-4 flex flex-wrap justify-between md:justify-start items-center gap-4">
+ <h2 className="text-lg font-semibold text-[var(--ios-text)] ">Resumo</h2>
+ <input
+ type="date"
+ value={format(selectedDate, 'yyyy-MM-dd')}
+ onChange={(e) => setSelectedDate(new Date(e.target.value + 'T00:00:00'))}
+ className="px-3 py-2 border border-[var(--ios-separator)] rounded-lg text-sm focus:ring-2 focus:ring-primary-500 h-10 bg-[var(--ios-card)] "
+ />
+ </div>
+ <PeriodSummary periodData={dailyData} />
+ </div>
+ );
 }
 
 export default DailyView;

@@ -1,67 +1,95 @@
-import { useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useModalStore } from '../store/modalStore';
-import { useFamilyExpensesStore } from '../store/familyExpensesStore';
-import { useVehicleExpensesStore } from '../store/vehicleExpensesStore';
-import { useAuth } from '../contexts/AuthContext';
-import AddChoiceModal from './AddChoiceModal';
-import BottomNavBar from './BottomNavBar';
+import { ReactNode, useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Header from './Header';
+import BottomNavBar from './BottomNavBar';
+import OnboardingTour from './OnboardingTour';
+import { useEntryStore } from '../store/entryStore';
+import { useExpenseStore } from '../store/expenseStore';
+import { useGoalStore } from '../store/goalStore';
+import { useAuth } from '../contexts/AuthContext';
+import { useOnboarding } from '../hooks/useOnboarding';
 
 interface LayoutProps {
-  children: React.ReactNode;
+ children: ReactNode;
 }
 
-function Layout({ children }: LayoutProps) {
-  const { modalType } = useModalStore();
-  const { user, loading } = useAuth();
-  const { fetchExpenses: fetchFamilyExpenses } = useFamilyExpensesStore();
-  const { fetchExpenses: fetchVehicleExpenses } = useVehicleExpensesStore();
-  const navigate = useNavigate();
-  const location = useLocation();
+const Layout = ({ children }: LayoutProps) => {
+ const location = useLocation();
+ const navigate = useNavigate();
+ const { user, loading: authLoading } = useAuth();
+ const [isLoading, setIsLoading] = useState(true);
+ const { fetchEntries } = useEntryStore();
+ const { fetchExpenses } = useExpenseStore();
+ const { fetchGoals } = useGoalStore();
 
-  // Redirect to login if not authenticated
+  const onboarding = useOnboarding();
+
+  // Redirecionar para login se não estiver autenticado
   useEffect(() => {
-    if (!loading && !user && location.pathname !== '/login') {
-      navigate('/login');
+    if (!authLoading && !user && location.pathname !== '/login') {
+      navigate('/login', { replace: true });
     }
-  }, [user, loading, navigate, location.pathname]);
+  }, [user, authLoading, navigate, location.pathname]);
 
-  // Fetch data when user is authenticated
   useEffect(() => {
-    if (user) {
-      fetchFamilyExpenses();
-      fetchVehicleExpenses();
-    }
-  }, [user, fetchFamilyExpenses, fetchVehicleExpenses]);
-
-  // Show loading state while checking auth
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-gray-900">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600"></div>
-      </div>
-    );
+  const loadData = async () => {
+  try {
+  await Promise.all([fetchEntries(), fetchExpenses(), fetchGoals()]);
+  } finally {
+  setIsLoading(false);
   }
-
-  // Don't show layout elements on login page
-  if (location.pathname === '/login') {
-    return <>{children}</>;
+  };
+  if (user) {
+    loadData();
+  } else {
+    setIsLoading(false);
   }
+  }, [fetchEntries, fetchExpenses, fetchGoals, user]);
+
+ const isLoginPage = location.pathname === '/login';
+
+ if (isLoginPage) {
+ return <>{children}</>;
+ }
+
+ // Mostrar loading enquanto verifica autenticação
+ if (authLoading || (!user && isLoading)) {
+ return (
+ <div className="h-screen-safe flex items-center justify-center" style={{ backgroundColor: 'var(--ios-bg)' }}>
+ <div className="w-8 h-8 border-3 border-t-transparent rounded-full animate-spin" style={{ borderColor: 'var(--ios-accent)', borderTopColor: 'transparent' }} />
+ </div>
+ );
+ }
+
+ // Se não está na página de login e não tem usuário, não renderiza nada (o redirect cuida)
+ if (!user) {
+   return null;
+ }
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-gray-900 transition-colors">
-      <Header />
+  <div className="h-screen-safe flex flex-col" style={{ backgroundColor: 'var(--ios-bg)' }}>
+  <Header />
+  <main className="flex-1 overflow-y-auto overscroll-y-contain px-4 pb-28 pt-2" style={{ WebkitOverflowScrolling: 'touch' }}>
+  <div className="max-w-lg mx-auto">
+  {children}
+  </div>
+  </main>
+  <BottomNavBar />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-28">
-        {children}
-      </main>
-
-      <BottomNavBar />
-
-      {modalType === 'add-choice' && <AddChoiceModal />}
-    </div>
+  {/* Onboarding para novos usuários */}
+  {!isLoading && onboarding.showOnboarding && !onboarding.isLoading && (
+    <OnboardingTour
+      steps={onboarding.steps}
+      currentStep={onboarding.currentStep}
+      totalSteps={onboarding.totalSteps}
+      onNext={onboarding.nextStep}
+      onPrev={onboarding.prevStep}
+      onComplete={onboarding.completeOnboarding}
+      onSkip={onboarding.skipOnboarding}
+    />
+  )}
+  </div>
   );
-}
+};
 
 export default Layout;

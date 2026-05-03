@@ -1,70 +1,77 @@
-import { TrendingUp, TrendingDown, Plus, Minus } from 'lucide-react';
-import { formatCurrency, formatPercent } from '../../utils/formatters';
+import { TrendingUp, TrendingDown, Plus } from 'lucide-react';
 
-interface SummaryCardProps {
-    title: string;
-    value: number;
-    percentChange?: number;
-    type: 'revenue' | 'expense';
-    onQuickAdd?: () => void;
+/*
+ * SummaryCard — Revenue/Expense card (finance app style)
+ * Compact card with value, trend indicator, and quick-add button
+ */
+
+interface Props {
+ title: string;
+ value: number;
+ percentChange: number;
+ type: 'revenue' | 'expense';
+ onQuickAdd: () => void;
 }
 
-const SummaryCard: React.FC<SummaryCardProps> = ({
-    title,
-    value,
-    percentChange,
-    type,
-    onQuickAdd
-}) => {
-    const isRevenue = type === 'revenue';
-    const hasIncrease = percentChange !== undefined && percentChange > 0;
-    const hasDecrease = percentChange !== undefined && percentChange < 0;
+function SummaryCard({ title, value, percentChange, type, onQuickAdd }: Props) {
+ const isRevenue = type === 'revenue';
+ const color = isRevenue ? 'var(--sys-green)' : 'var(--sys-red)';
+ const tintBg = isRevenue ? 'rgba(52, 199, 89, 0.12)' : 'rgba(255, 59, 48, 0.12)';
 
-    return (
-        <div className={`relative flex-1 rounded-2xl p-4 transition-all duration-300 shadow-sm hover:shadow-md ${isRevenue
-            ? 'bg-gradient-to-br from-emerald-500/10 to-emerald-600/5 border border-emerald-500/20 dark:border-emerald-500/30'
-            : 'bg-gradient-to-br from-rose-500/10 to-rose-600/5 border border-rose-500/20 dark:border-rose-500/30'
-            }`}>
-            <div className="flex flex-col">
-                <span className={`text-xs font-medium uppercase tracking-wide ${isRevenue ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'
-                    }`}>
-                    {title}
-                </span>
+ const formatCurrency = (v: number) => {
+ return v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+ };
 
-                <span className={`text-2xl font-bold mt-1 ${isRevenue ? 'text-emerald-700 dark:text-emerald-300' : 'text-rose-700 dark:text-rose-300'
-                    }`}>
-                    {formatCurrency(value)}
-                </span>
+ return (
+ <div className="ios-card p-4 flex-1">
+ {/* Header */}
+ <div className="flex items-center justify-between mb-3">
+ <span className="text-ios-footnote" style={{ color: 'var(--ios-text-secondary)' }}>
+ {title}
+ </span>
+ <button
+ onClick={onQuickAdd}
+ className="w-7 h-7 flex items-center justify-center rounded-full"
+ style={{ backgroundColor: tintBg, color, minHeight: '28px' }}
+ >
+ <Plus className="h-3.5 w-3.5" strokeWidth={2.5} />
+ </button>
+ </div>
 
-                {percentChange !== undefined && (
-                    <div className={`flex items-center gap-1 mt-2 text-xs ${hasIncrease ? 'text-emerald-600 dark:text-emerald-400' : hasDecrease ? 'text-rose-600 dark:text-rose-400' : 'text-gray-500 dark:text-gray-400'
-                        }`}>
-                        {hasIncrease ? (
-                            <TrendingUp className="w-3 h-3" />
-                        ) : hasDecrease ? (
-                            <TrendingDown className="w-3 h-3" />
-                        ) : null}
-                        <span>
-                            {hasIncrease ? '+' : ''}{formatPercent(percentChange)} vs semana
-                        </span>
-                    </div>
-                )}
-            </div>
+ {/* Value */}
+ <p
+ className="text-ios-title2 font-bold tabular-nums mb-1"
+ style={{ color: 'var(--ios-text)' }}
+ >
+ {formatCurrency(value)}
+ </p>
 
-            {/* Quick action button - positioned at bottom-right */}
-            {onQuickAdd && (
-                <button
-                    onClick={onQuickAdd}
-                    className={`absolute bottom-3 right-3 w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-110 ${isRevenue
-                        ? 'bg-emerald-500 hover:bg-emerald-600 text-white'
-                        : 'bg-rose-500 hover:bg-rose-600 text-white'
-                        }`}
-                >
-                    {isRevenue ? <Plus className="w-5 h-5" /> : <Minus className="w-5 h-5" />}
-                </button>
-            )}
-        </div>
-    );
-};
+ {/* Trend */}
+ {percentChange !== 0 && (
+ <div className="flex items-center gap-1">
+ <div
+ className="flex items-center gap-0.5 px-1.5 py-0.5 rounded-ios-full"
+ style={{
+ backgroundColor: tintBg,
+ color,
+ fontSize: '12px',
+ fontWeight: 600,
+ }}
+ >
+ {percentChange > 0 ? (
+ <TrendingUp className="h-3 w-3" />
+ ) : (
+ <TrendingDown className="h-3 w-3" />
+ )}
+ <span>{Math.abs(percentChange).toFixed(1)}%</span>
+ </div>
+ <span className="text-ios-caption2" style={{ color: 'var(--ios-text-tertiary)' }}>
+ vs semana anterior
+ </span>
+ </div>
+ )}
+ </div>
+ );
+}
 
 export default SummaryCard;

@@ -6,113 +6,107 @@ import { startOfDay, endOfDay } from 'date-fns';
 import { formatCurrency, formatPercent } from '../../utils/formatters';
 
 const AIInsightCard: React.FC = () => {
-    const entries = useEntryStore((state) => state.entries);
-    const { getGoalByMonth } = useGoalStore();
+ const entries = useEntryStore((state) => state.entries);
+ const { getGoalByMonth } = useGoalStore();
 
-    const insight = useMemo(() => {
-        const today = new Date();
-        const dayStart = startOfDay(today);
-        const dayEnd = endOfDay(today);
+ const insight = useMemo(() => {
+ const today = new Date();
+ const dayStart = startOfDay(today);
+ const dayEnd = endOfDay(today);
 
-        const todayEntries = entries.filter(
-            (entry) => new Date(entry.date) >= dayStart && new Date(entry.date) <= dayEnd
-        );
+ const todayEntries = entries.filter(
+ (entry) => new Date(entry.date) >= dayStart && new Date(entry.date) <= dayEnd
+ );
 
-        const revenue = todayEntries.reduce((sum, entry) => sum + entry.value, 0);
+ const revenue = todayEntries.reduce((sum, entry) => sum + entry.value, 0);
 
-        // Get goal
-        const currentMonthGoal = getGoalByMonth(today.getFullYear(), today.getMonth() + 1);
-        const monthlyRevenueGoal = currentMonthGoal?.revenue || 0;
-        const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
-        const workingDaysInMonth = currentMonthGoal?.daysWorkedPerWeek
-            ? (daysInMonth / 7) * currentMonthGoal.daysWorkedPerWeek
-            : daysInMonth;
-        const dailyGoal = monthlyRevenueGoal > 0 ? (monthlyRevenueGoal / workingDaysInMonth) : 0;
+ const currentMonthGoal = getGoalByMonth(today.getFullYear(), today.getMonth() + 1);
+ const monthlyRevenueGoal = currentMonthGoal?.revenue || 0;
+ const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+ const workingDaysInMonth = currentMonthGoal?.daysWorkedPerWeek
+ ? (daysInMonth / 7) * currentMonthGoal.daysWorkedPerWeek
+ : daysInMonth;
+ const dailyGoal = monthlyRevenueGoal > 0 ? (monthlyRevenueGoal / workingDaysInMonth) : 0;
 
-        // Platform analysis
-        const platformStats: Record<string, number> = {};
-        todayEntries.forEach(e => {
-            platformStats[e.source] = (platformStats[e.source] || 0) + e.value;
-        });
-        const bestPlatform = Object.entries(platformStats).sort((a, b) => b[1] - a[1])[0];
+ const platformStats: Record<string, number> = {};
+ todayEntries.forEach(e => {
+ platformStats[e.source] = (platformStats[e.source] || 0) + e.value;
+ });
+ const bestPlatform = Object.entries(platformStats).sort((a, b) => b[1] - a[1])[0];
 
-        // Generation logic
-        if (revenue === 0) {
-            return {
-                title: "Inicie seu dia!",
-                message: dailyGoal > 0
-                    ? `Sua meta hoje é de ${formatCurrency(dailyGoal)}. Vamos buscar bater esse objetivo?`
-                    : "Ainda não registrou ganhos hoje. Que tal começar?",
-                type: 'info',
-                icon: <Target className="w-5 h-5" />
-            };
-        }
+ if (revenue === 0) {
+ return {
+ title: "Inicie seu dia!",
+ message: dailyGoal > 0
+ ? `Sua meta hoje é de ${formatCurrency(dailyGoal)}. Vamos buscar batter esse objetivo?`
+ : "Ainda não registrou ganhos hoje. Que tal começar?",
+ type: 'info' as const,
+ icon: <Target className="w-5 h-5" />,
+ };
+ }
 
-        if (dailyGoal > 0 && revenue >= dailyGoal) {
-            return {
-                title: "Meta Batida! 🚀",
-                message: `Parabéns! Você superou sua meta diária. Seu faturamento extra hoje já é de ${formatCurrency(revenue - dailyGoal)}.`,
-                type: 'success',
-                icon: <Sparkles className="w-5 h-5" />
-            };
-        }
+ if (dailyGoal > 0 && revenue >= dailyGoal) {
+ return {
+ title: "Meta Batida! 🚀",
+ message: `Parabéns! Você superou sua meta diária em ${formatCurrency(revenue - dailyGoal)}.`,
+ type: 'success' as const,
+ icon: <Sparkles className="w-5 h-5" />,
+ };
+ }
 
-        if (bestPlatform && bestPlatform[1] > (revenue * 0.7)) {
-            return {
-                title: "Foco no Volume",
-                message: `Você está rendendo muito bem na ${bestPlatform[0]}. Mantenha o ritmo nela para atingir sua meta mais rápido!`,
-                type: 'trend',
-                icon: <TrendingUp className="w-5 h-5" />
-            };
-        }
+ if (bestPlatform && bestPlatform[1] > (revenue * 0.7)) {
+ return {
+ title: "Foco no Volume",
+ message: `Você está rendendo muito bem na ${bestPlatform[0]}. Mantenha o ritmo!`,
+ type: 'trend' as const,
+ icon: <TrendingUp className="w-5 h-5" />,
+ };
+ }
 
-        return {
-            title: "Dica do MotoristAI",
-            message: dailyGoal > 0
-                ? `Você já completou ${formatPercent((revenue / dailyGoal) * 100)} da sua meta diária. Faltam ${formatCurrency(dailyGoal - revenue)}.`
-                : "Seu faturamento está crescendo. Lembre-se de registrar suas despesas para ver seu lucro real!",
-            type: 'tip',
-            icon: <Lightbulb className="w-5 h-5" />
-        };
-    }, [entries, getGoalByMonth]);
+ return {
+ title: "Dica do MotoristAI",
+ message: dailyGoal > 0
+ ? `Você completou ${formatPercent((revenue / dailyGoal) * 100)} da meta. Faltam ${formatCurrency(dailyGoal - revenue)}.`
+ : "Registre também suas despesas para ver seu lucro real!",
+ type: 'tip' as const,
+ icon: <Lightbulb className="w-5 h-5" />,
+ };
+ }, [entries, getGoalByMonth]);
 
-    const colors = {
-        success: 'from-emerald-500 to-teal-600 shadow-emerald-500/20 text-white',
-        info: 'from-blue-500 to-indigo-600 shadow-blue-500/20 text-white',
-        trend: 'from-amber-500 to-orange-600 shadow-amber-500/20 text-white',
-        tip: 'from-purple-500 to-pink-600 shadow-purple-500/20 text-white',
-        warning: 'from-rose-500 to-red-600 shadow-rose-500/20 text-white',
-    };
+ const colorMap: Record<string, { accent: string; bg: string }> = {
+ success: { accent: 'var(--sys-green)', bg: 'rgba(52, 199, 89, 0.1)' },
+ info: { accent: 'var(--sys-blue)', bg: 'rgba(0, 122, 255, 0.1)' },
+ trend: { accent: 'var(--sys-orange)', bg: 'rgba(255, 149, 0, 0.1)' },
+ tip: { accent: 'var(--sys-purple)', bg: 'rgba(175, 82, 222, 0.1)' },
+ };
 
-    return (
-        <div className={`relative overflow-hidden rounded-2xl p-4 bg-gradient-to-br transition-all duration-300 shadow-xl ${colors[insight.type as keyof typeof colors]}`}>
-            {/* Background pattern */}
-            <div className="absolute top-0 right-0 p-2 opacity-15">
-                <Sparkles className="w-24 h-24" />
-            </div>
+ const colors = colorMap[insight.type];
 
-            <div className="relative z-10 flex gap-4 items-start">
-                <div className="p-2 bg-white/20 rounded-xl backdrop-blur-sm border border-white/30 shrink-0">
-                    {insight.icon}
-                </div>
-                <div>
-                    <h4 className="font-bold text-lg mb-1 flex items-center gap-2">
-                        {insight.title}
-                    </h4>
-                    <p className="text-sm font-medium text-white/90 leading-relaxed">
-                        {insight.message}
-                    </p>
-                </div>
-            </div>
+ return (
+ <div
+ className="ios-card p-4 flex gap-3 items-start"
+ style={{ borderLeft: `3px solid ${colors.accent}` }}
+ >
+ <div
+ className="flex-shrink-0 w-10 h-10 rounded-ios flex items-center justify-center"
+ style={{ backgroundColor: colors.bg, color: colors.accent }}
+ >
+ {insight.icon}
+ </div>
 
-            {/* Micro-animation indicator */}
-            <div className="absolute bottom-2 right-4 flex gap-1">
-                <div className="w-1 h-1 bg-white/50 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                <div className="w-1 h-1 bg-white/50 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                <div className="w-1 h-1 bg-white/50 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
-            </div>
-        </div>
-    );
+ <div className="min-w-0 flex-1">
+ <h4
+ className="text-ios-headline font-semibold mb-0.5"
+ style={{ color: 'var(--ios-text)' }}
+ >
+ {insight.title}
+ </h4>
+ <p className="text-ios-subhead" style={{ color: 'var(--ios-text-secondary)' }}>
+ {insight.message}
+ </p>
+ </div>
+ </div>
+ );
 };
 
 export default AIInsightCard;

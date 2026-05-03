@@ -1,26 +1,35 @@
 import { LucideIcon } from 'lucide-react';
 
+/*
+ * MetricCard — Apple HIG Compact Info Cell
+ * Ref: hig-foundations/references/layout.md - grouped content
+ * Ref: hig-foundations/references/color.md - accent tinted icon
+ */
+
 interface MetricCardProps {
-  icon: LucideIcon;
-  label: string;
-  value: string;
-  showIcon: boolean;
+ icon: LucideIcon;
+ label: string;
+ value: string;
+ showIcon: boolean;
 }
 
 function MetricCard({ icon: Icon, label, value, showIcon }: MetricCardProps) {
-  return (
-    <div className={`bg-white dark:bg-gray-800 rounded-lg shadow-sm p-2 sm:p-3 flex items-center ${showIcon ? 'space-x-2 sm:space-x-3' : 'justify-center text-center'}`}>
-      {showIcon && (
-        <div className="bg-primary-50 dark:bg-primary-900/30 p-1.5 sm:p-2 rounded-lg">
-          <Icon className="h-4 w-4 sm:h-5 sm:w-5 text-primary-600 dark:text-primary-400" />
-        </div>
-      )}
-      <div>
-        <p className="text-xs text-gray-500 dark:text-gray-400">{label}</p>
-        <p className="text-sm sm:text-base font-bold text-gray-800 dark:text-gray-100">{value}</p>
-      </div>
-    </div>
-  );
+ return (
+ <div className={`ios-card p-3 flex items-center ${showIcon ? 'gap-3' : 'justify-center text-center'}`}>
+ {showIcon && (
+ <div
+ className="flex items-center justify-center w-9 h-9 rounded-ios flex-shrink-0"
+ style={{ background: 'rgba(0, 136, 255, 0.12)' }}
+ >
+ <Icon className="h-4.5 w-4.5 text-[var(--ios-accent)]" style={{ width: '18px', height: '18px' }} />
+ </div>
+ )}
+ <div className="min-w-0">
+ <p className="text-ios-caption1 text-[var(--ios-text-secondary)] truncate">{label}</p>
+ <p className="text-ios-subhead font-semibold text-[var(--ios-text)] truncate">{value}</p>
+ </div>
+ </div>
+ );
 }
 
 export default MetricCard;

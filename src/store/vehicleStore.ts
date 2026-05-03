@@ -1,23 +1,20 @@
 import { create } from 'zustand';
 import { supabase } from '../services/supabase';
 
-export type FinancialStatus = 'Financiado' | 'Alugado' | 'Quitado';
-export type Transmission = 'Manual' | 'Automático';
-export type Fuel = 'Gasolina' | 'Etanol' | 'Diesel' | 'GNV' | 'Elétrico' | 'Híbrido';
-
 export interface Vehicle {
   id: string;
+  user_id: string;
   brand: string;
   model: string;
   version: string;
   year: number;
   color: string;
-  fuel: Fuel;
-  transmission: Transmission;
+  fuel: string;
+  transmission: string;
   doors: number;
-  hasAirConditioning: boolean;
+  has_air_conditioning: boolean;
   mileage: number;
-  financialStatus: FinancialStatus;
+  financial_status: string;
 }
 
 interface VehicleStore {
@@ -25,32 +22,50 @@ interface VehicleStore {
   isLoading: boolean;
   error: string | null;
   fetchVehicles: () => Promise<void>;
-  addVehicle: (vehicle: Omit<Vehicle, 'id'>) => Promise<void>;
-  updateVehicle: (id: string, vehicle: Partial<Omit<Vehicle, 'id'>>) => Promise<void>;
+  addVehicle: (vehicle: Omit<Vehicle, 'id' | 'user_id'>) => Promise<void>;
+  updateVehicle: (id: string, vehicle: Partial<Omit<Vehicle, 'id' | 'user_id'>>) => Promise<void>;
   deleteVehicle: (id: string) => Promise<void>;
 }
 
 const mapFromDB = (data: any): Vehicle => ({
   id: data.id,
+  user_id: data.user_id,
   brand: data.brand,
   model: data.model,
-  version: data.version,
+  version: data.version || '',
   year: data.year,
-  color: data.color,
+  color: data.color || '',
   fuel: data.fuel,
-  transmission: data.transmission,
-  doors: data.doors,
-  hasAirConditioning: data.has_air_conditioning,
-  mileage: data.mileage,
-  financialStatus: data.financial_status,
+  transmission: data.transmission || '',
+  doors: data.doors || 4,
+  has_air_conditioning: data.has_air_conditioning ?? false,
+  mileage: data.mileage || 0,
+  financial_status: data.financial_status || '',
 });
 
-const mapToDB = (data: Partial<Vehicle>) => {
-  const mapped: any = { ...data };
-  if (data.financialStatus !== undefined) { mapped.financial_status = data.financialStatus; delete mapped.financialStatus; }
-  if (data.hasAirConditioning !== undefined) { mapped.has_air_conditioning = data.hasAirConditioning; delete mapped.hasAirConditioning; }
-  return mapped;
-};
+export const FUEL_OPTIONS = [
+  { value: 'gasolina', label: 'Gasolina' },
+  { value: 'etanol', label: 'Etanol' },
+  { value: 'flex', label: 'Flex' },
+  { value: 'diesel', label: 'Diesel' },
+  { value: 'gnv', label: 'GNV' },
+  { value: 'eletrico', label: 'Elétrico' },
+  { value: 'hibrido', label: 'Híbrido' },
+];
+
+export const TRANSMISSION_OPTIONS = [
+  { value: 'manual', label: 'Manual' },
+  { value: 'automatica', label: 'Automática' },
+  { value: 'cvt', label: 'CVT' },
+  { value: 'semi-automatica', label: 'Semi-automática' },
+];
+
+export const FINANCIAL_STATUS_OPTIONS = [
+  { value: 'quitado', label: 'Quitado' },
+  { value: 'financiado', label: 'Financiado' },
+  { value: 'consorcio', label: 'Consórcio' },
+  { value: 'leasing', label: 'Leasing' },
+];
 
 export const useVehicleStore = create<VehicleStore>((set) => ({
   vehicles: [],
@@ -60,9 +75,15 @@ export const useVehicleStore = create<VehicleStore>((set) => ({
   fetchVehicles: async () => {
     set({ isLoading: true, error: null });
     try {
+      const { data: userData } = await supabase.auth.getUser();
+      if (!userData?.user) throw new Error('Usuário não autenticado');
+
       const { data, error } = await supabase
         .from('vehicles')
-        .select('*');
+        .select('*')
+        .eq('user_id', userData.user.id)
+        .order('brand', { ascending: true })
+        .order('model', { ascending: true });
 
       if (error) throw error;
       set({ vehicles: data?.map(mapFromDB) || [] });
@@ -76,7 +97,24 @@ export const useVehicleStore = create<VehicleStore>((set) => ({
   addVehicle: async (vehicle) => {
     set({ isLoading: true, error: null });
     try {
-      const dbVehicle = mapToDB(vehicle);
+      const { data: userData } = await supabase.auth.getUser();
+      if (!userData?.user) throw new Error('Usuário não autenticado');
+
+      const dbVehicle = {
+        user_id: userData.user.id,
+        brand: vehicle.brand,
+        model: vehicle.model,
+        version: vehicle.version || null,
+        year: vehicle.year,
+        color: vehicle.color || null,
+        fuel: vehicle.fuel,
+        transmission: vehicle.transmission || null,
+        doors: vehicle.doors || null,
+        has_air_conditioning: vehicle.has_air_conditioning ?? false,
+        mileage: vehicle.mileage || null,
+        financial_status: vehicle.financial_status || null,
+      };
+
       const { data, error } = await supabase
         .from('vehicles')
         .insert([dbVehicle])
@@ -85,7 +123,9 @@ export const useVehicleStore = create<VehicleStore>((set) => ({
 
       if (error) throw error;
       set((state) => ({
-        vehicles: [mapFromDB(data), ...state.vehicles]
+        vehicles: [...state.vehicles, mapFromDB(data)].sort((a, b) =>
+          `${a.brand} ${a.model}`.localeCompare(`${b.brand} ${b.model}`)
+        ),
       }));
     } catch (error: any) {
       set({ error: error.message });
@@ -97,7 +137,19 @@ export const useVehicleStore = create<VehicleStore>((set) => ({
   updateVehicle: async (id, updatedVehicle) => {
     set({ isLoading: true, error: null });
     try {
-      const dbVehicle = mapToDB(updatedVehicle);
+      const dbVehicle: any = {};
+      if (updatedVehicle.brand !== undefined) dbVehicle.brand = updatedVehicle.brand;
+      if (updatedVehicle.model !== undefined) dbVehicle.model = updatedVehicle.model;
+      if (updatedVehicle.version !== undefined) dbVehicle.version = updatedVehicle.version || null;
+      if (updatedVehicle.year !== undefined) dbVehicle.year = updatedVehicle.year;
+      if (updatedVehicle.color !== undefined) dbVehicle.color = updatedVehicle.color || null;
+      if (updatedVehicle.fuel !== undefined) dbVehicle.fuel = updatedVehicle.fuel;
+      if (updatedVehicle.transmission !== undefined) dbVehicle.transmission = updatedVehicle.transmission || null;
+      if (updatedVehicle.doors !== undefined) dbVehicle.doors = updatedVehicle.doors || null;
+      if (updatedVehicle.has_air_conditioning !== undefined) dbVehicle.has_air_conditioning = updatedVehicle.has_air_conditioning;
+      if (updatedVehicle.mileage !== undefined) dbVehicle.mileage = updatedVehicle.mileage || null;
+      if (updatedVehicle.financial_status !== undefined) dbVehicle.financial_status = updatedVehicle.financial_status || null;
+
       const { data, error } = await supabase
         .from('vehicles')
         .update(dbVehicle)
@@ -107,8 +159,8 @@ export const useVehicleStore = create<VehicleStore>((set) => ({
 
       if (error) throw error;
       set((state) => ({
-        vehicles: state.vehicles.map((vehicle) =>
-          vehicle.id === id ? mapFromDB(data) : vehicle
+        vehicles: state.vehicles.map((v) =>
+          v.id === id ? mapFromDB(data) : v
         ),
       }));
     } catch (error: any) {
@@ -128,7 +180,7 @@ export const useVehicleStore = create<VehicleStore>((set) => ({
 
       if (error) throw error;
       set((state) => ({
-        vehicles: state.vehicles.filter((vehicle) => vehicle.id !== id),
+        vehicles: state.vehicles.filter((v) => v.id !== id),
       }));
     } catch (error: any) {
       set({ error: error.message });

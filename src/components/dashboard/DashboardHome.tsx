@@ -10,158 +10,168 @@ import QuickEntryModal from './QuickEntryModal';
 import PerformanceMetrics from './PerformanceMetrics';
 import BestPlatformCard from './BestPlatformCard';
 import AIInsightCard from './AIInsightCard';
+import { MaintenanceAlertBanner } from './MaintenanceAlertBanner';
 
-function DashboardHome() {
-    const [quickEntryType, setQuickEntryType] = useState<'revenue' | 'expense' | null>(null);
+interface DashboardHomeProps {
+  selectedVehicleId?: string;
+}
 
-    const entries = useEntryStore((state) => state.entries);
-    const expenses = useExpenseStore((state) => state.expenses);
-    const { getGoalByMonth } = useGoalStore();
+function DashboardHome({ selectedVehicleId }: DashboardHomeProps) {
+ const [quickEntryType, setQuickEntryType] = useState<'revenue' | 'expense' | null>(null);
 
-    const todayData = useMemo(() => {
-        const today = new Date();
-        const dayStart = startOfDay(today);
-        const dayEnd = endOfDay(today);
+ const entries = useEntryStore((state) => state.entries);
+ const expenses = useExpenseStore((state) => state.expenses);
+ const { getGoalByMonth } = useGoalStore();
 
-        const todayEntries = entries.filter(
-            (entry) => new Date(entry.date) >= dayStart && new Date(entry.date) <= dayEnd
-        );
-        const todayExpenses = expenses.filter(
-            (expense) => new Date(expense.date) >= dayStart && new Date(expense.date) <= dayEnd
-        );
+ const todayData = useMemo(() => {
+ const today = new Date();
+ const dayStart = startOfDay(today);
+ const dayEnd = endOfDay(today);
 
-        const revenue = todayEntries.reduce((sum, entry) => sum + entry.value, 0);
-        const expenseTotal = todayExpenses.reduce((sum, expense) => sum + expense.amount, 0);
-        const lucro = revenue - expenseTotal;
+ const todayEntries = entries.filter(
+ (entry) => new Date(entry.date) >= dayStart && new Date(entry.date) <= dayEnd
+ );
+ const todayExpenses = expenses.filter(
+ (expense) => new Date(expense.date) >= dayStart && new Date(expense.date) <= dayEnd
+ );
 
-        // Get goal
-        const currentMonthGoal = getGoalByMonth(today.getFullYear(), today.getMonth() + 1);
-        const monthlyRevenueGoal = currentMonthGoal?.revenue || 0;
-        const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
-        const workingDaysInMonth = currentMonthGoal?.daysWorkedPerWeek
-            ? (daysInMonth / 7) * currentMonthGoal.daysWorkedPerWeek
-            : daysInMonth;
-        const dailyGoal = monthlyRevenueGoal > 0 ? (monthlyRevenueGoal / workingDaysInMonth) : 0;
+ const revenue = todayEntries.reduce((sum, entry) => sum + entry.value, 0);
+ const expenseTotal = todayExpenses.reduce((sum, expense) => sum + expense.amount, 0);
+ const lucro = revenue - expenseTotal;
 
-        return { revenue, expenseTotal, lucro, dailyGoal };
-    }, [entries, expenses, getGoalByMonth]);
+ // Get goal
+ const currentMonthGoal = getGoalByMonth(today.getFullYear(), today.getMonth() + 1);
+ const monthlyRevenueGoal = currentMonthGoal?.revenue || 0;
+ const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+ const workingDaysInMonth = currentMonthGoal?.daysWorkedPerWeek
+ ? (daysInMonth / 7) * currentMonthGoal.daysWorkedPerWeek
+ : daysInMonth;
+ const dailyGoal = monthlyRevenueGoal > 0 ? (monthlyRevenueGoal / workingDaysInMonth) : 0;
 
-    const weekComparison = useMemo(() => {
-        const today = new Date();
+ return { revenue, expenseTotal, lucro, dailyGoal };
+ }, [entries, expenses, getGoalByMonth]);
 
-        // This week
-        const thisWeekStart = startOfWeek(today, { weekStartsOn: 1 });
-        const thisWeekEnd = endOfWeek(today, { weekStartsOn: 1 });
+ const weekComparison = useMemo(() => {
+ const today = new Date();
 
-        // Last week
-        const lastWeekStart = subDays(thisWeekStart, 7);
-        const lastWeekEnd = subDays(thisWeekEnd, 7);
+ // This week
+ const thisWeekStart = startOfWeek(today, { weekStartsOn: 1 });
+ const thisWeekEnd = endOfWeek(today, { weekStartsOn: 1 });
 
-        // This week totals
-        const thisWeekRevenue = entries
-            .filter(e => {
-                const d = new Date(e.date);
-                return d >= thisWeekStart && d <= thisWeekEnd;
-            })
-            .reduce((sum, e) => sum + e.value, 0);
+ // Last week
+ const lastWeekStart = subDays(thisWeekStart, 7);
+ const lastWeekEnd = subDays(thisWeekEnd, 7);
 
-        const thisWeekExpenses = expenses
-            .filter(e => {
-                const d = new Date(e.date);
-                return d >= thisWeekStart && d <= thisWeekEnd;
-            })
-            .reduce((sum, e) => sum + e.amount, 0);
+ // This week totals
+ const thisWeekRevenue = entries
+ .filter(e => {
+ const d = new Date(e.date);
+ return d >= thisWeekStart && d <= thisWeekEnd;
+ })
+ .reduce((sum, e) => sum + e.value, 0);
 
-        // Last week totals
-        const lastWeekRevenue = entries
-            .filter(e => {
-                const d = new Date(e.date);
-                return d >= lastWeekStart && d <= lastWeekEnd;
-            })
-            .reduce((sum, e) => sum + e.value, 0);
+ const thisWeekExpenses = expenses
+ .filter(e => {
+ const d = new Date(e.date);
+ return d >= thisWeekStart && d <= thisWeekEnd;
+ })
+ .reduce((sum, e) => sum + e.amount, 0);
 
-        const lastWeekExpenses = expenses
-            .filter(e => {
-                const d = new Date(e.date);
-                return d >= lastWeekStart && d <= lastWeekEnd;
-            })
-            .reduce((sum, e) => sum + e.amount, 0);
+ // Last week totals
+ const lastWeekRevenue = entries
+ .filter(e => {
+ const d = new Date(e.date);
+ return d >= lastWeekStart && d <= lastWeekEnd;
+ })
+ .reduce((sum, e) => sum + e.value, 0);
 
-        // Calculate percentage change
-        const revenueChange = lastWeekRevenue > 0
-            ? ((thisWeekRevenue - lastWeekRevenue) / lastWeekRevenue) * 100
-            : 0;
-        const expenseChange = lastWeekExpenses > 0
-            ? ((thisWeekExpenses - lastWeekExpenses) / lastWeekExpenses) * 100
-            : 0;
+ const lastWeekExpenses = expenses
+ .filter(e => {
+ const d = new Date(e.date);
+ return d >= lastWeekStart && d <= lastWeekEnd;
+ })
+ .reduce((sum, e) => sum + e.amount, 0);
 
-        return {
-            thisWeekRevenue,
-            thisWeekExpenses,
-            revenueChange,
-            expenseChange,
-        };
-    }, [entries, expenses]);
+ // Calculate percentage change
+ const revenueChange = lastWeekRevenue > 0
+ ? ((thisWeekRevenue - lastWeekRevenue) / lastWeekRevenue) * 100
+ : 0;
+ const expenseChange = lastWeekExpenses > 0
+ ? ((thisWeekExpenses - lastWeekExpenses) / lastWeekExpenses) * 100
+ : 0;
 
-    const handleOpenQuickEntry = (type: 'revenue' | 'expense') => {
-        setQuickEntryType(type);
-    };
+ return {
+ thisWeekRevenue,
+ thisWeekExpenses,
+ revenueChange,
+ expenseChange,
+ };
+ }, [entries, expenses]);
 
-    return (
-        <div className="space-y-6 pb-8">
-            {/* Profit Circle */}
-            <LucroCentral
-                lucroLiquido={todayData.lucro}
-                meta={todayData.dailyGoal}
-                periodoLabel="Hoje"
-            />
+ const handleOpenQuickEntry = (type: 'revenue' | 'expense') => {
+ setQuickEntryType(type);
+ };
 
-            {/* AI Insights - Próximos passos e inteligência */}
-            <div className="px-2">
-                <AIInsightCard />
-            </div>
+ return (
+ <div className="space-y-6 pb-8">
+ {/* Profit Circle */}
+ <LucroCentral
+ lucroLiquido={todayData.lucro}
+ meta={todayData.dailyGoal}
+ periodoLabel="Hoje"
+ />
 
-            {/* Summary Cards */}
-            <div className="flex gap-4 px-2">
-                <SummaryCard
-                    title="Faturamento"
-                    value={weekComparison.thisWeekRevenue}
-                    percentChange={weekComparison.revenueChange}
-                    type="revenue"
-                    onQuickAdd={() => handleOpenQuickEntry('revenue')}
-                />
-                <SummaryCard
-                    title="Despesas"
-                    value={weekComparison.thisWeekExpenses}
-                    percentChange={weekComparison.expenseChange}
-                    type="expense"
-                    onQuickAdd={() => handleOpenQuickEntry('expense')}
-                />
-            </div>
+  {/* Maintenance Alerts Banner */}
+  <div className="px-2">
+  <MaintenanceAlertBanner />
+  </div>
 
-            {/* Weekly Chart */}
-            <div className="px-2">
-                <WeeklyChart entries={entries} expenses={expenses} />
-            </div>
+  {/* AI Insights - Próximos passos e inteligência */}
+  <div className="px-2">
+  <AIInsightCard />
+  </div>
 
-            {/* Performance Metrics */}
-            <div className="px-2">
-                <PerformanceMetrics />
-            </div>
+ {/* Summary Cards */}
+ <div className="flex gap-4 px-2">
+ <SummaryCard
+ title="Faturamento"
+ value={weekComparison.thisWeekRevenue}
+ percentChange={weekComparison.revenueChange}
+ type="revenue"
+ onQuickAdd={() => handleOpenQuickEntry('revenue')}
+ />
+ <SummaryCard
+ title="Despesas"
+ value={weekComparison.thisWeekExpenses}
+ percentChange={weekComparison.expenseChange}
+ type="expense"
+ onQuickAdd={() => handleOpenQuickEntry('expense')}
+ />
+ </div>
 
-            {/* Best Platform Card */}
-            <div className="px-2">
-                <BestPlatformCard />
-            </div>
+ {/* Weekly Chart */}
+ <div className="px-2">
+ <WeeklyChart entries={entries} expenses={expenses} />
+ </div>
 
-            {/* Quick Entry Modal */}
-            <QuickEntryModal
-                isOpen={quickEntryType !== null}
-                onClose={() => setQuickEntryType(null)}
-                type={quickEntryType || 'revenue'}
-            />
-        </div>
-    );
+ {/* Performance Metrics */}
+ <div className="px-2">
+ <PerformanceMetrics />
+ </div>
+
+ {/* Best Platform Card */}
+ <div className="px-2">
+ <BestPlatformCard />
+ </div>
+
+ {/* Quick Entry Modal */}
+ <QuickEntryModal
+ isOpen={quickEntryType !== null}
+ onClose={() => setQuickEntryType(null)}
+ type={quickEntryType || 'revenue'}
+ />
+ </div>
+ );
 }
 
 export default DashboardHome;

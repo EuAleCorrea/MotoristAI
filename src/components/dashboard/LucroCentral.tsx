@@ -1,99 +1,108 @@
-import { TrendingUp, TrendingDown } from 'lucide-react';
-import { formatCurrency, formatPercent } from '../../utils/formatters';
+import { useMemo } from 'react';
 
-interface LucroCentralProps {
-    lucroLiquido: number;
-    meta: number;
-    periodoLabel?: string;
+/*
+ * LucroCentral — Hero value display (like finance app reference)
+ * Shows the main profit value prominently, with progress ring
+ */
+
+interface Props {
+ lucroLiquido: number;
+ meta: number;
+ periodoLabel: string;
 }
 
-const LucroCentral: React.FC<LucroCentralProps> = ({ lucroLiquido, meta, periodoLabel = 'Hoje' }) => {
-    // Garantir que o percentual fique entre 0 e 100 para o círculo de progresso
-    const rawPercentual = meta > 0 ? (lucroLiquido / meta) * 100 : 0;
-    const percentual = Math.max(0, Math.min(rawPercentual, 100));
-    const isPositive = lucroLiquido >= 0;
-    const circumference = 2 * Math.PI * 90; // radius = 90
-    const strokeDashoffset = circumference - (percentual / 100) * circumference;
+function LucroCentral({ lucroLiquido, meta, periodoLabel }: Props) {
+ const progress = useMemo(() => {
+ if (meta <= 0) return 0;
+ return Math.min((lucroLiquido / meta) * 100, 100);
+ }, [lucroLiquido, meta]);
 
-    // Calcular tamanho dinâmico do texto baseado no valor
-    const getTextSize = () => {
-        const absValue = Math.abs(lucroLiquido);
-        if (absValue >= 100000) return 'text-xl';
-        if (absValue >= 10000) return 'text-2xl';
-        return 'text-3xl';
-    };
+ const formatCurrency = (value: number) => {
+ return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+ };
 
-    return (
-        <div className="relative flex flex-col items-center justify-center py-8">
-            {/* Outer glow effect */}
-            <div className="absolute inset-0 flex items-center justify-center">
-                <div className={`w-56 h-56 rounded-full blur-2xl opacity-20 dark:opacity-30 ${isPositive ? 'bg-primary-500' : 'bg-danger-500'}`} />
-            </div>
+ // SVG circle params
+ const size = 160;
+ const stroke = 8;
+ const radius = (size - stroke) / 2;
+ const circumference = 2 * Math.PI * radius;
+ const offset = circumference - (progress / 100) * circumference;
 
-            {/* Progress ring */}
-            <svg className="w-56 h-56 transform -rotate-90 relative z-10" viewBox="0 0 200 200">
-                {/* Background circle */}
-                <circle
-                    cx="100"
-                    cy="100"
-                    r="90"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="8"
-                    className="text-slate-200 dark:text-slate-700"
-                />
-                {/* Progress circle */}
-                <circle
-                    cx="100"
-                    cy="100"
-                    r="90"
-                    fill="none"
-                    stroke="url(#gradient)"
-                    strokeWidth="8"
-                    strokeLinecap="round"
-                    strokeDasharray={circumference}
-                    strokeDashoffset={strokeDashoffset}
-                    className="transition-all duration-1000 ease-out"
-                />
-                <defs>
-                    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stopColor="#3377FF" />
-                        <stop offset="100%" stopColor="#00BFFF" />
-                    </linearGradient>
-                </defs>
-            </svg>
+ const isPositive = lucroLiquido >= 0;
 
-            {/* Center content */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center z-20">
-                <span className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-1">
-                    {periodoLabel}
-                </span>
-                <span className={`${getTextSize()} font-bold ${isPositive ? 'text-gray-900 dark:text-white' : 'text-danger-600 dark:text-danger-400'}`}>
-                    {formatCurrency(lucroLiquido)}
-                </span>
-                <span className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-                    Lucro Líquido
-                </span>
-                {meta > 0 && (
-                    <div className="flex items-center gap-1 mt-2 px-3 py-1 bg-slate-100 dark:bg-slate-800/50 rounded-full">
-                        <span className="text-xs text-slate-600 dark:text-slate-300">
-                            Meta: {formatCurrency(meta, true)}
-                        </span>
-                        {lucroLiquido >= meta ? (
-                            <TrendingUp className="w-3 h-3 text-success-500" />
-                        ) : (
-                            <TrendingDown className="w-3 h-3 text-slate-400" />
-                        )}
-                    </div>
-                )}
-                {meta > 0 && (
-                    <span className="text-xs text-primary-600 dark:text-primary-400 mt-2 font-medium">
-                        {formatPercent(Math.max(0, rawPercentual), rawPercentual >= 100 ? 0 : 1)}
-                    </span>
-                )}
-            </div>
-        </div>
-    );
-};
+ return (
+ <div className="ios-card p-6 flex flex-col items-center">
+ {/* Period label */}
+ <span
+ className="text-ios-footnote font-medium mb-4"
+ style={{ color: 'var(--ios-text-secondary)' }}
+ >
+ {periodoLabel}
+ </span>
+
+ {/* Progress Ring with Value */}
+ <div className="relative" style={{ width: size, height: size }}>
+ <svg width={size} height={size} className="-rotate-90">
+ {/* Background ring */}
+ <circle
+ cx={size / 2}
+ cy={size / 2}
+ r={radius}
+ fill="none"
+ stroke="var(--ios-fill)"
+ strokeWidth={stroke}
+ />
+ {/* Progress ring */}
+ <circle
+ cx={size / 2}
+ cy={size / 2}
+ r={radius}
+ fill="none"
+ stroke={isPositive ? 'var(--sys-green)' : 'var(--sys-red)'}
+ strokeWidth={stroke}
+ strokeLinecap="round"
+ strokeDasharray={circumference}
+ strokeDashoffset={offset}
+ style={{ transition: 'stroke-dashoffset 0.8s ease' }}
+ />
+ </svg>
+
+ {/* Center value */}
+ <div className="absolute inset-0 flex flex-col items-center justify-center">
+ <span
+ className="text-ios-title1 font-bold tabular-nums"
+ style={{ color: isPositive ? 'var(--sys-green)' : 'var(--sys-red)' }}
+ >
+ {formatCurrency(lucroLiquido)}
+ </span>
+ <span className="text-ios-caption1" style={{ color: 'var(--ios-text-tertiary)' }}>
+ Lucro líquido
+ </span>
+ </div>
+ </div>
+
+ {/* Meta */}
+ {meta > 0 && (
+ <div className="mt-4 flex items-center gap-2">
+ <div
+ className="h-1.5 flex-1 rounded-full overflow-hidden"
+ style={{ backgroundColor: 'var(--ios-fill)', minWidth: '120px' }}
+ >
+ <div
+ className="h-full rounded-full transition-all duration-500"
+ style={{
+ width: `${Math.min(progress, 100)}%`,
+ backgroundColor: isPositive ? 'var(--sys-green)' : 'var(--sys-red)',
+ }}
+ />
+ </div>
+ <span className="text-ios-caption2" style={{ color: 'var(--ios-text-secondary)' }}>
+ {progress.toFixed(0)}% da meta
+ </span>
+ </div>
+ )}
+ </div>
+ );
+}
 
 export default LucroCentral;
