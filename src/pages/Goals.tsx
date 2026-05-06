@@ -11,9 +11,15 @@ import { formatCurrency } from '../utils/formatters';
 const currentYear = new Date().getFullYear();
 const years = Array.from({ length: 5 }, (_, i) => currentYear - 2 + i);
 
+import { useScrollReset } from '../hooks/useScrollReset';
+
 function Goals() {
- const [selectedYear, setSelectedYear] = useState(currentYear);
- const [activeFilter, setActiveFilter] = useState('Mensal');
+  const [selectedYear, setSelectedYear] = useState(currentYear);
+  const [activeFilter, setActiveFilter] = useState('Mensal');
+
+  // Reset scroll when year or filter changes
+  useScrollReset(selectedYear);
+  useScrollReset(activeFilter);
 
  const { goals: allGoals, fetchGoals, deleteGoal } = useGoalStore();
  const { entries, fetchEntries } = useEntryStore();

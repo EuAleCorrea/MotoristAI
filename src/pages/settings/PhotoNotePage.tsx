@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
-import { usePhotoNoteStore, PHOTO_NOTE_CATEGORIES } from '../../../store/photoNoteStore';
-import { useVehicleStore } from '../../../store/vehicleStore';
-import { formatCurrency } from '../../../utils/formatters';
+import { usePhotoNoteStore, PHOTO_NOTE_CATEGORIES } from '../../store/photoNoteStore';
+import { useVehicleStore } from '../../store/vehicleStore';
+import { formatCurrency } from '../../utils/formatters';
 
 const PhotoNotePage = () => {
   const { notes, isLoading, uploading, error, fetchNotes, addNote, deleteNote } = usePhotoNoteStore();

@@ -7,10 +7,15 @@ import { ptBR } from 'date-fns/locale';
 import { Calendar } from 'lucide-react';
 import { formatCurrency, formatChartCurrency } from '../utils/formatters';
 
+import { useScrollReset } from '../hooks/useScrollReset';
+
 function Analytics() {
- const entries = useEntryStore((state) => state.entries);
- const expenses = useExpenseStore((state) => state.expenses);
- const [selectedPeriod, setSelectedPeriod] = useState('6months');
+  const entries = useEntryStore((state) => state.entries);
+  const expenses = useExpenseStore((state) => state.expenses);
+  const [selectedPeriod, setSelectedPeriod] = useState('6months');
+
+  // Reset scroll when period changes
+  useScrollReset(selectedPeriod);
 
  const getMonthsData = () => {
  const periods: Record<string, number> = {

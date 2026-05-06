@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Download, Calendar, User, FileText, ArrowLeft, ShieldCheck } from 'lucide-react';
+import { Download, Calendar, User, FileText, ShieldCheck } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useEntryStore } from '../store/entryStore';
 import { useExpenseStore } from '../store/expenseStore';
@@ -125,12 +125,6 @@ const IncomeReportPage = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <button
-            onClick={() => navigate('/relatorios')}
-            className="p-2 rounded-full hover:bg-[var(--ios-fill)] transition-colors"
-          >
-            <ArrowLeft className="h-5 w-5 text-[var(--ios-text-secondary)]" />
-          </button>
           <div>
             <h1 className="text-2xl font-bold text-[var(--ios-text)]">Comprovante de Renda</h1>
             <p className="text-sm text-[var(--ios-text-secondary)]">

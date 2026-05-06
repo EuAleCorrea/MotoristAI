@@ -10,6 +10,7 @@ import { useEntryStore } from '../store/entryStore';
 import { useExpenseStore } from '../store/expenseStore';
 import { useGoalStore } from '../store/goalStore';
 import { useSettingsFilterStore } from '../store/settingsFilterStore';
+import { useScrollReset } from '../hooks/useScrollReset';
 
 type ViewType = 'Hoje' | 'Diário' | 'Semanal' | 'Mensal' | 'Anual';
 
@@ -25,6 +26,9 @@ function Dashboard() {
  fetchExpenses();
  fetchGoals();
  }, [fetchEntries, fetchExpenses, fetchGoals]);
+
+ // Reset scroll when tab changes
+ useScrollReset(activeView);
 
  const renderView = () => {
  const vehicleFilter = selectedVehicle || undefined;

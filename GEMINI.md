@@ -5,6 +5,15 @@ As regras abaixo sao OBRIGATORIAS e devem ser seguidas SEM EXCECAO.
 
 ---
 
+## Karpathy Guidelines (OBRIGATÓRIO)
+
+**ANTES de iniciar qualquer implementação de código, você DEVE:**
+1. Ler e seguir as diretrizes comportamentais em `CLAUDE.md`.
+2. Consultar a skill `karpathy-guidelines` (`.agent/.agent/skills/karpathy-guidelines/SKILL.md`) para garantir que o código siga os padrões de simplicidade, precisão e mudanças cirúrgicas.
+3. Se houver dúvida sobre a implementação, pare e pergunte ao usuário seguindo a regra "Think Before Coding".
+
+---
+
 ## Git: Commit e Push
 
 **ANTES de executar qualquer operacao de git (commit, push, branch), voce DEVE:**

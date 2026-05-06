@@ -18,12 +18,17 @@ const viewConfig: Record<ViewType, { title: string; icon: React.ElementType; des
  monthly: { title: 'Resumo Mensal', icon: FileText, description: 'Visão consolidada mensal de receitas, despesas e lucro' },
 };
 
+import { useScrollReset } from '../hooks/useScrollReset';
+
 const Reports = () => {
- const [searchParams, setSearchParams] = useSearchParams();
- const navigate = useNavigate();
- const viewParam = searchParams.get('view') as ViewType | null;
- const [activeView, setActiveView] = useState<ViewType>(viewParam || 'category');
- const [selectedPeriod, setSelectedPeriod] = useState('6months');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const viewParam = searchParams.get('view') as ViewType | null;
+  const [activeView, setActiveView] = useState<ViewType>(viewParam || 'category');
+  const [selectedPeriod, setSelectedPeriod] = useState('6months');
+
+  // Reset scroll when active view changes
+  useScrollReset(activeView);
 
  const entries = useEntryStore((state) => state.entries);
  const expenses = useExpenseStore((state) => state.expenses);
@@ -235,8 +240,8 @@ const Reports = () => {
         <ArrowLeft className="h-5 w-5 text-white/60 rotate-180 group-hover:translate-x-1 transition-transform" />
       </button>
 
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+      {/* Header and Controls */}
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div className="flex items-center gap-3">
           <ActiveIcon className="h-8 w-8 text-[var(--ios-accent)]" />
           <div>
@@ -244,44 +249,52 @@ const Reports = () => {
             <p className="text-sm text-[var(--ios-text-secondary)]">{viewConfig[activeView].description}</p>
           </div>
         </div>
-        <div className="mt-4 sm:mt-0 flex items-center space-x-2">
-          <Calendar className="h-5 w-5 text-[var(--ios-text-tertiary)]" />
-          <select
-            value={selectedPeriod}
-            onChange={(e) => setSelectedPeriod(e.target.value)}
-            className="px-4 py-2 border border-[var(--ios-separator)] bg-[var(--ios-card)] text-[var(--ios-text)] rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-          >
-            <option value="3months">Últimos 3 meses</option>
-            <option value="6months">Últimos 6 meses</option>
-            <option value="12months">Últimos 12 meses</option>
-          </select>
+
+        <div className="flex flex-row items-center justify-between w-full lg:w-auto gap-3">
+          {/* Date Filter */}
+          <div className="flex items-center space-x-2 bg-[var(--ios-fill)] px-3 py-1 rounded-xl">
+            <Calendar className="h-4 w-4 text-[var(--ios-text-tertiary)]" />
+            <select
+              value={selectedPeriod}
+              onChange={(e) => setSelectedPeriod(e.target.value)}
+              className="bg-transparent text-sm font-medium text-[var(--ios-text)] border-none focus:ring-0 cursor-pointer py-1.5 pr-8"
+            >
+              <option value="3months">Últimos 3 meses</option>
+              <option value="6months">Últimos 6 meses</option>
+              <option value="12months">Últimos 12 meses</option>
+            </select>
+          </div>
+
+          {/* View Selection Buttons */}
+          <div className="flex items-center gap-1.5 bg-[var(--ios-fill)] p-1 rounded-xl">
+            {(Object.keys(viewConfig) as ViewType[]).map((view) => {
+              const Icon = viewConfig[view].icon;
+              const isActive = activeView === view;
+              return (
+                <button
+                  key={view}
+                  onClick={() => handleTabChange(view)}
+                  className={`p-2 rounded-lg transition-all duration-200 ${
+                    isActive
+                      ? 'bg-[var(--ios-card)] text-[var(--ios-accent)] shadow-sm'
+                      : 'text-[var(--ios-text-secondary)] hover:text-[var(--ios-text)]'
+                  }`}
+                  title={viewConfig[view].title}
+                >
+                  <Icon className="h-5 w-5" />
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
 
- {/* Tabs */}
- <div className="flex flex-wrap gap-2 border-b border-[var(--ios-separator)] pb-4">
- {(Object.keys(viewConfig) as ViewType[]).map((view) => {
- const Icon = viewConfig[view].icon;
- return (
- <button
- key={view}
- onClick={() => handleTabChange(view)}
- className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeView === view
- ? 'bg-[var(--ios-tint)] text-[var(--ios-accent)] '
- : 'bg-[var(--ios-fill)] text-[var(--ios-text-secondary)] hover:bg-[var(--ios-fill)] '
- }`}
- >
- <Icon className="h-4 w-4" />
- <span className="hidden sm:inline">{viewConfig[view].title}</span>
- </button>
- );
- })}
- </div>
+      <div className="border-b border-[var(--ios-separator)] pb-1" />
 
- {/* Content */}
- {renderContent()}
- </div>
- );
+      {/* Content */}
+      {renderContent()}
+    </div>
+  );
 };
 
 export default Reports;

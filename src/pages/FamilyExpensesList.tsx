@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { Plus, Search, Filter, Edit2, Trash2, Download, Home } from 'lucide-react';
+import { Plus, Search, Edit2, Trash2, Download, Home, Utensils, Heart, GraduationCap, Palmtree, Info } from 'lucide-react';
 import { useFamilyExpensesStore, FamilyExpense } from '../store/familyExpensesStore';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
@@ -7,13 +7,13 @@ import { useNavigate } from 'react-router-dom';
 import { formatCurrency } from '../utils/formatters';
 import { exportToCsv, formatDateBR, formatCurrencyBR } from '../utils/exportCsv';
 
-const categoryColors: Record<string, string> = {
-  Moradia: 'bg-indigo-100 dark:bg-indigo-900/50 text-indigo-800 dark:text-indigo-300',
-  Alimentação: 'bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300',
-  Saúde: 'bg-pink-100 dark:bg-pink-900/50 text-pink-800 dark:text-pink-300',
-  Educação: 'bg-cyan-100 dark:bg-cyan-900/50 text-cyan-800 dark:text-cyan-300',
-  Lazer: 'bg-teal-100 dark:bg-teal-900/50 text-teal-800 dark:text-teal-300',
-  Outras: 'bg-[var(--ios-fill)] text-[var(--ios-text)]',
+const categoryIcons: Record<string, any> = {
+  Moradia: Home,
+  Alimentação: Utensils,
+  Saúde: Heart,
+  Educação: GraduationCap,
+  Lazer: Palmtree,
+  Outras: Info,
 };
 
 const categoryRoutes: Record<string, string> = {
@@ -25,12 +25,17 @@ const categoryRoutes: Record<string, string> = {
   Outras: '/despesas/familia/outras',
 };
 
+import { useScrollReset } from '../hooks/useScrollReset';
+
 function FamilyExpensesList() {
   const { expenses, deleteExpense, fetchExpenses } = useFamilyExpensesStore();
   const navigate = useNavigate();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
+
+  // Reset scroll when category filter changes
+  useScrollReset(categoryFilter);
 
   useEffect(() => {
     fetchExpenses();
@@ -39,12 +44,11 @@ function FamilyExpensesList() {
   const filteredExpenses = expenses.filter((expense) => {
     const matchesSearch =
       expense.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      expense.totalValue.toString().includes(searchTerm);
+      expense.totalValue.toString().includes(searchTerm) ||
+      expense.category.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = categoryFilter === 'all' || expense.category === categoryFilter;
     return matchesSearch && matchesCategory;
   });
-
-  const categories = Array.from(new Set(expenses.map((expense) => expense.category)));
 
   const categoryStats = useMemo(() => {
     const stats: Record<string, { total: number; count: number }> = {};
@@ -93,172 +97,167 @@ function FamilyExpensesList() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-[var(--ios-text)]">Despesas da Família</h1>
-          <p className="mt-1 text-sm text-[var(--ios-text-secondary)]">
-            Controle os gastos da sua casa e família
-          </p>
+    <div className="max-w-lg mx-auto pb-20">
+      {/* Header Section */}
+      <div className="px-1 mb-6">
+        <div className="flex items-center justify-between mb-2">
+          <h1 className="text-3xl font-extrabold tracking-tight text-[var(--ios-text)]">
+            Família
+          </h1>
+          <div className="flex gap-2">
+            <button
+              onClick={handleExportCSV}
+              className="p-2 rounded-full bg-[var(--ios-fill)] text-[var(--ios-accent)] hover:opacity-80 transition-opacity"
+              title="Exportar CSV"
+            >
+              <Download size={20} />
+            </button>
+            <button
+              onClick={() => navigate('/despesas/familia/moradia')}
+              className="p-2 rounded-full bg-[var(--ios-accent)] text-white shadow-lg hover:opacity-90 transition-opacity"
+            >
+              <Plus size={24} strokeWidth={2.5} />
+            </button>
+          </div>
         </div>
-        <button
-          onClick={() => navigate('/despesas/familia/moradia')}
-          className="ios-btn"
-        >
-          <Plus className="h-5 w-5 mr-2" />
-          Nova Despesa
-        </button>
-        <button
-          onClick={handleExportCSV}
-          className="ios-btn-tinted ml-2"
-          title="Exportar CSV"
-        >
-          <Download className="h-5 w-5" />
-        </button>
+        <p className="text-[var(--ios-text-secondary)] text-sm">
+          Controle centralizado dos gastos da casa
+        </p>
       </div>
 
-      {/* Summary Cards by Category */}
-      {categoryStats.length > 0 && (
-        <div className="flex gap-3 overflow-x-auto pb-2 -mx-2 px-2" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+      {/* Horizontal Filter Stats */}
+      <div className="flex gap-3 overflow-x-auto pb-4 mb-4 no-scrollbar -mx-4 px-4">
+        <button
+          onClick={() => setCategoryFilter('all')}
+          className={`flex-shrink-0 px-5 py-3 rounded-2xl transition-all duration-200 border ${
+            categoryFilter === 'all'
+              ? 'bg-[var(--ios-accent)] border-[var(--ios-accent)] text-white shadow-md scale-105'
+              : 'bg-[var(--ios-card)] border-[var(--ios-separator)] text-[var(--ios-text)]'
+          }`}
+        >
+          <p className="text-[10px] uppercase tracking-wider font-bold opacity-80 mb-1">Todas</p>
+          <p className="text-lg font-bold leading-none">{formatCurrency(totalExpenses)}</p>
+          <p className="text-[10px] mt-1.5 font-medium opacity-70">{expenses.length} registros</p>
+        </button>
+
+        {categoryStats.map((stat) => (
           <button
-            onClick={() => setCategoryFilter('all')}
-            className={`flex-shrink-0 px-4 py-3 rounded-xl transition-all ${
-              categoryFilter === 'all'
-                ? 'bg-[var(--ios-accent)] text-white'
-                : 'bg-[var(--ios-fill)] text-[var(--ios-text)] hover:bg-[var(--ios-fill)]'
+            key={stat.name}
+            onClick={() => setCategoryFilter(stat.name)}
+            className={`flex-shrink-0 px-5 py-3 rounded-2xl transition-all duration-200 border ${
+              categoryFilter === stat.name
+                ? 'bg-[var(--ios-accent)] border-[var(--ios-accent)] text-white shadow-md scale-105'
+                : 'bg-[var(--ios-card)] border-[var(--ios-separator)] text-[var(--ios-text)]'
             }`}
           >
-            <p className="text-xs font-medium">Todas</p>
-            <p className="text-lg font-bold">{formatCurrency(totalExpenses)}</p>
-            <p className="text-xs opacity-70">{expenses.length} registros</p>
+            <p className="text-[10px] uppercase tracking-wider font-bold opacity-80 mb-1">{stat.name}</p>
+            <p className="text-lg font-bold leading-none">{formatCurrency(stat.total)}</p>
+            <p className="text-[10px] mt-1.5 font-medium opacity-70">{stat.count} registros</p>
           </button>
-          {categoryStats.map((stat) => (
-            <button
-              key={stat.name}
-              onClick={() => setCategoryFilter(stat.name)}
-              className={`flex-shrink-0 px-4 py-3 rounded-xl transition-all ${
-                categoryFilter === stat.name
-                  ? 'bg-[var(--ios-accent)] text-white'
-                  : 'bg-[var(--ios-fill)] text-[var(--ios-text)] hover:bg-[var(--ios-fill)]'
-              }`}
-            >
-              <p className="text-xs font-medium">{stat.name}</p>
-              <p className="text-lg font-bold">{formatCurrency(stat.total)}</p>
-              <p className="text-xs opacity-70">{stat.count} registros</p>
-            </button>
-          ))}
-        </div>
-      )}
-
-      {/* Search & Filter */}
-      <div className="bg-[var(--ios-card)] rounded-lg shadow-sm p-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-[var(--ios-text-tertiary)]" />
-            <input
-              type="text"
-              placeholder="Buscar despesas da família..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-[var(--ios-separator)] rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-[var(--ios-card)]"
-            />
-          </div>
-          <div className="relative">
-            <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-[var(--ios-text-tertiary)]" />
-            <select
-              value={categoryFilter}
-              onChange={(e) => setCategoryFilter(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-[var(--ios-separator)] rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent appearance-none bg-[var(--ios-card)]"
-            >
-              <option value="all">Todas as Categorias</option>
-              {categories.map((category) => (
-                <option key={category} value={category}>{category}</option>
-              ))}
-            </select>
-          </div>
-        </div>
+        ))}
       </div>
 
-      {/* Expenses Table */}
-      <div className="bg-[var(--ios-card)] rounded-lg shadow-sm overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-[var(--ios-separator)]">
-            <thead className="bg-[var(--ios-bg)]">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-[var(--ios-text-secondary)] uppercase tracking-wider">Data</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-[var(--ios-text-secondary)] uppercase tracking-wider">Descrição</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-[var(--ios-text-secondary)] uppercase tracking-wider">Categoria</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-[var(--ios-text-secondary)] uppercase tracking-wider">Valor</th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-[var(--ios-text-secondary)] uppercase tracking-wider">Ações</th>
-              </tr>
-            </thead>
-            <tbody className="bg-[var(--ios-card)] divide-y divide-[var(--ios-separator)]">
-              {filteredExpenses.map((expense) => (
-                <tr key={expense.id} className="hover:bg-[var(--ios-bg)]">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-[var(--ios-text)]">
-                    {expense.date ? format(new Date(expense.date), "dd/MM/yy", { locale: ptBR }) : '-'}
-                  </td>
-                  <td className="px-6 py-4 text-sm text-[var(--ios-text)] max-w-[200px] truncate">
-                    {expense.description}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${categoryColors[expense.category] || categoryColors.Outras}`}>
-                      {expense.category}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-danger-600 dark:text-danger-400">
-                    {formatCurrency(expense.totalValue)}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+      {/* Search Bar - Below Filters */}
+      <div className="relative mb-6">
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--ios-text-tertiary)]" size={18} />
+        <input
+          type="text"
+          placeholder="Buscar despesas da família..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full bg-[var(--ios-card)] border-none rounded-2xl py-3.5 pl-11 pr-4 text-[17px] focus:ring-2 focus:ring-[var(--ios-accent)] shadow-sm text-[var(--ios-text)] placeholder:text-[var(--ios-text-tertiary)]"
+        />
+      </div>
+
+      {/* Expenses List */}
+      <div className="space-y-3">
+        {filteredExpenses.length > 0 ? (
+          filteredExpenses.map((expense) => {
+            const Icon = categoryIcons[expense.category] || Info;
+            return (
+              <div
+                key={expense.id}
+                className="bg-[var(--ios-card)] rounded-[20px] p-4 border border-[var(--ios-separator)] shadow-sm active:scale-[0.98] transition-transform"
+              >
+                {/* Line 1: Icon, Title, Actions */}
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center bg-[var(--ios-fill)] text-[var(--ios-accent)]">
+                    <Icon size={20} strokeWidth={2.5} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-[17px] font-semibold text-[var(--ios-text)] truncate">
+                      {expense.description}
+                    </h3>
+                  </div>
+                  <div className="flex gap-1">
                     <button
                       onClick={() => handleEdit(expense)}
-                      className="text-[var(--ios-accent)] hover:text-primary-900 dark:hover:text-primary-300 mr-3"
+                      className="p-2 rounded-full text-[var(--ios-text-secondary)] hover:bg-[var(--ios-fill)] active:bg-[var(--ios-fill)]"
                     >
-                      <Edit2 className="h-4 w-4" />
+                      <Edit2 size={16} />
                     </button>
                     <button
                       onClick={() => handleDelete(expense.id)}
-                      className="text-danger-600 dark:text-danger-400 hover:text-danger-900 dark:hover:text-danger-300"
+                      className="p-2 rounded-full text-ios-red hover:bg-ios-red/10 active:bg-ios-red/20"
                     >
-                      <Trash2 className="h-4 w-4" />
+                      <Trash2 size={16} />
                     </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        {filteredExpenses.length === 0 && (
-          <div className="text-center py-12">
-            <Home className="h-12 w-12 mx-auto mb-4 text-[var(--ios-text-tertiary)]" />
-            <p className="text-[var(--ios-text-secondary)]">
+                  </div>
+                </div>
+
+                {/* Line 2: Date, Category, Value */}
+                <div className="flex items-end justify-between">
+                  <div className="space-y-1">
+                    <p className="text-[13px] text-[var(--ios-text-tertiary)] font-medium">
+                      {expense.date ? format(new Date(expense.date), "dd 'de' MMMM, yyyy", { locale: ptBR }) : '-'}
+                    </p>
+                    <p className="text-[14px] text-[var(--ios-text-secondary)]">
+                      {expense.category}
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-[19px] font-bold text-ios-red tracking-tight">
+                      -{formatCurrency(expense.totalValue)}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            );
+          })
+        ) : (
+          <div className="flex flex-col items-center justify-center py-16 px-6 text-center bg-[var(--ios-card)] rounded-[32px] border border-dashed border-[var(--ios-separator)]">
+            <div className="w-20 h-20 bg-[var(--ios-fill)] rounded-full flex items-center justify-center mb-6">
+              <Home size={40} className="text-[var(--ios-text-tertiary)]" strokeWidth={1.5} />
+            </div>
+            <h3 className="text-xl font-bold text-[var(--ios-text)] mb-2">Sem registros</h3>
+            <p className="text-[var(--ios-text-secondary)] mb-8 max-w-[240px]">
               {expenses.length === 0
-                ? 'Nenhuma despesa familiar registrada ainda.'
-                : 'Nenhuma despesa encontrada para este filtro.'}
+                ? 'Você ainda não registrou nenhuma despesa para sua família.'
+                : 'Nenhuma despesa encontrada com os filtros atuais.'}
             </p>
             {expenses.length === 0 && (
               <button
                 onClick={() => navigate('/despesas/familia/moradia')}
-                className="mt-4 ios-btn"
+                className="flex items-center gap-2 bg-[var(--ios-accent)] text-white px-8 py-4 rounded-2xl font-bold shadow-lg shadow-blue-500/20 active:scale-95 transition-transform"
               >
-                <Plus className="h-4 w-4 mr-2" />
-                Registrar primeira despesa
+                <Plus size={20} strokeWidth={3} />
+                Registrar Despesa
               </button>
             )}
           </div>
         )}
       </div>
 
-      {/* Quick Category Shortcuts */}
+      {/* Quick Access Shortcuts */}
       {expenses.length > 0 && (
-        <div className="flex flex-wrap gap-2">
+        <div className="mt-8 flex flex-wrap gap-2 justify-center">
           {Object.entries(categoryRoutes).map(([category, route]) => (
             <button
               key={category}
               onClick={() => navigate(route)}
-              className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium border border-[var(--ios-separator)] bg-[var(--ios-card)] text-[var(--ios-text)] hover:bg-[var(--ios-bg)] transition-colors"
+              className="px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest border border-[var(--ios-separator)] bg-[var(--ios-card)] text-[var(--ios-text-secondary)] hover:bg-[var(--ios-fill)] active:scale-95 transition-all"
             >
-              {category}
+              + {category}
             </button>
           ))}
         </div>
@@ -268,3 +267,4 @@ function FamilyExpensesList() {
 }
 
 export default FamilyExpensesList;
+

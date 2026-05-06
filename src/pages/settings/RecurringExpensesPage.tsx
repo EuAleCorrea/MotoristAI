@@ -9,10 +9,11 @@ import {
 } from '../../store/recurrenceStore';
 import {
   Repeat, CreditCard, Plus, Trash2, CheckCircle2, AlertCircle,
-  ChevronLeft, Loader2, Edit3, Car, Calendar, DollarSign,
+  Loader2, Edit3, Car, Calendar, DollarSign,
   Clock, FileText, Tag, Activity, MoreHorizontal
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useScrollReset } from '../../hooks/useScrollReset';
 
 // ─── Modal de formulário ──────────────────────────────────────
 
@@ -616,6 +617,8 @@ const RecurringExpensesPage = () => {
   const [tab, setTab] = useState<'recurrences' | 'installments'>('recurrences');
   const [vehicles, setVehicles] = useState<{ id: string; name: string }[]>([]);
 
+  useScrollReset(tab);
+
   useEffect(() => {
     fetchRecurrences();
     fetchInstallments();
@@ -650,12 +653,6 @@ const RecurringExpensesPage = () => {
     <div className="space-y-6 pb-8">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <button
-          onClick={() => navigate('/ajustes')}
-          className="p-1 -ml-1 hover:opacity-70 transition-opacity"
-        >
-          <ChevronLeft className="w-6 h-6 text-[var(--ios-blue)]" />
-        </button>
         <h1 className="text-ios-title1 font-bold text-[var(--ios-text)]" style={{ letterSpacing: '-0.5px' }}>
           Despesas Fixas
         </h1>

@@ -2,8 +2,7 @@ import { useEffect } from 'react';
 import { usePreferencesStore, UserPreferences } from '../../store/preferencesStore';
 import {
   Globe, DollarSign, Calendar, Clock, Monitor, Ruler,
-  Bell, Target, RotateCcw, Loader2, CheckCircle2, AlertCircle,
-  ChevronLeft
+  Bell, Target, RotateCcw, Loader2, CheckCircle2, AlertCircle
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -133,12 +132,6 @@ const PreferencesPage = () => {
     <div className="space-y-6 pb-8">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <button
-          onClick={() => navigate('/ajustes')}
-          className="p-1 -ml-1 hover:opacity-70 transition-opacity"
-        >
-          <ChevronLeft className="w-6 h-6 text-[var(--ios-blue)]" />
-        </button>
         <h1 className="text-ios-title1 font-bold text-[var(--ios-text)]" style={{ letterSpacing: '-0.5px' }}>
           Preferências
         </h1>

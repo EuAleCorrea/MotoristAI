@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Car, Users, ArrowLeft } from 'lucide-react';
+import { Car, Users } from 'lucide-react';
 
 /**
  * Tela de escolha: "Despesa do Veículo" ou "Despesa da Família"
@@ -12,12 +12,6 @@ function NewExpenseChoice() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <button
-          onClick={() => navigate('/despesas')}
-          className="p-2 -ml-2 rounded-lg hover:bg-[var(--ios-fill)] transition-colors"
-        >
-          <ArrowLeft className="h-5 w-5 text-[var(--ios-accent)]" />
-        </button>
         <div>
           <h1 className="text-2xl font-bold text-[var(--ios-text)]">Nova Despesa</h1>
           <p className="mt-1 text-sm text-[var(--ios-text-secondary)]">

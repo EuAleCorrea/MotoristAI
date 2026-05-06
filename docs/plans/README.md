@@ -6,6 +6,7 @@ Este documento centraliza todos os planos de implementação técnica projetados
 
 | ID | Plano | Severidade | Status |
 |:---|:---|:---:|:---|
+| 004 | [Login Biométrico — Sessão não restaura após logout](backlog/004-biometric-login-fix.md) | 🟡 Média | Backlog |
 
 ## ✅ Histórico de Planos (Concluídos)
 

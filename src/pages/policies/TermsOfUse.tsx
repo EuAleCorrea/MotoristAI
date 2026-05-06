@@ -1,13 +1,14 @@
-import { ScrollText } from 'lucide-react';
-
+import { FileText } from 'lucide-react';
 const TermsOfUsePage = () => {
+
  return (
- <div className="min-h-screen pb-24">
+ <div className="pb-8">
  {/* Header */}
  <div className="mb-8">
+
  <div className="flex items-center gap-3 mb-2">
- <div className="p-2.5 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 shadow-lg shadow-amber-500/30">
- <ScrollText className="w-6 h-6 text-white" />
+ <div className="p-2.5 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/30">
+ <FileText className="w-6 h-6 text-white" />
  </div>
  <h1 className="text-2xl font-bold text-[var(--ios-text)]">
  Termos de Uso

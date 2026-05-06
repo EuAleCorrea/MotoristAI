@@ -1,8 +1,9 @@
 import { Shield } from 'lucide-react';
 
 const PrivacyPolicyPage = () => {
+
  return (
- <div className="min-h-screen pb-24">
+ <div className="pb-8">
  {/* Header */}
  <div className="mb-8">
  <div className="flex items-center gap-3 mb-2">

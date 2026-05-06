@@ -232,10 +232,15 @@ const faqData: FAQItem[] = [
  },
 ];
 
+import { useScrollReset } from '../hooks/useScrollReset';
+
 const FAQPage = () => {
- const [searchTerm, setSearchTerm] = useState('');
- const [expandedId, setExpandedId] = useState<string | null>(null);
- const [selectedCategory, setSelectedCategory] = useState<string>('Todas');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string>('Todas');
+
+  // Reset scroll when category changes
+  useScrollReset(selectedCategory);
 
  const categories = ['Todas', ...new Set(faqData.map((item) => item.category))];
 

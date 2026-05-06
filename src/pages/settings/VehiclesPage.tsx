@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Car, Plus, Edit2, Trash2, Check, X } from 'lucide-react';
-import { useVehicleStore, Vehicle, FUEL_OPTIONS, TRANSMISSION_OPTIONS, FINANCIAL_STATUS_OPTIONS } from '../../../store/vehicleStore';
+import { useVehicleStore, Vehicle, FUEL_OPTIONS, TRANSMISSION_OPTIONS, FINANCIAL_STATUS_OPTIONS } from '../../store/vehicleStore';
 
 const CURRENT_YEAR = new Date().getFullYear();
 const YEAR_OPTIONS = Array.from({ length: 40 }, (_, i) => CURRENT_YEAR - i);

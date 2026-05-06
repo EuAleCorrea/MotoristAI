@@ -7,16 +7,21 @@ import { useNavigate } from 'react-router-dom';
 import { formatCurrency } from '../utils/formatters';
 import { exportToCsv, formatDateBR, formatCurrencyBR } from '../utils/exportCsv';
 
+import { useScrollReset } from '../hooks/useScrollReset';
+
 function Trips() {
- const { trips, deleteTrip, fetchTrips } = useTripStore();
- const navigate = useNavigate();
+  const { trips, deleteTrip, fetchTrips } = useTripStore();
+  const navigate = useNavigate();
 
- useEffect(() => {
-   fetchTrips();
- }, [fetchTrips]);
+  useEffect(() => {
+    fetchTrips();
+  }, [fetchTrips]);
 
- const [searchTerm, setSearchTerm] = useState('');
- const [platformFilter, setPlatformFilter] = useState('all');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [platformFilter, setPlatformFilter] = useState('all');
+
+  // Reset scroll when platform filter changes
+  useScrollReset(platformFilter);
 
  const filteredTrips = trips.filter((trip) => {
  const matchesSearch =

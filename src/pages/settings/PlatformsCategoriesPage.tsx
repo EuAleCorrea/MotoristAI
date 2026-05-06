@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Layers3, Plus, Edit2, Trash2, Check, X, Car, Tag } from 'lucide-react';
 import { usePlatformStore, Platform } from '../../store/platformStore';
 import { useCategoryStore, Category } from '../../store/categoryStore';
+import { useScrollReset } from '../../hooks/useScrollReset';
 
 const PLATFORM_COLORS = [
  { id: 'bg-black', label: 'Preto', preview: 'bg-black' },

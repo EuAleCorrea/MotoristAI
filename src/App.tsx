@@ -63,6 +63,7 @@ function App() {
  <ScrollToTop />
   <Routes>
   <Route path="/" element={<Login />} />
+  <Route path="/login" element={<Login />} />
   <Route path="/dashboard" element={<ProtectedRoute><Layout><Dashboard /></Layout></ProtectedRoute>} />
   <Route path="/entradas" element={<ProtectedRoute><Layout><Entries /></Layout></ProtectedRoute>} />
   <Route path="/entradas/nova" element={<ProtectedRoute><Layout><EntryFormPage /></Layout></ProtectedRoute>} />
@@ -93,10 +94,10 @@ function App() {
   {/* ═══ SPRINT 1: Assistente IA (substitui placeholder) ═══ */}
   <Route path="/ai" element={<ProtectedRoute><Layout><AIAssistant /></Layout></ProtectedRoute>} />
 
-  {/* Rotas de Políticas (públicas) */}
-  <Route path="/politicas/privacidade" element={<PrivacyPolicy />} />
-  <Route path="/politicas/termos" element={<TermsOfUse />} />
-  <Route path="/politicas/lgpd" element={<LGPD />} />
+  {/* Rotas de Políticas (públicas mas agora dentro do layout da app) */}
+  <Route path="/politicas/privacidade" element={<ProtectedRoute><Layout><PrivacyPolicy /></Layout></ProtectedRoute>} />
+  <Route path="/politicas/termos" element={<ProtectedRoute><Layout><TermsOfUse /></Layout></ProtectedRoute>} />
+  <Route path="/politicas/lgpd" element={<ProtectedRoute><Layout><LGPD /></Layout></ProtectedRoute>} />
 
   {/* Rotas de Despesas do Veículo */}
   <Route path="/despesas/veiculo/energia-combustivel" element={<ProtectedRoute><Layout><EnergyFuelFormPage /></Layout></ProtectedRoute>} />

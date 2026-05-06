@@ -1,4 +1,4 @@
-﻿import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Home, DollarSign, Mic, Receipt, Settings } from 'lucide-react';
 
 /*
@@ -31,7 +31,7 @@ const BottomNavBar = () => {
  style={{
  backgroundColor: 'var(--ios-sheet-bg)',
  borderTop: '0.33px solid var(--ios-separator)',
- paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+ paddingBottom: 'calc(10px + env(safe-area-inset-bottom, 0px))',
  }}
  >
  <div className="flex items-end justify-around h-12 px-2">

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Gauge, Plus, Edit2, Trash2, Check, X, Car, Calendar, FileText } from 'lucide-react';
-import { useOdometerStore, OdometerEntry } from '../../../store/odometerStore';
-import { useVehicleStore } from '../../../store/vehicleStore';
+import { useOdometerStore, OdometerEntry } from '../../store/odometerStore';
+import { useVehicleStore } from '../../store/vehicleStore';
 
 function OdometerPage() {
   const { entries, fetchEntries, addEntry, updateEntry, deleteEntry } = useOdometerStore();

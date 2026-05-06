@@ -40,7 +40,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
  }, []);
 
  const signOut = async () => {
- await supabase.auth.signOut();
+ // scope: 'local' limpa a sessão do app mas NÃO revoga o refresh_token no servidor,
+ // permitindo que o login biométrico continue funcionando após logout
+ await supabase.auth.signOut({ scope: 'local' });
  };
 
  const value = {

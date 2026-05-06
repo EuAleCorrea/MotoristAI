@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useRecurrenceStore, Recurrence, Installment, getFrequencyLabel, getPaymentMethodLabel } from '../../../store/recurrenceStore';
+import { useRecurrenceStore, Recurrence, Installment, getFrequencyLabel, getPaymentMethodLabel } from '../../store/recurrenceStore';
+import { useScrollReset } from '../../hooks/useScrollReset';
 
 type Tab = 'recurrences' | 'installments';
 
@@ -349,6 +350,8 @@ export default function RecurrencesPage() {
   } = useRecurrenceStore();
 
   const [tab, setTab] = useState<Tab>('recurrences');
+  useScrollReset(tab);
+
   const [modalOpen, setModalOpen] = useState(false);
   const [editingRecurrence, setEditingRecurrence] = useState<Recurrence | null>(null);
   const [editingInstallment, setEditingInstallment] = useState<Installment | null>(null);
