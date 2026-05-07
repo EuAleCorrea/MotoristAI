@@ -25,6 +25,7 @@ function Expenses() {
   const deleteExpense = useExpenseStore((state) => state.deleteExpense);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
@@ -70,9 +71,8 @@ function Expenses() {
   };
 
   const handleDelete = (id: string) => {
-    if (window.confirm('Tem certeza que deseja excluir esta despesa?')) {
-      deleteExpense(id);
-    }
+    deleteExpense(id);
+    setDeletingId(null);
   };
 
   const handleExportCSV = () => {
@@ -170,8 +170,17 @@ function Expenses() {
             return (
               <div
                 key={expense.id}
-                className="bg-[var(--ios-card)] rounded-[20px] p-4 border border-[var(--ios-separator)] shadow-sm active:scale-[0.98] transition-transform"
+                className="bg-[var(--ios-card)] rounded-[20px] p-4 border border-[var(--ios-separator)] shadow-sm relative overflow-hidden"
               >
+                {deletingId === expense.id && (
+                  <div className="absolute inset-0 bg-[rgba(255,59,48,0.12)] backdrop-blur-sm flex flex-col items-center justify-center gap-3 z-20 animate-in fade-in duration-200">
+                    <span className="text-sm font-semibold text-red-600">Excluir?</span>
+                    <div className="flex gap-2">
+                      <button onClick={() => handleDelete(expense.id)} className="px-3 py-1 bg-red-600 text-white rounded-lg text-sm font-bold">Sim</button>
+                      <button onClick={() => setDeletingId(null)} className="px-3 py-1 bg-white/50 text-gray-700 rounded-lg text-sm font-bold">Não</button>
+                    </div>
+                  </div>
+                )}
                 <div className="flex items-center gap-3 mb-3">
                   <div className="w-10 h-10 rounded-full flex items-center justify-center bg-[var(--ios-fill)] text-[var(--ios-accent)] shrink-0">
                     <Icon size={20} strokeWidth={2.5} />
@@ -189,7 +198,7 @@ function Expenses() {
                       <Edit2 size={16} />
                     </button>
                     <button
-                      onClick={() => handleDelete(expense.id)}
+                      onClick={() => setDeletingId(expense.id)}
                       className="p-2 rounded-full text-ios-red hover:bg-ios-red/10 active:bg-ios-red/20"
                     >
                       <Trash2 size={16} />

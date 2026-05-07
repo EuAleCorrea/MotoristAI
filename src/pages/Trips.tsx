@@ -8,10 +8,12 @@ import { formatCurrency } from '../utils/formatters';
 import { exportToCsv, formatDateBR, formatCurrencyBR } from '../utils/exportCsv';
 
 import { useScrollReset } from '../hooks/useScrollReset';
+import ConfirmModal from '../components/ui/ConfirmModal';
 
 function Trips() {
   const { trips, deleteTrip, fetchTrips } = useTripStore();
   const navigate = useNavigate();
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchTrips();
@@ -55,11 +57,12 @@ function Trips() {
  navigate(`/corridas/${id}/editar`);
  };
 
-  const handleDelete = (id: string) => {
- if (window.confirm('Tem certeza que deseja excluir esta corrida?')) {
- deleteTrip(id);
- }
- };
+  const handleDelete = () => {
+    if (deletingId) {
+      deleteTrip(deletingId);
+      setDeletingId(null);
+    }
+  };
 
  const handleExportCSV = () => {
    const filtered = platformFilter === 'all' ? trips : trips.filter(t => t.platform === platformFilter);
@@ -221,26 +224,36 @@ function Trips() {
  >
  <Edit2 className="h-4 w-4" />
  </button>
- <button
- onClick={() => handleDelete(trip.id)}
- className="text-danger-600 dark:text-danger-400 hover:text-danger-900 dark:hover:text-danger-300"
- >
- <Trash2 className="h-4 w-4" />
- </button>
+  <button
+  onClick={() => setDeletingId(trip.id)}
+  className="text-danger-600 dark:text-danger-400 hover:text-danger-900 dark:hover:text-danger-300"
+  >
+  <Trash2 className="h-4 w-4" />
+  </button>
  </td>
  </tr>
  ))}
  </tbody>
  </table>
- </div>
- {filteredTrips.length === 0 && (
+  </div>
+  </div>
+  {filteredTrips.length === 0 && (
  <div className="text-center py-12">
  <p className="text-[var(--ios-text-secondary)]">Nenhuma corrida encontrada</p>
  </div>
  )}
- </div>
- </div>
- );
+
+      <ConfirmModal
+        isOpen={!!deletingId}
+        onClose={() => setDeletingId(null)}
+        onConfirm={handleDelete}
+        title="Excluir Corrida"
+        message="Tem certeza que deseja excluir esta corrida? Esta ação não pode ser desfeita."
+        confirmText="Excluir"
+        cancelText="Cancelar"
+      />
+    </div>
+  );
 }
 
 export default Trips;

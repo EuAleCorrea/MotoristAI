@@ -118,9 +118,13 @@ export function AuthCard({
               <motion.div
                 initial={{ scale: 0.5, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                className="mx-auto w-16 h-16 rounded-2xl bg-[#0057FF] flex items-center justify-center mb-4 shadow-[0_0_20px_rgba(0,87,255,0.4)]"
+                className="mx-auto w-32 h-32 mb-2 flex items-center justify-center"
               >
-                <span className="text-3xl">🚗</span>
+                <img 
+                  src="/assets/img/login_logo.png" 
+                  alt="MotoristAI Logo" 
+                  className="w-full h-full object-contain drop-shadow-[0_0_10px_rgba(0,87,255,0.3)]"
+                />
               </motion.div>
 
               <h1 className="text-2xl font-bold text-white tracking-tight">

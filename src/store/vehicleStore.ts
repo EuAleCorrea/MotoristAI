@@ -22,7 +22,7 @@ interface VehicleStore {
   isLoading: boolean;
   error: string | null;
   fetchVehicles: () => Promise<void>;
-  addVehicle: (vehicle: Omit<Vehicle, 'id' | 'user_id'>) => Promise<void>;
+  addVehicle: (vehicle: Omit<Vehicle, 'id' | 'user_id'>) => Promise<Vehicle | void>;
   updateVehicle: (id: string, vehicle: Partial<Omit<Vehicle, 'id' | 'user_id'>>) => Promise<void>;
   deleteVehicle: (id: string) => Promise<void>;
 }
@@ -122,11 +122,13 @@ export const useVehicleStore = create<VehicleStore>((set) => ({
         .single();
 
       if (error) throw error;
+      const newVehicle = mapFromDB(data);
       set((state) => ({
-        vehicles: [...state.vehicles, mapFromDB(data)].sort((a, b) =>
+        vehicles: [...state.vehicles, newVehicle].sort((a, b) =>
           `${a.brand} ${a.model}`.localeCompare(`${b.brand} ${b.model}`)
         ),
       }));
+      return newVehicle;
     } catch (error: any) {
       set({ error: error.message });
     } finally {

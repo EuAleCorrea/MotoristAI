@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Car, Plus, Edit2, Trash2, Check, X } from 'lucide-react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useVehicleStore, Vehicle, FUEL_OPTIONS, TRANSMISSION_OPTIONS, FINANCIAL_STATUS_OPTIONS } from '../../store/vehicleStore';
+import { useSettingsFilterStore } from '../../store/settingsFilterStore';
 
 const CURRENT_YEAR = new Date().getFullYear();
 const YEAR_OPTIONS = Array.from({ length: 40 }, (_, i) => CURRENT_YEAR - i);
@@ -23,6 +25,11 @@ const emptyForm = (): VehicleForm => ({
 
 const VehiclesPage = () => {
   const { vehicles, isLoading, fetchVehicles, addVehicle, updateVehicle, deleteVehicle } = useVehicleStore();
+  const { setVehicle } = useSettingsFilterStore();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const from = searchParams.get('from');
+  const entryType = searchParams.get('type');
 
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -78,7 +85,14 @@ const VehiclesPage = () => {
       if (editingId) {
         await updateVehicle(editingId, form);
       } else {
-        await addVehicle(form);
+        const newVehicle = await addVehicle(form);
+        
+        // Se veio do QuickEntry, seleciona o veículo e volta para o dashboard
+        if (from === 'quick-entry' && newVehicle) {
+          setVehicle(newVehicle.id);
+          navigate(`/dashboard?openModal=${entryType || 'revenue'}`);
+          return;
+        }
       }
       setShowForm(false);
       setEditingId(null);
@@ -142,13 +156,13 @@ const VehiclesPage = () => {
                     <span className="text-sm text-red-700 dark:text-red-300 font-medium">Excluir este veículo?</span>
                     <button
                       onClick={() => handleDelete(vehicle.id)}
-                      className="px-3 py-1.5 bg-red-600 text-white text-sm font-semibold rounded-lg hover:bg-red-700"
+                      className="ios-btn !min-h-[36px] !py-1.5 !px-4 !bg-[var(--sys-red)] text-sm"
                     >
                       Sim
                     </button>
                     <button
                       onClick={() => setDeletingId(null)}
-                      className="px-3 py-1.5 bg-gray-200 text-[var(--ios-text)] text-sm font-semibold rounded-lg"
+                      className="ios-btn-tinted !min-h-[36px] !py-1.5 !px-4 text-sm"
                     >
                       Não
                     </button>
@@ -210,9 +224,9 @@ const VehiclesPage = () => {
         {/* Add Button */}
         <button
           onClick={handleAdd}
-          className="w-full p-4 flex items-center justify-center gap-2 text-[var(--ios-accent)] hover:bg-[var(--ios-bg)]/50 transition border-t border-[var(--ios-separator)]"
+          className="ios-btn !rounded-t-none !border-t border-[var(--ios-separator)]"
         >
-          <Plus className="h-4 w-4" />
+          <Plus className="h-5 w-5" />
           <span className="font-medium">Adicionar Veículo</span>
         </button>
       </div>
@@ -236,7 +250,7 @@ const VehiclesPage = () => {
                     value={form.brand}
                     onChange={(e) => handleChange('brand', e.target.value)}
                     placeholder="Ex: Toyota, Volkswagen"
-                    className={`w-full px-3 py-2.5 rounded-lg border ${errors.brand ? 'border-red-400' : 'border-[var(--ios-separator)]'} bg-[var(--ios-input-bg)] text-[var(--ios-text)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ios-accent)]/30`}
+                    className={`w-full px-3 py-2.5 rounded-lg border ${errors.brand ? 'border-red-400' : 'border-[var(--ios-separator)]'} bg-[var(--ios-fill)] text-[var(--ios-text)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ios-accent)]/30`}
                   />
                   {errors.brand && <p className="text-xs text-red-500 mt-1">{errors.brand}</p>}
                 </div>
@@ -249,7 +263,7 @@ const VehiclesPage = () => {
                     value={form.model}
                     onChange={(e) => handleChange('model', e.target.value)}
                     placeholder="Ex: Corolla, Gol"
-                    className={`w-full px-3 py-2.5 rounded-lg border ${errors.model ? 'border-red-400' : 'border-[var(--ios-separator)]'} bg-[var(--ios-input-bg)] text-[var(--ios-text)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ios-accent)]/30`}
+                    className={`w-full px-3 py-2.5 rounded-lg border ${errors.model ? 'border-red-400' : 'border-[var(--ios-separator)]'} bg-[var(--ios-fill)] text-[var(--ios-text)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ios-accent)]/30`}
                   />
                   {errors.model && <p className="text-xs text-red-500 mt-1">{errors.model}</p>}
                 </div>
@@ -262,7 +276,7 @@ const VehiclesPage = () => {
                     value={form.version}
                     onChange={(e) => handleChange('version', e.target.value)}
                     placeholder="Ex: 1.8 Flex, 2.0 TSI"
-                    className="w-full px-3 py-2.5 rounded-lg border border-[var(--ios-separator)] bg-[var(--ios-input-bg)] text-[var(--ios-text)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ios-accent)]/30"
+                    className="w-full px-3 py-2.5 rounded-lg border border-[var(--ios-separator)] bg-[var(--ios-fill)] text-[var(--ios-text)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ios-accent)]/30"
                   />
                 </div>
 
@@ -273,7 +287,7 @@ const VehiclesPage = () => {
                     <select
                       value={form.year}
                       onChange={(e) => handleChange('year', Number(e.target.value))}
-                      className={`w-full px-3 py-2.5 rounded-lg border ${errors.year ? 'border-red-400' : 'border-[var(--ios-separator)]'} bg-[var(--ios-input-bg)] text-[var(--ios-text)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ios-accent)]/30`}
+                      className={`w-full px-3 py-2.5 rounded-lg border ${errors.year ? 'border-red-400' : 'border-[var(--ios-separator)]'} bg-[var(--ios-fill)] text-[var(--ios-text)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ios-accent)]/30`}
                     >
                       {YEAR_OPTIONS.map((y) => (
                         <option key={y} value={y}>{y}</option>
@@ -288,7 +302,7 @@ const VehiclesPage = () => {
                       value={form.color}
                       onChange={(e) => handleChange('color', e.target.value)}
                       placeholder="Ex: Preto, Branco"
-                      className="w-full px-3 py-2.5 rounded-lg border border-[var(--ios-separator)] bg-[var(--ios-input-bg)] text-[var(--ios-text)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ios-accent)]/30"
+                      className="w-full px-3 py-2.5 rounded-lg border border-[var(--ios-separator)] bg-[var(--ios-fill)] text-[var(--ios-text)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ios-accent)]/30"
                     />
                   </div>
                 </div>
@@ -299,7 +313,7 @@ const VehiclesPage = () => {
                   <select
                     value={form.fuel}
                     onChange={(e) => handleChange('fuel', e.target.value)}
-                    className={`w-full px-3 py-2.5 rounded-lg border ${errors.fuel ? 'border-red-400' : 'border-[var(--ios-separator)]'} bg-[var(--ios-input-bg)] text-[var(--ios-text)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ios-accent)]/30`}
+                    className={`w-full px-3 py-2.5 rounded-lg border ${errors.fuel ? 'border-red-400' : 'border-[var(--ios-separator)]'} bg-[var(--ios-fill)] text-[var(--ios-text)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ios-accent)]/30`}
                   >
                     {FUEL_OPTIONS.map((f) => (
                       <option key={f.value} value={f.value}>{f.label}</option>
@@ -315,7 +329,7 @@ const VehiclesPage = () => {
                     <select
                       value={form.transmission}
                       onChange={(e) => handleChange('transmission', e.target.value)}
-                      className="w-full px-3 py-2.5 rounded-lg border border-[var(--ios-separator)] bg-[var(--ios-input-bg)] text-[var(--ios-text)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ios-accent)]/30"
+                      className="w-full px-3 py-2.5 rounded-lg border border-[var(--ios-separator)] bg-[var(--ios-fill)] text-[var(--ios-text)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ios-accent)]/30"
                     >
                       {TRANSMISSION_OPTIONS.map((t) => (
                         <option key={t.value} value={t.value}>{t.label}</option>
@@ -327,7 +341,7 @@ const VehiclesPage = () => {
                     <select
                       value={form.doors}
                       onChange={(e) => handleChange('doors', Number(e.target.value))}
-                      className="w-full px-3 py-2.5 rounded-lg border border-[var(--ios-separator)] bg-[var(--ios-input-bg)] text-[var(--ios-text)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ios-accent)]/30"
+                      className="w-full px-3 py-2.5 rounded-lg border border-[var(--ios-separator)] bg-[var(--ios-fill)] text-[var(--ios-text)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ios-accent)]/30"
                     >
                       {[2, 3, 4, 5].map((d) => (
                         <option key={d} value={d}>{d}</option>
@@ -356,7 +370,7 @@ const VehiclesPage = () => {
                     value={form.mileage}
                     onChange={(e) => handleChange('mileage', Number(e.target.value))}
                     min={0}
-                    className="w-full px-3 py-2.5 rounded-lg border border-[var(--ios-separator)] bg-[var(--ios-input-bg)] text-[var(--ios-text)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ios-accent)]/30"
+                    className="w-full px-3 py-2.5 rounded-lg border border-[var(--ios-separator)] bg-[var(--ios-fill)] text-[var(--ios-text)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ios-accent)]/30"
                   />
                 </div>
 
@@ -366,7 +380,7 @@ const VehiclesPage = () => {
                   <select
                     value={form.financial_status}
                     onChange={(e) => handleChange('financial_status', e.target.value)}
-                    className="w-full px-3 py-2.5 rounded-lg border border-[var(--ios-separator)] bg-[var(--ios-input-bg)] text-[var(--ios-text)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ios-accent)]/30"
+                    className="w-full px-3 py-2.5 rounded-lg border border-[var(--ios-separator)] bg-[var(--ios-fill)] text-[var(--ios-text)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ios-accent)]/30"
                   >
                     {FINANCIAL_STATUS_OPTIONS.map((s) => (
                       <option key={s.value} value={s.value}>{s.label}</option>
@@ -380,14 +394,14 @@ const VehiclesPage = () => {
             <div className="flex gap-3 px-6 pb-6">
               <button
                 onClick={() => { setShowForm(false); setEditingId(null); }}
-                className="flex-1 py-2.5 rounded-lg bg-gray-100 text-[var(--ios-text)] font-medium text-sm hover:bg-gray-200 transition"
+                className="flex-1 ios-btn-tinted"
               >
                 Cancelar
               </button>
               <button
                 onClick={handleSave}
                 disabled={saving}
-                className="flex-1 py-2.5 rounded-lg bg-[var(--ios-accent)] text-white font-medium text-sm hover:opacity-80 transition disabled:opacity-50"
+                className="flex-1 ios-btn"
               >
                 {saving ? 'Salvando...' : editingId ? 'Atualizar' : 'Adicionar'}
               </button>

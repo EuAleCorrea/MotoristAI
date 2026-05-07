@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { useScrollReset } from '../hooks/useScrollReset';
 import { formatCurrency } from '../utils/formatters';
 import { exportToCsv, formatDateBR, formatCurrencyBR } from '../utils/exportCsv';
+import ConfirmModal from '../components/ui/ConfirmModal';
 
 const typeLabels: Record<string, string> = {
   fuel: 'Combustível',
@@ -38,6 +39,7 @@ function VehicleExpensesList() {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [typeFilter, setTypeFilter] = useState('all');
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   // Reset scroll when filter changes
   useScrollReset(typeFilter);
@@ -77,9 +79,10 @@ function VehicleExpensesList() {
     }
   };
 
-  const handleDelete = (id: string) => {
-    if (window.confirm('Tem certeza que deseja excluir esta despesa?')) {
-      deleteExpense(id);
+  const handleDelete = () => {
+    if (deletingId) {
+      deleteExpense(deletingId);
+      setDeletingId(null);
     }
   };
 
@@ -205,7 +208,7 @@ function VehicleExpensesList() {
                       <Edit2 size={16} />
                     </button>
                     <button
-                      onClick={() => handleDelete(expense.id)}
+                      onClick={() => setDeletingId(expense.id)}
                       className="p-2 rounded-full text-ios-red hover:bg-ios-red/10 active:bg-ios-red/20"
                     >
                       <Trash2 size={16} />
@@ -272,6 +275,16 @@ function VehicleExpensesList() {
           ))}
         </div>
       )}
+
+      <ConfirmModal
+        isOpen={!!deletingId}
+        onClose={() => setDeletingId(null)}
+        onConfirm={handleDelete}
+        title="Excluir Despesa"
+        message="Tem certeza que deseja excluir esta despesa? Esta ação não pode ser desfeita."
+        confirmText="Excluir"
+        cancelText="Cancelar"
+      />
     </div>
   );
 }

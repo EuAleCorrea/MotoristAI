@@ -1,4 +1,5 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { startOfDay, endOfDay, subDays, startOfWeek, endOfWeek } from 'date-fns';
 import { useEntryStore } from '../../store/entryStore';
 import { useExpenseStore } from '../../store/expenseStore';
@@ -17,11 +18,23 @@ interface DashboardHomeProps {
 }
 
 function DashboardHome({ selectedVehicleId }: DashboardHomeProps) {
- const [quickEntryType, setQuickEntryType] = useState<'revenue' | 'expense' | null>(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [quickEntryType, setQuickEntryType] = useState<'revenue' | 'expense' | null>(null);
 
- const entries = useEntryStore((state) => state.entries);
- const expenses = useExpenseStore((state) => state.expenses);
- const { getGoalByMonth } = useGoalStore();
+  useEffect(() => {
+    const openModal = searchParams.get('openModal');
+    if (openModal === 'revenue' || openModal === 'expense') {
+      setQuickEntryType(openModal as 'revenue' | 'expense');
+      
+      const newParams = new URLSearchParams(searchParams);
+      newParams.delete('openModal');
+      setSearchParams(newParams, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
+
+  const entries = useEntryStore((state) => state.entries);
+  const expenses = useExpenseStore((state) => state.expenses);
+  const { getGoalByMonth } = useGoalStore();
 
  const todayData = useMemo(() => {
  const today = new Date();

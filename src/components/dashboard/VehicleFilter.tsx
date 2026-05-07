@@ -18,6 +18,13 @@ export default function VehicleFilter() {
     }
   }, [fetchVehicles, vehicles.length]);
 
+  // Seleciona automaticamente se houver apenas um veículo
+  useEffect(() => {
+    if (!isLoading && vehicles.length === 1 && !selectedVehicle) {
+      setVehicle(vehicles[0].id);
+    }
+  }, [isLoading, vehicles, selectedVehicle, setVehicle]);
+
   return (
     <div className="relative">
       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">

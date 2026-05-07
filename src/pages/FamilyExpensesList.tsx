@@ -26,6 +26,7 @@ const categoryRoutes: Record<string, string> = {
 };
 
 import { useScrollReset } from '../hooks/useScrollReset';
+import ConfirmModal from '../components/ui/ConfirmModal';
 
 function FamilyExpensesList() {
   const { expenses, deleteExpense, fetchExpenses } = useFamilyExpensesStore();
@@ -33,6 +34,7 @@ function FamilyExpensesList() {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   // Reset scroll when category filter changes
   useScrollReset(categoryFilter);
@@ -72,9 +74,10 @@ function FamilyExpensesList() {
     }
   };
 
-  const handleDelete = (id: string) => {
-    if (window.confirm('Tem certeza que deseja excluir esta despesa?')) {
-      deleteExpense(id);
+  const handleDelete = () => {
+    if (deletingId) {
+      deleteExpense(deletingId);
+      setDeletingId(null);
     }
   };
 
@@ -197,7 +200,7 @@ function FamilyExpensesList() {
                       <Edit2 size={16} />
                     </button>
                     <button
-                      onClick={() => handleDelete(expense.id)}
+                      onClick={() => setDeletingId(expense.id)}
                       className="p-2 rounded-full text-ios-red hover:bg-ios-red/10 active:bg-ios-red/20"
                     >
                       <Trash2 size={16} />
@@ -262,6 +265,16 @@ function FamilyExpensesList() {
           ))}
         </div>
       )}
+
+      <ConfirmModal
+        isOpen={!!deletingId}
+        onClose={() => setDeletingId(null)}
+        onConfirm={handleDelete}
+        title="Excluir Despesa"
+        message="Tem certeza que deseja excluir esta despesa? Esta ação não pode ser desfeita."
+        confirmText="Excluir"
+        cancelText="Cancelar"
+      />
     </div>
   );
 }

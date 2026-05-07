@@ -5,6 +5,8 @@ import {
   Bell, Target, RotateCcw, Loader2, CheckCircle2, AlertCircle
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import ConfirmModal from '../../components/ui/ConfirmModal';
+import { useState } from 'react';
 
 const LANGUAGES = [
   { value: 'pt-BR', label: 'Português (Brasil)' },
@@ -96,6 +98,7 @@ const ToggleField = ({ label, description, enabled, onChange }: {
 const PreferencesPage = () => {
   const navigate = useNavigate();
   const { preferences, loading, saving, error, fetchPreferences, updatePreferences, resetPreferences } = usePreferencesStore();
+  const [isResetModalOpen, setIsResetModalOpen] = useState(false);
 
   useEffect(() => {
     fetchPreferences();
@@ -321,17 +324,23 @@ const PreferencesPage = () => {
       {/* Reset */}
       <div className="pt-4">
         <button
-          onClick={() => {
-            if (window.confirm('Tem certeza que deseja restaurar as preferências padrão?')) {
-              resetPreferences();
-            }
-          }}
+          onClick={() => setIsResetModalOpen(true)}
           className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl border border-red-500/30 text-red-500 font-medium hover:bg-red-500/5 transition-colors"
         >
           <RotateCcw className="w-4 h-4" />
           Restaurar Padrões
         </button>
       </div>
+
+      <ConfirmModal
+        isOpen={isResetModalOpen}
+        onClose={() => setIsResetModalOpen(false)}
+        onConfirm={resetPreferences}
+        title="Restaurar Padrões"
+        message="Tem certeza que deseja restaurar as preferências para o padrão original?"
+        confirmText="Restaurar"
+        cancelText="Cancelar"
+      />
     </div>
   );
 };
