@@ -8,9 +8,12 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      disable: !!process.env.CAPACITOR,
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
         maximumFileSizeToCacheInBytes: 4000000,
+        // Não interceptar requisições de assets no Capacitor (localhost)
+        navigateFallbackDenylist: [/^\/assets\//],
       },
       manifest: {
         name: 'MotoristAI - Controle Financeiro',
@@ -38,6 +41,18 @@ export default defineConfig({
       },
     }),
   ],
+
+  build: {
+    // Aumentar limite para evitar warnings de bundle grande
+    chunkSizeWarningLimit: 5000,
+    rollupOptions: {
+      output: {
+        // Forçar bundle único — elimina todos os chunks dinâmicos
+        // que causam "Failed to fetch dynamically imported module" no WebView Android
+        inlineDynamicImports: true,
+      },
+    },
+  },
 
   optimizeDeps: {
     exclude: ['lucide-react'],
