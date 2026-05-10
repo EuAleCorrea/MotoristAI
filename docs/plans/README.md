@@ -22,3 +22,14 @@ Este documento centraliza todos os planos de implementação técnica projetados
 1. **Novas Ideias**: Devem ser documentadas primeiro na pasta `backlog/`.
 2. **Execução**: Ao iniciar um plano, marque-o como `In Progress` no Dashboard.
 3. **Conclusão**: Após o deploy bem-sucedido, mova o arquivo `.md` para a pasta `history/`.
+
+---
+
+## 📚 Documentos de Conhecimento (Knowledge Base)
+
+Documentos técnicos e post-mortems para referência em projetos futuros.
+
+| Documento | Descrição |
+|:---|:---|
+| [GOOGLE_AUTH_ANDROID_GUIDE.md](../GOOGLE_AUTH_ANDROID_GUIDE.md) | Guia completo: como implementar Google Auth no Android (Firebase + OAuth browser) |
+| [GOOGLE_AUTH_POST_MORTEM.md](../GOOGLE_AUTH_POST_MORTEM.md) | Post-mortem: todas as tentativas, erros e lições aprendidas na implementação do MotoristAI |

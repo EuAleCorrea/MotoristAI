@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Login from './pages/Login';
@@ -56,10 +56,95 @@ import FamilyExpensesList from './pages/FamilyExpensesList';
 import AIAssistant from './pages/AI';
 import NewExpenseChoice from './pages/NewExpenseChoice';
 
+import { useEffect } from 'react';
+import { Capacitor } from '@capacitor/core';
+import { App as CapApp } from '@capacitor/app';
+import { Browser } from '@capacitor/browser';
+import { supabase } from './services/supabase';
+
+/**
+ * DeepLinkHandler — captura o retorno do OAuth via deep link.
+ * Supabase v2 usa PKCE: com.motoristai.app://login-callback?code=AUTHORIZATION_CODE
+ */
+function DeepLinkHandler() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!Capacitor.isNativePlatform()) return;
+
+    const setupListener = async () => {
+      await CapApp.addListener('appUrlOpen', async ({ url }) => {
+        // ── DEBUG VISUAL — remover após confirmar funcionamento ──
+        window.alert('[DEBUG] appUrlOpen!\nURL: ' + url);
+        // ────────────────────────────────────────────────────────
+
+        if (!url.includes('login-callback')) {
+          window.alert('[DEBUG] URL sem "login-callback". Ignorando.\n' + url);
+          return;
+        }
+
+        const normalized = url.replace('com.motoristai.app://', 'https://app.dummy/');
+        let urlObj: URL;
+        try {
+          urlObj = new URL(normalized);
+        } catch {
+          window.alert('[DEBUG] URL inválida: ' + url);
+          return;
+        }
+
+        // PKCE flow (padrão Supabase v2): ?code=xxx
+        const code = urlObj.searchParams.get('code');
+        if (code) {
+          window.alert('[DEBUG] PKCE code encontrado! Trocando...');
+          const { error } = await supabase.auth.exchangeCodeForSession(code);
+          if (error) {
+            window.alert('[DEBUG] ERRO: ' + error.message);
+          } else {
+            window.alert('[DEBUG] Login OK! Navegando para dashboard...');
+            try { await Browser.close(); } catch (_) { /* já fechado */ }
+            navigate('/dashboard', { replace: true });
+          }
+          return;
+        }
+
+        // Implicit flow (fallback): #access_token=xxx&refresh_token=yyy
+        const hash = new URLSearchParams(urlObj.hash.replace('#', ''));
+        const accessToken = hash.get('access_token');
+        const refreshToken = hash.get('refresh_token');
+
+        if (accessToken && refreshToken) {
+          const { error } = await supabase.auth.setSession({
+            access_token: accessToken,
+            refresh_token: refreshToken,
+          });
+          if (error) {
+            window.alert('[DEBUG] ERRO setSession: ' + error.message);
+          } else {
+            try { await Browser.close(); } catch (_) { /* já fechado */ }
+            navigate('/dashboard', { replace: true });
+          }
+          return;
+        }
+
+        window.alert('[DEBUG] Sem code nem access_token!\nURL: ' + url);
+      });
+    };
+
+    setupListener();
+
+    return () => {
+      CapApp.removeAllListeners();
+    };
+  }, [navigate]);
+
+  return null;
+}
+
 
 function App() {
  return (
  <Router>
+ <DeepLinkHandler />
  <AuthProvider>
  <SplashHandler />
  <ScrollToTop />

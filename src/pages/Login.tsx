@@ -5,7 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { AuthCard } from '../components/ui/AuthCard';
 import { useBiometricAuth } from '../hooks/useBiometricAuth';
 import { Capacitor } from '@capacitor/core';
-import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
+import { Browser } from '@capacitor/browser';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -109,37 +109,28 @@ function Login() {
       setError(null);
       
       if (Capacitor.isNativePlatform()) {
-        // Android nativo: usa o plugin Capacitor GoogleAuth (SDK nativo do Google)
-        // initialize() DEVE ser chamado antes de signIn() no Android nativo.
-        // Sem isso, o GoogleSignInClient fica null e o app fecha com NullPointerException.
-        await GoogleAuth.initialize({
-          clientId: '582220214551-hg82u3ns7rrf9r1e0hpgeeq3oh8q27.apps.googleusercontent.com',
-          scopes: ['profile', 'email'],
-          grantOfflineAccess: true,
-        });
-        
-        const googleUser = await GoogleAuth.signIn();
-        const idToken = googleUser.authentication.idToken;
-
-        if (!idToken) throw new Error('Não foi possível obter o token do Google.');
-
-        const { data, error: authError } = await supabase.auth.signInWithIdToken({
+        // Android nativo: abre o browser do sistema com o fluxo OAuth do Supabase.
+        // O Supabase cuida de tudo (Google consent, token exchange).
+        // Ao final, redireciona para com.motoristai.app://login-callback com os tokens.
+        // O deep link é interceptado pelo App.tsx (appUrlOpen listener).
+        const { data, error: oauthError } = await supabase.auth.signInWithOAuth({
           provider: 'google',
-          token: idToken,
+          options: {
+            redirectTo: 'com.motoristai.app://login-callback',
+            skipBrowserRedirect: true, // Não redirecionar automaticamente — nós abrimos o browser
+          },
         });
 
-        if (authError) throw authError;
+        if (oauthError) throw oauthError;
+        if (!data.url) throw new Error('URL de autenticação não gerada');
 
-        // Salvar sessão para biometria futura
-        if (data.session && biometricAvailable && googleUser.email) {
-          saveSessionForBiometric(
-            data.session.access_token,
-            data.session.refresh_token,
-            googleUser.email
-          );
-        }
+        // Abre o Chrome Custom Tab com a URL do OAuth.
+        // NÃO usar windowName: '_self' — isso abriria no WebView, quebrando o deep link.
+        await Browser.open({ url: data.url });
         
-        navigate('/dashboard', { replace: true });
+        // O retorno é tratado pelo listener de deep link no App.tsx
+        // O browser será fechado automaticamente ao voltar para o app
+        setIsLoading(false);
       } else {
         // Web: usa o fluxo OAuth nativo do Supabase (redirect para Google)
         const { error: authError } = await supabase.auth.signInWithOAuth({
@@ -153,8 +144,10 @@ function Login() {
         // O redirect acontece automaticamente — não precisa de navigate
       }
     } catch (err: any) {
-      // Se o usuário cancelar o login, não mostramos erro
-      if (err.message !== 'unspecified' && err.message !== 'User cancelled login') {
+      console.error('[GoogleAuth] Erro:', err.message);
+      
+      const cancelled = err.message === 'popup_closed_by_user';
+      if (!cancelled) {
         setError(err.message || 'Erro ao entrar com Google');
       }
       setIsLoading(false);
