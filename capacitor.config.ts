@@ -17,15 +17,15 @@ const config: CapacitorConfig = {
   },
   plugins: {
     SplashScreen: {
-      launchAutoHide: true,
-      launchShowDuration: 2000,
+      launchAutoHide: false,
+      launchShowDuration: 3000,
       backgroundColor: '#0A0F1C',
       showSpinner: false,
       androidScaleType: 'CENTER_CROP',
     },
     GoogleAuth: {
       scopes: ['profile', 'email'],
-      serverClientId: '582220214551-frqr12ie4oev83mlurp12in7qmfni08l.apps.googleusercontent.com',
+      serverClientId: '582220214551-hg82u3ns7rrf9r1e0hpgeeq3oh8q27.apps.googleusercontent.com',
       forceCodeForRefreshToken: true,
     },
   },

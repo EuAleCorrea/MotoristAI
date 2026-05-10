@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { AuthCard } from '../components/ui/AuthCard';
 import { useBiometricAuth } from '../hooks/useBiometricAuth';
+import { Capacitor } from '@capacitor/core';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -106,31 +107,52 @@ function Login() {
       setIsLoading(true);
       setError(null);
       
-      // Importação dinâmica para evitar erros em ambiente web puro durante o build
-      const { GoogleAuth } = await import('@codetrix-studio/capacitor-google-auth');
-      
-      const googleUser = await GoogleAuth.signIn();
-      const idToken = googleUser.authentication.idToken;
+      if (Capacitor.isNativePlatform()) {
+        // Android nativo: usa o plugin Capacitor GoogleAuth (SDK nativo do Google)
+        const { GoogleAuth } = await import('@codetrix-studio/capacitor-google-auth');
 
-      if (!idToken) throw new Error('Não foi possível obter o token do Google.');
+        // initialize() DEVE ser chamado antes de signIn() no Android nativo.
+        // Sem isso, o GoogleSignInClient fica null e o app fecha com NullPointerException.
+        await GoogleAuth.initialize({
+          clientId: '582220214551-hg82u3ns7rrf9r1e0hpgeeq3oh8q27.apps.googleusercontent.com',
+          scopes: ['profile', 'email'],
+          grantOfflineAccess: true,
+        });
+        
+        const googleUser = await GoogleAuth.signIn();
+        const idToken = googleUser.authentication.idToken;
 
-      const { data, error: authError } = await supabase.auth.signInWithIdToken({
-        provider: 'google',
-        token: idToken,
-      });
+        if (!idToken) throw new Error('Não foi possível obter o token do Google.');
 
-      if (authError) throw authError;
+        const { data, error: authError } = await supabase.auth.signInWithIdToken({
+          provider: 'google',
+          token: idToken,
+        });
 
-      // Salvar sessão para biometria futura
-      if (data.session && biometricAvailable && googleUser.email) {
-        saveSessionForBiometric(
-          data.session.access_token,
-          data.session.refresh_token,
-          googleUser.email
-        );
+        if (authError) throw authError;
+
+        // Salvar sessão para biometria futura
+        if (data.session && biometricAvailable && googleUser.email) {
+          saveSessionForBiometric(
+            data.session.access_token,
+            data.session.refresh_token,
+            googleUser.email
+          );
+        }
+        
+        navigate('/dashboard', { replace: true });
+      } else {
+        // Web: usa o fluxo OAuth nativo do Supabase (redirect para Google)
+        const { error: authError } = await supabase.auth.signInWithOAuth({
+          provider: 'google',
+          options: {
+            redirectTo: `${window.location.origin}/dashboard`,
+          },
+        });
+
+        if (authError) throw authError;
+        // O redirect acontece automaticamente — não precisa de navigate
       }
-      
-      navigate('/dashboard', { replace: true });
     } catch (err: any) {
       // Se o usuário cancelar o login, não mostramos erro
       if (err.message !== 'unspecified' && err.message !== 'User cancelled login') {

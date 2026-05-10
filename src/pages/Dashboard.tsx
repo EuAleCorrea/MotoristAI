@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Loader2 } from 'lucide-react';
 import DashboardTabs from '../components/dashboard/DashboardTabs';
 import DashboardHome from '../components/dashboard/DashboardHome';
 import DailyView from '../components/dashboard/DailyView';
@@ -16,15 +17,27 @@ type ViewType = 'Hoje' | 'Diário' | 'Semanal' | 'Mensal' | 'Anual';
 
 function Dashboard() {
  const [activeView, setActiveView] = useState<ViewType>('Hoje');
+ const [isInitializing, setIsInitializing] = useState(true);
+
  const { fetchEntries } = useEntryStore();
  const { fetchExpenses } = useExpenseStore();
  const { fetchGoals } = useGoalStore();
  const selectedVehicle = useSettingsFilterStore((state) => state.selectedVehicle);
 
  useEffect(() => {
- fetchEntries();
- fetchExpenses();
- fetchGoals();
+   const loadInitialData = async () => {
+     try {
+       await Promise.all([
+         fetchEntries(),
+         fetchExpenses(),
+         fetchGoals()
+       ]);
+     } finally {
+       setIsInitializing(false);
+     }
+   };
+   
+   loadInitialData();
  }, [fetchEntries, fetchExpenses, fetchGoals]);
 
  // Reset scroll when tab changes
@@ -41,6 +54,15 @@ function Dashboard() {
  default: return <DashboardHome selectedVehicleId={vehicleFilter} />;
  }
  };
+
+ if (isInitializing) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        <p className="text-sm text-muted-foreground">Sincronizando dados...</p>
+      </div>
+    );
+  }
 
  return (
  <div className="space-y-5">

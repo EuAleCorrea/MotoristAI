@@ -29,28 +29,28 @@ const PlatformSelector: React.FC<PlatformSelectorProps> = ({
  ? platforms.filter(p => p.isActive).map(p => ({ id: p.name, name: p.name }))
  : DEFAULT_PLATFORMS;
 
- return (
- <div>
- <label className="block text-sm font-medium text-[var(--ios-text)] mb-2">
- {label}
- </label>
- <select
- value={value}
- onChange={(e) => onChange(e.target.value)}
- className="w-full px-4 py-3 rounded-xl border border-[var(--ios-separator)] 
- bg-[var(--ios-card)] text-[var(--ios-text)]
- focus:ring-2 focus:ring-primary-500 focus:border-transparent
- transition-all duration-200"
- >
- <option value="">Selecione uma plataforma</option>
- {displayPlatforms.map((platform) => (
- <option key={platform.id} value={platform.id}>
- {platform.name}
- </option>
- ))}
- </select>
- </div>
- );
+  return (
+    <div>
+      <label className="block text-sm font-medium text-[var(--ios-text)] mb-1.5 pl-1">
+        {label}
+      </label>
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="w-full px-4 py-3 rounded-2xl border border-[var(--ios-separator)] 
+        bg-[var(--ios-fill)] text-[var(--ios-text)]
+        focus:ring-2 focus:ring-ios-accent focus:border-transparent
+        transition-all duration-200 font-medium"
+      >
+        <option value="">Selecione uma plataforma</option>
+        {displayPlatforms.map((platform) => (
+          <option key={platform.id} value={platform.id}>
+            {platform.name}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
 };
 
 export default PlatformSelector;

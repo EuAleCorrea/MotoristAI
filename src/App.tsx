@@ -26,6 +26,7 @@ import FAQ from './pages/FAQ';
 import Support from './pages/Support';
 import Reports from './pages/Reports';
 import IncomeReportPage from './pages/IncomeReportPage';
+import SplashHandler from './components/SplashHandler';
 
 // Páginas de Políticas
 import PrivacyPolicy from './pages/policies/PrivacyPolicy';
@@ -60,6 +61,7 @@ function App() {
  return (
  <Router>
  <AuthProvider>
+ <SplashHandler />
  <ScrollToTop />
   <Routes>
   <Route path="/" element={<Login />} />

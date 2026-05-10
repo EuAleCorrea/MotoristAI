@@ -81,31 +81,31 @@ function PeriodSummary({ periodData }: PeriodSummaryProps) {
 
  return (
  <div className="space-y-6">
- <div className="bg-[var(--ios-card)] rounded-lg shadow-sm p-4 flex justify-between items-center">
- <div>
- <p className="text-sm font-medium text-[var(--ios-text-secondary)]">Performance</p>
- <p className="text-2xl font-bold text-[var(--ios-accent)] ">{formatPercent(performance)}</p>
- </div>
- <div className="text-right">
- <p className="text-sm font-medium text-[var(--ios-text-secondary)]">Meta do Período</p>
- <p className="text-2xl font-bold text-danger-600 dark:text-danger-400">{formatCurrency(periodGoal)}</p>
- </div>
- </div>
+  <div className="bg-[var(--ios-card)] rounded-lg shadow-sm p-4">
+    <div className="flex justify-between text-sm font-medium mb-1">
+      <span className="text-[var(--ios-text)] ">Faturamento: {formatCurrency(revenue)}</span>
+    </div>
+    <ProgressBar value={revenue} max={periodGoal} color="bg-[rgba(52,199,89,0.08)]0" />
+    <div className="flex justify-end text-sm font-medium mt-1">
+      <span className="text-[var(--ios-text-secondary)]">Pendente: {formatCurrency(Math.max(0, periodGoal - revenue))}</span>
+    </div>
+  </div>
 
- <div className="bg-[var(--ios-card)] rounded-lg shadow-sm p-4">
- <div className="flex justify-between text-sm font-medium mb-1">
- <span className="text-[var(--ios-text)] ">Faturamento: {formatCurrency(revenue)}</span>
- </div>
- <ProgressBar value={revenue} max={periodGoal} color="bg-[rgba(52,199,89,0.08)]0" />
- <div className="flex justify-end text-sm font-medium mt-1">
- <span className="text-[var(--ios-text-secondary)]">Pendente: {formatCurrency(Math.max(0, periodGoal - revenue))}</span>
- </div>
- </div>
+  <div className="bg-[var(--ios-card)] rounded-lg shadow-sm p-6 text-center">
+    <p className="text-md font-medium text-[var(--ios-text-secondary)]">Faturamento Total</p>
+    <p className="text-4xl font-bold text-[var(--ios-text)] mt-1">{formatCurrency(revenue)}</p>
+  </div>
 
- <div className="bg-[var(--ios-card)] rounded-lg shadow-sm p-6 text-center">
- <p className="text-md font-medium text-[var(--ios-text-secondary)]">Faturamento Total</p>
- <p className="text-4xl font-bold text-[var(--ios-text)] mt-1">{formatCurrency(revenue)}</p>
- </div>
+  <div className="bg-[var(--ios-card)] rounded-lg shadow-sm p-4 flex justify-between items-center">
+    <div>
+      <p className="text-sm font-medium text-[var(--ios-text-secondary)]">Performance</p>
+      <p className="text-2xl font-bold text-[var(--ios-accent)] ">{formatPercent(performance)}</p>
+    </div>
+    <div className="text-right">
+      <p className="text-sm font-medium text-[var(--ios-text-secondary)]">Meta do Período</p>
+      <p className="text-2xl font-bold text-danger-600 dark:text-danger-400">{formatCurrency(periodGoal)}</p>
+    </div>
+  </div>
  <div className="grid grid-cols-2 gap-4">
  <div className="text-center p-4 bg-[rgba(255,59,48,0.08)] rounded-lg">
  <p className="text-sm font-medium text-danger-600 dark:text-danger-400">Despesas</p>

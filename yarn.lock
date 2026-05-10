@@ -872,6 +872,11 @@
   resolved "https://registry.npmjs.org/@capacitor/ios/-/ios-8.3.1.tgz"
   integrity sha512-BEhLyYYHWJLib4mpaPMaaylbC8meqgxbNYwQJH2svsSLW7yo/hFie+Zoo66a44XnqcMd2tvmAuzimWunXZi/xA==
 
+"@capacitor/splash-screen@^8.0.1":
+  version "8.0.1"
+  resolved "https://registry.npmjs.org/@capacitor/splash-screen/-/splash-screen-8.0.1.tgz"
+  integrity sha512-c/ew/Z3eA7z8l06WoRAtzVF16VwYYrExmHmfGq1Cg675pVzaC/yuucB8/1xG1vhEfnW4fZ1KhSf/kzR1RiVYgg==
+
 "@codetrix-studio/capacitor-google-auth@^3.4.0-rc.4":
   version "3.4.0-rc.4"
   resolved "https://registry.npmjs.org/@codetrix-studio/capacitor-google-auth/-/capacitor-google-auth-3.4.0-rc.4.tgz"
