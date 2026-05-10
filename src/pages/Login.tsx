@@ -5,6 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { AuthCard } from '../components/ui/AuthCard';
 import { useBiometricAuth } from '../hooks/useBiometricAuth';
 import { Capacitor } from '@capacitor/core';
+import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -109,8 +110,6 @@ function Login() {
       
       if (Capacitor.isNativePlatform()) {
         // Android nativo: usa o plugin Capacitor GoogleAuth (SDK nativo do Google)
-        const { GoogleAuth } = await import('@codetrix-studio/capacitor-google-auth');
-
         // initialize() DEVE ser chamado antes de signIn() no Android nativo.
         // Sem isso, o GoogleSignInClient fica null e o app fecha com NullPointerException.
         await GoogleAuth.initialize({
