@@ -2,6 +2,8 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Fuel, Zap, Droplets, Calendar, Gauge } from 'lucide-react';
 import { useVehicleExpensesStore, FuelExpense } from '../../../store/vehicleExpensesStore';
+import { useVehicleStore } from '../../../store/vehicleStore';
+import { useSettingsFilterStore } from '../../../store/settingsFilterStore';
 import FormSection from '../../../components/forms/FormSection';
 import FormInput from '../../../components/forms/FormInput';
 import MoneyInput from '../../../components/forms/MoneyInput';
@@ -19,9 +21,11 @@ const EnergyFuelFormPage: React.FC = () => {
  const isEditing = !!id;
 
  const { expenses, addExpense, updateExpense } = useVehicleExpensesStore();
+ const { vehicles } = useVehicleStore();
+ const selectedVehicleFromFilter = useSettingsFilterStore((state) => state.selectedVehicle);
 
  const [fuelType, setFuelType] = useState<FuelType>('Gasolina');
- const [vehicleId, setVehicleId] = useState('');
+ const [vehicleId, setVehicleId] = useState(isEditing ? '' : (selectedVehicleFromFilter || ''));
  const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
  const [odometer, setOdometer] = useState('');
  const [notes, setNotes] = useState('');
@@ -57,6 +61,24 @@ const EnergyFuelFormPage: React.FC = () => {
  }
  }
  }, [id, isEditing, expenses]);
+
+ useEffect(() => {
+   if (!isEditing && vehicleId && vehicles.length > 0) {
+     const selectedVehicle = vehicles.find(v => v.id === vehicleId);
+     if (selectedVehicle && selectedVehicle.fuel) {
+       const vFuel = selectedVehicle.fuel.toLowerCase();
+       let mappedFuel: FuelType = 'Gasolina';
+       switch(vFuel) {
+         case 'etanol': mappedFuel = 'Etanol'; break;
+         case 'diesel': mappedFuel = 'Diesel'; break;
+         case 'eletrico': mappedFuel = 'Elétrico'; break;
+         case 'hibrido': mappedFuel = 'Híbrido'; break;
+         default: mappedFuel = 'Gasolina';
+       }
+       setFuelType(mappedFuel);
+     }
+   }
+ }, [vehicleId, isEditing, vehicles]);
 
  useEffect(() => {
  const priceNum = parseFloat(pricePerLiter);

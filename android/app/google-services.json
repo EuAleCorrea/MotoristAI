@@ -2,12 +2,12 @@
   "project_info": {
     "project_number": "582220214551",
     "project_id": "motoristai",
-    "storage_bucket": "motoristai.appspot.com"
+    "storage_bucket": "motoristai.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:582220214551:android:0000000000000000",
+        "mobilesdk_app_id": "1:582220214551:android:95345ab39ed7f4a9764752",
         "android_client_info": {
           "package_name": "com.motoristai.app"
         }
@@ -22,20 +22,20 @@
           }
         },
         {
-          "client_id": "582220214551-hg82u3ns7rrfj9rl1e0hpgeeq3oh8q27.apps.googleusercontent.com",
+          "client_id": "582220214551-v4865skp44jg3dkivedkleos6enmkrig.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAKi6wG5Ort6DvdFcfliCq8PMmXR3q3Tgg"
+          "current_key": "AIzaSyBhDRkSDsrzknbflnpF8JFBgA_3EI0_kIo"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "582220214551-hg82u3ns7rrfj9rl1e0hpgeeq3oh8q27.apps.googleusercontent.com",
+              "client_id": "582220214551-v4865skp44jg3dkivedkleos6enmkrig.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

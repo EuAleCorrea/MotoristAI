@@ -23,11 +23,7 @@ const config: CapacitorConfig = {
       showSpinner: false,
       androidScaleType: 'CENTER_CROP',
     },
-    GoogleAuth: {
-      scopes: ['profile', 'email'],
-      serverClientId: '582220214551-hg82u3ns7rrf9r1e0hpgeeq3oh8q27.apps.googleusercontent.com',
-      forceCodeForRefreshToken: true,
-    },
+
   },
 };
 

@@ -63,8 +63,9 @@ import { Browser } from '@capacitor/browser';
 import { supabase } from './services/supabase';
 
 /**
- * DeepLinkHandler — captura o retorno do OAuth via deep link.
- * Supabase v2 usa PKCE: com.motoristai.app://login-callback?code=AUTHORIZATION_CODE
+ * DeepLinkHandler — captura retorno do OAuth via deep link (fallback).
+ * Com o login nativo via SocialLogin, este handler é usado apenas
+ * como fallback para fluxos OAuth via browser.
  */
 function DeepLinkHandler() {
   const navigate = useNavigate();
@@ -74,33 +75,26 @@ function DeepLinkHandler() {
 
     const setupListener = async () => {
       await CapApp.addListener('appUrlOpen', async ({ url }) => {
-        // ── DEBUG VISUAL — remover após confirmar funcionamento ──
-        window.alert('[DEBUG] appUrlOpen!\nURL: ' + url);
-        // ────────────────────────────────────────────────────────
+        console.log('[DeepLink] appUrlOpen:', url);
 
-        if (!url.includes('login-callback')) {
-          window.alert('[DEBUG] URL sem "login-callback". Ignorando.\n' + url);
-          return;
-        }
+        if (!url.includes('login-callback')) return;
 
         const normalized = url.replace('com.motoristai.app://', 'https://app.dummy/');
         let urlObj: URL;
         try {
           urlObj = new URL(normalized);
         } catch {
-          window.alert('[DEBUG] URL inválida: ' + url);
+          console.error('[DeepLink] URL inválida:', url);
           return;
         }
 
         // PKCE flow (padrão Supabase v2): ?code=xxx
         const code = urlObj.searchParams.get('code');
         if (code) {
-          window.alert('[DEBUG] PKCE code encontrado! Trocando...');
           const { error } = await supabase.auth.exchangeCodeForSession(code);
           if (error) {
-            window.alert('[DEBUG] ERRO: ' + error.message);
+            console.error('[DeepLink] Erro PKCE:', error.message);
           } else {
-            window.alert('[DEBUG] Login OK! Navegando para dashboard...');
             try { await Browser.close(); } catch (_) { /* já fechado */ }
             navigate('/dashboard', { replace: true });
           }
@@ -117,16 +111,11 @@ function DeepLinkHandler() {
             access_token: accessToken,
             refresh_token: refreshToken,
           });
-          if (error) {
-            window.alert('[DEBUG] ERRO setSession: ' + error.message);
-          } else {
+          if (!error) {
             try { await Browser.close(); } catch (_) { /* já fechado */ }
             navigate('/dashboard', { replace: true });
           }
-          return;
         }
-
-        window.alert('[DEBUG] Sem code nem access_token!\nURL: ' + url);
       });
     };
 

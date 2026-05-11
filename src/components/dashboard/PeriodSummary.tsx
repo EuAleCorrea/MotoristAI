@@ -81,6 +81,11 @@ function PeriodSummary({ periodData }: PeriodSummaryProps) {
 
  return (
  <div className="space-y-6">
+  <div className="bg-[var(--ios-card)] rounded-lg shadow-sm p-6 text-center">
+    <p className="text-md font-medium text-[var(--ios-text-secondary)]">Faturamento Total</p>
+    <p className="text-4xl font-bold text-[var(--ios-text)] mt-1">{formatCurrency(revenue)}</p>
+  </div>
+
   <div className="bg-[var(--ios-card)] rounded-lg shadow-sm p-4">
     <div className="flex justify-between text-sm font-medium mb-1">
       <span className="text-[var(--ios-text)] ">Faturamento: {formatCurrency(revenue)}</span>
@@ -89,11 +94,6 @@ function PeriodSummary({ periodData }: PeriodSummaryProps) {
     <div className="flex justify-end text-sm font-medium mt-1">
       <span className="text-[var(--ios-text-secondary)]">Pendente: {formatCurrency(Math.max(0, periodGoal - revenue))}</span>
     </div>
-  </div>
-
-  <div className="bg-[var(--ios-card)] rounded-lg shadow-sm p-6 text-center">
-    <p className="text-md font-medium text-[var(--ios-text-secondary)]">Faturamento Total</p>
-    <p className="text-4xl font-bold text-[var(--ios-text)] mt-1">{formatCurrency(revenue)}</p>
   </div>
 
   <div className="bg-[var(--ios-card)] rounded-lg shadow-sm p-4 flex justify-between items-center">
