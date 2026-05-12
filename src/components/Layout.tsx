@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import Header from './Header';
 import BottomNavBar from './BottomNavBar';
 import OnboardingTour from './OnboardingTour';
+import FloatingButton from './FloatingButton';
 import { useEntryStore } from '../store/entryStore';
 import { useExpenseStore } from '../store/expenseStore';
 import { useGoalStore } from '../store/goalStore';
@@ -88,6 +89,9 @@ const Layout = ({ children }: LayoutProps) => {
       onSkip={onboarding.skipOnboarding}
     />
   )}
+
+  {/* Botão flutuante arrastável */}
+  <FloatingButton />
   </div>
   );
 };

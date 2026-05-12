@@ -8,6 +8,7 @@ import Entries from './pages/Entries';
 import Expenses from './pages/Expenses';
 import Goals from './pages/Goals';
 import Settings from './pages/Settings';
+import AlertsManager from './pages/AlertsManager';
 import EntryFormPage from './pages/forms/EntryFormPage';
 import ExpenseFormPage from './pages/forms/ExpenseFormPage';
 import GoalFormPage from './pages/forms/GoalFormPage';
@@ -55,6 +56,7 @@ import VehicleExpensesList from './pages/VehicleExpensesList';
 import FamilyExpensesList from './pages/FamilyExpensesList';
 import AIAssistant from './pages/AI';
 import NewExpenseChoice from './pages/NewExpenseChoice';
+import Insights from './pages/Insights';
 
 import { useEffect } from 'react';
 import { Capacitor } from '@capacitor/core';
@@ -150,6 +152,7 @@ function App() {
   <Route path="/metas" element={<ProtectedRoute><Layout><Goals /></Layout></ProtectedRoute>} />
   <Route path="/metas/nova" element={<ProtectedRoute><Layout><GoalFormPage /></Layout></ProtectedRoute>} />
   <Route path="/metas/:id/editar" element={<ProtectedRoute><Layout><GoalFormPage /></Layout></ProtectedRoute>} />
+  <Route path="/alertas" element={<ProtectedRoute><Layout><AlertsManager /></Layout></ProtectedRoute>} />
   <Route path="/ajustes" element={<ProtectedRoute><Layout><Settings /></Layout></ProtectedRoute>} />
   <Route path="/faq" element={<ProtectedRoute><Layout><FAQ /></Layout></ProtectedRoute>} />
   <Route path="/suporte" element={<ProtectedRoute><Layout><Support /></Layout></ProtectedRoute>} />
@@ -169,6 +172,7 @@ function App() {
 
   {/* ═══ SPRINT 1: Assistente IA (substitui placeholder) ═══ */}
   <Route path="/ai" element={<ProtectedRoute><Layout><AIAssistant /></Layout></ProtectedRoute>} />
+  <Route path="/insights" element={<ProtectedRoute><Layout><Insights /></Layout></ProtectedRoute>} />
 
   {/* Rotas de Políticas (públicas mas agora dentro do layout da app) */}
   <Route path="/politicas/privacidade" element={<ProtectedRoute><Layout><PrivacyPolicy /></Layout></ProtectedRoute>} />

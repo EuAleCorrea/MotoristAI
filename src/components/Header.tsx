@@ -79,6 +79,7 @@ const Header = () => {
           
           <button
             id="header-notifications-btn"
+            onClick={() => navigate('/alertas')}
             className="w-10 h-11 flex items-center justify-center rounded-full"
             style={{ color: 'var(--ios-accent)' }}
             aria-label="Alertas"

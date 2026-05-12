@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useScrollReset } from '../../hooks/useScrollReset';
+import PageHeader from '../../components/PageHeader';
 
 // ─── Modal de formulário ──────────────────────────────────────
 
@@ -650,15 +651,13 @@ const RecurringExpensesPage = () => {
     .reduce((sum, i) => sum + i.installment_amount, 0);
 
   return (
-    <div className="space-y-6 pb-8">
-      {/* Header */}
-      <div className="flex items-center gap-3">
-        <h1 className="text-ios-title1 font-bold text-[var(--ios-text)]" style={{ letterSpacing: '-0.5px' }}>
-          Despesas Fixas
-        </h1>
+    <div className="pb-20 min-h-[100dvh] bg-ios-bg text-ios-text" style={{ background: 'var(--ios-bg)', color: 'var(--ios-text)' }}>
+      <div className="px-4 pt-4">
+        <PageHeader title="Despesas Fixas" icon={Repeat} />
       </div>
 
-      {/* Resumo mensal */}
+      <div className="px-4 py-4 space-y-6">
+        {/* Resumo mensal */}
       <div className="grid grid-cols-2 gap-3">
         <div className="bg-white dark:bg-[#1c1c1e] rounded-2xl p-4 border border-[var(--ios-separator)]">
           <div className="flex items-center gap-2 text-sm text-[var(--ios-text-secondary)] mb-1">
@@ -860,6 +859,7 @@ const RecurringExpensesPage = () => {
         onSubmit={addInstallment}
         vehicles={vehicles}
       />
+      </div>
     </div>
   );
 };

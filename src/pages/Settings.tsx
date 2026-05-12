@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 import SectionGrid from '../components/settings/SectionGrid';
-import NotificationReminderSettings from '../components/NotificationReminderSettings';
 import {
   Receipt, Fuel, Gauge, Camera, Wrench, ParkingCircle, Landmark, TrendingDown, Home, ShoppingCart, HeartPulse, GraduationCap, MoreHorizontal, PieChart, Layers3, FileText, Car, AppWindow, CalendarClock, Settings2, Repeat, Drama, Target, HelpCircle, MessageCircle, Shield, ScrollText, ShieldCheck
 } from 'lucide-react';
@@ -77,14 +76,7 @@ const SettingsPage = () => {
  ],
  },
   {
-  title: 'Alertas e Automação',
-  items: [
-  { id: 'Manutenção por km', title: 'Manutenção por km', icon: Wrench, iconName: 'Wrench', route: '/alertas/manutencao' },
-  { id: 'Despesas recorrentes', title: 'Despesas recorrentes', icon: Repeat, iconName: 'Repeat', route: '/alertas/despesas' },
-  ],
-  },
- {
- title: 'Ajuda',
+  title: 'Ajuda',
  items: [
  { id: 'FAQ', title: 'Perguntas Frequentes', icon: HelpCircle, iconName: 'HelpCircle', route: '/faq' },
  { id: 'Suporte', title: 'Falar com o Suporte', icon: MessageCircle, iconName: 'MessageCircle', route: '/suporte' },
@@ -116,14 +108,6 @@ const SettingsPage = () => {
  items={quickLaunchItems}
  />
  )}
-
-  {/* Notificações push (lembrete para registrar corridas) */}
-  <div className="space-y-2">
-    <h2 className="text-xs font-semibold text-[var(--ios-text-secondary)] uppercase tracking-wider px-1">
-      Lembretes
-    </h2>
-    <NotificationReminderSettings />
-  </div>
 
   {allSections.map((section) => (
    <SectionGrid

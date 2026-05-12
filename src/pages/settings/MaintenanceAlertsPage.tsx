@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Plus, AlertTriangle, CheckCircle, Clock, Gauge, Trash2, Car, Wrench } from 'lucide-react';
 import { useMaintenanceStore, MaintenanceRule } from '../../store/maintenanceStore';
 import { supabase } from '../../services/supabase';
+import PageHeader from '../../components/PageHeader';
 
 // Modal para adicionar/editar regra
 function RuleModal({
@@ -329,17 +330,13 @@ const MaintenanceAlertsPage = () => {
   return (
     <div className="space-y-6 pb-20">
       {/* Header */}
-      <div className="flex items-center gap-3">
-        <div className="flex-1">
-          <h1 className="text-ios-large-title font-bold text-[var(--ios-text)]">
-            Manutenção por km
-          </h1>
-          <p className="text-sm text-[var(--ios-text-secondary)] mt-1">
-            {currentKm > 0
-              ? `Km atual: ${currentKm.toLocaleString('pt-BR')} km`
-              : 'Registre o km do odômetro para ativar os alertas'}
-          </p>
-        </div>
+      <div>
+        <PageHeader title="Manutenção por km" icon={Wrench} />
+        <p className="text-sm text-[var(--ios-text-secondary)] -mt-2 mb-4 px-1">
+          {currentKm > 0
+            ? `Km atual: ${currentKm.toLocaleString('pt-BR')} km`
+            : 'Registre o km do odômetro para ativar os alertas'}
+        </p>
       </div>
 
       {/* Summary Cards */}

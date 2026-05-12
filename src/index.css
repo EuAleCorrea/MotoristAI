@@ -243,4 +243,56 @@
     -webkit-text-fill-color: var(--ios-text) !important;
     transition: background-color 5000s ease-in-out 0s;
   }
+
+  @keyframes slideUpCurtain {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  .animate-slide-up-curtain {
+    animation: slideUpCurtain 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes slideDownCurtain {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(100%);
+    }
+  }
+
+  .animate-slide-down-curtain {
+    animation: slideDownCurtain 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes fadeInOverlay {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .animate-fade-in-overlay {
+    animation: fadeInOverlay 0.3s ease forwards;
+  }
+
+  @keyframes fadeOutOverlay {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  .animate-fade-out-overlay {
+    animation: fadeOutOverlay 0.3s ease forwards;
+  }
 }

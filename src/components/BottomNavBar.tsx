@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Home, DollarSign, Mic, Receipt, Settings } from 'lucide-react';
+import { Home, DollarSign, Sparkles, Receipt, Settings } from 'lucide-react';
 
 /*
  * BottomNavBar — iOS Tab Bar (flat, no elevated buttons)
@@ -11,7 +11,7 @@ import { Home, DollarSign, Mic, Receipt, Settings } from 'lucide-react';
 const tabs = [
   { path: '/dashboard', label: 'Início', icon: Home },
  { path: '/entradas', label: 'Receitas', icon: DollarSign },
- { path: '/ai', label: 'Insights', icon: Mic },
+ { path: '/insights', label: 'Insights', icon: Sparkles },
  { path: '/despesas', label: 'Despesas', icon: Receipt },
  { path: '/ajustes', label: 'Ajustes', icon: Settings },
 ];
