@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
+import { AnimatePresence } from 'framer-motion';
 import { useSearchParams } from 'react-router-dom';
 import { startOfDay, endOfDay, subDays, startOfWeek, endOfWeek } from 'date-fns';
 import { useEntryStore } from '../../store/entryStore';
@@ -178,11 +179,15 @@ function DashboardHome({ selectedVehicleId }: DashboardHomeProps) {
  </div>
 
  {/* Quick Entry Modal */}
- <QuickEntryModal
- isOpen={quickEntryType !== null}
- onClose={() => setQuickEntryType(null)}
- type={quickEntryType || 'revenue'}
- />
+  <AnimatePresence>
+    {quickEntryType !== null && (
+      <QuickEntryModal
+        isOpen={quickEntryType !== null}
+        onClose={() => setQuickEntryType(null)}
+        type={quickEntryType || 'revenue'}
+      />
+    )}
+  </AnimatePresence>
  </div>
  );
 }

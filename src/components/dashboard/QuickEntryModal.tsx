@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { X, Calendar, FileText, CheckCircle2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { useEntryStore } from '../../store/entryStore';
@@ -20,7 +21,6 @@ const QuickEntryModal: React.FC<QuickEntryModalProps> = ({ isOpen, onClose, type
     const [category, setCategory] = useState('Combustível');
     const [description, setDescription] = useState('');
     const [date, setDate] = useState(format(new Date(), 'yyyy-MM-dd'));
-    const [isClosing, setIsClosing] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
 
     const { addEntry, isLoading: entryLoading } = useEntryStore();
@@ -28,7 +28,6 @@ const QuickEntryModal: React.FC<QuickEntryModalProps> = ({ isOpen, onClose, type
 
     useEffect(() => {
         if (isOpen) {
-            setIsClosing(false);
             setIsSuccess(false);
             document.body.style.overflow = 'hidden';
             // Reset fields
@@ -42,11 +41,7 @@ const QuickEntryModal: React.FC<QuickEntryModalProps> = ({ isOpen, onClose, type
     }, [isOpen]);
 
     const handleClose = () => {
-        setIsClosing(true);
-        setTimeout(() => {
-            onClose();
-            setIsClosing(false);
-        }, 300);
+        onClose();
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -81,22 +76,32 @@ const QuickEntryModal: React.FC<QuickEntryModalProps> = ({ isOpen, onClose, type
         }
     };
 
-    if (!isOpen) return null;
-
     const isRevenue = type === 'revenue';
     const isLoading = entryLoading || expenseLoading;
 
     return (
         <div className="fixed inset-0 z-[100] flex items-end justify-center px-0">
-            <div
-                className={`absolute inset-0 transition-all duration-300 backdrop-blur-[2px] ${isClosing ? 'opacity-0' : 'opacity-100'}`}
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="absolute inset-0 backdrop-blur-[2px]"
                 style={{ backgroundColor: 'rgba(0, 0, 0, 0.4)' }}
                 onClick={handleClose}
             />
 
-            <div
-                className={`relative w-full max-w-lg transform transition-all duration-500 ease-[cubic-bezier(0.32, 0.72, 0, 1)]
-                    ${isClosing ? 'translate-y-full opacity-0' : 'translate-y-0 opacity-100'}`}
+            <motion.div
+                initial={{ y: '100%', opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: '100%', opacity: 0 }}
+                transition={{ 
+                    type: 'spring',
+                    damping: 25,
+                    stiffness: 200,
+                    mass: 0.8
+                }}
+                className="relative w-full max-w-lg"
                 style={{
                     backgroundColor: 'var(--ios-sheet-bg)',
                     borderTopLeftRadius: '2rem',
@@ -201,7 +206,7 @@ const QuickEntryModal: React.FC<QuickEntryModalProps> = ({ isOpen, onClose, type
                         </form>
                     </div>
                 )}
-            </div>
+            </motion.div>
         </div>
     );
 };
