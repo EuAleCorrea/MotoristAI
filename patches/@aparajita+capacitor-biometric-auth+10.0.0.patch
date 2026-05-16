@@ -1,0 +1,21 @@
+diff --git a/node_modules/@aparajita/capacitor-biometric-auth/android/build.gradle b/node_modules/@aparajita/capacitor-biometric-auth/android/build.gradle
+index 8eff677..c73dc23 100644
+--- a/node_modules/@aparajita/capacitor-biometric-auth/android/build.gradle
++++ b/node_modules/@aparajita/capacitor-biometric-auth/android/build.gradle
+@@ -5,15 +5,7 @@ ext {
+     androidxMaterialVersion = project.hasProperty('androidxMaterialVersion') ? rootProject.ext.androidxMaterialVersion : '1.13.0'
+ }
+ 
+-buildscript {
+-    repositories {
+-        google()
+-        mavenCentral()
+-    }
+-    dependencies {
+-        classpath 'com.android.tools.build:gradle:8.13.2'
+-    }
+-}
++
+ 
+ apply plugin: 'com.android.library'
+ 

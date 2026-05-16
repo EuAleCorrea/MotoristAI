@@ -29,7 +29,7 @@ Antes de implementar:
 - Sem abstrações para código de uso único.
 - Sem "flexibilidade" ou "configurabilidade" que não foi solicitada.
 - Sem tratamento de erros para cenários impossíveis.
-- Se você escrever 200 linhas e puder ser 50, reescreva.
+- Se você escrever 200 lines e puder ser 50, reescreva.
 
 Pergunte-se: "Um engenheiro sênior diria que isso está complicado demais?" Se sim, simplifique.
 
@@ -65,7 +65,12 @@ Para tarefas multi-etapas, declare um plano breve:
 3. [Etapa] → verificar: [checagem]
 ```
 
-Critérios fortes de sucesso permitem iterar de forma independente. Critérios fracos ("fazer funcionar") exigem clarificações constantes.
+### 5. Conformidade de Tema (Dark/Light Mode)
+
+**Toda nova funcionalidade visual DEVE suportar nativamente os temas Claro e Escuro.**
+- Use variáveis CSS do `index.css` (ex: `var(--ios-bg)`, `var(--ios-text)`) em vez de cores hardcoded.
+- Para componentes de terceiros (Mapas, Gráficos), use hooks de estado de tema (ex: `useTheme`) para alternar estilos/tiles dinamicamente.
+- Teste sempre em ambos os modos antes de considerar a tarefa concluída.
 
 ---
 

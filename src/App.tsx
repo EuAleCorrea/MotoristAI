@@ -57,6 +57,7 @@ import FamilyExpensesList from './pages/FamilyExpensesList';
 import AIAssistant from './pages/AI';
 import NewExpenseChoice from './pages/NewExpenseChoice';
 import Insights from './pages/Insights';
+import MapPage from './pages/MapPage';
 
 import { useEffect } from 'react';
 import { Capacitor } from '@capacitor/core';
@@ -173,6 +174,7 @@ function App() {
   {/* ═══ SPRINT 1: Assistente IA (substitui placeholder) ═══ */}
   <Route path="/ai" element={<ProtectedRoute><Layout><AIAssistant /></Layout></ProtectedRoute>} />
   <Route path="/insights" element={<ProtectedRoute><Layout><Insights /></Layout></ProtectedRoute>} />
+  <Route path="/mapa" element={<ProtectedRoute><Layout><MapPage /></Layout></ProtectedRoute>} />
 
   {/* Rotas de Políticas (públicas mas agora dentro do layout da app) */}
   <Route path="/politicas/privacidade" element={<ProtectedRoute><Layout><PrivacyPolicy /></Layout></ProtectedRoute>} />

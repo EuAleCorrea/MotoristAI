@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ChevronLeft, Ellipsis, LogOut, Bell } from 'lucide-react';
+import { ChevronLeft, Ellipsis, LogOut, Bell, Map } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 import { supabase } from '../services/supabase';
 
@@ -107,15 +107,27 @@ const Header = () => {
                   border: '0.33px solid var(--ios-separator)',
                 }}
               >
-                <div className="px-4 py-2.5" style={{ borderBottom: '0.33px solid var(--ios-separator)', backgroundColor: 'var(--ios-fill)' }}>
-                  <p className="text-ios-caption2 uppercase font-bold" style={{ color: 'var(--ios-text-secondary)' }}>
-                    Conta
-                  </p>
-                </div>
+                {/* Itens Principais */}
+                <button
+                  id="header-map-btn"
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    navigate('/mapa');
+                  }}
+                  className="w-full flex items-center gap-3 px-4 py-3 active:opacity-70 transition-opacity"
+                  style={{ color: 'var(--ios-text)', fontSize: '16px' }}
+                >
+                  <Map className="h-4 w-4" style={{ color: 'var(--ios-accent)' }} />
+                  <span>Mapa</span>
+                </button>
+
+                {/* Separador */}
+                <div className="ios-separator" />
+                
                 <button
                   id="header-logout-btn"
                   onClick={handleLogout}
-                  className="w-full flex items-center gap-3 px-4 py-3"
+                  className="w-full flex items-center gap-3 px-4 py-3 active:opacity-70 transition-opacity"
                   style={{ color: 'var(--sys-red)', fontSize: '16px' }}
                 >
                   <LogOut className="h-4 w-4" />

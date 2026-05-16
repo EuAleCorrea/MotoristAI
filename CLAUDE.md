@@ -1,65 +1,128 @@
-# CLAUDE.md
+# CLAUDE.md — Instruções Obrigatórias do Projeto MotoristAI
 
-Behavioral guidelines to reduce common LLM coding mistakes. Merge with project-specific instructions as needed.
-
-**Tradeoff:** These guidelines bias toward caution over speed. For trivial tasks, use judgment.
-
-## 1. Think Before Coding
-
-**Don't assume. Don't hide confusion. Surface tradeoffs.**
-
-Before implementing:
-- State your assumptions explicitly. If uncertain, ask.
-- If multiple interpretations exist, present them - don't pick silently.
-- If a simpler approach exists, say so. Push back when warranted.
-- If something is unclear, stop. Name what's confusing. Ask.
-
-## 2. Simplicity First
-
-**Minimum code that solves the problem. Nothing speculative.**
-
-- No features beyond what was asked.
-- No abstractions for single-use code.
-- No "flexibility" or "configurability" that wasn't requested.
-- No error handling for impossible scenarios.
-- If you write 200 lines and it could be 50, rewrite it.
-
-Ask yourself: "Would a senior engineer say this is overcomplicated?" If yes, simplify.
-
-## 3. Surgical Changes
-
-**Touch only what you must. Clean up only your own mess.**
-
-When editing existing code:
-- Don't "improve" adjacent code, comments, or formatting.
-- Don't refactor things that aren't broken.
-- Match existing style, even if you'd do it differently.
-- If you notice unrelated dead code, mention it - don't delete it.
-
-When your changes create orphans:
-- Remove imports/variables/functions that YOUR changes made unused.
-- Don't remove pre-existing dead code unless asked.
-
-The test: Every changed line should trace directly to the user's request.
-
-## 4. Goal-Driven Execution
-
-**Define success criteria. Loop until verified.**
-
-Transform tasks into verifiable goals:
-- "Add validation" → "Write tests for invalid inputs, then make them pass"
-- "Fix the bug" → "Write a test that reproduces it, then make it pass"
-- "Refactor X" → "Ensure tests pass before and after"
-
-For multi-step tasks, state a brief plan:
-```
-1. [Step] → verify: [check]
-2. [Step] → verify: [check]
-3. [Step] → verify: [check]
-```
-
-Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
+Este arquivo é lido automaticamente por **qualquer agente AI** (Claude, Gemini ou outro) que trabalhe neste projeto.
+As regras abaixo são **OBRIGATÓRIAS** e devem ser seguidas **SEM EXCEÇÃO**.
 
 ---
 
-**These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.
+## Comportamento do Agente (Karpathy Guidelines)
+
+Diretrizes comportamentais para reduzir erros comuns de codificação. Aplicáveis a **toda** implementação de código.
+
+> **Tradeoff:** Estas diretrizes priorizam cautela sobre velocidade. Para tarefas triviais, use o bom senso.
+
+### 1. Pense Antes de Codificar
+
+**Não assuma. Não esconda confusão. Mostre os tradeoffs.**
+
+Antes de implementar:
+- Declare suas suposições explicitamente. Se incerto, pergunte.
+- Se existirem múltiplas interpretações, apresente-as — não escolha silenciosamente.
+- Se existir uma abordagem mais simples, diga. Questione quando necessário.
+- Se algo estiver confuso, pare. Nomeie o que está confuso. Pergunte.
+
+### 2. Simplicidade Primeiro
+
+**Código mínimo que resolve o problema. Nada especulativo.**
+
+- Sem features além do que foi pedido.
+- Sem abstrações para código de uso único.
+- Sem "flexibilidade" ou "configurabilidade" que não foi solicitada.
+- Sem tratamento de erros para cenários impossíveis.
+- Se você escrever 200 lines e puder ser 50, reescreva.
+
+Pergunte-se: "Um engenheiro sênior diria que isso está complicado demais?" Se sim, simplifique.
+
+### 3. Mudanças Cirúrgicas
+
+**Toque apenas o necessário. Limpe apenas a sua própria bagunça.**
+
+Ao editar código existente:
+- Não "melhore" código adjacente, comentários ou formatação.
+- Não refatore coisas que não estão quebradas.
+- Mantenha o estilo existente, mesmo que você faria diferente.
+- Se notar código morto não relacionado, mencione — não delete.
+
+Quando suas mudanças criarem órfãos:
+- Remova imports/variáveis/funções que **suas** mudanças tornaram desnecessários.
+- Não remova código morto pré-existente a menos que solicitado.
+
+O teste: cada linha alterada deve ser rastreável diretamente ao pedido do usuário.
+
+### 4. Execução Orientada a Objetivos
+
+**Defina critérios de sucesso. Itere até verificar.**
+
+Transforme tarefas em objetivos verificáveis:
+- "Adicionar validação" → "Escrever testes para inputs inválidos, depois fazê-los passar"
+- "Corrigir o bug" → "Escrever um teste que reproduz o bug, depois fazê-lo passar"
+- "Refatorar X" → "Garantir que os testes passem antes e depois"
+
+Para tarefas multi-etapas, declare um plano breve:
+```
+1. [Etapa] → verificar: [checagem]
+2. [Etapa] → verificar: [checagem]
+3. [Etapa] → verificar: [checagem]
+```
+
+### 5. Conformidade de Tema (Dark/Light Mode)
+
+**Toda nova funcionalidade visual DEVE suportar nativamente os temas Claro e Escuro.**
+
+- Use variáveis CSS do `index.css` (ex: `var(--ios-bg)`, `var(--ios-text)`) em vez de cores hardcoded.
+- Para componentes de terceiros (Mapas, Gráficos), use hooks de estado de tema (ex: `useTheme`) para alternar estilos/tiles dinamicamente.
+- Teste sempre em **ambos os modos** antes de considerar a tarefa concluída.
+
+---
+
+## Git: Commit e Push
+
+**ANTES de executar qualquer operação de git (commit, push, branch), você DEVE:**
+
+1. Ler o arquivo `docs/GIT_WORKFLOW.md`
+2. Seguir **exatamente** os passos documentados nele
+3. Usar as informações de remote, branch e diretório descritas naquele arquivo
+
+**Referência rápida (sempre confirme no `GIT_WORKFLOW.md`):**
+- Diretório: `z:\Documentos\Projetos\MotoristAI`
+- Remote: `origin`
+- Branch: `main`
+- Mensagens de commit em inglês, no formato: `tipo: descricao`
+
+---
+
+## Segurança
+
+- **NUNCA** exponha a `service_role` key do Supabase no código cliente
+- **NUNCA** commite o arquivo `.env`
+- **NUNCA** commite a pasta `.agent/`
+- Toda nova tabela no Supabase **DEVE** ter RLS habilitado com política vinculada ao `auth.uid()`
+
+---
+
+## Documentação do Projeto
+
+| Documento | Caminho | Descrição |
+|:----------|:--------|:----------|
+| Git Workflow | `docs/GIT_WORKFLOW.md` | Passo a passo padrão para commit/push |
+| Manutenção | `docs/MAINTENANCE.md` | Guia de infraestrutura e deploy |
+| Vulnerabilidades | `docs/vulnerabilities.md` | Registro de riscos e resoluções |
+| Backlog de Planos | `docs/plans/README.md` | Índice de planos de implementação |
+
+---
+
+## Stack Técnica
+
+| Camada | Tecnologia |
+|:-------|:-----------|
+| Frontend | React + TypeScript + Vite + Tailwind CSS |
+| Estado | Zustand |
+| Backend | Supabase (Auth + PostgreSQL + RLS) |
+| Mobile | Capacitor |
+| Deploy | EasyPanel + Nixpacks (Hostinger VPS) |
+
+---
+
+## Idioma
+
+Sempre converse com o usuário em **Português do Brasil**.

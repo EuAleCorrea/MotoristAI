@@ -190,17 +190,12 @@ const QuickEntryModal: React.FC<QuickEntryModalProps> = ({ isOpen, onClose, type
                                 />
                             </div>
 
-                            <div className="pt-2">
-                                <button
-                                    type="submit"
-                                    disabled={isLoading}
-                                    className="w-full h-16 rounded-[2rem] text-ios-headline font-bold text-white shadow-xl active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center"
-                                    style={{
-                                        background: isRevenue ? 'var(--sys-green)' : 'var(--sys-red)',
-                                        boxShadow: `0 8px 24px ${isRevenue ? 'rgba(52, 199, 89, 0.3)' : 'rgba(255, 59, 48, 0.3)'}`,
-                                    }}
-                                >
-                                    {isLoading ? 'Salvando...' : 'Salvar Lançamento'}
+                            <div className="pt-2 flex items-center gap-4">
+                                <button type="button" onClick={handleClose} className="flex-1 ios-btn-tinted">
+                                    Cancelar
+                                </button>
+                                <button type="submit" disabled={isLoading} className="flex-1 ios-btn">
+                                    {isLoading ? 'Salvando...' : 'Salvar'}
                                 </button>
                             </div>
                         </form>

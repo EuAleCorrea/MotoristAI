@@ -194,7 +194,7 @@ function EntryFormPage() {
  <button
  type="submit"
  disabled={isLoading}
- className="ios-btn"
+ className="flex-1 ios-btn"
  >
  {isLoading ? 'Salvando...' : 'Salvar'}
  </button>
@@ -205,3 +205,4 @@ function EntryFormPage() {
 }
 
 export default EntryFormPage;
+

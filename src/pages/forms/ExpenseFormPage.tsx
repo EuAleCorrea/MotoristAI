@@ -128,17 +128,17 @@ function ExpenseFormPage() {
  />
  </div>
 
- <div className="flex space-x-3 pt-4">
+ <div className="pt-6 flex items-center gap-4">
  <button
  type="button"
  onClick={() => navigate(-1)}
- className="flex-1 px-4 py-2 border border-[var(--ios-separator)] text-[var(--ios-text)] rounded-lg hover:bg-[var(--ios-bg)] "
+ className="flex-1 ios-btn-tinted"
  >
  Cancelar
  </button>
  <button
  type="submit"
- className="ios-btn"
+ className="flex-1 ios-btn"
  >
  Salvar
  </button>
@@ -150,3 +150,5 @@ function ExpenseFormPage() {
 }
 
 export default ExpenseFormPage;
+
+
