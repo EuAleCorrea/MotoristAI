@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Gauge, Plus, Edit2, Trash2, Check, X, Car, Calendar, FileText } from 'lucide-react';
 import { useOdometerStore, OdometerEntry } from '../../store/odometerStore';
 import { useVehicleStore } from '../../store/vehicleStore';
+import { AppSelect } from '../../components/forms/AppSelect';
 
 function OdometerPage() {
   const { entries, fetchEntries, addEntry, updateEntry, deleteEntry } = useOdometerStore();
@@ -109,18 +110,14 @@ function OdometerPage() {
         <label className="block text-sm font-medium text-[var(--ios-text-secondary)] mb-2">
           Selecione o veículo
         </label>
-        <select
+        <AppSelect
           value={selectedVehicleId}
-          onChange={(e) => setSelectedVehicleId(e.target.value)}
-          className="w-full px-4 py-3 rounded-xl border border-[var(--ios-separator)] bg-[var(--ios-card)] text-[var(--ios-text)] text-sm appearance-none"
-        >
-          <option value="">Todos os veículos</option>
-          {vehicles.map((v) => (
-            <option key={v.id} value={v.id}>
-              {v.brand} {v.model} {v.version || ''} ({v.year})
-            </option>
-          ))}
-        </select>
+          onValueChange={setSelectedVehicleId}
+          options={[
+            { value: '', label: 'Todos os veículos' },
+            ...vehicles.map((v) => ({ value: v.id, label: `${v.brand} ${v.model} ${v.version || ''} (${v.year})` }))
+          ]}
+        />
       </div>
 
       {/* Action Button / Form */}

@@ -7,6 +7,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import ConfirmModal from '../../components/ui/ConfirmModal';
 import { useState } from 'react';
+import { AppSelect } from '../../components/forms/AppSelect';
 
 const LANGUAGES = [
   { value: 'pt-BR', label: 'Português (Brasil)' },
@@ -57,15 +58,12 @@ const SelectField = ({ label, icon: Icon, value, options, onChange }: SelectFiel
       <Icon className="w-4 h-4" />
       <span>{label}</span>
     </div>
-    <select
+    <AppSelect
       value={value}
-      onChange={(e) => onChange(e.target.value)}
-      className="w-full bg-transparent text-base text-[var(--ios-text)] font-medium outline-none appearance-none cursor-pointer"
-    >
-      {options.map((opt) => (
-        <option key={opt.value} value={opt.value}>{opt.label}</option>
-      ))}
-    </select>
+      onValueChange={onChange}
+      options={options}
+      triggerClassName="border-none bg-transparent shadow-none px-0 py-0"
+    />
   </div>
 );
 

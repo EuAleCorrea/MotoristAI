@@ -3,6 +3,7 @@ import { Layers3, Plus, Edit2, Trash2, Check, X, Car, Tag } from 'lucide-react';
 import { usePlatformStore, Platform } from '../../store/platformStore';
 import { useCategoryStore, Category } from '../../store/categoryStore';
 import { useScrollReset } from '../../hooks/useScrollReset';
+import { AppSelect } from '../../components/forms/AppSelect';
 
 const PLATFORM_COLORS = [
  { id: 'bg-black', label: 'Preto', preview: 'bg-black' },
@@ -179,15 +180,12 @@ function PlatformsCategoriesPage() {
  className="flex-1 px-3 py-2 rounded-lg border border-[var(--ios-separator)] bg-[var(--ios-card)] text-[var(--ios-text)] text-sm"
  autoFocus
  />
- <select
- value={editingPlatformColor}
- onChange={(e) => setEditingPlatformColor(e.target.value)}
- className="px-3 py-2 rounded-lg border border-[var(--ios-separator)] bg-[var(--ios-card)] text-[var(--ios-text)] text-sm"
- >
- {PLATFORM_COLORS.map((c) => (
- <option key={c.id} value={c.id}>{c.label}</option>
- ))}
- </select>
+ <AppSelect
+    value={editingPlatformColor}
+    onValueChange={setEditingPlatformColor}
+    options={PLATFORM_COLORS.map((c) => ({ value: c.id, label: c.label }))}
+    className="w-32"
+  />
  <button onClick={handleSavePlatform} className="p-2 text-[var(--sys-green)] hover:bg-[rgba(52,199,89,0.08)] rounded-lg">
  <Check className="h-4 w-4" />
  </button>
@@ -234,15 +232,12 @@ function PlatformsCategoriesPage() {
  className="flex-1 px-3 py-2 rounded-lg border border-[var(--ios-separator)] bg-[var(--ios-card)] text-[var(--ios-text)] text-sm"
  autoFocus
  />
- <select
- value={newPlatformColor}
- onChange={(e) => setNewPlatformColor(e.target.value)}
- className="px-3 py-2 rounded-lg border border-[var(--ios-separator)] bg-[var(--ios-card)] text-[var(--ios-text)] text-sm"
- >
- {PLATFORM_COLORS.map((c) => (
- <option key={c.id} value={c.id}>{c.label}</option>
- ))}
- </select>
+ <AppSelect
+    value={newPlatformColor}
+    onValueChange={setNewPlatformColor}
+    options={PLATFORM_COLORS.map((c) => ({ value: c.id, label: c.label }))}
+    className="w-36"
+  />
  <button onClick={handleAddPlatform} className="p-2 text-[var(--sys-green)] hover:bg-[rgba(52,199,89,0.08)] rounded-lg">
  <Check className="h-4 w-4" />
  </button>

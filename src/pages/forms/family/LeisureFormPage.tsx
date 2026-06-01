@@ -96,9 +96,13 @@ const LeisureFormPage: React.FC = () => {
  <FormPageLayout title={isEditing ? 'Editar Despesa de Lazer' : 'Despesa de Lazer'} icon={Drama}>
  <form onSubmit={handleSubmit} className="space-y-6 pb-24">
  <FormSection title="Detalhes da Despesa">
- <FormSelect id="expenseType" label="Tipo de Despesa" value={expenseType} onChange={e => setExpenseType(e.target.value)}>
- {expenseTypeOptions.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
- </FormSelect>
+  <FormSelect
+    id="expenseType"
+    label="Tipo de Despesa"
+    value={expenseType}
+    onValueChange={setExpenseType}
+    options={expenseTypeOptions.map(opt => ({ value: opt.value, label: opt.label }))}
+  />
  <FormInput id="description" label="Descrição" type="text" placeholder="Ex: Jantar de aniversário" value={description} onChange={e => setDescription(e.target.value)} required />
  <FormInput id="location" label="Local / Serviço" type="text" placeholder="Ex: Restaurante Sabor Divino" value={location} onChange={e => setLocation(e.target.value)} required icon={<MapPin className="w-4 h-4 text-[var(--ios-text-tertiary)]" />} />
  <FormInput id="date" label="Data" type="date" value={date} onChange={e => setDate(e.target.value)} required icon={<Calendar className="w-4 h-4 text-[var(--ios-text-tertiary)]" />} />
@@ -109,10 +113,16 @@ const LeisureFormPage: React.FC = () => {
  <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
  <FormSection title="Detalhes Específicos">
  {expenseType === 'Streaming' && (
- <FormSelect id="periodicity" label="Periodicidade" value={periodicity} onChange={e => setPeriodicity(e.target.value as 'Mensal' | 'Anual')}>
- <option value="Mensal">Mensal</option>
- <option value="Anual">Anual</option>
- </FormSelect>
+  <FormSelect
+    id="periodicity"
+    label="Periodicidade"
+    value={periodicity}
+    onValueChange={(val) => setPeriodicity(val as 'Mensal' | 'Anual')}
+    options={[
+      { value: 'Mensal', label: 'Mensal' },
+      { value: 'Anual', label: 'Anual' },
+    ]}
+  />
  )}
  {expenseType === 'Viagem' && (
  <>
@@ -127,11 +137,17 @@ const LeisureFormPage: React.FC = () => {
 
  <FormSection title="Valores e Participantes">
  <MoneyInput id="totalValue" label="Valor Total (R$)" placeholder="0,00" value={totalValue} onChange={e => setTotalValue(e.target.value)} required icon={<span className="text-sm font-semibold text-[var(--ios-text-secondary)]">R$</span>} />
- <FormSelect id="paymentMethod" label="Forma de Pagamento" value={paymentMethod} onChange={e => setPaymentMethod(e.target.value)}>
- <option>Cartão</option>
- <option>Pix</option>
- <option>Dinheiro</option>
- </FormSelect>
+  <FormSelect
+    id="paymentMethod"
+    label="Forma de Pagamento"
+    value={paymentMethod}
+    onValueChange={setPaymentMethod}
+    options={[
+      { value: 'Cartão', label: 'Cartão' },
+      { value: 'Pix', label: 'Pix' },
+      { value: 'Dinheiro', label: 'Dinheiro' },
+    ]}
+  />
  <div className="md:col-span-2">
  <FormInput id="participants" label="Participantes (Opcional)" type="text" placeholder="Ex: Família toda, Casal" value={participants} onChange={e => setParticipants(e.target.value)} icon={<Users className="w-4 h-4 text-[var(--ios-text-tertiary)]" />} />
  </div>

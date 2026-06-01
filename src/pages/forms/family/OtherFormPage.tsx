@@ -81,17 +81,29 @@ const OtherFormPage: React.FC = () => {
  </FormSection>
 
  <FormSection title="Pagamento e Recorrência">
- <FormSelect id="paymentMethod" label="Forma de Pagamento" value={paymentMethod} onChange={e => setPaymentMethod(e.target.value)}>
- <option>Pix</option>
- <option>Cartão</option>
- <option>Dinheiro</option>
- <option>Outro</option>
- </FormSelect>
- <FormSelect id="recurrence" label="Recorrência" value={recurrence} onChange={e => setRecurrence(e.target.value)}>
- <option>Única</option>
- <option>Mensal</option>
- <option>Anual</option>
- </FormSelect>
+  <FormSelect
+    id="paymentMethod"
+    label="Forma de Pagamento"
+    value={paymentMethod}
+    onValueChange={setPaymentMethod}
+    options={[
+      { value: 'Pix', label: 'Pix' },
+      { value: 'Cartão', label: 'Cartão' },
+      { value: 'Dinheiro', label: 'Dinheiro' },
+      { value: 'Outro', label: 'Outro' },
+    ]}
+  />
+  <FormSelect
+    id="recurrence"
+    label="Recorrência"
+    value={recurrence}
+    onValueChange={setRecurrence}
+    options={[
+      { value: 'Única', label: 'Única' },
+      { value: 'Mensal', label: 'Mensal' },
+      { value: 'Anual', label: 'Anual' },
+    ]}
+  />
  </FormSection>
 
  <FormSection title="Observações">

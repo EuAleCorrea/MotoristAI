@@ -7,6 +7,7 @@ import { Plus, Calendar, DollarSign, TrendingUp, TrendingDown, Edit2, Trash2, Ch
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { formatCurrency } from '../utils/formatters';
+import { AppSelect } from '../components/forms/AppSelect';
 
 const currentYear = new Date().getFullYear();
 const years = Array.from({ length: 5 }, (_, i) => currentYear - 2 + i);
@@ -65,23 +66,13 @@ function Goals() {
       </div>
 
       {/* Year Filter */}
-      <div className="relative mb-4">
-        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
-          <Calendar className="h-4 w-4 text-[var(--ios-text-tertiary)]" />
-        </div>
-        <select
-          value={selectedYear}
-          onChange={(e) => setSelectedYear(Number(e.target.value))}
-          className="w-full pl-10 pr-8 py-2.5 border border-[var(--ios-separator)] rounded-xl bg-[var(--ios-card)] text-[var(--ios-text)] text-sm appearance-none focus:ring-2 focus:ring-primary-500 focus:border-transparent shadow-sm"
-        >
-          {years.map((y) => (
-            <option key={y} value={y}>Ano: {y}</option>
-          ))}
-        </select>
-        <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none z-10">
-          <ChevronDown className="h-4 w-4 text-[var(--ios-text-tertiary)]" />
-        </div>
-      </div>
+      <AppSelect
+        value={selectedYear.toString()}
+        onValueChange={(val) => setSelectedYear(Number(val))}
+        options={years.map((y) => ({ value: y.toString(), label: `Ano: ${y}` }))}
+        icon={<Calendar className="h-4 w-4" />}
+        className="mb-4"
+      />
 
       {/* Segmented Tabs */}
       <div className="relative flex rounded-ios p-0.5 mb-6" style={{ backgroundColor: 'var(--ios-fill)' }}>

@@ -8,6 +8,7 @@ import { Calendar } from 'lucide-react';
 import { formatCurrency, formatChartCurrency } from '../utils/formatters';
 
 import { useScrollReset } from '../hooks/useScrollReset';
+import { AppSelect } from '../components/forms/AppSelect';
 
 function Analytics() {
   const entries = useEntryStore((state) => state.entries);
@@ -192,18 +193,17 @@ function Analytics() {
  Visualize tendências e padrões nos seus ganhos
  </p>
  </div>
- <div className="mt-4 sm:mt-0 flex items-center space-x-2">
- <Calendar className="h-5 w-5 text-[var(--ios-text-tertiary)]" />
- <select
- value={selectedPeriod}
- onChange={(e) => setSelectedPeriod(e.target.value)}
- className="px-4 py-2 border border-[var(--ios-separator)] rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
- >
- <option value="3months">Últimos 3 meses</option>
- <option value="6months">Últimos 6 meses</option>
- <option value="12months">Últimos 12 meses</option>
- </select>
- </div>
+  <AppSelect
+    value={selectedPeriod}
+    onValueChange={setSelectedPeriod}
+    options={[
+      { value: '3months', label: 'Últimos 3 meses' },
+      { value: '6months', label: 'Últimos 6 meses' },
+      { value: '12months', label: 'Últimos 12 meses' },
+    ]}
+    icon={<Calendar className="h-5 w-5" />}
+    triggerClassName="px-4 py-2"
+  />
  </div>
 
  <div className="bg-[var(--ios-card)] rounded-lg shadow-sm p-6">

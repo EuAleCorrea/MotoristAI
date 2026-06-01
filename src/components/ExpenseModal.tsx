@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { X } from 'lucide-react';
 import { useExpenseStore } from '../store/expenseStore';
+import { AppSelect } from './forms/AppSelect';
 
 /*
  * ExpenseModal — Apple HIG Bottom Sheet
@@ -84,23 +85,22 @@ function ExpenseModal({ expense, onClose }: ExpenseModalProps) {
 
  {/* Form — inset grouped style */}
  <form onSubmit={handleSubmit} className="px-4 pb-6 space-y-4">
- <div>
- <label className={labelClass}>Categoria</label>
- <select
- id="expense-category"
- value={formData.category}
- onChange={(e) => setFormData({ ...formData, category: e.target.value })}
- className={selectClass}
- required
- >
- <option value="Combustível">Combustível</option>
- <option value="Manutenção">Manutenção</option>
- <option value="Alimentação">Alimentação</option>
- <option value="Estacionamento">Estacionamento</option>
- <option value="Pedágio">Pedágio</option>
- <option value="Outros">Outros</option>
- </select>
- </div>
+    <div>
+      <label className={labelClass}>Categoria</label>
+      <AppSelect
+        id="expense-category"
+        value={formData.category}
+        onValueChange={(val) => setFormData({ ...formData, category: val })}
+        options={[
+          { value: 'Combustível', label: 'Combustível' },
+          { value: 'Manutenção', label: 'Manutenção' },
+          { value: 'Alimentação', label: 'Alimentação' },
+          { value: 'Estacionamento', label: 'Estacionamento' },
+          { value: 'Pedágio', label: 'Pedágio' },
+          { value: 'Outros', label: 'Outros' },
+        ]}
+      />
+    </div>
 
  <div>
  <label className={labelClass}>Descrição</label>

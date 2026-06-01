@@ -1,6 +1,8 @@
+import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { useRecurrenceStore, Recurrence, Installment, getFrequencyLabel, getPaymentMethodLabel } from '../../store/recurrenceStore';
 import { useScrollReset } from '../../hooks/useScrollReset';
+import { AppSelect } from '../../components/forms/AppSelect';
 
 type Tab = 'recurrences' | 'installments';
 
@@ -39,11 +41,31 @@ function Input(props: React.InputHTMLAttributes<HTMLInputElement>) {
   );
 }
 
-function Select(props: React.SelectHTMLAttributes<HTMLSelectElement>) {
+function Select({ children, value, onChange, ...props }: any) {
+  const options = React.Children.toArray(children)
+    .map((child: any) => {
+      if (React.isValidElement(child) && (child.type === 'option' || (child.props && child.props.value !== undefined))) {
+        return {
+          value: child.props.value !== undefined ? child.props.value : String(child.props.children || ''),
+          label: String(child.props.children || child.props.value || ''),
+        };
+      }
+      return null;
+    })
+    .filter((opt): opt is { value: string; label: string } => opt !== null);
+
+  const handleValueChange = (val: string) => {
+    if (onChange) {
+      onChange({ target: { value: val } } as any);
+    }
+  };
+
   return (
-    <select
-      className="w-full px-3 py-2 rounded-lg border border-[var(--ios-border)] bg-[var(--ios-bg)] text-[var(--ios-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ios-blue)]"
-      {...props}
+    <AppSelect
+      value={value ? String(value) : ''}
+      onValueChange={handleValueChange}
+      options={options}
+      disabled={props.disabled}
     />
   );
 }

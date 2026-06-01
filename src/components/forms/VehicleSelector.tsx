@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useVehicleStore } from '../../store/vehicleStore';
 import { Car } from 'lucide-react';
+import { AppSelect } from './AppSelect';
 
 interface VehicleSelectorProps {
   value: string;
@@ -9,7 +10,7 @@ interface VehicleSelectorProps {
 }
 
 /**
- * Seletor de veículos — busca da store e exibe como select estilizado
+ * Seletor de veículos — busca da store e exibe como DropdownMenu shadcn estilizado
  * Usa o design system iOS via variáveis CSS
  */
 export default function VehicleSelector({ value, onChange, label = 'Veículo' }: VehicleSelectorProps) {
@@ -21,39 +22,34 @@ export default function VehicleSelector({ value, onChange, label = 'Veículo' }:
     }
   }, [fetchVehicles, vehicles.length]);
 
+  const placeholder = isLoading
+    ? 'Carregando veículos...'
+    : vehicles.length === 0
+    ? 'Nenhum veículo cadastrado'
+    : 'Selecione um veículo';
+
+  const options = vehicles.map((v) => ({
+    value: v.id,
+    label: `${v.brand} ${v.model} ${v.year}${v.color ? ` — ${v.color}` : ''}`,
+  }));
+
   return (
     <div>
       <label className="block text-sm font-medium text-[var(--ios-text)] mb-1">
         {label}
       </label>
-      <div className="relative">
-        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <Car className="h-4 w-4 text-[var(--ios-text-tertiary)]" />
-        </div>
-        <select
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          className="w-full pl-10 pr-4 py-2 border border-[var(--ios-separator)] rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent appearance-none bg-[var(--ios-card)] text-[var(--ios-text)]"
-          required
-        >
-          <option value="" disabled>
-            {isLoading ? 'Carregando veículos...' : 'Selecione um veículo'}
-          </option>
-          {vehicles.map((v) => (
-            <option key={v.id} value={v.id}>
-              {v.brand} {v.model} {v.year} — {v.color ? `${v.color}` : ''}
-            </option>
-          ))}
-          {vehicles.length === 0 && !isLoading && (
-            <option value="" disabled>
-              Nenhum veículo cadastrado. Vá em Ajustes &gt; Veículos
-            </option>
-          )}
-        </select>
-      </div>
+      <AppSelect
+        value={value}
+        onValueChange={onChange}
+        options={options}
+        placeholder={placeholder}
+        icon={<Car className="h-4 w-4" />}
+        disabled={isLoading || vehicles.length === 0}
+      />
       {vehicles.length === 0 && !isLoading && (
         <p className="text-xs text-[var(--ios-text-tertiary)] mt-1">
-          Cadastre um veículo em <button
+          Cadastre um veículo em{' '}
+          <button
             type="button"
             onClick={() => window.location.href = '/cadastros/veiculos'}
             className="text-[var(--ios-accent)] underline"

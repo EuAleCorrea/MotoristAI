@@ -4,6 +4,7 @@ import { useExpenseStore } from '../../store/expenseStore';
 import { useGoalStore } from '../../store/goalStore';
 import { getYearInterval, hhmmToHours } from '../../utils/dateHelpers';
 import PeriodSummary, { PeriodData } from './PeriodSummary';
+import { AppSelect } from '../forms/AppSelect';
 
 const currentYear = new Date().getFullYear();
 const years = Array.from({ length: 5 }, (_, i) => currentYear - 4 + i);
@@ -55,13 +56,12 @@ function AnnualView({ selectedVehicleId }: AnnualViewProps) {
  <div className="space-y-6">
  <div className="bg-[var(--ios-card)] rounded-lg shadow-sm p-4 flex flex-wrap justify-between md:justify-start items-center gap-4">
  <h2 className="text-lg font-semibold text-[var(--ios-text)] ">Resumo Anual</h2>
- <select
- value={selectedYear}
- onChange={(e) => setSelectedYear(Number(e.target.value))}
- className="px-3 py-2 border border-[var(--ios-separator)] rounded-lg text-sm focus:ring-2 focus:ring-primary-500 h-10 bg-[var(--ios-card)] "
- >
- {years.map(y => <option key={y} value={y}>{y}</option>)}
- </select>
+      <AppSelect
+        value={String(selectedYear)}
+        onValueChange={(val) => setSelectedYear(Number(val))}
+        className="w-28"
+        options={years.map(y => ({ value: String(y), label: String(y) }))}
+      />
  </div>
  <PeriodSummary periodData={annualData} />
  </div>

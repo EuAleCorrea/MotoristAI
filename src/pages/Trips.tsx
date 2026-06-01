@@ -9,6 +9,7 @@ import { exportToCsv, formatDateBR, formatCurrencyBR } from '../utils/exportCsv'
 
 import { useScrollReset } from '../hooks/useScrollReset';
 import ConfirmModal from '../components/ui/ConfirmModal';
+import { AppSelect } from '../components/forms/AppSelect';
 
 function Trips() {
   const { trips, deleteTrip, fetchTrips } = useTripStore();
@@ -154,21 +155,15 @@ function Trips() {
  className="w-full pl-10 pr-4 py-2 border border-[var(--ios-separator)] rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-[var(--ios-card)] "
  />
  </div>
- <div className="relative">
- <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-[var(--ios-text-tertiary)]" />
- <select
- value={platformFilter}
- onChange={(e) => setPlatformFilter(e.target.value)}
- className="w-full pl-10 pr-4 py-2 border border-[var(--ios-separator)] rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent appearance-none bg-[var(--ios-card)] "
- >
- <option value="all">Todas as Plataformas</option>
- {platforms.map((platform) => (
- <option key={platform} value={platform}>
- {platform}
- </option>
- ))}
- </select>
- </div>
+  <AppSelect
+    value={platformFilter}
+    onValueChange={setPlatformFilter}
+    options={[
+      { value: 'all', label: 'Todas as Plataformas' },
+      ...platforms.map(platform => ({ value: platform, label: platform }))
+    ]}
+    icon={<Filter className="h-5 w-5" />}
+  />
  </div>
  </div>
 

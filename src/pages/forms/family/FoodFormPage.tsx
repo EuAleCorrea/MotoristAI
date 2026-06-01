@@ -76,14 +76,20 @@ const FoodFormPage: React.FC = () => {
  <FormPageLayout title={isEditing ? 'Editar Despesa de Alimentação' : 'Despesa de Alimentação'} icon={ShoppingCart}>
  <form onSubmit={handleSubmit} className="space-y-6 pb-24">
  <FormSection title="Detalhes da Compra">
- <FormSelect id="expenseType" label="Tipo de Despesa" value={expenseType} onChange={e => setExpenseType(e.target.value)}>
- <option>Supermercado</option>
- <option>Delivery</option>
- <option>Restaurante</option>
- <option>Alimentação escolar</option>
- <option>Assinaturas</option>
- <option>Outros</option>
- </FormSelect>
+  <FormSelect
+    id="expenseType"
+    label="Tipo de Despesa"
+    value={expenseType}
+    onValueChange={setExpenseType}
+    options={[
+      { value: 'Supermercado', label: 'Supermercado' },
+      { value: 'Delivery', label: 'Delivery' },
+      { value: 'Restaurante', label: 'Restaurante' },
+      { value: 'Alimentação escolar', label: 'Alimentação escolar' },
+      { value: 'Assinaturas', label: 'Assinaturas' },
+      { value: 'Outros', label: 'Outros' },
+    ]}
+  />
  <FormInput id="description" label="Descrição" type="text" placeholder="Ex: Compras do mês" value={description} onChange={e => setDescription(e.target.value)} required />
  <FormInput id="location" label="Local / Estabelecimento" type="text" placeholder="Ex: Supermercado Central" value={location} onChange={e => setLocation(e.target.value)} required icon={<MapPin className="w-4 h-4 text-[var(--ios-text-tertiary)]" />} />
  <FormInput id="purchaseDate" label="Data da Compra" type="date" value={purchaseDate} onChange={e => setPurchaseDate(e.target.value)} required icon={<Calendar className="w-4 h-4 text-[var(--ios-text-tertiary)]" />} />
@@ -91,17 +97,29 @@ const FoodFormPage: React.FC = () => {
 
  <FormSection title="Valores e Pagamento">
  <MoneyInput id="totalValue" label="Valor Total (R$)" placeholder="0,00" value={totalValue} onChange={e => setTotalValue(e.target.value)} required icon={<span className="text-sm font-semibold text-[var(--ios-text-secondary)]">R$</span>} />
- <FormSelect id="paymentMethod" label="Forma de Pagamento" value={paymentMethod} onChange={e => setPaymentMethod(e.target.value)}>
- <option>Cartão</option>
- <option>Pix</option>
- <option>Dinheiro</option>
- <option>Vale-alimentação</option>
- </FormSelect>
- <FormSelect id="recurrence" label="Recorrência" value={recurrence} onChange={e => setRecurrence(e.target.value)}>
- <option>Única</option>
- <option>Semanal</option>
- <option>Mensal</option>
- </FormSelect>
+  <FormSelect
+    id="paymentMethod"
+    label="Forma de Pagamento"
+    value={paymentMethod}
+    onValueChange={setPaymentMethod}
+    options={[
+      { value: 'Cartão', label: 'Cartão' },
+      { value: 'Pix', label: 'Pix' },
+      { value: 'Dinheiro', label: 'Dinheiro' },
+      { value: 'Vale-alimentação', label: 'Vale-alimentação' },
+    ]}
+  />
+  <FormSelect
+    id="recurrence"
+    label="Recorrência"
+    value={recurrence}
+    onValueChange={setRecurrence}
+    options={[
+      { value: 'Única', label: 'Única' },
+      { value: 'Semanal', label: 'Semanal' },
+      { value: 'Mensal', label: 'Mensal' },
+    ]}
+  />
  </FormSection>
 
  <FormSection title="Itens e Observações">

@@ -15,6 +15,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { useScrollReset } from '../../hooks/useScrollReset';
 import PageHeader from '../../components/PageHeader';
+import { AppSelect } from '../../components/forms/AppSelect';
 
 // ─── Modal de formulário ──────────────────────────────────────
 
@@ -165,43 +166,43 @@ const AddRecurrenceModal = ({ isOpen, onClose, onSubmit, vehicles }: AddRecurren
             </div>
             <div>
               <label className="text-sm text-[var(--ios-text-secondary)]">Categoria</label>
-              <select
+              <AppSelect
                 value={form.category}
-                onChange={(e) => setForm({ ...form, category: e.target.value })}
-                className="w-full bg-[#f2f2f7] dark:bg-[#2c2c2e] rounded-xl px-4 py-3 text-[var(--ios-text)] outline-none mt-1"
-              >
-                <option value="">Selecione</option>
-                {CATEGORIES.map((cat) => (
-                  <option key={cat} value={cat}>{cat}</option>
-                ))}
-              </select>
+                onValueChange={(val) => setForm({ ...form, category: val })}
+                options={[
+                  { value: '', label: 'Selecione' },
+                  ...CATEGORIES.map((cat) => ({ value: cat, label: cat }))
+                ]}
+                className="mt-1"
+                triggerClassName="bg-[#f2f2f7] dark:bg-[#2c2c2e] border-none shadow-none rounded-xl"
+              />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="text-sm text-[var(--ios-text-secondary)]">Tipo</label>
-              <select
+              <AppSelect
                 value={form.type}
-                onChange={(e) => setForm({ ...form, type: e.target.value as any })}
-                className="w-full bg-[#f2f2f7] dark:bg-[#2c2c2e] rounded-xl px-4 py-3 text-[var(--ios-text)] outline-none mt-1"
-              >
-                <option value="general">Geral</option>
-                <option value="vehicle">Veículo</option>
-                <option value="family">Família</option>
-              </select>
+                onValueChange={(val) => setForm({ ...form, type: val as any })}
+                options={[
+                  { value: 'general', label: 'Geral' },
+                  { value: 'vehicle', label: 'Veículo' },
+                  { value: 'family', label: 'Família' },
+                ]}
+                className="mt-1"
+                triggerClassName="bg-[#f2f2f7] dark:bg-[#2c2c2e] border-none shadow-none rounded-xl"
+              />
             </div>
             <div>
               <label className="text-sm text-[var(--ios-text-secondary)]">Frequência</label>
-              <select
+              <AppSelect
                 value={form.frequency}
-                onChange={(e) => setForm({ ...form, frequency: e.target.value })}
-                className="w-full bg-[#f2f2f7] dark:bg-[#2c2c2e] rounded-xl px-4 py-3 text-[var(--ios-text)] outline-none mt-1"
-              >
-                {FREQUENCIES.map((f) => (
-                  <option key={f.value} value={f.value}>{f.label}</option>
-                ))}
-              </select>
+                onValueChange={(val) => setForm({ ...form, frequency: val })}
+                options={FREQUENCIES.map((f) => ({ value: f.value, label: f.label }))}
+                className="mt-1"
+                triggerClassName="bg-[#f2f2f7] dark:bg-[#2c2c2e] border-none shadow-none rounded-xl"
+              />
             </div>
           </div>
 
@@ -233,16 +234,16 @@ const AddRecurrenceModal = ({ isOpen, onClose, onSubmit, vehicles }: AddRecurren
           {form.type === 'vehicle' && (
             <div>
               <label className="text-sm text-[var(--ios-text-secondary)]">Veículo</label>
-              <select
+              <AppSelect
                 value={form.vehicle_id}
-                onChange={(e) => setForm({ ...form, vehicle_id: e.target.value })}
-                className="w-full bg-[#f2f2f7] dark:bg-[#2c2c2e] rounded-xl px-4 py-3 text-[var(--ios-text)] outline-none mt-1"
-              >
-                <option value="">Nenhum</option>
-                {vehicles.map((v) => (
-                  <option key={v.id} value={v.id}>{v.name}</option>
-                ))}
-              </select>
+                onValueChange={(val) => setForm({ ...form, vehicle_id: val })}
+                options={[
+                  { value: '', label: 'Nenhum' },
+                  ...vehicles.map((v) => ({ value: v.id, label: v.name }))
+                ]}
+                className="mt-1"
+                triggerClassName="bg-[#f2f2f7] dark:bg-[#2c2c2e] border-none shadow-none rounded-xl"
+              />
             </div>
           )}
 
@@ -406,44 +407,42 @@ const AddInstallmentModal = ({ isOpen, onClose, onSubmit, vehicles }: AddInstall
             </div>
             <div>
               <label className="text-sm text-[var(--ios-text-secondary)]">Pagamento</label>
-              <select
+              <AppSelect
                 value={form.payment_method}
-                onChange={(e) => setForm({ ...form, payment_method: e.target.value })}
-                className="w-full bg-[#f2f2f7] dark:bg-[#2c2c2e] rounded-xl px-4 py-3 text-[var(--ios-text)] outline-none mt-1"
-              >
-                {PAYMENT_METHODS.map((m) => (
-                  <option key={m.value} value={m.value}>{m.label}</option>
-                ))}
-              </select>
+                onValueChange={(val) => setForm({ ...form, payment_method: val })}
+                options={PAYMENT_METHODS.map((m) => ({ value: m.value, label: m.label }))}
+                className="mt-1"
+                triggerClassName="bg-[#f2f2f7] dark:bg-[#2c2c2e] border-none shadow-none rounded-xl"
+              />
             </div>
           </div>
 
           <div>
             <label className="text-sm text-[var(--ios-text-secondary)]">Categoria</label>
-            <select
+            <AppSelect
               value={form.category}
-              onChange={(e) => setForm({ ...form, category: e.target.value })}
-              className="w-full bg-[#f2f2f7] dark:bg-[#2c2c2e] rounded-xl px-4 py-3 text-[var(--ios-text)] outline-none mt-1"
-            >
-              <option value="">Selecione</option>
-              {CATEGORIES.map((cat) => (
-                <option key={cat} value={cat}>{cat}</option>
-              ))}
-            </select>
+              onValueChange={(val) => setForm({ ...form, category: val })}
+              options={[
+                { value: '', label: 'Selecione' },
+                ...CATEGORIES.map((cat) => ({ value: cat, label: cat }))
+              ]}
+              className="mt-1"
+              triggerClassName="bg-[#f2f2f7] dark:bg-[#2c2c2e] border-none shadow-none rounded-xl"
+            />
           </div>
 
           <div>
             <label className="text-sm text-[var(--ios-text-secondary)]">Veículo (opcional)</label>
-            <select
+            <AppSelect
               value={form.vehicle_id}
-              onChange={(e) => setForm({ ...form, vehicle_id: e.target.value })}
-              className="w-full bg-[#f2f2f7] dark:bg-[#2c2c2e] rounded-xl px-4 py-3 text-[var(--ios-text)] outline-none mt-1"
-            >
-              <option value="">Nenhum</option>
-              {vehicles.map((v) => (
-                <option key={v.id} value={v.id}>{v.name}</option>
-              ))}
-            </select>
+              onValueChange={(val) => setForm({ ...form, vehicle_id: val })}
+              options={[
+                { value: '', label: 'Nenhum' },
+                ...vehicles.map((v) => ({ value: v.id, label: v.name }))
+              ]}
+              className="mt-1"
+              triggerClassName="bg-[#f2f2f7] dark:bg-[#2c2c2e] border-none shadow-none rounded-xl"
+            />
           </div>
 
           <div>

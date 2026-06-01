@@ -162,9 +162,7 @@ const EnergyFuelFormPage: React.FC = () => {
  <div className="bg-[var(--ios-card)] rounded-xl shadow-sm p-4 sm:p-6">
  <div className="flex justify-between items-start mb-6">
  <div className="flex-1">
- <FormSelect id="fuelType" name="fuelType" label="Tipo de Combustível/Energia" value={fuelType} onChange={(e) => setFuelType(e.target.value as FuelType)}>
- {fuelTypeOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
- </FormSelect>
+  <FormSelect id="fuelType" label="Tipo de Combustível/Energia" value={fuelType} onValueChange={(val) => setFuelType(val as FuelType)} options={fuelTypeOptions.map(opt => ({ value: opt, label: opt }))} />
  </div>
  <div className="pl-4 pt-8">
  {getIconForFuelType()}

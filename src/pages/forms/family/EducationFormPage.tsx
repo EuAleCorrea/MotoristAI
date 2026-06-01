@@ -85,14 +85,20 @@ const EducationFormPage: React.FC = () => {
  <FormPageLayout title={isEditing ? 'Editar Despesa de Educação' : 'Despesa de Educação'} icon={GraduationCap}>
  <form onSubmit={handleSubmit} className="space-y-6 pb-24">
  <FormSection title="Detalhes da Despesa">
- <FormSelect id="expenseType" label="Tipo de Despesa" value={expenseType} onChange={e => setExpenseType(e.target.value)}>
- <option>Mensalidade</option>
- <option>Material escolar</option>
- <option>Curso</option>
- <option>Transporte escolar</option>
- <option>Uniforme</option>
- <option>Outros</option>
- </FormSelect>
+  <FormSelect
+    id="expenseType"
+    label="Tipo de Despesa"
+    value={expenseType}
+    onValueChange={setExpenseType}
+    options={[
+      { value: 'Mensalidade', label: 'Mensalidade' },
+      { value: 'Material escolar', label: 'Material escolar' },
+      { value: 'Curso', label: 'Curso' },
+      { value: 'Transporte escolar', label: 'Transporte escolar' },
+      { value: 'Uniforme', label: 'Uniforme' },
+      { value: 'Outros', label: 'Outros' },
+    ]}
+  />
  <FormInput id="institution" label="Instituição / Escola / Curso" type="text" placeholder="Ex: Colégio Aprender" value={institution} onChange={e => setInstitution(e.target.value)} required icon={<Building className="w-4 h-4 text-[var(--ios-text-tertiary)]" />} />
  <div className="md:col-span-2">
  <FormInput id="description" label="Descrição" type="text" placeholder="Ex: Mensalidade de Março" value={description} onChange={e => setDescription(e.target.value)} required />
@@ -103,24 +109,43 @@ const EducationFormPage: React.FC = () => {
  <MoneyInput id="totalValue" label="Valor (R$)" placeholder="0,00" value={totalValue} onChange={e => setTotalValue(e.target.value)} required icon={<span className="text-sm font-semibold text-[var(--ios-text-secondary)]">R$</span>} />
  <FormInput id="dueDate" label="Data de Vencimento" type="date" value={dueDate} onChange={e => setDueDate(e.target.value)} required icon={<Calendar className="w-4 h-4 text-[var(--ios-text-tertiary)]" />} />
  <FormInput id="paymentDate" label="Data de Pagamento (Opcional)" type="date" value={paymentDate} onChange={e => setPaymentDate(e.target.value)} icon={<Calendar className="w-4 h-4 text-[var(--ios-text-tertiary)]" />} />
- <FormSelect id="status" label="Status" value={status} onChange={() => { }} disabled>
- <option>Pendente</option>
- <option>Pago</option>
- </FormSelect>
+  <FormSelect
+    id="status"
+    label="Status"
+    value={status}
+    onValueChange={() => { }}
+    disabled
+    options={[
+      { value: 'Pendente', label: 'Pendente' },
+      { value: 'Pago', label: 'Pago' },
+    ]}
+  />
  </FormSection>
 
  <FormSection title="Pagamento e Recorrência">
- <FormSelect id="paymentMethod" label="Forma de Pagamento" value={paymentMethod} onChange={e => setPaymentMethod(e.target.value)}>
- <option>Boleto</option>
- <option>Pix</option>
- <option>Cartão</option>
- <option>Transferência</option>
- </FormSelect>
- <FormSelect id="recurrence" label="Recorrência" value={recurrence} onChange={e => setRecurrence(e.target.value)}>
- <option>Única</option>
- <option>Mensal</option>
- <option>Anual</option>
- </FormSelect>
+  <FormSelect
+    id="paymentMethod"
+    label="Forma de Pagamento"
+    value={paymentMethod}
+    onValueChange={setPaymentMethod}
+    options={[
+      { value: 'Boleto', label: 'Boleto' },
+      { value: 'Pix', label: 'Pix' },
+      { value: 'Cartão', label: 'Cartão' },
+      { value: 'Transferência', label: 'Transferência' },
+    ]}
+  />
+  <FormSelect
+    id="recurrence"
+    label="Recorrência"
+    value={recurrence}
+    onValueChange={setRecurrence}
+    options={[
+      { value: 'Única', label: 'Única' },
+      { value: 'Mensal', label: 'Mensal' },
+      { value: 'Anual', label: 'Anual' },
+    ]}
+  />
  <FormTextArea id="notes" label="Observações Adicionais" placeholder="Detalhes sobre a despesa..." value={notes} onChange={e => setNotes(e.target.value)} />
  </FormSection>
 

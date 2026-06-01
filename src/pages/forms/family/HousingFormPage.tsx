@@ -89,38 +89,62 @@ const HousingFormPage: React.FC = () => {
  <FormPageLayout title={isEditing ? 'Editar Despesa de Moradia' : 'Despesa de Moradia'} icon={Home}>
  <form onSubmit={handleSubmit} className="space-y-6 pb-24">
  <FormSection title="Detalhes da Despesa">
- <FormSelect id="expenseType" label="Tipo de Despesa" value={expenseType} onChange={e => setExpenseType(e.target.value)}>
- <option>Aluguel</option>
- <option>Financiamento</option>
- <option>Condomínio</option>
- <option>Energia</option>
- <option>Água</option>
- <option>Internet</option>
- <option>Manutenção</option>
- <option>Outros</option>
- </FormSelect>
+  <FormSelect
+    id="expenseType"
+    label="Tipo de Despesa"
+    value={expenseType}
+    onValueChange={setExpenseType}
+    options={[
+      { value: 'Aluguel', label: 'Aluguel' },
+      { value: 'Financiamento', label: 'Financiamento' },
+      { value: 'Condomínio', label: 'Condomínio' },
+      { value: 'Energia', label: 'Energia' },
+      { value: 'Água', label: 'Água' },
+      { value: 'Internet', label: 'Internet' },
+      { value: 'Manutenção', label: 'Manutenção' },
+      { value: 'Outros', label: 'Outros' },
+    ]}
+  />
  <FormInput id="description" label="Descrição" type="text" placeholder="Ex: Conta de luz" value={description} onChange={e => setDescription(e.target.value)} required />
  <MoneyInput id="totalValue" label="Valor (R$)" placeholder="0,00" value={totalValue} onChange={e => setTotalValue(e.target.value)} required icon={<span className="text-sm font-semibold text-[var(--ios-text-secondary)]">R$</span>} />
- <FormSelect id="recurrence" label="Recorrência" value={recurrence} onChange={e => setRecurrence(e.target.value)}>
- <option>Única</option>
- <option>Mensal</option>
- <option>Anual</option>
- </FormSelect>
+  <FormSelect
+    id="recurrence"
+    label="Recorrência"
+    value={recurrence}
+    onValueChange={setRecurrence}
+    options={[
+      { value: 'Única', label: 'Única' },
+      { value: 'Mensal', label: 'Mensal' },
+      { value: 'Anual', label: 'Anual' },
+    ]}
+  />
  </FormSection>
 
  <FormSection title="Pagamento e Prazos">
  <FormInput id="dueDate" label="Data de Vencimento" type="date" value={dueDate} onChange={e => setDueDate(e.target.value)} required icon={<Calendar className="w-4 h-4 text-[var(--ios-text-tertiary)]" />} />
  <FormInput id="paymentDate" label="Data de Pagamento (Opcional)" type="date" value={paymentDate} onChange={e => setPaymentDate(e.target.value)} icon={<Calendar className="w-4 h-4 text-[var(--ios-text-tertiary)]" />} />
- <FormSelect id="status" label="Status" value={status} onChange={e => setStatus(e.target.value as Status)}>
- <option>Pendente</option>
- <option>Pago</option>
- </FormSelect>
- <FormSelect id="paymentMethod" label="Forma de Pagamento" value={paymentMethod} onChange={e => setPaymentMethod(e.target.value)}>
- <option>Pix</option>
- <option>Cartão</option>
- <option>Débito automático</option>
- <option>Dinheiro</option>
- </FormSelect>
+  <FormSelect
+    id="status"
+    label="Status"
+    value={status}
+    onValueChange={(val) => setStatus(val as Status)}
+    options={[
+      { value: 'Pendente', label: 'Pendente' },
+      { value: 'Pago', label: 'Pago' },
+    ]}
+  />
+  <FormSelect
+    id="paymentMethod"
+    label="Forma de Pagamento"
+    value={paymentMethod}
+    onValueChange={setPaymentMethod}
+    options={[
+      { value: 'Pix', label: 'Pix' },
+      { value: 'Cartão', label: 'Cartão' },
+      { value: 'Débito automático', label: 'Débito automático' },
+      { value: 'Dinheiro', label: 'Dinheiro' },
+    ]}
+  />
  </FormSection>
 
  <FormSection title="Observações">

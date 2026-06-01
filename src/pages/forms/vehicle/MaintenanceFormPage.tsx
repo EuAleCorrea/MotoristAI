@@ -117,14 +117,20 @@ const MaintenanceFormPage: React.FC = () => {
  <form onSubmit={handleSubmit} className="space-y-6 pb-24">
  <FormSection title="Detalhes do Serviço">
  <VehicleSelector value={vehicleId} onChange={setVehicleId} />
- <FormSelect id="maintenanceType" name="maintenanceType" label="Tipo de Manutenção" value={maintenanceType} onChange={e => setMaintenanceType(e.target.value)}>
- <option>Revisão</option>
- <option>Troca de óleo</option>
- <option>Pneus</option>
- <option>Freios</option>
- <option>Bateria</option>
- <option>Outros</option>
- </FormSelect>
+ <FormSelect
+    id="maintenanceType"
+    label="Tipo de Manutenção"
+    value={maintenanceType}
+    onValueChange={setMaintenanceType}
+    options={[
+      { value: 'Revisão', label: 'Revisão' },
+      { value: 'Troca de óleo', label: 'Troca de óleo' },
+      { value: 'Pneus', label: 'Pneus' },
+      { value: 'Freios', label: 'Freios' },
+      { value: 'Bateria', label: 'Bateria' },
+      { value: 'Outros', label: 'Outros' },
+    ]}
+  />
  <FormInput id="date" name="date" label="Data do Serviço" type="date" value={date} onChange={e => setDate(e.target.value)} required icon={<Calendar className="w-4 h-4 text-[var(--ios-text-tertiary)]" />} />
  <FormInput id="provider" name="provider" label="Oficina / Local" type="text" placeholder="Ex: Oficina do Zé" value={provider} onChange={e => setProvider(e.target.value)} required icon={<Building className="w-4 h-4 text-[var(--ios-text-tertiary)]" />} />
  <FormTextArea id="partsReplaced" name="partsReplaced" label="Itens Substituídos" placeholder="Ex: Filtro de ar, pastilhas de freio" value={partsReplaced} onChange={e => setPartsReplaced(e.target.value)} />

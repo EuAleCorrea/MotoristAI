@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Bell, BellOff, Clock, Sun, Moon, AlertCircle, CheckCircle } from 'lucide-react';
 import { useNotificationReminder } from '../hooks/useNotificationReminder';
+import { AppSelect } from './forms/AppSelect';
 
 const DAY_LABELS = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 const DAY_LABELS_FULL = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
@@ -126,29 +127,25 @@ export default function NotificationReminderSettings() {
               Horário do lembrete
             </label>
             <div className="flex gap-2">
-              <select
-                value={settings.hour}
-                onChange={(e) => updateSettings({ hour: Number(e.target.value) })}
-                className="flex-1 px-3 py-2 rounded-xl border border-[var(--ios-separator)] bg-[var(--ios-bg)] text-[var(--ios-text)] text-sm appearance-none"
-              >
-                {Array.from({ length: 24 }, (_, i) => (
-                  <option key={i} value={i}>
-                    {String(i).padStart(2, '0')}h
-                  </option>
-                ))}
-              </select>
+              <AppSelect
+                value={String(settings.hour)}
+                onValueChange={(val) => updateSettings({ hour: Number(val) })}
+                className="flex-1"
+                options={Array.from({ length: 24 }, (_, i) => ({
+                  value: String(i),
+                  label: `${String(i).padStart(2, '0')}h`,
+                }))}
+              />
               <span className="self-center text-[var(--ios-text-secondary)]">:</span>
-              <select
-                value={settings.minute}
-                onChange={(e) => updateSettings({ minute: Number(e.target.value) })}
-                className="flex-1 px-3 py-2 rounded-xl border border-[var(--ios-separator)] bg-[var(--ios-bg)] text-[var(--ios-text)] text-sm appearance-none"
-              >
-                {Array.from({ length: 60 }, (_, i) => (
-                  <option key={i} value={i}>
-                    {String(i).padStart(2, '0')}min
-                  </option>
-                ))}
-              </select>
+              <AppSelect
+                value={String(settings.minute)}
+                onValueChange={(val) => updateSettings({ minute: Number(val) })}
+                className="flex-1"
+                options={Array.from({ length: 60 }, (_, i) => ({
+                  value: String(i),
+                  label: `${String(i).padStart(2, '0')}min`,
+                }))}
+              />
             </div>
           </div>
 

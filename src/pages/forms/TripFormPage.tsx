@@ -67,20 +67,19 @@ function TripFormPage() {
  <FormPageLayout title={isEditing ? 'Editar Corrida' : 'Nova Corrida'} icon={Car}>
  <div className="bg-[var(--ios-card)] rounded-xl shadow-sm p-6 overflow-hidden">
  <form onSubmit={handleSubmit} className="space-y-6">
- <FormSelect
- label="Plataforma"
- id="platform"
- name="platform"
- value={formData.platform}
- onChange={handleInputChange}
- required
- >
- <option value="Uber">Uber</option>
- <option value="99">99</option>
- <option value="iFood">iFood</option>
- <option value="Rappi">Rappi</option>
- <option value="Outros">Outros</option>
- </FormSelect>
+  <FormSelect
+    id="platform"
+    label="Plataforma"
+    value={formData.platform}
+    onValueChange={(val) => setFormData(prev => ({ ...prev, platform: val }))}
+    options={[
+      { value: 'Uber', label: 'Uber' },
+      { value: '99', label: '99' },
+      { value: 'iFood', label: 'iFood' },
+      { value: 'Rappi', label: 'Rappi' },
+      { value: 'Outros', label: 'Outros' },
+    ]}
+  />
 
  <MoneyInput
  label="Valor (R$)"

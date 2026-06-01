@@ -18,12 +18,11 @@ export default function InsightsSummary({ faturamento, despesas, lucro, rsHora }
   ];
 
   return (
-    <div className="flex" style={{ borderBottom: '0.5px solid var(--ios-separator)' }}>
-      {items.map((item, i, arr) => (
+    <div className="grid grid-cols-2 divide-x divide-y divide-[var(--ios-separator)] md:flex md:divide-y-0 md:divide-x md:divide-[var(--ios-separator)]" style={{ borderBottom: '0.5px solid var(--ios-separator)' }}>
+      {items.map((item) => (
         <div
           key={item.label}
-          className="flex-1 px-3 py-3"
-          style={{ borderRight: i < arr.length - 1 ? '0.5px solid var(--ios-separator)' : 'none' }}
+          className="px-4 py-3 md:flex-1"
         >
           <div className="text-xs font-normal uppercase tracking-wide" style={{ color: 'var(--ios-text-secondary)' }}>
             {item.label}

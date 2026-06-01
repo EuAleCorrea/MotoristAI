@@ -8,7 +8,7 @@ const ThemeToggle = () => {
  <button
  id="theme-toggle-btn"
  onClick={toggleTheme}
- className="w-11 h-11 flex items-center justify-center rounded-full"
+ className="w-8 h-11 flex items-center justify-center rounded-full"
  style={{ color: 'var(--ios-accent)' }}
  aria-label={theme === 'light' ? 'Ativar modo escuro' : 'Ativar modo claro'}
  >

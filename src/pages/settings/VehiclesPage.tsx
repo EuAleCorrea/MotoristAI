@@ -3,6 +3,7 @@ import { Car, Plus, Edit2, Trash2, Check, X } from 'lucide-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useVehicleStore, Vehicle, FUEL_OPTIONS, TRANSMISSION_OPTIONS, FINANCIAL_STATUS_OPTIONS } from '../../store/vehicleStore';
 import { useSettingsFilterStore } from '../../store/settingsFilterStore';
+import { AppSelect } from '../../components/forms/AppSelect';
 
 const CURRENT_YEAR = new Date().getFullYear();
 const YEAR_OPTIONS = Array.from({ length: 40 }, (_, i) => CURRENT_YEAR - i);
@@ -284,15 +285,12 @@ const VehiclesPage = () => {
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <label className="block text-xs font-medium text-[var(--ios-text-secondary)] mb-1">Ano *</label>
-                    <select
-                      value={form.year}
-                      onChange={(e) => handleChange('year', Number(e.target.value))}
-                      className={`w-full px-3 py-2.5 rounded-lg border ${errors.year ? 'border-red-400' : 'border-[var(--ios-separator)]'} bg-[var(--ios-fill)] text-[var(--ios-text)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ios-accent)]/30`}
-                    >
-                      {YEAR_OPTIONS.map((y) => (
-                        <option key={y} value={y}>{y}</option>
-                      ))}
-                    </select>
+                    <AppSelect
+                      value={form.year.toString()}
+                      onValueChange={(val) => handleChange('year', Number(val))}
+                      options={YEAR_OPTIONS.map((y) => ({ value: y.toString(), label: y.toString() }))}
+                      triggerClassName={`w-full ${errors.year ? 'border-red-400' : ''}`}
+                    />
                     {errors.year && <p className="text-xs text-red-500 mt-1">{errors.year}</p>}
                   </div>
                   <div>
@@ -310,15 +308,12 @@ const VehiclesPage = () => {
                 {/* Fuel */}
                 <div>
                   <label className="block text-xs font-medium text-[var(--ios-text-secondary)] mb-1">Combustível *</label>
-                  <select
+                  <AppSelect
                     value={form.fuel}
-                    onChange={(e) => handleChange('fuel', e.target.value)}
-                    className={`w-full px-3 py-2.5 rounded-lg border ${errors.fuel ? 'border-red-400' : 'border-[var(--ios-separator)]'} bg-[var(--ios-fill)] text-[var(--ios-text)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ios-accent)]/30`}
-                  >
-                    {FUEL_OPTIONS.map((f) => (
-                      <option key={f.value} value={f.value}>{f.label}</option>
-                    ))}
-                  </select>
+                    onValueChange={(val) => handleChange('fuel', val)}
+                    options={FUEL_OPTIONS.map((f) => ({ value: f.value, label: f.label }))}
+                    triggerClassName={`w-full ${errors.fuel ? 'border-red-400' : ''}`}
+                  />
                   {errors.fuel && <p className="text-xs text-red-500 mt-1">{errors.fuel}</p>}
                 </div>
 
@@ -326,27 +321,19 @@ const VehiclesPage = () => {
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <label className="block text-xs font-medium text-[var(--ios-text-secondary)] mb-1">Transmissão</label>
-                    <select
+                    <AppSelect
                       value={form.transmission}
-                      onChange={(e) => handleChange('transmission', e.target.value)}
-                      className="w-full px-3 py-2.5 rounded-lg border border-[var(--ios-separator)] bg-[var(--ios-fill)] text-[var(--ios-text)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ios-accent)]/30"
-                    >
-                      {TRANSMISSION_OPTIONS.map((t) => (
-                        <option key={t.value} value={t.value}>{t.label}</option>
-                      ))}
-                    </select>
+                      onValueChange={(val) => handleChange('transmission', val)}
+                      options={TRANSMISSION_OPTIONS.map((t) => ({ value: t.value, label: t.label }))}
+                    />
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-[var(--ios-text-secondary)] mb-1">Portas</label>
-                    <select
-                      value={form.doors}
-                      onChange={(e) => handleChange('doors', Number(e.target.value))}
-                      className="w-full px-3 py-2.5 rounded-lg border border-[var(--ios-separator)] bg-[var(--ios-fill)] text-[var(--ios-text)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ios-accent)]/30"
-                    >
-                      {[2, 3, 4, 5].map((d) => (
-                        <option key={d} value={d}>{d}</option>
-                      ))}
-                    </select>
+                    <AppSelect
+                      value={form.doors.toString()}
+                      onValueChange={(val) => handleChange('doors', Number(val))}
+                      options={[2, 3, 4, 5].map((d) => ({ value: d.toString(), label: d.toString() }))}
+                    />
                   </div>
                 </div>
 
@@ -377,15 +364,11 @@ const VehiclesPage = () => {
                 {/* Financial Status */}
                 <div>
                   <label className="block text-xs font-medium text-[var(--ios-text-secondary)] mb-1">Status Financeiro</label>
-                  <select
+                  <AppSelect
                     value={form.financial_status}
-                    onChange={(e) => handleChange('financial_status', e.target.value)}
-                    className="w-full px-3 py-2.5 rounded-lg border border-[var(--ios-separator)] bg-[var(--ios-fill)] text-[var(--ios-text)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ios-accent)]/30"
-                  >
-                    {FINANCIAL_STATUS_OPTIONS.map((s) => (
-                      <option key={s.value} value={s.value}>{s.label}</option>
-                    ))}
-                  </select>
+                    onValueChange={(val) => handleChange('financial_status', val)}
+                    options={FINANCIAL_STATUS_OPTIONS.map((s) => ({ value: s.value, label: s.label }))}
+                  />
                 </div>
               </div>
             </div>

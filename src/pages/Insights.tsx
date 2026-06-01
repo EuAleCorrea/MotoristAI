@@ -32,20 +32,35 @@ export default function Insights() {
         WebkitBackdropFilter: 'blur(14px)',
         borderBottom: '0.5px solid var(--ios-separator)',
       }}>
-        <div className="flex justify-between items-start mb-3">
-          <div>
-            <div className="-mb-2">
-              <PageHeader title="Insights" icon={Sparkles} />
+        <div className="flex flex-col gap-3 pb-3">
+          {/* Top Line: Icon + Title + Description */}
+          <div className="flex items-center gap-3 pt-2">
+            <div
+              className="flex items-center justify-center w-9 h-9 rounded-ios flex-shrink-0"
+              style={{ background: 'rgba(0, 136, 255, 0.12)' }}
+            >
+              <Sparkles className="h-5 w-5 text-[var(--ios-accent)]" strokeWidth={2} />
             </div>
-            <div className="text-sm px-1" style={{ color: 'var(--ios-text-secondary)' }}>Análise de performance</div>
+            <div className="flex items-baseline gap-2">
+              <h2
+                className="text-ios-title3 font-semibold text-[var(--ios-text)]"
+                style={{ letterSpacing: '-0.43px' }}
+              >
+                Insights
+              </h2>
+              <span className="text-xs font-normal" style={{ color: 'var(--ios-text-secondary)' }}>
+                Análise de performance
+              </span>
+            </div>
           </div>
-          {/* Period selector */}
-          <div className="flex gap-0.5 p-0.5 rounded-lg" style={{ background: 'var(--ios-fill)', border: '0.5px solid var(--ios-separator)' }}>
+
+          {/* Bottom Line: Period selector */}
+          <div className="flex w-full gap-0.5 p-0.5 rounded-lg" style={{ background: 'var(--ios-fill)', border: '0.5px solid var(--ios-separator)' }}>
             {PERIODS.map(p => (
               <button
                 key={p.key}
                 onClick={() => setPeriod(p.key)}
-                className="px-3 py-1.5 rounded-md text-sm font-medium transition-all"
+                className="flex-1 py-1.5 rounded-md text-xs font-medium transition-all text-center"
                 style={{
                   background: period === p.key ? 'var(--sys-blue)' : 'transparent',
                   color: period === p.key ? '#fff' : 'var(--ios-text-secondary)',

@@ -1,26 +1,38 @@
 import React from 'react';
+import { AppSelect, AppSelectOption } from './AppSelect';
 
-type FormSelectProps = React.SelectHTMLAttributes<HTMLSelectElement> & {
-    label: string;
-    children: React.ReactNode;
+type FormSelectProps = {
+  label: string;
+  value: string;
+  onValueChange: (value: string) => void;
+  options: AppSelectOption[];
+  placeholder?: string;
+  disabled?: boolean;
+  id?: string;
 };
 
-const FormSelect: React.FC<FormSelectProps> = ({ label, id, children, ...props }) => (
-    <div>
-        <label htmlFor={id} className="block text-sm font-medium mb-1.5" style={{ color: 'var(--ios-text)' }}>{label}</label>
-        <select
-            id={id}
-            {...props}
-            className="w-full px-3 py-2 border rounded-lg focus:ring-2 transition"
-            style={{
-                backgroundColor: 'var(--ios-card)',
-                borderColor: 'var(--ios-separator)',
-                color: 'var(--ios-text)',
-            }}
-        >
-            {children}
-        </select>
-    </div>
+const FormSelect: React.FC<FormSelectProps> = ({
+  label,
+  value,
+  onValueChange,
+  options,
+  placeholder,
+  disabled,
+  id,
+}) => (
+  <div>
+    <label htmlFor={id} className="block text-sm font-medium mb-1.5" style={{ color: 'var(--ios-text)' }}>
+      {label}
+    </label>
+    <AppSelect
+      id={id}
+      value={value}
+      onValueChange={onValueChange}
+      options={options}
+      placeholder={placeholder}
+      disabled={disabled}
+    />
+  </div>
 );
 
 export default FormSelect;

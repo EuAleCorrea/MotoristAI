@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { X } from 'lucide-react';
 import { useTripStore } from '../store/tripStore';
+import { AppSelect } from './forms/AppSelect';
 
 /*
  * TripModal — Apple HIG Bottom Sheet
@@ -81,22 +82,21 @@ function TripModal({ trip, onClose }: TripModalProps) {
  </div>
 
  <form onSubmit={handleSubmit} className="px-4 pb-6 space-y-4">
- <div>
- <label className={labelClass}>Plataforma</label>
- <select
- id="trip-platform"
- value={formData.platform}
- onChange={(e) => setFormData({ ...formData, platform: e.target.value })}
- className={selectClass}
- required
- >
- <option value="Uber">Uber</option>
- <option value="99">99</option>
- <option value="iFood">iFood</option>
- <option value="Rappi">Rappi</option>
- <option value="Outros">Outros</option>
- </select>
- </div>
+    <div>
+      <label className={labelClass}>Plataforma</label>
+      <AppSelect
+        id="trip-platform"
+        value={formData.platform}
+        onValueChange={(val) => setFormData({ ...formData, platform: val })}
+        options={[
+          { value: 'Uber', label: 'Uber' },
+          { value: '99', label: '99' },
+          { value: 'iFood', label: 'iFood' },
+          { value: 'Rappi', label: 'Rappi' },
+          { value: 'Outros', label: 'Outros' },
+        ]}
+      />
+    </div>
 
  <div>
  <label className={labelClass}>Valor (R$)</label>

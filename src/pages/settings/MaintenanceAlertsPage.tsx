@@ -4,6 +4,7 @@ import { Plus, AlertTriangle, CheckCircle, Clock, Gauge, Trash2, Car, Wrench } f
 import { useMaintenanceStore, MaintenanceRule } from '../../store/maintenanceStore';
 import { supabase } from '../../services/supabase';
 import PageHeader from '../../components/PageHeader';
+import { AppSelect } from '../../components/forms/AppSelect';
 
 // Modal para adicionar/editar regra
 function RuleModal({
@@ -121,16 +122,15 @@ function RuleModal({
           {/* Veículo */}
           <div>
             <label className="text-sm text-[var(--ios-text-secondary)] mb-1 block">Veículo (opcional)</label>
-            <select
+            <AppSelect
               value={vehicleId}
-              onChange={(e) => setVehicleId(e.target.value)}
-              className="w-full bg-[var(--ios-bg)] text-[var(--ios-text)] rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[var(--ios-blue)]"
-            >
-              <option value="">Todos os veículos</option>
-              {vehicles.map((v) => (
-                <option key={v.id} value={v.id}>{v.name}</option>
-              ))}
-            </select>
+              onValueChange={setVehicleId}
+              placeholder="Todos os veículos"
+              options={[
+                { value: '', label: 'Todos os veículos' },
+                ...vehicles.map((v) => ({ value: v.id, label: v.name })),
+              ]}
+            />
           </div>
 
           {/* Observações */}

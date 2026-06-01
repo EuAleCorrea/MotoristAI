@@ -4,6 +4,7 @@ import { useExpenseStore } from '../../store/expenseStore';
 import FormPageLayout from '../../components/layouts/FormPageLayout';
 import MoneyInput from '../../components/forms/MoneyInput';
 import { Wallet } from 'lucide-react';
+import { AppSelect } from '../../components/forms/AppSelect';
 
 function ExpenseFormPage() {
  const { id } = useParams();
@@ -63,28 +64,26 @@ function ExpenseFormPage() {
  <FormPageLayout title={isEditing ? 'Editar Despesa' : 'Nova Despesa'} icon={Wallet}>
  <div className="bg-[var(--ios-card)] rounded-lg shadow-sm p-6">
  <form onSubmit={handleSubmit} className="space-y-4">
- <div>
- <label className="block text-sm font-medium text-[var(--ios-text)] mb-1">
- Categoria
- </label>
- <select
- name="category"
- value={formData.category}
- onChange={handleInputChange}
- className="w-full px-3 py-2 border border-[var(--ios-separator)] rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-[var(--ios-card)] "
- required
- >
- <option value="Combustível">Combustível</option>
- <option value="Manutenção">Manutenção</option>
- <option value="Alimentação">Alimentação</option>
- <option value="Pedágio/Estacionamento">Pedágio/Estacionamento</option>
- <option value="Moradia">Moradia</option>
- <option value="Saúde">Saúde</option>
- <option value="Educação">Educação</option>
- <option value="Lazer">Lazer</option>
- <option value="Outras">Outras</option>
- </select>
- </div>
+  <div>
+    <label className="block text-sm font-medium text-[var(--ios-text)] mb-1">
+      Categoria
+    </label>
+    <AppSelect
+      value={formData.category}
+      onValueChange={(val) => setFormData(prev => ({ ...prev, category: val }))}
+      options={[
+        { value: 'Combustível', label: 'Combustível' },
+        { value: 'Manutenção', label: 'Manutenção' },
+        { value: 'Alimentação', label: 'Alimentação' },
+        { value: 'Pedágio/Estacionamento', label: 'Pedágio/Estacionamento' },
+        { value: 'Moradia', label: 'Moradia' },
+        { value: 'Saúde', label: 'Saúde' },
+        { value: 'Educação', label: 'Educação' },
+        { value: 'Lazer', label: 'Lazer' },
+        { value: 'Outras', label: 'Outras' },
+      ]}
+    />
+  </div>
 
  <div>
  <label className="block text-sm font-medium text-[var(--ios-text)] mb-1">

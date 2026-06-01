@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { X } from 'lucide-react';
 import { useGoalStore, Goal } from '../store/goalStore';
 import { format } from 'date-fns';
+import { AppSelect } from './forms/AppSelect';
 
 /*
  * GoalModal — Apple HIG Bottom Sheet
@@ -102,20 +103,26 @@ function GoalModal({ goal, onClose }: GoalModalProps) {
  <form onSubmit={handleSubmit} className="px-4 pb-6">
  {/* Section: Período */}
  <p className="ios-section-header">Período</p>
- <div className="grid grid-cols-2 gap-3 mb-6">
- <div>
- <label className={labelClass}>Ano</label>
- <select id="goal-year" name="year" value={formData.year} onChange={handleInputChange} className={selectClass}>
- {years.map(y => <option key={y} value={y}>{y}</option>)}
- </select>
- </div>
- <div>
- <label className={labelClass}>Mês</label>
- <select id="goal-month" name="month" value={formData.month} onChange={handleInputChange} className={selectClass}>
- {months.map(m => <option key={m.value} value={m.value}>{m.label}</option>)}
- </select>
- </div>
- </div>
+  <div className="grid grid-cols-2 gap-3 mb-6">
+    <div>
+      <label className={labelClass}>Ano</label>
+      <AppSelect
+        id="goal-year"
+        value={String(formData.year)}
+        onValueChange={(val) => setFormData(prev => ({ ...prev, year: Number(val) }))}
+        options={years.map(y => ({ value: String(y), label: String(y) }))}
+      />
+    </div>
+    <div>
+      <label className={labelClass}>Mês</label>
+      <AppSelect
+        id="goal-month"
+        value={String(formData.month)}
+        onValueChange={(val) => setFormData(prev => ({ ...prev, month: Number(val) }))}
+        options={months.map(m => ({ value: String(m.value), label: m.label }))}
+      />
+    </div>
+  </div>
 
  {/* Section: Metas Financeiras */}
  <p className="ios-section-header">Metas Financeiras</p>

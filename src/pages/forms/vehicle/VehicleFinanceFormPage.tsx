@@ -104,21 +104,33 @@ const VehicleFinanceFormPage: React.FC = () => {
  <form onSubmit={handleSubmit} className="space-y-6 pb-24">
  <FormSection title="Detalhes do Custo">
  <VehicleSelector value={vehicleId} onChange={setVehicleId} />
- <FormSelect id="costType" name="costType" label="Tipo de Custo" value={costType} onChange={e => setCostType(e.target.value as CostType)}>
- <option>Financiamento</option>
- <option>Seguro</option>
- <option>IPVA</option>
- <option>Licenciamento</option>
- <option>Multa</option>
- <option>Outros</option>
- </FormSelect>
+  <FormSelect
+    id="costType"
+    label="Tipo de Custo"
+    value={costType}
+    onValueChange={(val) => setCostType(val as CostType)}
+    options={[
+      { value: 'Financiamento', label: 'Financiamento' },
+      { value: 'Seguro', label: 'Seguro' },
+      { value: 'IPVA', label: 'IPVA' },
+      { value: 'Licenciamento', label: 'Licenciamento' },
+      { value: 'Multa', label: 'Multa' },
+      { value: 'Outros', label: 'Outros' },
+    ]}
+  />
  <FormInput id="provider" name="provider" label="Instituição / Seguradora" type="text" placeholder="Ex: Banco XYZ" value={provider} onChange={e => setProvider(e.target.value)} required icon={<Building className="w-4 h-4 text-[var(--ios-text-tertiary)]" />} />
  <MoneyInput id="totalValue" name="totalValue" label="Valor (R$)" placeholder="0,00" value={totalValue} onChange={e => setTotalValue(e.target.value)} required icon={<span className="text-sm font-semibold text-[var(--ios-text-secondary)]">R$</span>} />
  <FormInput id="dueDate" name="dueDate" label="Vencimento" type="date" value={dueDate} onChange={e => setDueDate(e.target.value)} required icon={<Calendar className="w-4 h-4 text-[var(--ios-text-tertiary)]" />} />
- <FormSelect id="status" name="status" label="Situação" value={status} onChange={e => setStatus(e.target.value as Status)}>
- <option>Pendente</option>
- <option>Pago</option>
- </FormSelect>
+  <FormSelect
+    id="status"
+    label="Situação"
+    value={status}
+    onValueChange={(val) => setStatus(val as Status)}
+    options={[
+      { value: 'Pendente', label: 'Pendente' },
+      { value: 'Pago', label: 'Pago' },
+    ]}
+  />
  <div className="md:col-span-2">
  <label className="block text-sm font-medium text-[var(--ios-text)] mb-1.5">Comprovante (Opcional)</label>
  <label htmlFor="payment-proof-upload" className="w-full flex items-center justify-center px-4 py-3 border-2 border-dashed border-[var(--ios-separator)] rounded-lg cursor-pointer hover:border-[var(--ios-accent)] hover:bg-[var(--ios-fill)] dark:hover:bg-primary-900/10 transition">

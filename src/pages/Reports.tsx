@@ -8,6 +8,7 @@ import { format, startOfMonth, endOfMonth, eachMonthOfInterval, subMonths } from
 import { ptBR } from 'date-fns/locale';
 import { PieChart, Gauge, Layers3, FileText, Calendar, ArrowLeft, Download } from 'lucide-react';
 import { formatCurrency, formatNumber, formatInteger, formatChartCurrency } from '../utils/formatters';
+import { AppSelect } from '../components/forms/AppSelect';
 
 type ViewType = 'category' | 'km_energy' | 'platforms' | 'monthly';
 
@@ -251,19 +252,18 @@ const Reports = () => {
         </div>
 
         <div className="flex flex-row items-center justify-between w-full lg:w-auto gap-3">
-          {/* Date Filter */}
-          <div className="flex items-center space-x-2 bg-[var(--ios-fill)] px-3 py-1 rounded-xl">
-            <Calendar className="h-4 w-4 text-[var(--ios-text-tertiary)]" />
-            <select
-              value={selectedPeriod}
-              onChange={(e) => setSelectedPeriod(e.target.value)}
-              className="bg-transparent text-sm font-medium text-[var(--ios-text)] border-none focus:ring-0 cursor-pointer py-1.5 pr-8"
-            >
-              <option value="3months">Últimos 3 meses</option>
-              <option value="6months">Últimos 6 meses</option>
-              <option value="12months">Últimos 12 meses</option>
-            </select>
-          </div>
+          <AppSelect
+            value={selectedPeriod}
+            onValueChange={setSelectedPeriod}
+            options={[
+              { value: '3months', label: 'Últimos 3 meses' },
+              { value: '6months', label: 'Últimos 6 meses' },
+              { value: '12months', label: 'Últimos 12 meses' },
+            ]}
+            icon={<Calendar className="h-4 w-4" />}
+            className="w-full sm:w-auto"
+            triggerClassName="px-3 py-1.5 bg-[var(--ios-fill)] border-none shadow-none rounded-xl"
+          />
 
           {/* View Selection Buttons */}
           <div className="flex items-center gap-1.5 bg-[var(--ios-fill)] p-1 rounded-xl">

@@ -89,27 +89,39 @@ const HealthFormPage: React.FC = () => {
  <FormPageLayout title={isEditing ? 'Editar Despesa de Saúde' : 'Despesa de Saúde'} icon={HeartPulse}>
  <form onSubmit={handleSubmit} className="space-y-6 pb-24">
  <FormSection title="Detalhes da Despesa">
- <FormSelect id="expenseType" label="Tipo de Despesa" value={expenseType} onChange={e => setExpenseType(e.target.value)}>
- <option>Plano de Saúde</option>
- <option>Consulta</option>
- <option>Exame</option>
- <option>Medicamento</option>
- <option>Odontologia</option>
- <option>Academia</option>
- <option>Outros</option>
- </FormSelect>
+  <FormSelect
+    id="expenseType"
+    label="Tipo de Despesa"
+    value={expenseType}
+    onValueChange={setExpenseType}
+    options={[
+      { value: 'Plano de Saúde', label: 'Plano de Saúde' },
+      { value: 'Consulta', label: 'Consulta' },
+      { value: 'Exame', label: 'Exame' },
+      { value: 'Medicamento', label: 'Medicamento' },
+      { value: 'Odontologia', label: 'Odontologia' },
+      { value: 'Academia', label: 'Academia' },
+      { value: 'Outros', label: 'Outros' },
+    ]}
+  />
  <FormInput id="provider" label="Profissional / Clínica / Farmácia" type="text" placeholder="Ex: Dr. João Silva" value={provider} onChange={e => setProvider(e.target.value)} required icon={<Building className="w-4 h-4 text-[var(--ios-text-tertiary)]" />} />
  <MoneyInput id="totalValue" label="Valor (R$)" placeholder="0,00" value={totalValue} onChange={e => setTotalValue(e.target.value)} required icon={<span className="text-sm font-semibold text-[var(--ios-text-secondary)]">R$</span>} />
  <FormInput id="date" label="Data" type="date" value={date} onChange={e => setDate(e.target.value)} required icon={<Calendar className="w-4 h-4 text-[var(--ios-text-tertiary)]" />} />
  </FormSection>
 
  <FormSection title="Pagamento e Reembolso">
- <FormSelect id="paymentMethod" label="Forma de Pagamento" value={paymentMethod} onChange={e => setPaymentMethod(e.target.value)}>
- <option>Pix</option>
- <option>Cartão</option>
- <option>Convênio</option>
- <option>Dinheiro</option>
- </FormSelect>
+  <FormSelect
+    id="paymentMethod"
+    label="Forma de Pagamento"
+    value={paymentMethod}
+    onValueChange={setPaymentMethod}
+    options={[
+      { value: 'Pix', label: 'Pix' },
+      { value: 'Cartão', label: 'Cartão' },
+      { value: 'Convênio', label: 'Convênio' },
+      { value: 'Dinheiro', label: 'Dinheiro' },
+    ]}
+  />
  <div className="flex items-center justify-between col-span-1 md:col-span-2">
  <span className="text-sm font-medium text-[var(--ios-text)]">Possui reembolso?</span>
  <label className="relative inline-flex items-center cursor-pointer">

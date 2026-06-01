@@ -250,12 +250,20 @@ function GoalFormPage() {
  value={formData.daysWorkedPerWeek}
  onChange={handleInputChange}
  />
- <FormSelect id="year" name="year" label="Ano" value={formData.year} onChange={handleInputChange}>
- {years.map(y => <option key={y} value={y}>{y}</option>)}
- </FormSelect>
- <FormSelect id="month" name="month" label="Mês" value={formData.month} onChange={handleInputChange}>
- {months.map(m => <option key={m.value} value={m.value}>{m.label}</option>)}
- </FormSelect>
+ <FormSelect
+    id="year"
+    label="Ano"
+    value={formData.year}
+    onValueChange={(val) => handleInputChange({ target: { name: 'year', value: val } } as any)}
+    options={years.map(y => ({ value: y.toString(), label: y.toString() }))}
+  />
+  <FormSelect
+    id="month"
+    label="Mês"
+    value={formData.month}
+    onValueChange={(val) => handleInputChange({ target: { name: 'month', value: val } } as any)}
+    options={months.map(m => ({ value: m.value.toString(), label: m.label }))}
+  />
  <FormInput
  id="week"
  name="week"

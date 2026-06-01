@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ChevronLeft, Ellipsis, LogOut, Bell, Map } from 'lucide-react';
+import { ChevronLeft, Ellipsis, LogOut, Bell } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 import { supabase } from '../services/supabase';
 
@@ -80,7 +80,7 @@ const Header = () => {
           <button
             id="header-notifications-btn"
             onClick={() => navigate('/alertas')}
-            className="w-10 h-11 flex items-center justify-center rounded-full"
+            className="w-8 h-11 flex items-center justify-center rounded-full"
             style={{ color: 'var(--ios-accent)' }}
             aria-label="Alertas"
           >
@@ -91,7 +91,7 @@ const Header = () => {
             <button
               id="header-menu-btn"
               onClick={() => setIsMenuOpen(prev => !prev)}
-              className="w-10 h-11 flex items-center justify-center rounded-full"
+              className="w-8 h-11 flex items-center justify-center rounded-full"
               style={{ color: 'var(--ios-accent)' }}
               aria-label="Mais opções"
             >
@@ -108,21 +108,7 @@ const Header = () => {
                 }}
               >
                 {/* Itens Principais */}
-                <button
-                  id="header-map-btn"
-                  onClick={() => {
-                    setIsMenuOpen(false);
-                    navigate('/mapa');
-                  }}
-                  className="w-full flex items-center gap-3 px-4 py-3 active:opacity-70 transition-opacity"
-                  style={{ color: 'var(--ios-text)', fontSize: '16px' }}
-                >
-                  <Map className="h-4 w-4" style={{ color: 'var(--ios-accent)' }} />
-                  <span>Mapa</span>
-                </button>
 
-                {/* Separador */}
-                <div className="ios-separator" />
                 
                 <button
                   id="header-logout-btn"

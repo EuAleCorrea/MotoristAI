@@ -79,10 +79,16 @@ const TollParkingFormPage: React.FC = () => {
  <form onSubmit={handleSubmit} className="space-y-6 pb-24">
  <FormSection title="Detalhes do Lançamento">
  <VehicleSelector value={vehicleId} onChange={setVehicleId} />
- <FormSelect id="expenseType" name="expenseType" label="Tipo" value={expenseType} onChange={e => setExpenseType(e.target.value as ExpenseType)}>
- <option>Pedágio</option>
- <option>Estacionamento</option>
- </FormSelect>
+ <FormSelect
+    id="expenseType"
+    label="Tipo"
+    value={expenseType}
+    onValueChange={(val) => setExpenseType(val as ExpenseType)}
+    options={[
+      { value: 'Pedágio', label: 'Pedágio' },
+      { value: 'Estacionamento', label: 'Estacionamento' },
+    ]}
+  />
  <FormInput id="date" name="date" label="Data" type="date" value={date} onChange={e => setDate(e.target.value)} required icon={<Calendar className="w-4 h-4 text-[var(--ios-text-tertiary)]" />} />
  <MoneyInput id="totalValue" name="totalValue" label="Valor Pago (R$)" placeholder="0,00" value={totalValue} onChange={e => setTotalValue(e.target.value)} required icon={<span className="text-sm font-semibold text-[var(--ios-text-secondary)]">R$</span>} />
  <FormInput id="location" name="location" label="Local" type="text" placeholder={expenseType === 'Pedágio' ? "Ex: Praça de Itatiba" : "Ex: Shopping Central"} value={location} onChange={e => setLocation(e.target.value)} required icon={<MapPin className="w-4 h-4 text-[var(--ios-text-tertiary)]" />} />
@@ -95,12 +101,18 @@ const TollParkingFormPage: React.FC = () => {
  )}
 
  <div className={expenseType === 'Pedágio' ? 'md:col-start-2' : ''}>
- <FormSelect id="paymentMethod" name="paymentMethod" label="Meio de Pagamento" value={paymentMethod} onChange={e => setPaymentMethod(e.target.value)}>
- <option>Tag</option>
- <option>Dinheiro</option>
- <option>Cartão</option>
- <option>App</option>
- </FormSelect>
+ <FormSelect
+    id="paymentMethod"
+    label="Meio de Pagamento"
+    value={paymentMethod}
+    onValueChange={setPaymentMethod}
+    options={[
+      { value: 'Tag', label: 'Tag' },
+      { value: 'Dinheiro', label: 'Dinheiro' },
+      { value: 'Cartão', label: 'Cartão' },
+      { value: 'App', label: 'App' },
+    ]}
+  />
  </div>
 
  <FormTextArea id="notes" name="notes" label="Observações (Opcional)" placeholder="Detalhes adicionais sobre o gasto." value={notes} onChange={e => setNotes(e.target.value)} />
