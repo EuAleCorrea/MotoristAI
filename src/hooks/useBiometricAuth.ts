@@ -11,6 +11,7 @@ export interface BiometricState {
   isEnabled: boolean;
   isLoading: boolean;
   biometricType: string;
+  hasCredentials: boolean;
 }
 
 export function useBiometricAuth() {
@@ -19,6 +20,7 @@ export function useBiometricAuth() {
     isEnabled: false,
     isLoading: true,
     biometricType: 'Biometria',
+    hasCredentials: false,
   });
 
   const isNative = Capacitor.isNativePlatform();
@@ -43,6 +45,7 @@ export function useBiometricAuth() {
       const credentials = await secureGet(BIOMETRIC_CREDENTIALS_KEY);
       const isEnabled = enabledFlag === 'true';
       const hasCredentials = !!credentials;
+      console.log(`[BiometricAuth] secureGet: enabledFlag=${enabledFlag}, credentials.length=${credentials?.length ?? 0}`);
 
       console.log(`[BiometricAuth] available=${available}, isEnabled=${isEnabled}, hasCredentials=${hasCredentials}, type=${biometricType}`);
 
@@ -51,10 +54,11 @@ export function useBiometricAuth() {
         isEnabled: available && isEnabled && hasCredentials,
         isLoading: false,
         biometricType,
+        hasCredentials,
       });
     } catch (err: any) {
       console.error('[BiometricAuth] Erro ao verificar biometria:', err?.message ?? err);
-      setState({ isAvailable: false, isEnabled: false, isLoading: false, biometricType: 'Biometria' });
+      setState({ isAvailable: false, isEnabled: false, isLoading: false, biometricType: 'Biometria', hasCredentials: false });
     }
   }, [isNative]);
 
@@ -125,10 +129,15 @@ export function useBiometricAuth() {
   }, [isNative]);
 
   const saveSessionForBiometric = useCallback(async (email: string, password: string) => {
-    if (!isNative) return;
+    if (!isNative) {
+      console.warn('[BiometricAuth] saveSessionForBiometric ignorado: plataforma não nativa');
+      return;
+    }
+    console.log(`[BiometricAuth] Salvando credenciais para ${email}...`);
     await secureSet(BIOMETRIC_CREDENTIALS_KEY, JSON.stringify({ email, password }));
     await secureSet(BIOMETRIC_ENABLED_KEY, 'true');
-    setState(prev => ({ ...prev, isEnabled: true }));
+    console.log('[BiometricAuth] Credenciais salvas com sucesso');
+    setState(prev => ({ ...prev, isEnabled: true, hasCredentials: true }));
   }, [isNative]);
 
   const clearBiometricSession = useCallback(async () => {
