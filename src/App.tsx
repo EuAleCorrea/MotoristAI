@@ -58,6 +58,9 @@ import AIAssistant from './pages/AI';
 import NewExpenseChoice from './pages/NewExpenseChoice';
 import Insights from './pages/Insights';
 
+import DepreciationListPage from './pages/settings/DepreciationListPage';
+import VehicleFinanceListPage from './pages/settings/VehicleFinanceListPage';
+
 
 import { useEffect } from 'react';
 import { Capacitor } from '@capacitor/core';
@@ -192,6 +195,10 @@ function App() {
   <Route path="/despesas/veiculo/financeiro/:id/editar" element={<ProtectedRoute><Layout><VehicleFinancePage /></Layout></ProtectedRoute>} />
   <Route path="/despesas/veiculo/depreciacao" element={<ProtectedRoute><Layout><DepreciationPage /></Layout></ProtectedRoute>} />
   <Route path="/despesas/veiculo/depreciacao/:id/editar" element={<ProtectedRoute><Layout><DepreciationPage /></Layout></ProtectedRoute>} />
+
+  {/* Listas de Depreciacao e Financeiro do Veiculo */}
+  <Route path="/despesas/veiculo/depreciacao/lista" element={<ProtectedRoute><Layout><DepreciationListPage /></Layout></ProtectedRoute>} />
+  <Route path="/despesas/veiculo/financeiro/lista" element={<ProtectedRoute><Layout><VehicleFinanceListPage /></Layout></ProtectedRoute>} />
 
   {/* Rotas de Despesas da Família */}
   <Route path="/despesas/familia/moradia" element={<ProtectedRoute><Layout><HousingFormPage /></Layout></ProtectedRoute>} />
