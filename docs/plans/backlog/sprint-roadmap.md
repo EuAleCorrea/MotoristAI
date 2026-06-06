@@ -144,7 +144,7 @@ As tarefas dentro de cada sprint são priorizadas por **impacto x esforço**.
 | Sprint 1 | 1 semana | 16/04 | 16/04 | 10/10 | 0 |
 | Sprint 2 | 1 semana | 16/04 | 16/04 | 4/4 | 0 |
 | Sprint 3 | 1-2 semanas | 16/04 | 05/03 | 3/3 | 0 |
-| Sprint 4+ | Contínuo | — | — | 0/7 | 7 |
+| Sprint 4+ | Contínuo | — | — | 5/7 | 2 |
 
 ---
 
