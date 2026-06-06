@@ -21,7 +21,6 @@ function Login() {
     isEnabled: biometricEnabled,
     isLoading: biometricLoading,
     biometricType,
-    hasCredentials,
     authenticateWithBiometric,
     saveSessionForBiometric,
   } = useBiometricAuth();
@@ -112,10 +111,6 @@ function Login() {
 
   const showBiometricButton = !biometricLoading && biometricAvailable && biometricEnabled;
 
-  const debugInfo = biometricLoading
-    ? '[BiometricAuth] carregando...'
-    : `[BiometricAuth] available=${biometricAvailable}, isEnabled=${biometricEnabled}, hasCredentials=${hasCredentials}, type=${biometricType}`;
-
   return (
     <AuthCard
       type={isResettingPassword ? 'reset' : isRegistering ? 'register' : 'login'}
@@ -133,7 +128,6 @@ function Login() {
       onBiometricLogin={showBiometricButton ? handleBiometricLogin : undefined}
       biometricType={biometricType}
       resetSent={resetSent}
-      debugInfo={debugInfo}
     />
   );
 }

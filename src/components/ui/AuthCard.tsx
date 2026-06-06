@@ -21,7 +21,6 @@ interface AuthCardProps {
   onBiometricLogin?: () => void;
   biometricType?: string;
   resetSent?: boolean;
-  debugInfo?: string;
 }
 
 function Input({ className, type, ...props }: React.ComponentProps<"input">) {
@@ -52,8 +51,7 @@ export function AuthCard({
   onGoogleLogin,
   onBiometricLogin,
   biometricType = 'Digital',
-  resetSent,
-  debugInfo
+  resetSent
 }: AuthCardProps) {
   const [focusedInput, setFocusedInput] = useState<string | null>(null);
   
@@ -322,12 +320,6 @@ export function AuthCard({
                 <Link to="/terms" className="underline hover:text-white/60">Termos de Uso</Link> e{' '}
                 <Link to="/privacy" className="underline hover:text-white/60">Privacidade</Link>.
               </p>
-
-              {debugInfo && (
-                <p className="text-[9px] text-white/25 font-mono break-all px-4 mt-2">
-                  {debugInfo}
-                </p>
-              )}
             </div>
           </div>
         </motion.div>

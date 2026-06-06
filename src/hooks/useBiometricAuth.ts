@@ -11,7 +11,6 @@ export interface BiometricState {
   isEnabled: boolean;
   isLoading: boolean;
   biometricType: string;
-  hasCredentials: boolean;
 }
 
 export function useBiometricAuth() {
@@ -20,7 +19,6 @@ export function useBiometricAuth() {
     isEnabled: false,
     isLoading: true,
     biometricType: 'Biometria',
-    hasCredentials: false,
   });
 
   const isNative = Capacitor.isNativePlatform();
@@ -54,11 +52,10 @@ export function useBiometricAuth() {
         isEnabled: available && isEnabled && hasCredentials,
         isLoading: false,
         biometricType,
-        hasCredentials,
       });
     } catch (err: any) {
       console.error('[BiometricAuth] Erro ao verificar biometria:', err?.message ?? err);
-      setState({ isAvailable: false, isEnabled: false, isLoading: false, biometricType: 'Biometria', hasCredentials: false });
+      setState({ isAvailable: false, isEnabled: false, isLoading: false, biometricType: 'Biometria' });
     }
   }, [isNative]);
 
@@ -137,7 +134,7 @@ export function useBiometricAuth() {
     await secureSet(BIOMETRIC_CREDENTIALS_KEY, JSON.stringify({ email, password }));
     await secureSet(BIOMETRIC_ENABLED_KEY, 'true');
     console.log('[BiometricAuth] Credenciais salvas com sucesso');
-    setState(prev => ({ ...prev, isEnabled: true, hasCredentials: true }));
+    setState(prev => ({ ...prev, isEnabled: true }));
   }, [isNative]);
 
   const clearBiometricSession = useCallback(async () => {
