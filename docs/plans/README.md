@@ -4,9 +4,7 @@ Este documento centraliza todos os planos de implementação técnica projetados
 
 ## 📋 Backlog de Planos (Aguardando Execução)
 
-| ID | Plano | Severidade | Status |
-|:---|:---|:---:|:---|
-| 004 | [Login Biométrico — Sessão não restaura após logout](backlog/004-biometric-login-fix.md) | 🟡 Média | Backlog |
+_Nenhum plano aguardando execução no momento._
 
 ## ✅ Histórico de Planos (Concluídos)
 
@@ -15,6 +13,7 @@ Este documento centraliza todos os planos de implementação técnica projetados
 | 001 | [Auditoria de Segurança](history/001-security-audit.md) | 2026-04-16 | Bloqueio de Credentials Leak & RLS Ativo |
 | 002 | [Organização do GitHub](history/002-github-organization.md) | 2026-04-16 | Repositório Limpo e Padronizado (via Opus) |
 | 003 | [Manutenção e Suporte](history/003-project-maintenance.md) | 2026-04-16 | Guia Técnico e Script de Verificação Criados |
+| 004 | [Login Biométrico — Sessão não restaura após logout](history/004-biometric-login-fix.md) | 2026-06-06 | Credenciais criptografadas em Preferences + re-auth via signInWithPassword |
 | 005 | [Padronização de Dropdowns e Otimização Premium](history/005-shadcn-dropdowns-migration.md) | 2026-05-31 | Dropdowns unificados (shadcn) acoplados com check à direita |
 
 ---

@@ -113,7 +113,7 @@ Todas as tabelas possuem RLS ativado. O acesso é restrito ao `user_id` vinculad
 
 ### Autenticação
 - Email/senha (Supabase Auth)
-- Biometria no Android (Capacitor `@aparajita/capacitor-biometric-auth` v10) — ver `docs/plans/backlog/004-biometric-login-fix.md` (issue conhecida)
+- Biometria no Android (Capacitor `@aparajita/capacitor-biometric-auth` v10) — ver `docs/plans/history/004-biometric-login-fix.md`
 - Google Auth (em transição, ver `docs/GOOGLE_AUTH_POST_MORTEM.md`)
 
 ---

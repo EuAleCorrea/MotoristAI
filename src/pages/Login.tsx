@@ -3,6 +3,7 @@ import { supabase } from '../services/supabase';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { AuthCard } from '../components/ui/AuthCard';
+import { useBiometricAuth } from '../hooks/useBiometricAuth';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -15,8 +16,14 @@ function Login() {
   const [resetSent, setResetSent] = useState(false);
   const navigate = useNavigate();
   const { user } = useAuth();
-
-
+  const {
+    isAvailable: biometricAvailable,
+    isEnabled: biometricEnabled,
+    isLoading: biometricLoading,
+    biometricType,
+    authenticateWithBiometric,
+    saveSessionForBiometric,
+  } = useBiometricAuth();
 
   useEffect(() => {
     if (user) navigate('/dashboard', { replace: true });
@@ -33,13 +40,14 @@ function Login() {
         return;
       }
 
-      const { data, error: authError } = isRegistering
+      const { error: authError } = isRegistering
         ? await supabase.auth.signUp({ email, password })
         : await supabase.auth.signInWithPassword({ email, password });
 
       if (authError) throw authError;
 
       if (!isRegistering) {
+        await saveSessionForBiometric(email, password);
         navigate('/dashboard', { replace: true });
       } else {
         setError('Verifique seu email para confirmar o cadastro.');
@@ -86,7 +94,22 @@ function Login() {
     setError(null);
   };
 
+  const handleBiometricLogin = async () => {
+    setError(null);
+    setIsLoading(true);
+    try {
+      const result = await authenticateWithBiometric();
+      if (result.success) {
+        navigate('/dashboard', { replace: true });
+      } else if (result.error) {
+        setError(result.error);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
+  const showBiometricButton = !biometricLoading && biometricAvailable && biometricEnabled;
 
   return (
     <AuthCard
@@ -102,7 +125,8 @@ function Login() {
       error={error}
       onToggleMode={handleToggleMode}
       onForgotPassword={handleForgotPassword}
-
+      onBiometricLogin={showBiometricButton ? handleBiometricLogin : undefined}
+      biometricType={biometricType}
       resetSent={resetSent}
     />
   );

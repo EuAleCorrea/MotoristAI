@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Capacitor } from '@capacitor/core';
+import { supabase } from '../services/supabase';
+import { secureGet, secureSet, secureRemove } from '../lib/secureStorage';
 
-// Chaves para armazenar sessão no localStorage (simulando Keystore seguro)
-const BIOMETRIC_SESSION_KEY = 'motoristai_biometric_session';
-const BIOMETRIC_EMAIL_KEY = 'motoristai_biometric_email';
-const BIOMETRIC_ENABLED_KEY = 'motoristai_biometric_enabled';
+const BIOMETRIC_CREDENTIALS_KEY = 'biometric_credentials';
+const BIOMETRIC_ENABLED_KEY = 'biometric_enabled';
 
 export interface BiometricState {
   isAvailable: boolean;
@@ -23,7 +23,6 @@ export function useBiometricAuth() {
 
   const isNative = Capacitor.isNativePlatform();
 
-  // Verifica disponibilidade de biometria no dispositivo
   const checkBiometricAvailability = useCallback(async () => {
     if (!isNative) {
       console.log('[BiometricAuth] Plataforma não nativa — ignorando');
@@ -40,14 +39,16 @@ export function useBiometricAuth() {
 
       const available = info.isAvailable;
       const biometricType = getBiometricTypeName(info.biometryTypes);
-      const isEnabled = localStorage.getItem(BIOMETRIC_ENABLED_KEY) === 'true';
-      const hasSession = !!localStorage.getItem(BIOMETRIC_SESSION_KEY);
+      const enabledFlag = await secureGet(BIOMETRIC_ENABLED_KEY);
+      const credentials = await secureGet(BIOMETRIC_CREDENTIALS_KEY);
+      const isEnabled = enabledFlag === 'true';
+      const hasCredentials = !!credentials;
 
-      console.log(`[BiometricAuth] available=${available}, isEnabled=${isEnabled}, hasSession=${hasSession}, type=${biometricType}`);
+      console.log(`[BiometricAuth] available=${available}, isEnabled=${isEnabled}, hasCredentials=${hasCredentials}, type=${biometricType}`);
 
       setState({
         isAvailable: available,
-        isEnabled: available && isEnabled,
+        isEnabled: available && isEnabled && hasCredentials,
         isLoading: false,
         biometricType,
       });
@@ -61,12 +62,8 @@ export function useBiometricAuth() {
     checkBiometricAvailability();
   }, [checkBiometricAvailability]);
 
-  // Autentica com biometria e retorna a sessão salva
   const authenticateWithBiometric = useCallback(async (): Promise<{
     success: boolean;
-    accessToken?: string;
-    refreshToken?: string;
-    email?: string;
     error?: string;
   }> => {
     if (!isNative) return { success: false, error: 'Não disponível na web' };
@@ -83,19 +80,39 @@ export function useBiometricAuth() {
         androidSubtitle: 'Use sua digital para entrar',
       });
 
-      // Biometria OK — recuperar sessão salva
-      const savedSession = localStorage.getItem(BIOMETRIC_SESSION_KEY);
-      const savedEmail = localStorage.getItem(BIOMETRIC_EMAIL_KEY);
+      console.log('[BiometricAuth] Biometria confirmada — restaurando sessão');
 
-      if (!savedSession) {
-        return { success: false, error: 'Nenhuma sessão salva. Faça login com email primeiro.' };
+      const credentialsJson = await secureGet(BIOMETRIC_CREDENTIALS_KEY);
+      if (!credentialsJson) {
+        return { success: false, error: 'Nenhuma credencial salva. Faça login com email primeiro.' };
       }
 
-      const { accessToken, refreshToken } = JSON.parse(savedSession);
-      return { success: true, accessToken, refreshToken, email: savedEmail ?? undefined };
+      const { email, password } = JSON.parse(credentialsJson);
+      if (!email || !password) {
+        return { success: false, error: 'Credenciais salvas estão corrompidas. Faça login com email.' };
+      }
+
+      const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+
+      if (signInError) {
+        const isInvalidCredentials =
+          signInError.message?.toLowerCase().includes('invalid login') ||
+          signInError.message?.toLowerCase().includes('invalid credentials');
+        if (isInvalidCredentials) {
+          console.warn('[BiometricAuth] Credenciais biométricas expiradas — limpando');
+          await secureRemove(BIOMETRIC_CREDENTIALS_KEY);
+          await secureRemove(BIOMETRIC_ENABLED_KEY);
+          setState(prev => ({ ...prev, isEnabled: false }));
+          return { success: false, error: 'Sua senha foi alterada. Entre com email para reativar a digital.' };
+        }
+        console.error('[BiometricAuth] Erro no signInWithPassword:', signInError.message);
+        return { success: false, error: signInError.message };
+      }
+
+      console.log('[BiometricAuth] Sessão restaurada com sucesso');
+      return { success: true };
     } catch (err: any) {
       console.log('[BiometricAuth] Erro na autenticação:', err?.code, err?.message);
-      // Usuário cancelou — silencioso
       const cancelCodes = ['userCancel', 'appCancel', 'systemCancel'];
       if (err?.code && cancelCodes.includes(err.code)) {
         return { success: false, error: '' };
@@ -107,30 +124,25 @@ export function useBiometricAuth() {
     }
   }, [isNative]);
 
-  // Salva a sessão do Supabase para uso futuro com biometria
-  const saveSessionForBiometric = useCallback((accessToken: string, refreshToken: string, email: string) => {
+  const saveSessionForBiometric = useCallback(async (email: string, password: string) => {
     if (!isNative) return;
-    localStorage.setItem(BIOMETRIC_SESSION_KEY, JSON.stringify({ accessToken, refreshToken }));
-    localStorage.setItem(BIOMETRIC_EMAIL_KEY, email);
-    localStorage.setItem(BIOMETRIC_ENABLED_KEY, 'true');
+    await secureSet(BIOMETRIC_CREDENTIALS_KEY, JSON.stringify({ email, password }));
+    await secureSet(BIOMETRIC_ENABLED_KEY, 'true');
     setState(prev => ({ ...prev, isEnabled: true }));
   }, [isNative]);
 
-  // Limpa dados biométricos (logout)
-  const clearBiometricSession = useCallback(() => {
-    localStorage.removeItem(BIOMETRIC_SESSION_KEY);
-    localStorage.removeItem(BIOMETRIC_EMAIL_KEY);
-    localStorage.removeItem(BIOMETRIC_ENABLED_KEY);
+  const clearBiometricSession = useCallback(async () => {
+    await secureRemove(BIOMETRIC_CREDENTIALS_KEY);
+    await secureRemove(BIOMETRIC_ENABLED_KEY);
     setState(prev => ({ ...prev, isEnabled: false }));
   }, []);
 
-  // Habilita ou desabilita biometria (nas configurações)
-  const toggleBiometric = useCallback((enabled: boolean) => {
+  const toggleBiometric = useCallback(async (enabled: boolean) => {
     if (enabled) {
-      localStorage.setItem(BIOMETRIC_ENABLED_KEY, 'true');
+      await secureSet(BIOMETRIC_ENABLED_KEY, 'true');
     } else {
-      localStorage.removeItem(BIOMETRIC_ENABLED_KEY);
-      localStorage.removeItem(BIOMETRIC_SESSION_KEY);
+      await secureRemove(BIOMETRIC_ENABLED_KEY);
+      await secureRemove(BIOMETRIC_CREDENTIALS_KEY);
     }
     setState(prev => ({ ...prev, isEnabled: enabled }));
   }, []);
@@ -145,15 +157,12 @@ export function useBiometricAuth() {
   };
 }
 
-// Determina o nome amigável do tipo de biometria
-// BiometryType enum (v10): 0=none, 1=touchId, 2=faceId, 3=fingerprintAuthentication, 4=faceAuthentication, 5=irisAuthentication
 function getBiometricTypeName(types: readonly number[]): string {
   if (!types || types.length === 0) return 'Biometria';
-  // Android fingerprint = 3, iOS TouchID = 1
   if (types.includes(3)) return 'Digital';
-  if (types.includes(1)) return 'Digital'; // iOS Touch ID
-  if (types.includes(2)) return 'Face ID'; // iOS Face ID
-  if (types.includes(4)) return 'Rosto';   // Android face
-  if (types.includes(5)) return 'Íris';    // Android iris
+  if (types.includes(1)) return 'Digital';
+  if (types.includes(2)) return 'Face ID';
+  if (types.includes(4)) return 'Rosto';
+  if (types.includes(5)) return 'Íris';
   return 'Biometria';
 }
