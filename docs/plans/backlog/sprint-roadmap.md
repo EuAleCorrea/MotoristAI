@@ -107,7 +107,7 @@ As tarefas dentro de cada sprint são priorizadas por **impacto x esforço**.
 | # | Tarefa | Status | Estimativa | Prioridade |
 |---|--------|--------|-----------|-----------|
 | 4.1 | Importação de extratos bancários (PDF/CSV) | ⬜ | 16h | 🔥 Alta |
-| 4.2 | Relatório PDF para comprovação de renda | ⬜ | 12h | 🔥 Alta |
+| 4.2 | ~~Relatório PDF para comprovação de renda~~ | ✅ | — | — |
 | 4.3 | Alertas de manutenção por km | ⬜ | 8h | Média |
 | 4.4 | Integração com APIs de plataformas (Uber, 99) | ⬜ | 20h | Baixa |
 | 4.5 | Modo escuro completo (já iniciado) | ⬜ | 4h | Média |
