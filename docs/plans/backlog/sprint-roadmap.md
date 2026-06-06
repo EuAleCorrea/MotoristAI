@@ -110,7 +110,7 @@ As tarefas dentro de cada sprint são priorizadas por **impacto x esforço**.
 | 4.2 | ~~Relatório PDF para comprovação de renda~~ | ✅ | — | — |
 | 4.3 | Alertas de manutenção por km | ⬜ | 8h | Média |
 | 4.4 | Integração com APIs de plataformas (Uber, 99) | ⬜ | 20h | Baixa |
-| 4.5 | Modo escuro completo (já iniciado) | ⬜ | 4h | Média |
+| 4.5 | ~~Modo escuro completo (já iniciado)~~ | ✅ | — | — |
 | 4.6 | Suporte a múltiplos veículos simultâneos | ⬜ | 10h | Média |
 | 4.7 | ~~App Android/iOS nativo (Capacitor)~~ | ✅ | — | — |
 | 4.8 | Correção do login biométrico pós-logout | ✅ | 8h | 🔥 Alta |

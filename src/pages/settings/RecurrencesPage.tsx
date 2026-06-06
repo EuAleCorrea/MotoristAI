@@ -319,7 +319,7 @@ function InstallmentCard({ item, onEdit, onDelete, onPay }: { item: Installment;
       </div>
 
       {/* Barra de progresso */}
-      <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+      <div className="w-full h-2 bg-[var(--ios-fill)] rounded-full overflow-hidden">
         <div className="h-full bg-[var(--ios-blue)] rounded-full transition-all" style={{ width: `${progress}%` }} />
       </div>
 

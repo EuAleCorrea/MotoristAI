@@ -76,7 +76,7 @@ function PeriodSummary({ periodData }: PeriodSummaryProps) {
  '99': 'bg-yellow-400',
  iFood: 'bg-[rgba(255,59,48,0.08)]0',
  Rappi: 'bg-orange-500',
- Outros: 'bg-gray-400',
+ Outros: 'bg-[var(--ios-fill)]',
  };
 
  return (
@@ -151,7 +151,7 @@ function PeriodSummary({ periodData }: PeriodSummaryProps) {
  <span className="">{app}</span>
  <span className="">{formatCurrency(amount)}</span>
  </div>
- <ProgressBar value={amount} max={revenue} color={appColors[app] || 'bg-gray-400'} />
+ <ProgressBar value={amount} max={revenue} color={appColors[app] || 'bg-[var(--ios-fill)]'} />
  </div>
  )) : <p className="text-center text-[var(--ios-text-secondary)] text-sm py-4">Nenhuma corrida no período.</p>}
  </div>
@@ -164,7 +164,7 @@ function PeriodSummary({ periodData }: PeriodSummaryProps) {
  <label htmlFor="expense-toggle" className="text-sm text-[var(--ios-text-secondary)] mr-2">Todas</label>
  <label className="relative inline-flex items-center cursor-pointer">
  <input type="checkbox" id="expense-toggle" className="sr-only peer" checked={showNonZeroExpenses} onChange={e => setShowNonZeroExpenses(e.target.checked)} />
- <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-2 peer-focus:ring-primary-300 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-[var(--ios-card)] after:border-[var(--ios-separator)] after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[var(--ios-accent)]"></div>
+ <div className="w-11 h-6 bg-[var(--ios-fill)] rounded-full peer peer-focus:ring-2 peer-focus:ring-primary-300 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-[var(--ios-card)] after:border-[var(--ios-separator)] after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[var(--ios-accent)]"></div>
  </label>
  </div>
  </div>

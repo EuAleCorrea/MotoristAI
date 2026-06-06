@@ -280,7 +280,7 @@ const PhotoNotePage = () => {
             >
               {/* Foto miniatura */}
               <div
-                className="relative h-40 bg-gray-100 cursor-pointer"
+                className="relative h-40 bg-[var(--ios-fill)] cursor-pointer"
                 onClick={() => setViewPhoto(note.photo_url)}
               >
                 <img

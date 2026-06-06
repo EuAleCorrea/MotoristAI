@@ -343,7 +343,7 @@ const VehiclesPage = () => {
                   <button
                     type="button"
                     onClick={() => handleChange('has_air_conditioning', !form.has_air_conditioning)}
-                    className={`relative w-11 h-6 rounded-full transition-colors ${form.has_air_conditioning ? 'bg-[var(--ios-accent)]' : 'bg-gray-300'}`}
+                    className={`relative w-11 h-6 rounded-full transition-colors ${form.has_air_conditioning ? 'bg-[var(--ios-accent)]' : 'bg-[var(--ios-fill)]'}`}
                   >
                     <div className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow-sm transition-transform ${form.has_air_conditioning ? 'translate-x-5' : 'translate-x-0'}`} />
                   </button>

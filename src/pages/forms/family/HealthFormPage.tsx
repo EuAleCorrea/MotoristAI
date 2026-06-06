@@ -126,7 +126,7 @@ const HealthFormPage: React.FC = () => {
  <span className="text-sm font-medium text-[var(--ios-text)]">Possui reembolso?</span>
  <label className="relative inline-flex items-center cursor-pointer">
  <input type="checkbox" checked={hasReimbursement} onChange={() => setHasReimbursement(!hasReimbursement)} className="sr-only peer" />
- <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary-300 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-[var(--ios-card)] after:border-[var(--ios-separator)] after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[var(--ios-accent)]"></div>
+ <div className="w-11 h-6 bg-[var(--ios-fill)] rounded-full peer peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary-300 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-[var(--ios-card)] after:border-[var(--ios-separator)] after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[var(--ios-accent)]"></div>
  </label>
  </div>
  <AnimatePresence>

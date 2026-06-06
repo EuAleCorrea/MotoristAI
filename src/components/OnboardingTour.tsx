@@ -81,7 +81,7 @@ export default function OnboardingTour({
               <div
                 key={i}
                 className={`h-2 rounded-full transition-all duration-300 ${
-                  i === currentStep ? 'w-8 bg-ios-accent' : 'w-2 bg-gray-300 dark:bg-gray-600'
+                  i === currentStep ? 'w-8 bg-ios-accent' : 'w-2 bg-[var(--ios-fill)]'
                 }`}
               />
             ))}

@@ -131,8 +131,8 @@ const AddRecurrenceModal = ({ isOpen, onClose, onSubmit, vehicles }: AddRecurren
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
       <div className="absolute inset-0 bg-black/40" onClick={onClose} />
-      <div className="relative bg-white dark:bg-[#1c1c1e] rounded-t-3xl sm:rounded-3xl w-full sm:max-w-lg max-h-[85vh] overflow-y-auto pb-safe-bottom">
-        <div className="sticky top-0 bg-white dark:bg-[#1c1c1e] z-10 flex items-center justify-between p-4 border-b border-[var(--ios-separator)]">
+      <div className="relative bg-white dark:bg-[var(--ios-card)] rounded-t-3xl sm:rounded-3xl w-full sm:max-w-lg max-h-[85vh] overflow-y-auto pb-safe-bottom">
+        <div className="sticky top-0 bg-white dark:bg-[var(--ios-card)] z-10 flex items-center justify-between p-4 border-b border-[var(--ios-separator)]">
           <button onClick={onClose} className="text-[var(--ios-blue)] font-medium">Cancelar</button>
           <h2 className="text-lg font-semibold text-[var(--ios-text)]">Nova Recorrência</h2>
           <div className="w-16" />
@@ -145,7 +145,7 @@ const AddRecurrenceModal = ({ isOpen, onClose, onSubmit, vehicles }: AddRecurren
               required
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
-              className="w-full bg-[#f2f2f7] dark:bg-[#2c2c2e] rounded-xl px-4 py-3 text-[var(--ios-text)] outline-none mt-1"
+              className="w-full bg-[var(--ios-fill)] rounded-xl px-4 py-3 text-[var(--ios-text)] outline-none mt-1"
               placeholder="Ex: Aluguel, Assinatura..."
             />
           </div>
@@ -160,7 +160,7 @@ const AddRecurrenceModal = ({ isOpen, onClose, onSubmit, vehicles }: AddRecurren
                 min="0.01"
                 value={form.amount}
                 onChange={(e) => setForm({ ...form, amount: e.target.value })}
-                className="w-full bg-[#f2f2f7] dark:bg-[#2c2c2e] rounded-xl px-4 py-3 text-[var(--ios-text)] outline-none mt-1"
+                className="w-full bg-[var(--ios-fill)] rounded-xl px-4 py-3 text-[var(--ios-text)] outline-none mt-1"
                 placeholder="0,00"
               />
             </div>
@@ -174,7 +174,7 @@ const AddRecurrenceModal = ({ isOpen, onClose, onSubmit, vehicles }: AddRecurren
                   ...CATEGORIES.map((cat) => ({ value: cat, label: cat }))
                 ]}
                 className="mt-1"
-                triggerClassName="bg-[#f2f2f7] dark:bg-[#2c2c2e] border-none shadow-none rounded-xl"
+                triggerClassName="bg-[var(--ios-fill)] border-none shadow-none rounded-xl"
               />
             </div>
           </div>
@@ -191,7 +191,7 @@ const AddRecurrenceModal = ({ isOpen, onClose, onSubmit, vehicles }: AddRecurren
                   { value: 'family', label: 'Família' },
                 ]}
                 className="mt-1"
-                triggerClassName="bg-[#f2f2f7] dark:bg-[#2c2c2e] border-none shadow-none rounded-xl"
+                triggerClassName="bg-[var(--ios-fill)] border-none shadow-none rounded-xl"
               />
             </div>
             <div>
@@ -201,7 +201,7 @@ const AddRecurrenceModal = ({ isOpen, onClose, onSubmit, vehicles }: AddRecurren
                 onValueChange={(val) => setForm({ ...form, frequency: val })}
                 options={FREQUENCIES.map((f) => ({ value: f.value, label: f.label }))}
                 className="mt-1"
-                triggerClassName="bg-[#f2f2f7] dark:bg-[#2c2c2e] border-none shadow-none rounded-xl"
+                triggerClassName="bg-[var(--ios-fill)] border-none shadow-none rounded-xl"
               />
             </div>
           </div>
@@ -215,7 +215,7 @@ const AddRecurrenceModal = ({ isOpen, onClose, onSubmit, vehicles }: AddRecurren
                 max="31"
                 value={form.day}
                 onChange={(e) => setForm({ ...form, day: e.target.value })}
-                className="w-full bg-[#f2f2f7] dark:bg-[#2c2c2e] rounded-xl px-4 py-3 text-[var(--ios-text)] outline-none mt-1"
+                className="w-full bg-[var(--ios-fill)] rounded-xl px-4 py-3 text-[var(--ios-text)] outline-none mt-1"
                 placeholder="Ex: 15"
               />
             </div>
@@ -226,7 +226,7 @@ const AddRecurrenceModal = ({ isOpen, onClose, onSubmit, vehicles }: AddRecurren
                 type="date"
                 value={form.next_due_date}
                 onChange={(e) => setForm({ ...form, next_due_date: e.target.value })}
-                className="w-full bg-[#f2f2f7] dark:bg-[#2c2c2e] rounded-xl px-4 py-3 text-[var(--ios-text)] outline-none mt-1"
+                className="w-full bg-[var(--ios-fill)] rounded-xl px-4 py-3 text-[var(--ios-text)] outline-none mt-1"
               />
             </div>
           </div>
@@ -242,7 +242,7 @@ const AddRecurrenceModal = ({ isOpen, onClose, onSubmit, vehicles }: AddRecurren
                   ...vehicles.map((v) => ({ value: v.id, label: v.name }))
                 ]}
                 className="mt-1"
-                triggerClassName="bg-[#f2f2f7] dark:bg-[#2c2c2e] border-none shadow-none rounded-xl"
+                triggerClassName="bg-[var(--ios-fill)] border-none shadow-none rounded-xl"
               />
             </div>
           )}
@@ -252,7 +252,7 @@ const AddRecurrenceModal = ({ isOpen, onClose, onSubmit, vehicles }: AddRecurren
             <textarea
               value={form.notes}
               onChange={(e) => setForm({ ...form, notes: e.target.value })}
-              className="w-full bg-[#f2f2f7] dark:bg-[#2c2c2e] rounded-xl px-4 py-3 text-[var(--ios-text)] outline-none mt-1 resize-none"
+              className="w-full bg-[var(--ios-fill)] rounded-xl px-4 py-3 text-[var(--ios-text)] outline-none mt-1 resize-none"
               rows={2}
               placeholder="Observações opcionais"
             />
@@ -318,8 +318,8 @@ const AddInstallmentModal = ({ isOpen, onClose, onSubmit, vehicles }: AddInstall
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
       <div className="absolute inset-0 bg-black/40" onClick={onClose} />
-      <div className="relative bg-white dark:bg-[#1c1c1e] rounded-t-3xl sm:rounded-3xl w-full sm:max-w-lg max-h-[85vh] overflow-y-auto pb-safe-bottom">
-        <div className="sticky top-0 bg-white dark:bg-[#1c1c1e] z-10 flex items-center justify-between p-4 border-b border-[var(--ios-separator)]">
+      <div className="relative bg-white dark:bg-[var(--ios-card)] rounded-t-3xl sm:rounded-3xl w-full sm:max-w-lg max-h-[85vh] overflow-y-auto pb-safe-bottom">
+        <div className="sticky top-0 bg-white dark:bg-[var(--ios-card)] z-10 flex items-center justify-between p-4 border-b border-[var(--ios-separator)]">
           <button onClick={onClose} className="text-[var(--ios-blue)] font-medium">Cancelar</button>
           <h2 className="text-lg font-semibold text-[var(--ios-text)]">Novo Parcelamento</h2>
           <div className="w-16" />
@@ -332,7 +332,7 @@ const AddInstallmentModal = ({ isOpen, onClose, onSubmit, vehicles }: AddInstall
               required
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
-              className="w-full bg-[#f2f2f7] dark:bg-[#2c2c2e] rounded-xl px-4 py-3 text-[var(--ios-text)] outline-none mt-1"
+              className="w-full bg-[var(--ios-fill)] rounded-xl px-4 py-3 text-[var(--ios-text)] outline-none mt-1"
               placeholder="Ex: Notebook, Curso..."
             />
           </div>
@@ -347,7 +347,7 @@ const AddInstallmentModal = ({ isOpen, onClose, onSubmit, vehicles }: AddInstall
                 min="0.01"
                 value={form.total_amount}
                 onChange={(e) => setForm({ ...form, total_amount: e.target.value })}
-                className="w-full bg-[#f2f2f7] dark:bg-[#2c2c2e] rounded-xl px-4 py-3 text-[var(--ios-text)] outline-none mt-1"
+                className="w-full bg-[var(--ios-fill)] rounded-xl px-4 py-3 text-[var(--ios-text)] outline-none mt-1"
                 placeholder="0,00"
               />
             </div>
@@ -359,7 +359,7 @@ const AddInstallmentModal = ({ isOpen, onClose, onSubmit, vehicles }: AddInstall
                 min="0.01"
                 value={form.installment_amount}
                 onChange={(e) => setForm({ ...form, installment_amount: e.target.value })}
-                className="w-full bg-[#f2f2f7] dark:bg-[#2c2c2e] rounded-xl px-4 py-3 text-[var(--ios-text)] outline-none mt-1"
+                className="w-full bg-[var(--ios-fill)] rounded-xl px-4 py-3 text-[var(--ios-text)] outline-none mt-1"
                 placeholder="Calculado automático"
               />
             </div>
@@ -375,7 +375,7 @@ const AddInstallmentModal = ({ isOpen, onClose, onSubmit, vehicles }: AddInstall
                 max="120"
                 value={form.total_installments}
                 onChange={(e) => setForm({ ...form, total_installments: e.target.value })}
-                className="w-full bg-[#f2f2f7] dark:bg-[#2c2c2e] rounded-xl px-4 py-3 text-[var(--ios-text)] outline-none mt-1"
+                className="w-full bg-[var(--ios-fill)] rounded-xl px-4 py-3 text-[var(--ios-text)] outline-none mt-1"
                 placeholder="12"
               />
             </div>
@@ -388,7 +388,7 @@ const AddInstallmentModal = ({ isOpen, onClose, onSubmit, vehicles }: AddInstall
                 max="31"
                 value={form.due_day}
                 onChange={(e) => setForm({ ...form, due_day: e.target.value })}
-                className="w-full bg-[#f2f2f7] dark:bg-[#2c2c2e] rounded-xl px-4 py-3 text-[var(--ios-text)] outline-none mt-1"
+                className="w-full bg-[var(--ios-fill)] rounded-xl px-4 py-3 text-[var(--ios-text)] outline-none mt-1"
                 placeholder="15"
               />
             </div>
@@ -402,7 +402,7 @@ const AddInstallmentModal = ({ isOpen, onClose, onSubmit, vehicles }: AddInstall
                 type="date"
                 value={form.start_date}
                 onChange={(e) => setForm({ ...form, start_date: e.target.value })}
-                className="w-full bg-[#f2f2f7] dark:bg-[#2c2c2e] rounded-xl px-4 py-3 text-[var(--ios-text)] outline-none mt-1"
+                className="w-full bg-[var(--ios-fill)] rounded-xl px-4 py-3 text-[var(--ios-text)] outline-none mt-1"
               />
             </div>
             <div>
@@ -412,7 +412,7 @@ const AddInstallmentModal = ({ isOpen, onClose, onSubmit, vehicles }: AddInstall
                 onValueChange={(val) => setForm({ ...form, payment_method: val })}
                 options={PAYMENT_METHODS.map((m) => ({ value: m.value, label: m.label }))}
                 className="mt-1"
-                triggerClassName="bg-[#f2f2f7] dark:bg-[#2c2c2e] border-none shadow-none rounded-xl"
+                triggerClassName="bg-[var(--ios-fill)] border-none shadow-none rounded-xl"
               />
             </div>
           </div>
@@ -427,7 +427,7 @@ const AddInstallmentModal = ({ isOpen, onClose, onSubmit, vehicles }: AddInstall
                 ...CATEGORIES.map((cat) => ({ value: cat, label: cat }))
               ]}
               className="mt-1"
-              triggerClassName="bg-[#f2f2f7] dark:bg-[#2c2c2e] border-none shadow-none rounded-xl"
+              triggerClassName="bg-[var(--ios-fill)] border-none shadow-none rounded-xl"
             />
           </div>
 
@@ -441,7 +441,7 @@ const AddInstallmentModal = ({ isOpen, onClose, onSubmit, vehicles }: AddInstall
                 ...vehicles.map((v) => ({ value: v.id, label: v.name }))
               ]}
               className="mt-1"
-              triggerClassName="bg-[#f2f2f7] dark:bg-[#2c2c2e] border-none shadow-none rounded-xl"
+              triggerClassName="bg-[var(--ios-fill)] border-none shadow-none rounded-xl"
             />
           </div>
 
@@ -450,7 +450,7 @@ const AddInstallmentModal = ({ isOpen, onClose, onSubmit, vehicles }: AddInstall
             <textarea
               value={form.notes}
               onChange={(e) => setForm({ ...form, notes: e.target.value })}
-              className="w-full bg-[#f2f2f7] dark:bg-[#2c2c2e] rounded-xl px-4 py-3 text-[var(--ios-text)] outline-none mt-1 resize-none"
+              className="w-full bg-[var(--ios-fill)] rounded-xl px-4 py-3 text-[var(--ios-text)] outline-none mt-1 resize-none"
               rows={2}
               placeholder="Observações opcionais"
             />
@@ -480,7 +480,7 @@ const RecurrenceCard = ({ item, onMarkPaid, onDelete }: {
   const isOverdue = new Date(item.next_due_date) < new Date(new Date().toDateString());
 
   return (
-    <div className="bg-white dark:bg-[#1c1c1e] rounded-2xl p-4 border border-[var(--ios-separator)]">
+    <div className="bg-white dark:bg-[var(--ios-card)] rounded-2xl p-4 border border-[var(--ios-separator)]">
       <div className="flex items-start justify-between">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
@@ -509,7 +509,7 @@ const RecurrenceCard = ({ item, onMarkPaid, onDelete }: {
         <div className="flex gap-2">
           <button
             onClick={() => onMarkPaid(item.id)}
-            className="p-2 rounded-xl bg-[#34c759]/10 text-[#34c759] hover:bg-[#34c759]/20 transition-colors"
+            className="p-2 rounded-xl bg-[var(--sys-green)]/10 text-[var(--sys-green)] hover:bg-[var(--sys-green)]/20 transition-colors"
             title="Marcar como pago"
           >
             <CheckCircle2 className="w-4 h-4" />
@@ -538,7 +538,7 @@ const InstallmentCard = ({ item, onMarkPaid, onDelete }: {
   const isOverdue = item.active && new Date(item.next_due_date) < new Date(new Date().toDateString());
 
   return (
-    <div className="bg-white dark:bg-[#1c1c1e] rounded-2xl p-4 border border-[var(--ios-separator)]">
+    <div className="bg-white dark:bg-[var(--ios-card)] rounded-2xl p-4 border border-[var(--ios-separator)]">
       <div className="flex items-start justify-between">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
@@ -561,7 +561,7 @@ const InstallmentCard = ({ item, onMarkPaid, onDelete }: {
 
       {/* Barra de progresso */}
       <div className="mt-3">
-        <div className="h-1.5 bg-[#f2f2f7] dark:bg-[#2c2c2e] rounded-full overflow-hidden">
+        <div className="h-1.5 bg-[var(--ios-fill)] rounded-full overflow-hidden">
           <div
             className="h-full bg-[var(--ios-blue)] rounded-full transition-all duration-300"
             style={{ width: `${progress}%` }}
@@ -581,7 +581,7 @@ const InstallmentCard = ({ item, onMarkPaid, onDelete }: {
           <div className="flex gap-2">
             <button
               onClick={() => onMarkPaid(item.id)}
-              className="p-2 rounded-xl bg-[#34c759]/10 text-[#34c759] hover:bg-[#34c759]/20 transition-colors"
+              className="p-2 rounded-xl bg-[var(--sys-green)]/10 text-[var(--sys-green)] hover:bg-[var(--sys-green)]/20 transition-colors"
               title="Marcar parcela como paga"
             >
               <CheckCircle2 className="w-4 h-4" />
@@ -658,7 +658,7 @@ const RecurringExpensesPage = () => {
       <div className="px-4 py-4 space-y-6">
         {/* Resumo mensal */}
       <div className="grid grid-cols-2 gap-3">
-        <div className="bg-white dark:bg-[#1c1c1e] rounded-2xl p-4 border border-[var(--ios-separator)]">
+        <div className="bg-white dark:bg-[var(--ios-card)] rounded-2xl p-4 border border-[var(--ios-separator)]">
           <div className="flex items-center gap-2 text-sm text-[var(--ios-text-secondary)] mb-1">
             <Repeat className="w-4 h-4" />
             <span>Recorrências/mês</span>
@@ -667,7 +667,7 @@ const RecurringExpensesPage = () => {
             R$ {totalMonthlyRecurrences.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
           </p>
         </div>
-        <div className="bg-white dark:bg-[#1c1c1e] rounded-2xl p-4 border border-[var(--ios-separator)]">
+        <div className="bg-white dark:bg-[var(--ios-card)] rounded-2xl p-4 border border-[var(--ios-separator)]">
           <div className="flex items-center gap-2 text-sm text-[var(--ios-text-secondary)] mb-1">
             <CreditCard className="w-4 h-4" />
             <span>Parcelamentos/mês</span>
@@ -679,12 +679,12 @@ const RecurringExpensesPage = () => {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-2 bg-[#f2f2f7] dark:bg-[#2c2c2e] rounded-xl p-1">
+      <div className="flex gap-2 bg-[var(--ios-fill)] rounded-xl p-1">
         <button
           onClick={() => setTab('recurrences')}
           className={`flex-1 py-2 rounded-lg text-sm font-medium transition-colors ${
             tab === 'recurrences'
-              ? 'bg-white dark:bg-[#1c1c1e] text-[var(--ios-text)] shadow-sm'
+              ? 'bg-white dark:bg-[var(--ios-card)] text-[var(--ios-text)] shadow-sm'
               : 'text-[var(--ios-text-secondary)]'
           }`}
         >
@@ -697,7 +697,7 @@ const RecurringExpensesPage = () => {
           onClick={() => setTab('installments')}
           className={`flex-1 py-2 rounded-lg text-sm font-medium transition-colors ${
             tab === 'installments'
-              ? 'bg-white dark:bg-[#1c1c1e] text-[var(--ios-text)] shadow-sm'
+              ? 'bg-white dark:bg-[var(--ios-card)] text-[var(--ios-text)] shadow-sm'
               : 'text-[var(--ios-text-secondary)]'
           }`}
         >

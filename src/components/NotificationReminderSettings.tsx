@@ -58,7 +58,7 @@ export default function NotificationReminderSettings() {
             {settings.enabled ? (
               <Bell className="w-5 h-5 text-blue-600 dark:text-blue-400" />
             ) : (
-              <BellOff className="w-5 h-5 text-gray-400" />
+              <BellOff className="w-5 h-5 text-[var(--ios-text-tertiary)]" />
             )}
           </div>
           <div className="text-left">
@@ -80,7 +80,7 @@ export default function NotificationReminderSettings() {
             handleToggle();
           }}
           className={`relative w-12 h-7 rounded-full transition-colors cursor-pointer ${
-            settings.enabled ? 'bg-blue-600' : 'bg-gray-300 dark:bg-gray-600'
+            settings.enabled ? 'bg-[var(--ios-accent)]' : 'bg-[var(--ios-fill)]'
           }`}
           role="switch"
           aria-checked={settings.enabled}

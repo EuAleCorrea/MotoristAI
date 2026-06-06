@@ -8,6 +8,7 @@ import { format, startOfMonth, endOfMonth, eachMonthOfInterval, subMonths } from
 import { ptBR } from 'date-fns/locale';
 import { PieChart, Gauge, Layers3, FileText, Calendar, ArrowLeft, Download } from 'lucide-react';
 import { formatCurrency, formatNumber, formatInteger, formatChartCurrency } from '../utils/formatters';
+import { useChartTheme } from '../utils/chartTheme';
 import { AppSelect } from '../components/forms/AppSelect';
 
 type ViewType = 'category' | 'km_energy' | 'platforms' | 'monthly';
@@ -25,8 +26,9 @@ const Reports = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const viewParam = searchParams.get('view') as ViewType | null;
-  const [activeView, setActiveView] = useState<ViewType>(viewParam || 'category');
-  const [selectedPeriod, setSelectedPeriod] = useState('6months');
+ const [activeView, setActiveView] = useState<ViewType>(viewParam || 'category');
+ const [selectedPeriod, setSelectedPeriod] = useState('6months');
+ const chartTheme = useChartTheme();
 
   // Reset scroll when active view changes
   useScrollReset(activeView);
@@ -92,11 +94,17 @@ const Reports = () => {
  }, [expenses]);
 
  const categoryChartOption = {
- tooltip: { trigger: 'item', formatter: (params: any) => `${params.name}: ${formatChartCurrency(params.value)} (${params.percent}%)` },
+ tooltip: {
+ trigger: 'item',
+ backgroundColor: chartTheme.tooltipBg,
+ borderColor: chartTheme.tooltipBorder,
+ textStyle: { color: chartTheme.textColor },
+ formatter: (params: any) => `${params.name}: ${formatChartCurrency(params.value)} (${params.percent}%)`,
+ },
  series: [{
  name: 'Despesas', type: 'pie', radius: ['40%', '70%'],
- itemStyle: { borderRadius: 10, borderColor: '#fff', borderWidth: 2 },
- label: { show: true, formatter: '{b}: {d}%' },
+ itemStyle: { borderRadius: 10, borderColor: chartTheme.pieBorderColor, borderWidth: 2 },
+ label: { show: true, color: chartTheme.textColor, formatter: '{b}: {d}%' },
  data: Object.entries(expensesByCategory).map(([name, value]) => ({ name, value })),
  }],
  };
@@ -121,22 +129,42 @@ const Reports = () => {
  }, [entries]);
 
  const platformChartOption = {
- tooltip: { trigger: 'item', formatter: (params: any) => `${params.name}: ${formatChartCurrency(params.value)} (${params.percent}%)` },
+ tooltip: {
+ trigger: 'item',
+ backgroundColor: chartTheme.tooltipBg,
+ borderColor: chartTheme.tooltipBorder,
+ textStyle: { color: chartTheme.textColor },
+ formatter: (params: any) => `${params.name}: ${formatChartCurrency(params.value)} (${params.percent}%)`,
+ },
  series: [{
  name: 'Receita', type: 'pie', radius: ['40%', '70%'],
- itemStyle: { borderRadius: 10, borderColor: '#fff', borderWidth: 2 },
- label: { show: true, formatter: '{b}: {d}%' },
+ itemStyle: { borderRadius: 10, borderColor: chartTheme.pieBorderColor, borderWidth: 2 },
+ label: { show: true, color: chartTheme.textColor, formatter: '{b}: {d}%' },
  data: Object.entries(revenueByPlatform).map(([name, value]) => ({ name, value })),
  }],
  };
 
  // --- Monthly View ---
  const monthlyChartOption = {
- tooltip: { trigger: 'axis' },
- legend: { data: ['Receita', 'Despesas', 'Lucro'], bottom: 0 },
+ tooltip: {
+ trigger: 'axis',
+ backgroundColor: chartTheme.tooltipBg,
+ borderColor: chartTheme.tooltipBorder,
+ textStyle: { color: chartTheme.textColor },
+ },
+ legend: { data: ['Receita', 'Despesas', 'Lucro'], bottom: 0, textStyle: { color: chartTheme.legendTextColor } },
  grid: { left: '3%', right: '4%', bottom: '15%', containLabel: true },
- xAxis: { type: 'category', data: monthsData.map((d) => d.month) },
- yAxis: { type: 'value', axisLabel: { formatter: (value: number) => formatChartCurrency(value) } },
+ xAxis: {
+ type: 'category',
+ data: monthsData.map((d) => d.month),
+ axisLine: { lineStyle: { color: chartTheme.axisLineColor } },
+ axisLabel: { color: chartTheme.textColor },
+ },
+ yAxis: {
+ type: 'value',
+ axisLabel: { color: chartTheme.textColor, formatter: (value: number) => formatChartCurrency(value) },
+ splitLine: { lineStyle: { color: chartTheme.splitLineColor } },
+ },
  series: [
  { name: 'Receita', type: 'bar', data: monthsData.map((d) => d.revenue), itemStyle: { color: '#22c55e' } },
  { name: 'Despesas', type: 'bar', data: monthsData.map((d) => d.expenses), itemStyle: { color: '#ef4444' } },

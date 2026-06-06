@@ -146,7 +146,7 @@ function Goals() {
                     <span className="text-sm font-semibold text-red-600">Excluir meta?</span>
                     <div className="flex gap-2">
                       <button onClick={() => { deleteGoal(goal.id); setDeleteConfirmId(null); }} className="px-3 py-1 bg-red-600 text-white rounded-lg text-sm font-bold">Sim</button>
-                      <button onClick={() => setDeleteConfirmId(null)} className="px-3 py-1 bg-white/50 text-gray-700 rounded-lg text-sm font-bold">Não</button>
+                      <button onClick={() => setDeleteConfirmId(null)} className="px-3 py-1 bg-[var(--ios-fill)] text-[var(--ios-text)] rounded-lg text-sm font-bold">Não</button>
                     </div>
                   </div>
                 )}

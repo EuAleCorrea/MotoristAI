@@ -53,7 +53,7 @@ interface SelectFieldProps {
 }
 
 const SelectField = ({ label, icon: Icon, value, options, onChange }: SelectFieldProps) => (
-  <div className="bg-white dark:bg-[#1c1c1e] rounded-2xl p-4 space-y-2 border border-[var(--ios-separator)]">
+  <div className="bg-white dark:bg-[var(--ios-card)] rounded-2xl p-4 space-y-2 border border-[var(--ios-separator)]">
     <div className="flex items-center gap-2 text-sm text-[var(--ios-text-secondary)]">
       <Icon className="w-4 h-4" />
       <span>{label}</span>
@@ -73,7 +73,7 @@ const ToggleField = ({ label, description, enabled, onChange }: {
   enabled: boolean;
   onChange: (v: boolean) => void;
 }) => (
-  <div className="bg-white dark:bg-[#1c1c1e] rounded-2xl p-4 flex items-center justify-between border border-[var(--ios-separator)]">
+  <div className="bg-white dark:bg-[var(--ios-card)] rounded-2xl p-4 flex items-center justify-between border border-[var(--ios-separator)]">
     <div className="flex-1">
       <p className="text-[var(--ios-text)] font-medium">{label}</p>
       {description && (
@@ -83,7 +83,7 @@ const ToggleField = ({ label, description, enabled, onChange }: {
     <button
       onClick={() => onChange(!enabled)}
       className={`relative w-12 h-7 rounded-full transition-colors duration-200 ${
-        enabled ? 'bg-[#34c759]' : 'bg-[#e9e9eb] dark:bg-[#3a3a3c]'
+        enabled ? 'bg-[var(--sys-green)]' : 'bg-[var(--ios-fill)]'
       }`}
     >
       <div className={`absolute top-0.5 w-6 h-6 bg-white rounded-full shadow-md transition-transform duration-200 ${
@@ -146,7 +146,7 @@ const PreferencesPage = () => {
         </div>
       )}
       {!saving && preferences && (
-        <div className="flex items-center gap-2 px-4 py-2 bg-[#34c759]/10 rounded-2xl text-sm text-[#34c759]">
+        <div className="flex items-center gap-2 px-4 py-2 bg-[var(--sys-green)]/10 rounded-2xl text-sm text-[var(--sys-green)]">
           <CheckCircle2 className="w-4 h-4" />
           Salvo automaticamente
         </div>
@@ -209,7 +209,7 @@ const PreferencesPage = () => {
         <h2 className="text-xs font-semibold text-[var(--ios-text-secondary)] uppercase tracking-wider px-1">
           Aparência
         </h2>
-        <div className="bg-white dark:bg-[#1c1c1e] rounded-2xl p-4 space-y-2 border border-[var(--ios-separator)]">
+        <div className="bg-white dark:bg-[var(--ios-card)] rounded-2xl p-4 space-y-2 border border-[var(--ios-separator)]">
           <div className="flex items-center gap-2 text-sm text-[var(--ios-text-secondary)] mb-3">
             <Monitor className="w-4 h-4" />
             <span>Tema</span>
@@ -222,7 +222,7 @@ const PreferencesPage = () => {
                 className={`flex-1 py-3 rounded-xl text-sm font-medium transition-colors ${
                   preferences.theme === theme.value
                     ? 'bg-[var(--ios-blue)] text-white'
-                    : 'bg-[#f2f2f7] dark:bg-[#2c2c2e] text-[var(--ios-text-secondary)]'
+                    : 'bg-[var(--ios-fill)] text-[var(--ios-text-secondary)]'
                 }`}
               >
                 {theme.label}
@@ -256,7 +256,7 @@ const PreferencesPage = () => {
         <h2 className="text-xs font-semibold text-[var(--ios-text-secondary)] uppercase tracking-wider px-1">
           Padrões
         </h2>
-        <div className="bg-white dark:bg-[#1c1c1e] rounded-2xl p-4 space-y-3 border border-[var(--ios-separator)]">
+        <div className="bg-white dark:bg-[var(--ios-card)] rounded-2xl p-4 space-y-3 border border-[var(--ios-separator)]">
           <div>
             <label className="text-sm text-[var(--ios-text-secondary)]">Plataforma padrão</label>
             <input
@@ -285,7 +285,7 @@ const PreferencesPage = () => {
         <h2 className="text-xs font-semibold text-[var(--ios-text-secondary)] uppercase tracking-wider px-1">
           Produtividade
         </h2>
-        <div className="bg-white dark:bg-[#1c1c1e] rounded-2xl p-4 space-y-2 border border-[var(--ios-separator)]">
+        <div className="bg-white dark:bg-[var(--ios-card)] rounded-2xl p-4 space-y-2 border border-[var(--ios-separator)]">
           <div className="flex items-center gap-2 text-sm text-[var(--ios-text-secondary)]">
             <Target className="w-4 h-4" />
             <span>Meta semanal de horas trabalhadas</span>
@@ -299,7 +299,7 @@ const PreferencesPage = () => {
               value={preferences.weekly_goal_hours ?? ''}
               onChange={(e) => update('weekly_goal_hours', e.target.value ? parseFloat(e.target.value) : null)}
               placeholder="40"
-              className="flex-1 bg-[#f2f2f7] dark:bg-[#2c2c2e] text-[var(--ios-text)] text-lg font-bold rounded-xl px-4 py-2 outline-none text-center"
+              className="flex-1 bg-[var(--ios-fill)] text-[var(--ios-text)] text-lg font-bold rounded-xl px-4 py-2 outline-none text-center"
             />
             <span className="text-[var(--ios-text-secondary)] font-medium">horas/semana</span>
           </div>

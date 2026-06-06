@@ -6,6 +6,7 @@ import { format, startOfMonth, endOfMonth, eachMonthOfInterval, subMonths } from
 import { ptBR } from 'date-fns/locale';
 import { Calendar } from 'lucide-react';
 import { formatCurrency, formatChartCurrency } from '../utils/formatters';
+import { useChartTheme } from '../utils/chartTheme';
 
 import { useScrollReset } from '../hooks/useScrollReset';
 import { AppSelect } from '../components/forms/AppSelect';
@@ -14,6 +15,7 @@ function Analytics() {
   const entries = useEntryStore((state) => state.entries);
   const expenses = useExpenseStore((state) => state.expenses);
   const [selectedPeriod, setSelectedPeriod] = useState('6months');
+  const chartTheme = useChartTheme();
 
   // Reset scroll when period changes
   useScrollReset(selectedPeriod);
@@ -58,86 +60,101 @@ function Analytics() {
 
  const monthsData = getMonthsData();
 
- const monthlyRevenueOption = {
- tooltip: {
- trigger: 'axis',
- formatter: (params: any) => {
- return `${params[0].axisValue}<br/>
- Receita: ${formatChartCurrency(params[0].value)}<br/>
- Despesas: ${formatChartCurrency(params[1].value)}<br/>
- Lucro: ${formatChartCurrency(params[2].value)}`;
- },
- },
- legend: {
- data: ['Receita', 'Despesas', 'Lucro'],
- bottom: 0,
- },
- grid: {
- left: '3%',
- right: '4%',
- bottom: '15%',
- containLabel: true,
- },
- xAxis: {
- type: 'category',
- data: monthsData.map((d) => d.month),
- },
- yAxis: {
- type: 'value',
- axisLabel: {
- formatter: (value: number) => formatChartCurrency(value),
- },
- },
- series: [
- {
- name: 'Receita',
- type: 'bar',
- data: monthsData.map((d) => d.revenue),
- itemStyle: { color: '#22c55e' },
- },
- {
- name: 'Despesas',
- type: 'bar',
- data: monthsData.map((d) => d.expenses),
- itemStyle: { color: '#ef4444' },
- },
- {
- name: 'Lucro',
- type: 'line',
- data: monthsData.map((d) => d.profit),
- itemStyle: { color: '#3b82f6' },
- smooth: true,
- },
- ],
+  const monthlyRevenueOption = {
+  tooltip: {
+  trigger: 'axis',
+  backgroundColor: chartTheme.tooltipBg,
+  borderColor: chartTheme.tooltipBorder,
+  textStyle: { color: chartTheme.textColor },
+  formatter: (params: any) => {
+  return `${params[0].axisValue}<br/>
+  Receita: ${formatChartCurrency(params[0].value)}<br/>
+  Despesas: ${formatChartCurrency(params[1].value)}<br/>
+  Lucro: ${formatChartCurrency(params[2].value)}`;
+  },
+  },
+  legend: {
+  data: ['Receita', 'Despesas', 'Lucro'],
+  bottom: 0,
+  textStyle: { color: chartTheme.legendTextColor },
+  },
+  grid: {
+  left: '3%',
+  right: '4%',
+  bottom: '15%',
+  containLabel: true,
+  },
+  xAxis: {
+  type: 'category',
+  data: monthsData.map((d) => d.month),
+  axisLine: { lineStyle: { color: chartTheme.axisLineColor } },
+  axisLabel: { color: chartTheme.textColor },
+  },
+  yAxis: {
+  type: 'value',
+  axisLabel: {
+  color: chartTheme.textColor,
+  formatter: (value: number) => formatChartCurrency(value),
+  },
+  splitLine: { lineStyle: { color: chartTheme.splitLineColor } },
+  },
+  series: [
+  {
+  name: 'Receita',
+  type: 'bar',
+  data: monthsData.map((d) => d.revenue),
+  itemStyle: { color: '#22c55e' },
+  },
+  {
+  name: 'Despesas',
+  type: 'bar',
+  data: monthsData.map((d) => d.expenses),
+  itemStyle: { color: '#ef4444' },
+  },
+  {
+  name: 'Lucro',
+  type: 'line',
+  data: monthsData.map((d) => d.profit),
+  itemStyle: { color: '#3b82f6' },
+  smooth: true,
+  },
+  ],
  };
 
- const tripsCountOption = {
- tooltip: {
- trigger: 'axis',
- },
- grid: {
- left: '3%',
- right: '4%',
- bottom: '10%',
- containLabel: true,
- },
- xAxis: {
- type: 'category',
- data: monthsData.map((d) => d.month),
- },
- yAxis: {
- type: 'value',
- },
- series: [
- {
- name: 'Viagens',
- type: 'line',
- smooth: true,
- data: monthsData.map((d) => d.trips),
- itemStyle: { color: '#3b82f6' },
- areaStyle: { opacity: 0.3 },
- },
- ],
+  const tripsCountOption = {
+  tooltip: {
+  trigger: 'axis',
+  backgroundColor: chartTheme.tooltipBg,
+  borderColor: chartTheme.tooltipBorder,
+  textStyle: { color: chartTheme.textColor },
+  },
+  grid: {
+  left: '3%',
+  right: '4%',
+  bottom: '10%',
+  containLabel: true,
+  },
+  xAxis: {
+  type: 'category',
+  data: monthsData.map((d) => d.month),
+  axisLine: { lineStyle: { color: chartTheme.axisLineColor } },
+  axisLabel: { color: chartTheme.textColor },
+  },
+  yAxis: {
+  type: 'value',
+  axisLabel: { color: chartTheme.textColor },
+  splitLine: { lineStyle: { color: chartTheme.splitLineColor } },
+  },
+  series: [
+  {
+  name: 'Viagens',
+  type: 'line',
+  smooth: true,
+  data: monthsData.map((d) => d.trips),
+  itemStyle: { color: '#3b82f6' },
+  areaStyle: { opacity: 0.3 },
+  },
+  ],
  };
 
  // Expense categories breakdown
@@ -149,39 +166,43 @@ function Analytics() {
  return acc;
  }, {} as Record<string, number>);
 
- const expenseCategoryOption = {
- tooltip: {
- trigger: 'item',
- formatter: '{b}: R$ {c} ({d}%)',
- },
- series: [
- {
- name: 'Despesas por Categoria',
- type: 'pie',
- radius: ['40%', '70%'],
- avoidLabelOverlap: false,
- itemStyle: {
- borderRadius: 10,
- borderColor: '#fff',
- borderWidth: 2,
- },
- label: {
- show: true,
- formatter: '{b}: {d}%',
- },
- emphasis: {
- label: {
- show: true,
- fontSize: 16,
- fontWeight: 'bold',
- },
- },
- data: Object.entries(expensesByCategory).map(([name, value]) => ({
- name,
- value,
- })),
- },
- ],
+  const expenseCategoryOption = {
+  tooltip: {
+  trigger: 'item',
+  backgroundColor: chartTheme.tooltipBg,
+  borderColor: chartTheme.tooltipBorder,
+  textStyle: { color: chartTheme.textColor },
+  formatter: '{b}: R$ {c} ({d}%)',
+  },
+  series: [
+  {
+  name: 'Despesas por Categoria',
+  type: 'pie',
+  radius: ['40%', '70%'],
+  avoidLabelOverlap: false,
+  itemStyle: {
+  borderRadius: 10,
+  borderColor: chartTheme.pieBorderColor,
+  borderWidth: 2,
+  },
+  label: {
+  show: true,
+  color: chartTheme.textColor,
+  formatter: '{b}: {d}%',
+  },
+  emphasis: {
+  label: {
+  show: true,
+  fontSize: 16,
+  fontWeight: 'bold',
+  },
+  },
+  data: Object.entries(expensesByCategory).map(([name, value]) => ({
+  name,
+  value,
+  })),
+  },
+  ],
  };
 
  return (

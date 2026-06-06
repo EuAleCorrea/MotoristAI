@@ -211,7 +211,7 @@ function OdometerPage() {
                     </button>
                     <button
                       onClick={() => setDeletingId(null)}
-                      className="px-3 py-1.5 bg-gray-200 text-[var(--ios-text)] text-sm font-semibold rounded-lg"
+                      className="px-3 py-1.5 bg-[var(--ios-fill)] text-[var(--ios-text)] text-sm font-semibold rounded-lg"
                     >
                       Não
                     </button>

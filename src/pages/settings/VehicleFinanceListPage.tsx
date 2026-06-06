@@ -12,7 +12,7 @@ const costTypeColors: Record<string, string> = {
   'IPVA': 'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300',
   'Licenciamento': 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300',
   'Multa': 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300',
-  'Outros': 'bg-gray-100 dark:bg-gray-900/30 text-gray-700 dark:text-gray-300',
+  'Outros': 'bg-[var(--ios-fill)] text-[var(--ios-text-secondary)]',
 };
 
 const VehicleFinanceListPage = () => {
