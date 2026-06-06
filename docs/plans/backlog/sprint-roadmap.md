@@ -106,7 +106,7 @@ As tarefas dentro de cada sprint são priorizadas por **impacto x esforço**.
 
 | # | Tarefa | Status | Estimativa | Prioridade |
 |---|--------|--------|-----------|-----------|
-| 4.1 | Importação de extratos bancários (PDF/CSV) | ⬜ | 16h | 🔥 Alta |
+| 4.1 | ~~Importação de extratos bancários (CSV/OFX)~~ | ✅ | — | — |
 | 4.2 | ~~Relatório PDF para comprovação de renda~~ | ✅ | — | — |
 | 4.3 | ~~Alertas de manutenção por km~~ | ✅ | — | — |
 | 4.4 | Integração com APIs de plataformas (Uber, 99) | ⬜ | 20h | Baixa |
@@ -117,11 +117,13 @@ As tarefas dentro de cada sprint são priorizadas por **impacto x esforço**.
 
 ### Detalhamento
 
-#### 4.1 — Importação de extratos
-- Upload de arquivo PDF/CSV
-- Parse automático de valores, datas e descrições
-- Classificação inteligente por categoria
-- Diferencial competitivo: motorista não precisa lançar manualmente
+#### 4.1 — Importação de extratos ✅
+- v1 entregue: CSV + OFX (parser próprio, zero deps)
+- Upload via file picker + drag & drop
+- Preview editável: data, descrição, valor, tipo, categoria
+- Auto-categorização por keywords BR (20 grupos)
+- Bulk insert em `expenses` (1 round-trip)
+- Persistido em `history/007-bank-statement-import.md`
 
 #### 4.2 — Relatório PDF
 - Gerar PDF mensal com:
@@ -144,7 +146,7 @@ As tarefas dentro de cada sprint são priorizadas por **impacto x esforço**.
 | Sprint 1 | 1 semana | 16/04 | 16/04 | 10/10 | 0 |
 | Sprint 2 | 1 semana | 16/04 | 16/04 | 4/4 | 0 |
 | Sprint 3 | 1-2 semanas | 16/04 | 05/03 | 3/3 | 0 |
-| Sprint 4+ | Contínuo | — | — | 5/7 | 2 |
+| Sprint 4+ | Contínuo | — | — | 6/7 | 1 |
 
 ---
 

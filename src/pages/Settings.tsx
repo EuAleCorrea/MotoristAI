@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import SectionGrid from '../components/settings/SectionGrid';
 import {
-  Receipt, Fuel, Gauge, Camera, Wrench, ParkingCircle, Landmark, TrendingDown, Home, ShoppingCart, HeartPulse, GraduationCap, MoreHorizontal, PieChart, Layers3, FileText, Car, AppWindow, CalendarClock, Settings2, Repeat, Drama, Target, HelpCircle, MessageCircle, Shield, ScrollText, ShieldCheck
+  Receipt, Fuel, Gauge, Camera, Wrench, ParkingCircle, Landmark, TrendingDown, Home, ShoppingCart, HeartPulse, GraduationCap, MoreHorizontal, PieChart, Layers3, FileText, Car, AppWindow, CalendarClock, Settings2, Repeat, Drama, Target, HelpCircle, MessageCircle, Shield, ScrollText, ShieldCheck, Upload
 } from 'lucide-react';
 import { LucideIcon } from 'lucide-react';
 import { useQuickLaunchStore } from '../store/quickLaunchStore';
@@ -56,15 +56,16 @@ const SettingsPage = () => {
  { id: 'Todas as Despesas Familiares', title: 'Todas as Despesas', icon: Receipt, iconName: 'Receipt', route: '/despesas/familia' },
  ],
  },
- {
- title: 'Relatórios de Custos',
- items: [
- { id: 'Custos por Categoria', title: 'Custos por Categoria', icon: PieChart, iconName: 'PieChart', route: '/relatorios?view=category' },
- { id: 'Custo por Km e Energia', title: 'Custo por Km e Energia', icon: Gauge, iconName: 'Gauge', route: '/relatorios?view=km_energy' },
- { id: 'Plataformas e Categorias', title: 'Plataformas e Categorias', icon: Layers3, iconName: 'Layers3', route: '/relatorios?view=platforms' },
- { id: 'Resumo Mensal', title: 'Resumo Mensal', icon: FileText, iconName: 'FileText', route: '/relatorios?view=monthly' },
- ],
- },
+  {
+  title: 'Relatórios de Custos',
+  items: [
+  { id: 'Custos por Categoria', title: 'Custos por Categoria', icon: PieChart, iconName: 'PieChart', route: '/relatorios?view=category' },
+  { id: 'Custo por Km e Energia', title: 'Custo por Km e Energia', icon: Gauge, iconName: 'Gauge', route: '/relatorios?view=km_energy' },
+  { id: 'Plataformas e Categorias', title: 'Plataformas e Categorias', icon: Layers3, iconName: 'Layers3', route: '/relatorios?view=platforms' },
+  { id: 'Resumo Mensal', title: 'Resumo Mensal', icon: FileText, iconName: 'FileText', route: '/relatorios?view=monthly' },
+  { id: 'Importar Extrato', title: 'Importar Extrato', icon: Upload, iconName: 'Upload', route: '/importar-extrato' },
+  ],
+  },
  {
  title: 'Cadastros e Parâmetros',
  items: [

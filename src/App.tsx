@@ -60,6 +60,7 @@ import Insights from './pages/Insights';
 
 import DepreciationListPage from './pages/settings/DepreciationListPage';
 import VehicleFinanceListPage from './pages/settings/VehicleFinanceListPage';
+import ImportStatementPage from './pages/settings/ImportStatementPage';
 
 
 import { useEffect } from 'react';
@@ -223,6 +224,7 @@ function App() {
   <Route path="/cadastros/preferencias" element={<ProtectedRoute><Layout><PreferencesPage /></Layout></ProtectedRoute>} />
   <Route path="/alertas/manutencao" element={<ProtectedRoute><Layout><MaintenanceAlertsPage /></Layout></ProtectedRoute>} />
   <Route path="/alertas/despesas" element={<ProtectedRoute><Layout><RecurringExpensesPage /></Layout></ProtectedRoute>} />
+  <Route path="/importar-extrato" element={<ProtectedRoute><Layout><ImportStatementPage /></Layout></ProtectedRoute>} />
   </Routes>
  </AuthProvider>
  </Router >

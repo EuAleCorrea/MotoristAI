@@ -15,6 +15,7 @@ interface ExpenseStore {
   error: string | null;
   fetchExpenses: () => Promise<void>;
   addExpense: (expense: Omit<Expense, 'id'>) => Promise<void>;
+  bulkAddExpenses: (expenses: Omit<Expense, 'id'>[]) => Promise<number>;
   updateExpense: (id: string, expense: Partial<Expense>) => Promise<void>;
   deleteExpense: (id: string) => Promise<void>;
 }
@@ -54,6 +55,31 @@ export const useExpenseStore = create<ExpenseStore>((set) => ({
       set((state) => ({ expenses: [data, ...state.expenses] }));
     } catch (error: any) {
       set({ error: error.message });
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
+  bulkAddExpenses: async (newExpenses) => {
+    if (newExpenses.length === 0) return 0;
+    set({ isLoading: true, error: null });
+    try {
+      const { data, error } = await supabase
+        .from('expenses')
+        .insert(newExpenses)
+        .select();
+
+      if (error) throw error;
+      const inserted = data || [];
+      set((state) => ({
+        expenses: [...inserted, ...state.expenses].sort(
+          (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+        ),
+      }));
+      return inserted.length;
+    } catch (error: any) {
+      set({ error: error.message });
+      return 0;
     } finally {
       set({ isLoading: false });
     }
