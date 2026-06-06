@@ -109,9 +109,9 @@ As tarefas dentro de cada sprint são priorizadas por **impacto x esforço**.
 | 4.1 | ~~Importação de extratos bancários (CSV/OFX)~~ | ✅ | — | — |
 | 4.2 | ~~Relatório PDF para comprovação de renda~~ | ✅ | — | — |
 | 4.3 | ~~Alertas de manutenção por km~~ | ✅ | — | — |
-| 4.4 | Integração com APIs de plataformas (Uber, 99) | ⬜ | 20h | Baixa |
+| 4.4 | ~~Integração com APIs de plataformas (Uber, 99)~~ | ⛔ | — | — |
 | 4.5 | ~~Modo escuro completo (já iniciado)~~ | ✅ | — | — |
-| 4.6 | Suporte a múltiplos veículos simultâneos | ⬜ | 10h | Média |
+| 4.6 | ~~Suporte a múltiplos veículos simultâneos~~ | ⛔ | — | — |
 | 4.7 | ~~App Android/iOS nativo (Capacitor)~~ | ✅ | — | — |
 | 4.8 | Correção do login biométrico pós-logout | ✅ | 8h | 🔥 Alta |
 
@@ -146,7 +146,7 @@ As tarefas dentro de cada sprint são priorizadas por **impacto x esforço**.
 | Sprint 1 | 1 semana | 16/04 | 16/04 | 10/10 | 0 |
 | Sprint 2 | 1 semana | 16/04 | 16/04 | 4/4 | 0 |
 | Sprint 3 | 1-2 semanas | 16/04 | 05/03 | 3/3 | 0 |
-| Sprint 4+ | Contínuo | — | — | 6/7 | 1 |
+| Sprint 4+ | Contínuo | — | — | 6/7 | 0 (2 despriorizados) |
 
 ---
 
