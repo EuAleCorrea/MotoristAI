@@ -19,6 +19,7 @@
   --ios-bg: #F2F2F7;
   --ios-card: #FFFFFF;
   --ios-card-secondary: #F2F2F7;
+  --ios-bg-secondary: #F2F2F7;
   --ios-sheet-bg: #FFFFFF;
 
   /* Text */
@@ -28,8 +29,11 @@
 
   /* UI */
   --ios-separator: rgba(60, 60, 67, 0.12);
+  --ios-border: rgba(60, 60, 67, 0.12);
+  --ios-card-border: rgba(60, 60, 67, 0.12);
   --ios-fill: rgba(120, 120, 128, 0.12);
   --ios-accent: #007AFF;
+  --ios-blue: #007AFF;
   --ios-tint: rgba(0, 122, 255, 0.12);
 
   /* System Colors */
@@ -40,6 +44,12 @@
   --sys-yellow: #FFCC00;
   --sys-purple: #AF52DE;
   --sys-gray: #8E8E93;
+  --ios-red: #FF3B30;
+  --ios-green: #34C759;
+  --ios-orange: #FF9500;
+  --ios-yellow: #FFCC00;
+  --ios-purple: #AF52DE;
+  --ios-gray: #8E8E93;
 
   /* Safe areas */
   --safe-area-top: env(safe-area-inset-top, 0px);
@@ -51,6 +61,7 @@
   --ios-bg: #0B1929;
   --ios-card: #1C2B3A;
   --ios-card-secondary: #162534;
+  --ios-bg-secondary: #162534;
   --ios-sheet-bg: #1C2B3A;
 
   /* Text */
@@ -60,8 +71,11 @@
 
   /* UI */
   --ios-separator: rgba(255, 255, 255, 0.08);
+  --ios-border: rgba(255, 255, 255, 0.08);
+  --ios-card-border: rgba(255, 255, 255, 0.08);
   --ios-fill: #253444;
   --ios-accent: #0A84FF;
+  --ios-blue: #0A84FF;
   --ios-tint: rgba(10, 132, 255, 0.2);
 
   /* System Colors — brighter for dark bg */
@@ -72,6 +86,12 @@
   --sys-yellow: #FFD60A;
   --sys-purple: #BF5AF2;
   --sys-gray: #98989D;
+  --ios-red: #FF453A;
+  --ios-green: #30D158;
+  --ios-orange: #FF9F0A;
+  --ios-yellow: #FFD60A;
+  --ios-purple: #BF5AF2;
+  --ios-gray: #98989D;
 }
 
 /* ================================================================
