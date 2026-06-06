@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Plus, Edit2, Trash2, Landmark, Calendar, CheckCircle2, Clock, AlertTriangle, Banknote } from 'lucide-react';
-import { useVehicleExpensesStore, FinanceExpense } from '../../../store/vehicleExpensesStore';
+import { useVehicleExpensesStore, FinanceExpense } from '../../store/vehicleExpensesStore';
 import { useNavigate } from 'react-router-dom';
 import { format, isBefore, parseISO, isToday } from 'date-fns';
 import { ptBR } from 'date-fns/locale/pt-BR';
-import { formatCurrency } from '../../../utils/formatters';
+import { formatCurrency } from '../../utils/formatters';
 
 const costTypeColors: Record<string, string> = {
   'Financiamento': 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300',
@@ -15,7 +15,7 @@ const costTypeColors: Record<string, string> = {
   'Outros': 'bg-gray-100 dark:bg-gray-900/30 text-gray-700 dark:text-gray-300',
 };
 
-const VehicleFinancePage = () => {
+const VehicleFinanceListPage = () => {
   const { expenses, isLoading, error, fetchExpenses, deleteExpense } = useVehicleExpensesStore();
   const navigate = useNavigate();
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
@@ -293,4 +293,4 @@ const VehicleFinancePage = () => {
   );
 };
 
-export default VehicleFinancePage;
+export default VehicleFinanceListPage;

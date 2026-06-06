@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import { supabase } from '../services/supabase';
-import { faker } from '@faker-js/faker';
 
 // Base interface
 interface VehicleExpense {

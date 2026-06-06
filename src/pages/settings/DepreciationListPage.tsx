@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Plus, Edit2, Trash2, TrendingDown, ArrowRight } from 'lucide-react';
-import { useVehicleExpensesStore, DepreciationExpense } from '../../../store/vehicleExpensesStore';
+import { useVehicleExpensesStore, DepreciationExpense } from '../../store/vehicleExpensesStore';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale/pt-BR';
-import { formatCurrency, formatNumber } from '../../../utils/formatters';
+import { formatCurrency, formatNumber } from '../../utils/formatters';
 
-const DepreciationPage = () => {
+const DepreciationListPage = () => {
   const { expenses, isLoading, error, fetchExpenses, deleteExpense } = useVehicleExpensesStore();
   const navigate = useNavigate();
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
@@ -203,4 +203,4 @@ const DepreciationPage = () => {
   );
 };
 
-export default DepreciationPage;
+export default DepreciationListPage;
