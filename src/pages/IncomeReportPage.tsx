@@ -5,6 +5,8 @@ import { useEntryStore } from '../store/entryStore';
 import { useExpenseStore } from '../store/expenseStore';
 import { generateIncomeReport } from '../services/pdfReport';
 import { format } from 'date-fns';
+import { Capacitor } from '@capacitor/core';
+import { Filesystem, Directory } from '@capacitor/filesystem';
 
 const IncomeReportPage = () => {
   const navigate = useNavigate();
@@ -20,6 +22,7 @@ const IncomeReportPage = () => {
   const [driverName, setDriverName] = useState('');
   const [driverDocument, setDriverDocument] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     fetchEntries();
@@ -60,6 +63,7 @@ const IncomeReportPage = () => {
 
   const handleGeneratePDF = async () => {
     setIsGenerating(true);
+    setSuccess(false);
     try {
       const start = new Date(startDate + 'T00:00:00');
       const end = new Date(endDate + 'T23:59:59');
@@ -104,7 +108,27 @@ const IncomeReportPage = () => {
         ? `comprovante-renda-${driverName.replace(/\s+/g, '-').toLowerCase()}.pdf`
         : `comprovante-renda-${format(start, 'dd-MM-yyyy')}-a-${format(end, 'dd-MM-yyyy')}.pdf`;
 
-      doc.save(fileName);
+      if (Capacitor.isNativePlatform()) {
+        const dataUri = doc.output('datauristring');
+        const pdfBase64 = dataUri.split(',')[1];
+        const relativePath = `Comprovantes/${fileName}`;
+        await Filesystem.writeFile({
+          path: relativePath,
+          data: pdfBase64,
+          directory: Directory.External,
+          recursive: true,
+        });
+        const result = await Filesystem.getUri({
+          path: relativePath,
+          directory: Directory.External,
+        });
+        console.log('PDF salvo em:', result.uri);
+      } else {
+        doc.save(fileName);
+      }
+
+      setSuccess(true);
+      setTimeout(() => setSuccess(false), 2500);
     } catch (error) {
       console.error('Erro ao gerar PDF:', error);
       alert('Ocorreu um erro ao gerar o PDF. Tente novamente.');
@@ -281,6 +305,11 @@ const IncomeReportPage = () => {
             <>
               <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white" />
               Gerando PDF...
+            </>
+          ) : success ? (
+            <>
+              <ShieldCheck className="h-5 w-5" />
+              PDF Salvo em Documentos
             </>
           ) : (
             <>

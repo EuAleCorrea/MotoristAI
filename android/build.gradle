@@ -45,18 +45,6 @@ subprojects {
             }
         }
     }
-    afterEvaluate { project ->
-        if (project.hasProperty('android')) {
-            project.android {
-                if (namespace != null) {
-                    lint {
-                        checkReleaseBuilds false
-                        abortOnError false
-                    }
-                }
-            }
-        }
-    }
 }
 
 task clean(type: Delete) {
