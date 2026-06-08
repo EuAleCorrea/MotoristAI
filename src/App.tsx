@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Login from './pages/Login';
@@ -63,7 +63,7 @@ import VehicleFinanceListPage from './pages/settings/VehicleFinanceListPage';
 import ImportStatementPage from './pages/settings/ImportStatementPage';
 
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Capacitor } from '@capacitor/core';
 import { App as CapApp } from '@capacitor/app';
 import { Browser } from '@capacitor/browser';
@@ -80,8 +80,10 @@ function DeepLinkHandler() {
   useEffect(() => {
     if (!Capacitor.isNativePlatform()) return;
 
+    let listenerHandle: { remove(): Promise<void>; } | undefined;
+
     const setupListener = async () => {
-      await CapApp.addListener('appUrlOpen', async ({ url }) => {
+      listenerHandle = await CapApp.addListener('appUrlOpen', async ({ url }) => {
         console.log('[DeepLink] appUrlOpen:', url);
 
         if (!url.includes('login-callback')) return;
@@ -129,7 +131,79 @@ function DeepLinkHandler() {
     setupListener();
 
     return () => {
-      CapApp.removeAllListeners();
+      listenerHandle?.remove();
+    };
+  }, [navigate]);
+
+  return null;
+}
+
+
+/**
+ * BackButtonHandler — Hardware back button on Android.
+ * Navigates back using React Router history instead of WebView default,
+ * which would minimize the app immediately.
+ */
+function BackButtonHandler() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const historyStack = useRef<string[]>([location.pathname + location.search]);
+  const isNavigatingBack = useRef(false);
+
+  // Listen to ANY history.pop event (hardware back OR programmatic navigate(-1))
+  useEffect(() => {
+    const handlePopState = () => {
+      isNavigatingBack.current = true;
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  // Track route changes and sync the stack
+  useEffect(() => {
+    if (isNavigatingBack.current) {
+      // This change was caused by a pop (navigate(-1) or hardware back)
+      isNavigatingBack.current = false;
+      historyStack.current.pop();
+
+      // Ensure the new current location is tracked in the stack
+      const current = location.pathname + location.search;
+      if (current !== historyStack.current[historyStack.current.length - 1]) {
+        historyStack.current.push(current);
+      }
+      return;
+    }
+
+    // Forward navigation (pushState)
+    const current = location.pathname + location.search;
+    if (current !== historyStack.current[historyStack.current.length - 1]) {
+      historyStack.current.push(current);
+      if (historyStack.current.length > 30) {
+        historyStack.current.shift();
+      }
+    }
+  }, [location.pathname, location.search]);
+
+  // Hardware back button listener
+  useEffect(() => {
+    if (!Capacitor.isNativePlatform()) return;
+
+    let listener: { remove(): Promise<void>; } | undefined;
+
+    const setup = async () => {
+      listener = await CapApp.addListener('backButton', () => {
+        if (historyStack.current.length > 1) {
+          navigate(-1);
+        } else {
+          CapApp.exitApp();
+        }
+      });
+    };
+
+    setup();
+
+    return () => {
+      listener?.remove();
     };
   }, [navigate]);
 
@@ -139,9 +213,10 @@ function DeepLinkHandler() {
 
 function App() {
  return (
- <Router>
- <DeepLinkHandler />
- <AuthProvider>
+    <Router>
+      <DeepLinkHandler />
+      <BackButtonHandler />
+      <AuthProvider>
  <SplashHandler />
  <ScrollToTop />
   <Routes>
