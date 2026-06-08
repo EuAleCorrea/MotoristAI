@@ -70,7 +70,7 @@ export const AppSelect: React.FC<AppSelectProps> = ({
 
         <DropdownMenuContent
           align="start"
-          className={`w-[var(--radix-dropdown-menu-trigger-width)] max-h-60 overflow-y-auto bg-[var(--ios-sheet-bg)] border border-[var(--ios-separator)] text-[var(--ios-text)] rounded-xl p-1 shadow-lg z-50 ${contentClassName}`}
+          className={`w-[var(--radix-dropdown-menu-trigger-width)] max-h-60 overflow-y-auto bg-[var(--ios-sheet-bg)] border border-[var(--ios-separator)] text-[var(--ios-text)] rounded-xl p-1 shadow-lg z-[200] ${contentClassName}`}
         >
           <DropdownMenuRadioGroup value={value} onValueChange={onValueChange}>
             {options.map((opt) => {

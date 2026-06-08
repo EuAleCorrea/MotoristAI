@@ -54,7 +54,7 @@ export default function VehicleFilter() {
         </Button>
       </DropdownMenuTrigger>
       
-      <DropdownMenuContent className="w-[calc(100vw-32px)] sm:w-80 bg-[var(--ios-sheet-bg)] border border-[var(--ios-separator)] text-[var(--ios-text)] rounded-xl p-1 shadow-lg z-50">
+      <DropdownMenuContent className="w-[calc(100vw-32px)] sm:w-80 bg-[var(--ios-sheet-bg)] border border-[var(--ios-separator)] text-[var(--ios-text)] rounded-xl p-1 shadow-lg z-[200]">
         <DropdownMenuRadioGroup
           value={selectedVehicle || ''}
           onValueChange={(val) => setVehicle(val || null)}
