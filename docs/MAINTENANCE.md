@@ -45,6 +45,9 @@ Acesse `http://localhost:5173/` no browser. Verifique:
 5. Visualizar insights
 6. Configurar uma regra de manutenção
 7. Trocar tema
+8. **Expiração de sessão**: login → aguardar 5 min sem mexer → redireciona para `/login` com card "Sessão expirada" → clicar "Fazer login" → logar novamente
+9. **Páginas públicas**: deslogado → clicar "Termos de Uso" / "Privacidade" / "LGPD" no rodapé → renderiza conteúdo → "Voltar" → login
+10. **Parsing monetário**: digitar `365,50` e `1.234,56` em formulários → salvar → editar → valor correto (365.5 / 1234.56 no DB)
 
 ---
 
@@ -115,6 +118,19 @@ Todas as tabelas possuem RLS ativado. O acesso é restrito ao `user_id` vinculad
 - Email/senha (Supabase Auth)
 - Biometria no Android (Capacitor `@aparajita/capacitor-biometric-auth` v10) — ver `docs/plans/history/004-biometric-login-fix.md`
 - Google Auth (em transição, ver `docs/GOOGLE_AUTH_POST_MORTEM.md`)
+
+### Expiração de Sessão (nível banco)
+Implementado em `009-session-policy-fixes.md`:
+- **Inatividade 5 min**: `src/hooks/useInactivityLogout.ts` detecta eventos de input e faz logout silencioso após 5 min sem interação
+- **Sessão máxima 24h**: `src/services/supabase.ts` armazena timestamp de primeiro login e força logout ao atingir 24h
+- **Tela dedicada**: Ao expirar, redireciona para `/login` com card arredondado + botão "Fazer login"
+- **Razão**: `session_expired_reason` no `sessionStorage` (gravado via `onAuthStateChange` no `supabase.ts`)
+
+### Páginas de Política (públicas)
+- Termos (`/politicas/termos`), Privacidade (`/politicas/privacidade`), LGPD (`/politicas/lgpd`)
+- Sem `ProtectedRoute` — acessíveis sem login
+- `Layout.tsx` detecta `/politicas/*` e renderiza `PublicHeader` + conteúdo + `PublicFooter` quando `!user`
+- Links no rodapé do login corrigidos em `AuthCard.tsx`
 
 ---
 

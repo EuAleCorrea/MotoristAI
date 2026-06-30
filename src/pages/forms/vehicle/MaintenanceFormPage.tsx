@@ -9,6 +9,7 @@ import FormTextArea from '../../../components/forms/FormTextArea';
 import { Wrench, Calendar, Gauge, Paperclip, AlertTriangle, Building } from 'lucide-react';
 import FormPageLayout from '../../../components/layouts/FormPageLayout';
 import VehicleSelector from '../../../components/forms/VehicleSelector';
+import { parseAmount } from '../../../utils/formatters';
 
 const MaintenanceFormPage: React.FC = () => {
  const navigate = useNavigate();
@@ -64,20 +65,20 @@ const MaintenanceFormPage: React.FC = () => {
  }
  }, [id, isEditing, expenses]);
 
- useEffect(() => {
- const parts = parseFloat(partsCost) || 0;
- const labor = parseFloat(laborCost) || 0;
+  useEffect(() => {
+ const parts = parseAmount(partsCost) ?? 0;
+ const labor = parseAmount(laborCost) ?? 0;
  setTotalValue((parts + labor).toFixed(2));
- }, [partsCost, laborCost]);
+  }, [partsCost, laborCost]);
 
- useEffect(() => {
+  useEffect(() => {
  const currentOdometer = parseFloat(odometer);
  if (latestOdometer && currentOdometer > 0 && currentOdometer < latestOdometer) {
  setOdometerWarning(`Atenção: O odômetro inserido (${currentOdometer} km) é menor que o último registro (${latestOdometer} km).`);
  } else {
  setOdometerWarning(null);
  }
- }, [odometer, latestOdometer]);
+  }, [odometer, latestOdometer]);
 
  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
  if (e.target.files && e.target.files[0]) {
@@ -85,13 +86,13 @@ const MaintenanceFormPage: React.FC = () => {
  }
  };
 
- const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
  e.preventDefault();
-  const expenseData: Omit<MaintenanceExpense, 'id' | 'createdAt' | 'updatedAt'> = {
+   const expenseData: Omit<MaintenanceExpense, 'id' | 'createdAt' | 'updatedAt'> = {
  type: 'maintenance',
  vehicleId: vehicleId || undefined,
  date: new Date(date + 'T12:00:00').toISOString(),
- totalValue: parseFloat(totalValue) || 0,
+ totalValue: parseAmount(totalValue) ?? 0,
  odometer: parseFloat(odometer) || undefined,
  notes: notes || undefined,
  details: {
@@ -99,8 +100,8 @@ const MaintenanceFormPage: React.FC = () => {
  description: maintenanceType,
  provider,
  partsReplaced: partsReplaced || undefined,
- laborCost: parseFloat(laborCost) || 0,
- partsCost: parseFloat(partsCost) || 0,
+ laborCost: parseAmount(laborCost) ?? 0,
+ partsCost: parseAmount(partsCost) ?? 0,
  }
  };
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import FormInput from './FormInput';
-import { formatNumber, parseCurrency } from '../../utils/formatters';
+import { formatNumber, parseAmount } from '../../utils/formatters';
 
 type MoneyInputProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> & {
  label: string;
@@ -11,6 +11,8 @@ type MoneyInputProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChan
 
 /**
  * Componente de entrada de valores monetários que formata para pt-BR no blur.
+ * Notifica o parent com o valor numérico a CADA keystroke (não só no blur),
+ * evitando perda de dados quando o usuário clica "Salvar" sem tirar o foco.
  */
 const MoneyInput: React.FC<MoneyInputProps> = ({ value, onChange, onFocus, onBlur, ...props }) => {
  const [displayValue, setDisplayValue] = useState<string>('');
@@ -18,37 +20,52 @@ const MoneyInput: React.FC<MoneyInputProps> = ({ value, onChange, onFocus, onBlu
  // Sincroniza o valor inicial e mudanças externas
  useEffect(() => {
  if (value !== undefined && value !== null && value !== '') {
- const numericValue = typeof value === 'number' ? value : parseCurrency(value.toString());
- setDisplayValue(formatNumber(numericValue));
+ const numericValue = typeof value === 'number' ? value : parseAmount(value.toString());
+ setDisplayValue(numericValue !== null ? formatNumber(numericValue) : '');
  } else {
  setDisplayValue('');
  }
  }, [value]);
 
+ const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+ const raw = e.target.value;
+ setDisplayValue(raw);
+ // Notifica o parent IMEDIATAMENTE com o valor numérico parseado,
+ // para que o handleSubmit sempre tenha o valor correto, mesmo sem blur.
+ if (onChange) {
+ const parsed = parseAmount(raw);
+ onChange({
+ target: {
+ name: props.name || props.id,
+ value: parsed !== null ? parsed.toString() : ''
+ }
+ });
+ }
+ };
+
  const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
  // Quando focar, removemos os pontos de milhar para facilitar a edição
  // Mas mantemos a vírgula decimal se houver
- const numericValue = parseCurrency(displayValue);
- if (numericValue !== 0) {
- // Formata apenas com a vírgula, sem pontos
+ const numericValue = parseAmount(displayValue);
+ if (numericValue !== null && numericValue !== 0) {
  setDisplayValue(numericValue.toString().replace('.', ','));
  }
  if (onFocus) onFocus(e);
  };
 
  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
- const numericValue = parseCurrency(displayValue);
+ const numericValue = parseAmount(displayValue);
 
  // Formata para o padrão brasileiro bonito: 1.234,56
- const formatted = formatNumber(numericValue);
+ const formatted = numericValue !== null ? formatNumber(numericValue) : '';
  setDisplayValue(formatted);
 
- // Notifica o pai com o valor numérico (como string para manter compatibilidade com FormInput)
+ // Re-notifica o parent com o valor formatado (sanitizado)
  if (onChange) {
  onChange({
  target: {
  name: props.name || props.id,
- value: numericValue.toString()
+ value: numericValue !== null ? numericValue.toString() : ''
  }
  });
  }
@@ -58,11 +75,13 @@ const MoneyInput: React.FC<MoneyInputProps> = ({ value, onChange, onFocus, onBlu
  return (
  <FormInput
  {...props}
- type="text" // Mudamos para text para permitir caracteres de formatação
+ type="text" // text para permitir vírgula como decimal (pt-BR)
+ inputMode="decimal"
+ lang="pt-BR"
  value={displayValue}
  onFocus={handleFocus}
  onBlur={handleBlur}
- onChange={(e) => setDisplayValue(e.target.value)}
+ onChange={handleChange}
  />
  );
 };

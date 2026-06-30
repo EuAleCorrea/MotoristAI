@@ -3,6 +3,7 @@ import { X } from 'lucide-react';
 import { useGoalStore, Goal } from '../store/goalStore';
 import { format } from 'date-fns';
 import { AppSelect } from './forms/AppSelect';
+import { parseAmount } from '../utils/formatters';
 
 /*
  * GoalModal — Apple HIG Bottom Sheet
@@ -38,20 +39,20 @@ function GoalModal({ goal, onClose }: GoalModalProps) {
  day: goal?.day || '',
  });
 
- const handleSubmit = (e: React.FormEvent) => {
- e.preventDefault();
+  const handleSubmit = (e: React.FormEvent) => {
+  e.preventDefault();
 
- const goalData = {
- year: Number(formData.year),
- month: Number(formData.month),
- daysWorkedPerWeek: formData.daysWorkedPerWeek ? Number(formData.daysWorkedPerWeek) : undefined,
- revenue: formData.revenue ? Number(formData.revenue) : undefined,
- profit: formData.profit ? Number(formData.profit) : undefined,
- expense: formData.expense ? Number(formData.expense) : undefined,
- numberOfWeeks: formData.numberOfWeeks ? Number(formData.numberOfWeeks) : undefined,
- week: formData.week ? Number(formData.week) : undefined,
- day: formData.day ? Number(formData.day) : undefined,
- };
+  const goalData = {
+   year: Number(formData.year),
+   month: Number(formData.month),
+   daysWorkedPerWeek: formData.daysWorkedPerWeek ? Number(formData.daysWorkedPerWeek) : undefined,
+   revenue: formData.revenue ? (parseAmount(formData.revenue) ?? undefined) : undefined,
+   profit: formData.profit ? (parseAmount(formData.profit) ?? undefined) : undefined,
+   expense: formData.expense ? (parseAmount(formData.expense) ?? undefined) : undefined,
+   numberOfWeeks: formData.numberOfWeeks ? Number(formData.numberOfWeeks) : undefined,
+   week: formData.week ? Number(formData.week) : undefined,
+   day: formData.day ? Number(formData.day) : undefined,
+  };
 
  addGoal(goalData);
  onClose();

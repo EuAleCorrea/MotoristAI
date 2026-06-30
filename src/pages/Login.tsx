@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { AuthCard } from '../components/ui/AuthCard';
 import { useBiometricAuth } from '../hooks/useBiometricAuth';
+import { Clock, LogIn } from 'lucide-react';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -14,6 +15,7 @@ function Login() {
   const [isRegistering, setIsRegistering] = useState(false);
   const [isResettingPassword, setIsResettingPassword] = useState(false);
   const [resetSent, setResetSent] = useState(false);
+  const [expiredReason, setExpiredReason] = useState<string | null>(null);
   const navigate = useNavigate();
   const { user } = useAuth();
   const {
@@ -26,8 +28,52 @@ function Login() {
   } = useBiometricAuth();
 
   useEffect(() => {
-    if (user) navigate('/dashboard', { replace: true });
-  }, [user, navigate]);
+    if (user && !expiredReason) navigate('/dashboard', { replace: true });
+  }, [user, expiredReason, navigate]);
+
+  useEffect(() => {
+    const reason = sessionStorage.getItem('session_expired_reason');
+    if (reason) {
+      setExpiredReason(reason);
+    }
+  }, []);
+
+  const handleExpiredLogin = () => {
+    sessionStorage.removeItem('session_expired_reason');
+    setExpiredReason(null);
+  };
+
+  if (expiredReason) {
+    const message =
+      expiredReason === '24h_limit'
+        ? 'Sua sessão expirou após 24 horas.'
+        : 'Sua sessão expirou por inatividade.';
+
+    return (
+      <div className="w-full max-w-md mx-auto">
+        <div className="rounded-2xl border border-border bg-card text-card-foreground shadow-xl p-8 space-y-6">
+          <div className="flex justify-center">
+            <div className="rounded-full bg-amber-100 dark:bg-amber-900/30 p-4">
+              <Clock className="w-10 h-10 text-amber-600 dark:text-amber-400" />
+            </div>
+          </div>
+          <div className="space-y-2 text-center">
+            <h1 className="text-2xl font-bold">Sessão expirada</h1>
+            <p className="text-muted-foreground">{message}</p>
+            <p className="text-muted-foreground">Faça login novamente para continuar.</p>
+          </div>
+          <button
+            type="button"
+            onClick={handleExpiredLogin}
+            className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-3 font-medium transition-colors"
+          >
+            <LogIn className="w-5 h-5" />
+            Fazer login
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();

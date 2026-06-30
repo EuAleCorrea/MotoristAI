@@ -7,7 +7,7 @@ import FormTextArea from '../../../components/forms/FormTextArea';
 import { TrendingDown, Calendar } from 'lucide-react';
 import FormPageLayout from '../../../components/layouts/FormPageLayout';
 import VehicleSelector from '../../../components/forms/VehicleSelector';
-import { formatCurrency, formatNumber } from '../../../utils/formatters';
+import { formatCurrency, formatNumber, parseAmount } from '../../../utils/formatters';
 
 const DepreciationFormPage: React.FC = () => {
  const navigate = useNavigate();
@@ -35,28 +35,30 @@ const DepreciationFormPage: React.FC = () => {
  }
  }, [id, isEditing, expenses]);
 
- const depreciationPercentage = useMemo(() => {
- const pValue = parseFloat(purchaseValue);
- const cValue = parseFloat(currentValue);
+  const depreciationPercentage = useMemo(() => {
+ const pValue = parseAmount(purchaseValue);
+ const cValue = parseAmount(currentValue);
 
- if (isNaN(pValue) || isNaN(cValue) || pValue <= 0) {
+ if (pValue === null || cValue === null || pValue <= 0) {
  return 0;
  }
 
  return ((pValue - cValue) / pValue) * 100;
- }, [purchaseValue, currentValue]);
+  }, [purchaseValue, currentValue]);
 
- const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
  e.preventDefault();
-  const expenseData: Omit<DepreciationExpense, 'id' | 'createdAt' | 'updatedAt'> = {
+ const pValue = parseAmount(purchaseValue) ?? 0;
+ const cValue = parseAmount(currentValue) ?? 0;
+   const expenseData: Omit<DepreciationExpense, 'id' | 'createdAt' | 'updatedAt'> = {
  type: 'depreciation',
  vehicleId: vehicleId || undefined,
  date: new Date().toISOString().split('T')[0] + 'T12:00:00',
- totalValue: (parseFloat(purchaseValue) || 0) - (parseFloat(currentValue) || 0),
+ totalValue: pValue - cValue,
  notes: notes || undefined,
  details: {
- purchaseValue: parseFloat(purchaseValue) || 0,
- currentValue: parseFloat(currentValue) || 0,
+ purchaseValue: pValue,
+ currentValue: cValue,
  purchaseDate: purchaseDate + 'T12:00:00',
  evaluationDate: new Date().toISOString().split('T')[0] + 'T12:00:00',
  depreciationPercentage,
@@ -97,7 +99,7 @@ const DepreciationFormPage: React.FC = () => {
  <div className="mt-4 flex flex-col items-center">
  <span className="text-sm text-[var(--ios-text-tertiary)]">Valor depreciado:</span>
  <span className="text-lg font-bold text-[var(--ios-text)] ">
- {formatCurrency((parseFloat(purchaseValue) || 0) - (parseFloat(currentValue) || 0))}
+ {formatCurrency((parseAmount(purchaseValue) ?? 0) - (parseAmount(currentValue) ?? 0))}
  </span>
  </div>
  </div>

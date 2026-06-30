@@ -8,6 +8,7 @@ import FormSelect from '../../../components/forms/FormSelect';
 import FormTextArea from '../../../components/forms/FormTextArea';
 import { ShoppingCart, Calendar, MapPin } from 'lucide-react';
 import FormPageLayout from '../../../components/layouts/FormPageLayout';
+import { parseAmount } from '../../../utils/formatters';
 
 const FoodFormPage: React.FC = () => {
  const navigate = useNavigate();
@@ -43,10 +44,10 @@ const FoodFormPage: React.FC = () => {
  }
  }, [id, isEditing, expenses]);
 
- const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
  e.preventDefault();
- const value = parseFloat(totalValue);
- if (isNaN(value) || value <= 0) {
+ const value = parseAmount(totalValue);
+ if (value === null || value <= 0) {
  alert('O valor da despesa deve ser um número positivo.');
  return;
  }

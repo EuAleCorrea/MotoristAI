@@ -10,6 +10,7 @@ import FormTextArea from '../../components/forms/FormTextArea';
 import PlatformSelector from '../../components/forms/PlatformSelector';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { parseAmount } from '../../utils/formatters';
 
 function EntryFormPage() {
  const { id } = useParams();
@@ -70,7 +71,7 @@ function EntryFormPage() {
   const entryData: Omit<Entry, 'id'> = {
  date: new Date(formData.date + 'T12:00:00').toISOString(),
  source: formData.source,
- value: parseFloat(formData.value),
+ value: parseAmount(formData.value) ?? 0,
  tripCount: formData.tripCount ? parseInt(formData.tripCount) : 0,
  kmDriven: formData.kmDriven ? parseFloat(formData.kmDriven) : 0,
  hoursWorked: formData.hoursWorked || '00:00',

@@ -10,6 +10,7 @@ import FormInput from '../../components/forms/FormInput';
 import MoneyInput from '../../components/forms/MoneyInput';
 import FormSelect from '../../components/forms/FormSelect';
 import { getWorkingWeeksInMonth } from '../../utils/dateHelpers';
+import { parseAmount } from '../../utils/formatters';
 
 const months = Array.from({ length: 12 }, (_, i) => ({
  value: i + 1,
@@ -134,18 +135,18 @@ function GoalFormPage() {
  }
  }, [formData.year, formData.month]);
 
- const handleSubmit = (e: React.FormEvent) => {
- e.preventDefault();
+  const handleSubmit = (e: React.FormEvent) => {
+  e.preventDefault();
 
- const goalData = {
- year: Number(formData.year),
- month: Number(formData.month),
- daysWorkedPerWeek: formData.daysWorkedPerWeek ? Number(formData.daysWorkedPerWeek) : undefined,
- revenue: formData.revenue ? Number(formData.revenue) : undefined,
- profit: formData.profit ? Number(formData.profit) : undefined,
- expense: formData.expense ? Number(formData.expense) : undefined,
- week: formData.week ? Number(formData.week) : undefined,
- };
+  const goalData = {
+   year: Number(formData.year),
+   month: Number(formData.month),
+   daysWorkedPerWeek: formData.daysWorkedPerWeek ? Number(formData.daysWorkedPerWeek) : undefined,
+   revenue: formData.revenue ? (parseAmount(formData.revenue) ?? undefined) : undefined,
+   profit: formData.profit ? (parseAmount(formData.profit) ?? undefined) : undefined,
+   expense: formData.expense ? (parseAmount(formData.expense) ?? undefined) : undefined,
+   week: formData.week ? Number(formData.week) : undefined,
+  };
 
  if (isEditing && id) {
  updateGoal(id, goalData);

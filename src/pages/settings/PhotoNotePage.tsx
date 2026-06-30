@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { usePhotoNoteStore, PHOTO_NOTE_CATEGORIES } from '../../store/photoNoteStore';
 import { useVehicleStore } from '../../store/vehicleStore';
-import { formatCurrency } from '../../utils/formatters';
+import { formatCurrency, parseAmount } from '../../utils/formatters';
 import { AppSelect } from '../../components/forms/AppSelect';
 
 const PhotoNotePage = () => {
@@ -63,7 +63,7 @@ const PhotoNotePage = () => {
     }
 
     await addNote({
-      amount: parseFloat(form.amount),
+      amount: parseAmount(form.amount) ?? 0,
       description: form.description,
       date: form.date,
       category: form.category,

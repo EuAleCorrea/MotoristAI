@@ -28,6 +28,7 @@ import Support from './pages/Support';
 import Reports from './pages/Reports';
 import IncomeReportPage from './pages/IncomeReportPage';
 import SplashHandler from './components/SplashHandler';
+import { useInactivityLogout } from './hooks/useInactivityLogout';
 
 // Páginas de Políticas
 import PrivacyPolicy from './pages/policies/PrivacyPolicy';
@@ -211,12 +212,19 @@ function BackButtonHandler() {
 }
 
 
+function InactivityWatcher() {
+  useInactivityLogout();
+  return null;
+}
+
+
 function App() {
  return (
     <Router>
       <DeepLinkHandler />
       <BackButtonHandler />
-      <AuthProvider>
+ <AuthProvider>
+ <InactivityWatcher />
  <SplashHandler />
  <ScrollToTop />
   <Routes>
@@ -255,10 +263,10 @@ function App() {
   <Route path="/insights" element={<ProtectedRoute><Layout><Insights /></Layout></ProtectedRoute>} />
 
 
-  {/* Rotas de Políticas (públicas mas agora dentro do layout da app) */}
-  <Route path="/politicas/privacidade" element={<ProtectedRoute><Layout><PrivacyPolicy /></Layout></ProtectedRoute>} />
-  <Route path="/politicas/termos" element={<ProtectedRoute><Layout><TermsOfUse /></Layout></ProtectedRoute>} />
-  <Route path="/politicas/lgpd" element={<ProtectedRoute><Layout><LGPD /></Layout></ProtectedRoute>} />
+  {/* Rotas de Políticas (públicas — sem ProtectedRoute) */}
+  <Route path="/politicas/privacidade" element={<Layout><PrivacyPolicy /></Layout>} />
+  <Route path="/politicas/termos" element={<Layout><TermsOfUse /></Layout>} />
+  <Route path="/politicas/lgpd" element={<Layout><LGPD /></Layout>} />
 
   {/* Rotas de Despesas do Veículo */}
   <Route path="/despesas/veiculo/energia-combustivel" element={<ProtectedRoute><Layout><EnergyFuelFormPage /></Layout></ProtectedRoute>} />

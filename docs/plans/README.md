@@ -4,7 +4,9 @@ Este documento centraliza todos os planos de implementação técnica projetados
 
 ## 📋 Backlog de Planos (Aguardando Execução)
 
-_Nenhum plano aguardando execução no momento._
+| ID | Plano | Origem | Próximo Passo |
+|:---|:---|:---|:---|
+| 008 | [Redução do Tamanho do APK Android](backlog/008-apk-size-reduction.md) | Investigação 2026-06-08 (APK 41.4MB) | Habilitar R8 + remover @capgo/capacitor-social-login |
 
 ## ✅ Histórico de Planos (Concluídos)
 
@@ -15,6 +17,7 @@ _Nenhum plano aguardando execução no momento._
 | 003 | [Manutenção e Suporte](history/003-project-maintenance.md) | 2026-04-16 | Guia Técnico e Script de Verificação Criados |
 | 004 | [Login Biométrico — Sessão não restaura após logout](history/004-biometric-login-fix.md) | 2026-06-06 | Credenciais criptografadas em Preferences + re-auth via signInWithPassword |
 | 005 | [Padronização de Dropdowns e Otimização Premium](history/005-shadcn-dropdowns-migration.md) | 2026-05-31 | Dropdowns unificados (shadcn) acoplados com check à direita |
+| 009 | [Expiração de Sessão, Políticas Públicas e Parsing Monetário](history/009-session-policy-fixes.md) | 2026-06-18 | Inatividade 5min + sessão 24h, páginas públicas, parseAmount pt-BR |
 
 ---
 

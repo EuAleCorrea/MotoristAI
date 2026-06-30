@@ -5,6 +5,7 @@ import FormPageLayout from '../../components/layouts/FormPageLayout';
 import MoneyInput from '../../components/forms/MoneyInput';
 import { Wallet } from 'lucide-react';
 import { AppSelect } from '../../components/forms/AppSelect';
+import { parseAmount } from '../../utils/formatters';
 
 function ExpenseFormPage() {
  const { id } = useParams();
@@ -39,10 +40,10 @@ function ExpenseFormPage() {
  const handleSubmit = (e: React.FormEvent) => {
  e.preventDefault();
 
- const expenseData = {
+  const expenseData = {
  category: formData.category,
  description: formData.description,
- amount: parseFloat(formData.amount),
+ amount: parseAmount(formData.amount) ?? 0,
  date: new Date(formData.date + 'T12:00:00').toISOString(),
  };
 

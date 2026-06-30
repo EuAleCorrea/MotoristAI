@@ -2,7 +2,7 @@
 
 buildscript {
 
-    ext.kotlin_version = '2.0.21'
+    ext.kotlin_version = '2.1.0'
 
     repositories {
         google()
@@ -27,10 +27,25 @@ allprojects {
     }
     configurations.all {
         resolutionStrategy {
-            force "org.jetbrains.kotlin:kotlin-stdlib:2.0.21"
-            force "org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.0.21"
-            force "org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.0.21"
-            force "org.jetbrains.kotlin:kotlin-stdlib-common:2.0.21"
+            force "org.jetbrains.kotlin:kotlin-stdlib:2.1.0"
+            force "org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.1.0"
+            force "org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.1.0"
+            force "org.jetbrains.kotlin:kotlin-stdlib-common:2.1.0"
+
+            eachDependency { DependencyResolveDetails details ->
+                if (details.requested.group == 'io.netty') {
+                    details.useVersion '4.1.119.Final'
+                }
+                if (details.requested.group == 'org.bouncycastle') {
+                    details.useVersion '1.80'
+                }
+                if (details.requested.group == 'org.apache.commons' && details.requested.name == 'commons-lang3') {
+                    details.useVersion '3.17.0'
+                }
+                if (details.requested.group == 'org.apache.httpcomponents' && details.requested.name == 'httpclient') {
+                    details.useVersion '4.5.14'
+                }
+            }
         }
     }
 }
@@ -41,7 +56,7 @@ subprojects {
     buildscript {
         configurations.classpath {
             resolutionStrategy {
-                force "org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.21"
+                force "org.jetbrains.kotlin:kotlin-gradle-plugin:2.1.0"
             }
         }
     }

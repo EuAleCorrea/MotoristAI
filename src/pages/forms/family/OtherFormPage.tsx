@@ -8,6 +8,7 @@ import FormSelect from '../../../components/forms/FormSelect';
 import FormTextArea from '../../../components/forms/FormTextArea';
 import { MoreHorizontal, Tag, Calendar } from 'lucide-react';
 import FormPageLayout from '../../../components/layouts/FormPageLayout';
+import { parseAmount } from '../../../utils/formatters';
 
 const OtherFormPage: React.FC = () => {
  const navigate = useNavigate();
@@ -39,14 +40,14 @@ const OtherFormPage: React.FC = () => {
  }
  }, [id, isEditing, expenses]);
 
- const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
  e.preventDefault();
- const value = parseFloat(totalValue);
+ const value = parseAmount(totalValue);
  if (!customCategory.trim()) {
  alert('O campo "Categoria Personalizada" é obrigatório.');
  return;
  }
- if (isNaN(value) || value <= 0) {
+ if (value === null || value <= 0) {
  alert('O valor da despesa deve ser um número positivo.');
  return;
  }

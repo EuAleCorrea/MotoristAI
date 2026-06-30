@@ -9,7 +9,7 @@ import FormTextArea from '../../../components/forms/FormTextArea';
 import { HeartPulse, Calendar, Building } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import FormPageLayout from '../../../components/layouts/FormPageLayout';
-import { formatCurrency } from '../../../utils/formatters';
+import { formatCurrency, parseAmount } from '../../../utils/formatters';
 
 const HealthFormPage: React.FC = () => {
  const navigate = useNavigate();
@@ -45,16 +45,16 @@ const HealthFormPage: React.FC = () => {
  }
  }, [id, isEditing, expenses]);
 
- const netValue = useMemo(() => {
- const total = parseFloat(totalValue) || 0;
- const reimbursement = hasReimbursement ? (parseFloat(reimbursementValue) || 0) : 0;
+  const netValue = useMemo(() => {
+ const total = parseAmount(totalValue) ?? 0;
+ const reimbursement = hasReimbursement ? (parseAmount(reimbursementValue) ?? 0) : 0;
  return total - reimbursement;
- }, [totalValue, reimbursementValue, hasReimbursement]);
+  }, [totalValue, reimbursementValue, hasReimbursement]);
 
- const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
  e.preventDefault();
- const value = parseFloat(totalValue);
- if (isNaN(value) || value <= 0) {
+ const value = parseAmount(totalValue);
+ if (value === null || value <= 0) {
  alert('O valor da despesa deve ser um número positivo.');
  return;
  }
@@ -72,7 +72,7 @@ const HealthFormPage: React.FC = () => {
  date: new Date(date + 'T12:00:00').toISOString(),
  paymentMethod,
  hasReimbursement,
- reimbursementValue: hasReimbursement ? (parseFloat(reimbursementValue) || undefined) : undefined,
+ reimbursementValue: hasReimbursement ? (parseAmount(reimbursementValue) ?? undefined) : undefined,
  reimbursementDate: hasReimbursement ? (reimbursementDate ? new Date(reimbursementDate + 'T12:00:00').toISOString() : undefined) : undefined,
  notes: notes || undefined,
  };

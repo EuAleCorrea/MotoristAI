@@ -317,8 +317,9 @@ export function AuthCard({
               
               <p className="text-[10px] text-white/30 px-4 leading-relaxed">
                 Ao continuar, você concorda com nossos{' '}
-                <Link to="/terms" className="underline hover:text-white/60">Termos de Uso</Link> e{' '}
-                <Link to="/privacy" className="underline hover:text-white/60">Privacidade</Link>.
+                <Link to="/politicas/termos" className="underline hover:text-white/60">Termos de Uso</Link>,{' '}
+                <Link to="/politicas/privacidade" className="underline hover:text-white/60">Privacidade</Link> e{' '}
+                <Link to="/politicas/lgpd" className="underline hover:text-white/60">LGPD</Link>.
               </p>
             </div>
           </div>

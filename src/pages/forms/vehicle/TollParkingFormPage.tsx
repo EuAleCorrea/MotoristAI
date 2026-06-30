@@ -9,7 +9,7 @@ import FormTextArea from '../../../components/forms/FormTextArea';
 import { ParkingCircle, Calendar, MapPin, Route, Clock } from 'lucide-react';
 import FormPageLayout from '../../../components/layouts/FormPageLayout';
 import VehicleSelector from '../../../components/forms/VehicleSelector';
-import { formatCurrency } from '../../../utils/formatters';
+import { formatCurrency, parseAmount } from '../../../utils/formatters';
 
 type ExpenseType = 'Pedágio' | 'Estacionamento';
 
@@ -44,19 +44,19 @@ const TollParkingFormPage: React.FC = () => {
  }
  }, [id, isEditing, expenses]);
 
- const summary = useMemo(() => {
- const value = parseFloat(totalValue) || 0;
+  const summary = useMemo(() => {
+ const value = parseAmount(totalValue) ?? 0;
  if (value === 0 && !location) return "Preencha os campos para ver o resumo.";
  return `${formatCurrency(value)} em ${expenseType} — ${location || 'Local não informado'}`;;
- }, [totalValue, expenseType, location]);
+  }, [totalValue, expenseType, location]);
 
- const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
  e.preventDefault();
-  const expenseData: Omit<TollParkingExpense, 'id' | 'createdAt' | 'updatedAt'> = {
+   const expenseData: Omit<TollParkingExpense, 'id' | 'createdAt' | 'updatedAt'> = {
  type: 'toll_parking',
  vehicleId: vehicleId || undefined,
  date: new Date(date + 'T12:00:00').toISOString(),
- totalValue: parseFloat(totalValue) || 0,
+ totalValue: parseAmount(totalValue) ?? 0,
  notes: notes || undefined,
  details: {
  expenseType,

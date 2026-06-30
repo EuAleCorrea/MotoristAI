@@ -139,10 +139,13 @@ export const useCategoryStore = create<CategoryStore>((set, get) => ({
 
     seedDefaultCategories: async () => {
         try {
+            // onConflict: 'user_id,name' — se já existir categoria com mesmo (user_id, name),
+            // o upsert substitui em vez de inserir duplicata. Protege contra seed concorrente.
+            // Requer constraint UNIQUE composta em (user_id, name) na tabela.
             const dbCategories = DEFAULT_CATEGORIES.map(mapToDB);
             const { data, error } = await supabase
                 .from('expense_categories')
-                .insert(dbCategories)
+                .upsert(dbCategories, { onConflict: 'user_id,name' })
                 .select();
 
             if (error) throw error;

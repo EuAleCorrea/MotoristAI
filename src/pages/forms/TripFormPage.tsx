@@ -6,6 +6,7 @@ import FormInput from '../../components/forms/FormInput';
 import MoneyInput from '../../components/forms/MoneyInput';
 import FormSelect from '../../components/forms/FormSelect';
 import { Car, Calendar, Route, Clock } from 'lucide-react';
+import { parseAmount } from '../../utils/formatters';
 
 function TripFormPage() {
  const { id } = useParams();
@@ -41,9 +42,9 @@ function TripFormPage() {
  const handleSubmit = (e: React.FormEvent) => {
  e.preventDefault();
 
- const tripData = {
+  const tripData = {
  platform: formData.platform,
- amount: parseFloat(formData.amount),
+ amount: parseAmount(formData.amount) ?? 0,
  distance: parseFloat(formData.distance),
  duration: parseInt(formData.duration),
  date: new Date(formData.date).toISOString(),

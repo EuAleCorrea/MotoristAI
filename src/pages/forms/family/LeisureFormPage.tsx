@@ -9,6 +9,7 @@ import FormTextArea from '../../../components/forms/FormTextArea';
 import { Drama, Calendar, MapPin, Users, Plane, Film, Utensils, Mountain, Tv, Dumbbell, MoreHorizontal, Clock } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import FormPageLayout from '../../../components/layouts/FormPageLayout';
+import { parseAmount } from '../../../utils/formatters';
 
 const LeisureFormPage: React.FC = () => {
  const navigate = useNavigate();
@@ -51,10 +52,10 @@ const LeisureFormPage: React.FC = () => {
  }
  }, [id, isEditing, expenses]);
 
- const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
  e.preventDefault();
- const value = parseFloat(totalValue);
- if (isNaN(value) || value <= 0) {
+ const value = parseAmount(totalValue);
+ if (value === null || value <= 0) {
  alert('O valor da despesa deve ser positivo.');
  return;
  }

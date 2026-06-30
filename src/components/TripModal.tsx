@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { X } from 'lucide-react';
 import { useTripStore } from '../store/tripStore';
 import { AppSelect } from './forms/AppSelect';
+import MoneyInput from './forms/MoneyInput';
+import { parseAmount } from '../utils/formatters';
 
 /*
  * TripModal — Apple HIG Bottom Sheet
@@ -30,11 +32,14 @@ function TripModal({ trip, onClose }: TripModalProps) {
  const handleSubmit = (e: React.FormEvent) => {
  e.preventDefault();
 
- const tripData = {
- platform: formData.platform,
- amount: parseFloat(formData.amount.toString()),
- distance: parseFloat(formData.distance.toString()),
- duration: parseInt(formData.duration.toString()),
+ const parsedAmount = parseAmount(formData.amount);
+ const parsedDistance = parseAmount(formData.distance);
+
+ const.platform,
+ amount: parsedAmount ??  tripData = {
+ platform: formData0,
+ distance: parsedDistance ?? 0,
+ duration: parseInt(formData.duration) || 0,
  date: new Date(formData.date).toISOString(),
  };
 
@@ -100,14 +105,13 @@ function TripModal({ trip, onClose }: TripModalProps) {
 
  <div>
  <label className={labelClass}>Valor (R$)</label>
- <input
+ <MoneyInput
  id="trip-amount"
- type="number"
- step="0.01"
+ name="amount"
  value={formData.amount}
  onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
- className={inputClass}
  required
+ icon={<span className="text-sm font-semibold text-[var(--ios-text-secondary)]">R$</span>}
  />
  </div>
 

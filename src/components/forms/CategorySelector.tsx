@@ -23,7 +23,9 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
     }
   }, [fetchCategories, categories.length]);
 
-  const activeCategories = categories.filter(c => c.isActive);
+  const activeCategories = categories
+    .filter(c => c.isActive)
+    .filter((cat, idx, arr) => arr.findIndex(c => c.name === cat.name) === idx);
 
   return (
     <div>
@@ -34,13 +36,10 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
         value={value}
         onValueChange={onChange}
         placeholder="Selecione uma categoria"
-        options={[
-          { value: '', label: 'Selecione uma categoria' },
-          ...activeCategories.map((category) => ({
-            value: category.name,
-            label: category.name,
-          })),
-        ]}
+        options={activeCategories.map((category) => ({
+          value: category.name,
+          label: category.name,
+        }))}
       />
     </div>
   );

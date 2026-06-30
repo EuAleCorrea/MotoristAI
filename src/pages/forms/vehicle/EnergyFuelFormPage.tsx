@@ -11,7 +11,7 @@ import FormSelect from '../../../components/forms/FormSelect';
 import FormTextArea from '../../../components/forms/FormTextArea';
 import FormPageLayout from '../../../components/layouts/FormPageLayout';
 import VehicleSelector from '../../../components/forms/VehicleSelector';
-import { formatCurrency } from '../../../utils/formatters';
+import { formatCurrency, parseAmount } from '../../../utils/formatters';
 
 type FuelType = 'Gasolina' | 'Etanol' | 'Diesel' | 'Elétrico' | 'Híbrido';
 
@@ -80,25 +80,25 @@ const EnergyFuelFormPage: React.FC = () => {
    }
  }, [vehicleId, isEditing, vehicles]);
 
- useEffect(() => {
- const priceNum = parseFloat(pricePerLiter);
- const quantityNum = parseFloat(liters);
- if (lastEdited !== 'total' && !isNaN(priceNum) && !isNaN(quantityNum)) {
+  useEffect(() => {
+ const priceNum = parseAmount(pricePerLiter);
+ const quantityNum = parseAmount(liters);
+ if (lastEdited !== 'total' && priceNum !== null && quantityNum !== null) {
  setTotalValue((priceNum * quantityNum).toFixed(2));
  }
- }, [pricePerLiter, liters, lastEdited]);
+  }, [pricePerLiter, liters, lastEdited]);
 
- useEffect(() => {
- const priceNum = parseFloat(pricePerKwh);
- const quantityNum = parseFloat(kwh);
- if (!isNaN(priceNum) && !isNaN(quantityNum)) {
+  useEffect(() => {
+ const priceNum = parseAmount(pricePerKwh);
+ const quantityNum = parseAmount(kwh);
+ if (priceNum !== null && quantityNum !== null) {
  setTotalElectricValue((priceNum * quantityNum).toFixed(2));
  }
- }, [pricePerKwh, kwh]);
+  }, [pricePerKwh, kwh]);
 
- const summary = useMemo(() => {
+  const summary = useMemo(() => {
  const parts: string[] = [];
- const finalTotal = (parseFloat(totalValue) || 0) + (parseFloat(totalElectricValue) || 0);
+ const finalTotal = (parseAmount(totalValue) ?? 0) + (parseAmount(totalElectricValue) ?? 0);
 
  if (fuelType === 'Híbrido') {
  if (liters) parts.push(`${liters} L`);
@@ -120,9 +120,9 @@ const EnergyFuelFormPage: React.FC = () => {
  const showLiquid = fuelType !== 'Elétrico';
  const showElectric = fuelType === 'Elétrico' || fuelType === 'Híbrido';
 
- const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
  e.preventDefault();
- const finalTotal = (parseFloat(totalValue) || 0) + (parseFloat(totalElectricValue) || 0);
+ const finalTotal = (parseAmount(totalValue) ?? 0) + (parseAmount(totalElectricValue) ?? 0);
 
   const expenseData: Omit<FuelExpense, 'id' | 'createdAt' | 'updatedAt'> = {
  type: 'fuel',

@@ -8,11 +8,13 @@ Este documento serve para rastrear todas as falhas de segurança identificadas e
 |:---|:---|:---|:---|
 | SEC-001 | Vazamento de Service Role Key no Frontend | 2026-04-16 | Substituição por Anon Key no .env |
 | SEC-002 | Tabelas Supabase sem Row Level Security (RLS) | 2026-04-16 | Aplicação de script SQL de Hardening (auth.uid()) |
+| SEC-003 | Sessão persistente indefinidamente (sem expiração) | 2026-06-18 | Inatividade 5min + sessão máxima 24h + tela de expiração |
 
 ---
 
 ## 🚩 Riscos Ativos
 1. **Falta de Auditoria Automatizada Pós-Deploy**: Necessário criar rotinas periódicas de scan.
+2. **Dados históricos com valor monetário multiplicado por 100**: Entradas salvas com `type="number"` antes do `parseAmount()` podem estar 100× maiores. Pendente migration de diagnóstico.
 
 ---
 

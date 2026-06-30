@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { X } from 'lucide-react';
 import { useExpenseStore } from '../store/expenseStore';
 import { AppSelect } from './forms/AppSelect';
+import MoneyInput from './forms/MoneyInput';
+import { parseAmount } from '../utils/formatters';
 
 /*
  * ExpenseModal — Apple HIG Bottom Sheet
@@ -30,10 +32,12 @@ function ExpenseModal({ expense, onClose }: ExpenseModalProps) {
  const handleSubmit = (e: React.FormEvent) => {
  e.preventDefault();
 
+ const parsedAmount = parseAmount(formData.amount);
+
  const expenseData = {
  category: formData.category,
  description: formData.description,
- amount: parseFloat(formData.amount.toString()),
+ amount: parsedAmount ?? 0,
  date: new Date(formData.date).toISOString(),
  };
 
@@ -117,14 +121,13 @@ function ExpenseModal({ expense, onClose }: ExpenseModalProps) {
 
  <div>
  <label className={labelClass}>Valor (R$)</label>
- <input
+ <MoneyInput
  id="expense-amount"
- type="number"
- step="0.01"
+ name="amount"
  value={formData.amount}
  onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
- className={inputClass}
  required
+ icon={<span className="text-sm font-semibold text-[var(--ios-text-secondary)]">R$</span>}
  />
  </div>
 

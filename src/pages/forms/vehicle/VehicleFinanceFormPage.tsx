@@ -11,7 +11,7 @@ import { isBefore, addDays, isToday, formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import FormPageLayout from '../../../components/layouts/FormPageLayout';
 import VehicleSelector from '../../../components/forms/VehicleSelector';
-import { formatCurrency } from '../../../utils/formatters';
+import { formatCurrency, parseAmount } from '../../../utils/formatters';
 
 type CostType = 'Financiamento' | 'Seguro' | 'IPVA' | 'Licenciamento' | 'Multa' | 'Outros';
 type Status = 'Pago' | 'Pendente';
@@ -63,19 +63,19 @@ const VehicleFinanceFormPage: React.FC = () => {
  return null;
  }, [dueDate, status]);
 
- const summary = useMemo(() => {
- const value = parseFloat(totalValue) || 0;
+  const summary = useMemo(() => {
+ const value = parseAmount(totalValue) ?? 0;
  if (value === 0) return "Preencha os campos para ver o resumo.";
  return `${formatCurrency(value)} — ${costType} — ${status}`;;
- }, [totalValue, costType, status]);
+  }, [totalValue, costType, status]);
 
- const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
  e.preventDefault();
-  const expenseData: Omit<FinanceExpense, 'id' | 'createdAt' | 'updatedAt'> = {
+   const expenseData: Omit<FinanceExpense, 'id' | 'createdAt' | 'updatedAt'> = {
  type: 'finance',
  vehicleId: vehicleId || undefined,
- date: new Date(dueDate + 'T12:00:00').toISOString(), // Usando dueDate como base para 'date' no registro principal
- totalValue: parseFloat(totalValue) || 0,
+ date: new Date(dueDate + 'T12:00:00').toISOString(),
+ totalValue: parseAmount(totalValue) ?? 0,
  notes: notes || undefined,
  details: {
  costType,

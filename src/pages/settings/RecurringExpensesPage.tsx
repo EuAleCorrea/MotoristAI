@@ -16,6 +16,8 @@ import { useNavigate } from 'react-router-dom';
 import { useScrollReset } from '../../hooks/useScrollReset';
 import PageHeader from '../../components/PageHeader';
 import { AppSelect } from '../../components/forms/AppSelect';
+import MoneyInput from '../../components/forms/MoneyInput';
+import { parseAmount } from '../../utils/formatters';
 
 // ─── Modal de formulário ──────────────────────────────────────
 
@@ -113,7 +115,7 @@ const AddRecurrenceModal = ({ isOpen, onClose, onSubmit, vehicles }: AddRecurren
         description: form.description,
         category: form.category,
         type: form.type,
-        amount: parseFloat(form.amount),
+        amount: parseAmount(form.amount) ?? 0,
         frequency: form.frequency as any,
         day: form.day ? parseInt(form.day) : null,
         next_due_date: form.next_due_date,
@@ -153,14 +155,11 @@ const AddRecurrenceModal = ({ isOpen, onClose, onSubmit, vehicles }: AddRecurren
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="text-sm text-[var(--ios-text-secondary)]">Valor *</label>
-              <input
-                required
-                type="number"
-                step="0.01"
-                min="0.01"
+              <MoneyInput
+                id="recurrence-amount"
                 value={form.amount}
                 onChange={(e) => setForm({ ...form, amount: e.target.value })}
-                className="w-full bg-[var(--ios-fill)] rounded-xl px-4 py-3 text-[var(--ios-text)] outline-none mt-1"
+                required
                 placeholder="0,00"
               />
             </div>
@@ -289,9 +288,10 @@ const AddInstallmentModal = ({ isOpen, onClose, onSubmit, vehicles }: AddInstall
     e.preventDefault();
     setSaving(true);
     try {
-      const total = parseFloat(form.total_amount);
-      const totalParcelas = parseInt(form.total_installments);
-      const valorParcela = form.installment_amount ? parseFloat(form.installment_amount) : (total / totalParcelas);
+      const total = parseAmount(form.total_amount) ?? 0;
+      const totalParcelas = parseInt(form.total_installments) || 0;
+      const parsedInstallment = parseAmount(form.installment_amount);
+      const valorParcela = parsedInstallment !== null ? parsedInstallment : (totalParcelas > 0 ? total / totalParcelas : 0);
 
       await onSubmit({
         description: form.description,

@@ -39,13 +39,10 @@ const PlatformSelector: React.FC<PlatformSelectorProps> = ({
         value={value}
         onValueChange={onChange}
         placeholder="Selecione uma plataforma"
-        options={[
-          { value: '', label: 'Selecione uma plataforma' },
-          ...displayPlatforms.map((platform) => ({
-            value: platform.id,
-            label: platform.name,
-          })),
-        ]}
+        options={displayPlatforms.map((platform) => ({
+          value: platform.id,
+          label: platform.name,
+        }))}
       />
     </div>
   );

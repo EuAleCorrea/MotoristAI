@@ -9,6 +9,7 @@ import FormTextArea from '../../../components/forms/FormTextArea';
 import { Home, Calendar } from 'lucide-react';
 import { isBefore, startOfToday } from 'date-fns';
 import FormPageLayout from '../../../components/layouts/FormPageLayout';
+import { parseAmount } from '../../../utils/formatters';
 
 type Status = 'Pago' | 'Pendente';
 
@@ -56,10 +57,10 @@ const HousingFormPage: React.FC = () => {
  }
  }, [paymentDate, dueDate]);
 
- const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
  e.preventDefault();
- const value = parseFloat(totalValue);
- if (isNaN(value) || value <= 0) {
+ const value = parseAmount(totalValue);
+ if (value === null || value <= 0) {
  alert('O valor da despesa deve ser um número positivo.');
  return;
  }
