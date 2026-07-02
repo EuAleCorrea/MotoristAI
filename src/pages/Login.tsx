@@ -1,10 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { supabase } from '../services/supabase';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { AuthCard } from '../components/ui/AuthCard';
 import { useBiometricAuth } from '../hooks/useBiometricAuth';
-import { Clock, LogIn } from 'lucide-react';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -15,7 +14,6 @@ function Login() {
   const [isRegistering, setIsRegistering] = useState(false);
   const [isResettingPassword, setIsResettingPassword] = useState(false);
   const [resetSent, setResetSent] = useState(false);
-  const [expiredReason, setExpiredReason] = useState<string | null>(null);
   const navigate = useNavigate();
   const { user } = useAuth();
   const {
@@ -26,54 +24,43 @@ function Login() {
     authenticateWithBiometric,
     saveSessionForBiometric,
   } = useBiometricAuth();
+  const autoTriggeredRef = useRef(false);
+  const biometricStartedRef = useRef(false);
+  const userInteractedRef = useRef(false);
 
   useEffect(() => {
-    if (user && !expiredReason) navigate('/dashboard', { replace: true });
-  }, [user, expiredReason, navigate]);
+    if (user) navigate('/dashboard', { replace: true });
+  }, [user, navigate]);
 
   useEffect(() => {
-    const reason = sessionStorage.getItem('session_expired_reason');
-    if (reason) {
-      setExpiredReason(reason);
-    }
+    sessionStorage.removeItem('session_expired_reason');
   }, []);
 
-  const handleExpiredLogin = () => {
-    sessionStorage.removeItem('session_expired_reason');
-    setExpiredReason(null);
-  };
+  useEffect(() => {
+    if (biometricLoading) return;
+    if (!biometricEnabled) return;
+    if (autoTriggeredRef.current) return;
+    if (userInteractedRef.current) return;
 
-  if (expiredReason) {
-    const message =
-      expiredReason === '24h_limit'
-        ? 'Sua sessão expirou após 24 horas.'
-        : 'Sua sessão expirou por inatividade.';
+    autoTriggeredRef.current = true;
+    biometricStartedRef.current = true;
 
-    return (
-      <div className="w-full max-w-md mx-auto">
-        <div className="rounded-2xl border border-border bg-card text-card-foreground shadow-xl p-8 space-y-6">
-          <div className="flex justify-center">
-            <div className="rounded-full bg-amber-100 dark:bg-amber-900/30 p-4">
-              <Clock className="w-10 h-10 text-amber-600 dark:text-amber-400" />
-            </div>
-          </div>
-          <div className="space-y-2 text-center">
-            <h1 className="text-2xl font-bold">Sessão expirada</h1>
-            <p className="text-muted-foreground">{message}</p>
-            <p className="text-muted-foreground">Faça login novamente para continuar.</p>
-          </div>
-          <button
-            type="button"
-            onClick={handleExpiredLogin}
-            className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-3 font-medium transition-colors"
-          >
-            <LogIn className="w-5 h-5" />
-            Fazer login
-          </button>
-        </div>
-      </div>
-    );
-  }
+    const timer = setTimeout(() => {
+      if (!userInteractedRef.current) {
+        void handleBiometricLogin();
+      }
+    }, 400);
+
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [biometricLoading, biometricEnabled]);
+
+  useEffect(() => {
+    if (email.length > 0) {
+      userInteractedRef.current = true;
+      biometricStartedRef.current = false;
+    }
+  }, [email]);
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -149,11 +136,19 @@ function Login() {
         navigate('/dashboard', { replace: true });
       } else if (result.error) {
         setError(result.error);
+        biometricStartedRef.current = false;
       }
     } finally {
       setIsLoading(false);
     }
   };
+
+  const showBiometricSplash =
+    biometricLoading || (biometricEnabled && biometricStartedRef.current && !user);
+
+  if (showBiometricSplash) {
+    return <BiometricSplash />;
+  }
 
   const showBiometricButton = !biometricLoading && biometricAvailable && biometricEnabled;
 
@@ -175,6 +170,21 @@ function Login() {
       biometricType={biometricType}
       resetSent={resetSent}
     />
+  );
+}
+
+function BiometricSplash() {
+  return (
+    <div
+      className="min-h-screen w-full flex items-center justify-center"
+      style={{ backgroundColor: 'var(--ios-bg, #0A0F1C)' }}
+    >
+      <img
+        src="/assets/img/login_logo.png"
+        alt="MotoristAI"
+        className="w-32 h-32 animate-pulse"
+      />
+    </div>
   );
 }
 
