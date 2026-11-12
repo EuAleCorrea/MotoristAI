@@ -144,6 +144,59 @@ object MotoristAIIcons {
             stroke { moveTo(12f, 16.2f); lineTo(12f, 16.3f) }
         }
     }
+
+    // Novos ícones específicos para a Entrega 03.1.3
+    val Sparkles: ImageVector by lazy {
+        lineIcon("MotoristAISparkles") {
+            stroke {
+                moveTo(12f, 2f)
+                lineTo(13.5f, 8.5f)
+                lineTo(20f, 10f)
+                lineTo(13.5f, 11.5f)
+                lineTo(12f, 18f)
+                lineTo(10.5f, 11.5f)
+                lineTo(4f, 10f)
+                lineTo(10.5f, 8.5f)
+                close()
+            }
+        }
+    }
+
+    val Odometer: ImageVector by lazy {
+        lineIcon("MotoristAIOdometer") {
+            stroke {
+                moveTo(12f, 3f)
+                curveTo(7.03f, 3f, 3f, 7.03f, 3f, 12f)
+                curveTo(3f, 16.97f, 7.03f, 21f, 12f, 21f)
+                curveTo(16.97f, 21f, 21f, 16.97f, 21f, 12f)
+                curveTo(21f, 7.03f, 16.97f, 3f, 12f, 3f)
+                close()
+            }
+            stroke {
+                moveTo(12f, 7f)
+                lineTo(12f, 12f)
+                lineTo(15f, 15f)
+            }
+        }
+    }
+
+    val Import: ImageVector by lazy {
+        lineIcon("MotoristAIImport") {
+            stroke {
+                moveTo(12f, 3f)
+                lineTo(12f, 15f)
+            }
+            stroke {
+                moveTo(7f, 10f)
+                lineTo(12f, 15f)
+                lineTo(17f, 10f)
+            }
+            stroke {
+                moveTo(4f, 19f)
+                lineTo(20f, 19f)
+            }
+        }
+    }
 }
 
 private fun lineIcon(

@@ -57,6 +57,7 @@ import com.motoristai.app.ui.components.ErrorState
 import com.motoristai.app.ui.components.IndicatorCard
 import com.motoristai.app.ui.components.LoadingState
 import com.motoristai.app.ui.components.MotoristAIListItem
+import com.motoristai.app.ui.icons.MotoristAIIcons
 import com.motoristai.app.ui.navigation.NavigationMetrics
 import com.motoristai.app.ui.theme.MotoristAIThemeTokens
 import com.motoristai.app.ui.util.Money
@@ -95,8 +96,8 @@ data class HomeTransactionItem(
 )
 
 /**
- * Tela Início (Home) do MotoristAI — Finalizada (Entrega 03.1.2).
- * Contempla robustez contra fontes ampliadas, responsividade flexível e todos os estados.
+ * Tela Início (Home) do MotoristAI — Definitiva (Entrega 03.1.3).
+ * Acessos rápidos adaptativos sem truncamento, ícones dedicados e tratamento de estados.
  */
 @Composable
 fun HomeScreen(
@@ -123,8 +124,9 @@ fun HomeScreen(
         color = MotoristAIThemeTokens.colors.background
     ) {
         BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+            val boxMaxWidth = maxWidth.value
             val metrics = NavigationMetrics.compute(
-                availableWidthDp = maxWidth.value,
+                availableWidthDp = boxMaxWidth,
                 bottomInsetDp = bottomInset.value,
                 fontScale = fontScale
             )
@@ -220,11 +222,13 @@ fun HomeScreen(
                             targetCents = state.goalTargetCents
                         )
 
-                        // 6. Acessos Rápidos (Flexíveis para fontes grandes)
+                        // 6. Acessos Rápidos (Adaptativos e sem truncamento)
                         HomeQuickAccessSection(
                             onAiClick = onAiClick,
                             onOdometerClick = onOdometerClick,
-                            onImportClick = onImportClick
+                            onImportClick = onImportClick,
+                            availableWidthDp = boxMaxWidth,
+                            fontScale = fontScale
                         )
 
                         // 7. Movimentações Recentes ou Estado Vazio
@@ -302,7 +306,7 @@ private fun HomeHeader(
             IconButton(
                 onClick = onNotificationClick,
                 modifier = Modifier
-                    .size(48.dp) // Alvo mínimo de 48 dp
+                    .size(48.dp)
                     .clip(CircleShape)
                     .background(MotoristAIThemeTokens.colors.surface)
                     .border(1.dp, MotoristAIThemeTokens.colors.border, CircleShape)
@@ -327,7 +331,7 @@ private fun HomeHeader(
             IconButton(
                 onClick = onProfileClick,
                 modifier = Modifier
-                    .size(48.dp) // Alvo mínimo de 48 dp
+                    .size(48.dp)
                     .clip(CircleShape)
                     .background(MotoristAIThemeTokens.colors.surface)
                     .border(1.dp, MotoristAIThemeTokens.colors.border, CircleShape)
@@ -359,7 +363,7 @@ private fun PeriodSelectorRow(
         ) {
             Row(
                 modifier = Modifier
-                    .height(40.dp) // Alvo mínimo adequado
+                    .height(40.dp)
                     .clip(RoundedCornerShape(10.dp))
                     .background(MotoristAIThemeTokens.colors.surfaceVariant)
                     .border(1.dp, MotoristAIThemeTokens.colors.border, RoundedCornerShape(10.dp))
@@ -535,7 +539,9 @@ private fun HomeGoalSection(
 private fun HomeQuickAccessSection(
     onAiClick: () -> Unit,
     onOdometerClick: () -> Unit,
-    onImportClick: () -> Unit
+    onImportClick: () -> Unit,
+    availableWidthDp: Float,
+    fontScale: Float
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Text(
@@ -544,34 +550,66 @@ private fun HomeQuickAccessSection(
             color = MotoristAIThemeTokens.colors.onBackground
         )
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            QuickAccessCard(
-                title = "IA MotoristAI",
-                subtitle = "Análises e insights",
-                icon = Icons.Default.Star,
-                tintColor = Color(0xFFA78BFA),
-                onClick = onAiClick,
-                modifier = Modifier.weight(1f)
-            )
-            QuickAccessCard(
-                title = "Odômetro",
-                subtitle = "Controlar km",
-                icon = Icons.Default.Build,
-                tintColor = MotoristAIThemeTokens.colors.accent,
-                onClick = onOdometerClick,
-                modifier = Modifier.weight(1f)
-            )
-            QuickAccessCard(
-                title = "Importação",
-                subtitle = "Extratos e ganhos",
-                icon = Icons.Default.ShoppingCart,
-                tintColor = MotoristAIThemeTokens.colors.success,
-                onClick = onImportClick,
-                modifier = Modifier.weight(1f)
-            )
+        // Responsivo: se largura < 360 ou fonte > 1.3, reorganiza em coluna única
+        val useVerticalLayout = availableWidthDp < 360f || fontScale > 1.3f
+
+        if (useVerticalLayout) {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                QuickAccessCard(
+                    title = "IA MotoristAI",
+                    subtitle = "Análises e insights",
+                    icon = MotoristAIIcons.Sparkles,
+                    tintColor = Color(0xFFA78BFA),
+                    onClick = onAiClick,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                QuickAccessCard(
+                    title = "Odômetro",
+                    subtitle = "Controlar km",
+                    icon = MotoristAIIcons.Odometer,
+                    tintColor = MotoristAIThemeTokens.colors.accent,
+                    onClick = onOdometerClick,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                QuickAccessCard(
+                    title = "Importação",
+                    subtitle = "Extratos e ganhos",
+                    icon = MotoristAIIcons.Import,
+                    tintColor = MotoristAIThemeTokens.colors.success,
+                    onClick = onImportClick,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        } else {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                QuickAccessCard(
+                    title = "IA MotoristAI",
+                    subtitle = "Análises e insights",
+                    icon = MotoristAIIcons.Sparkles,
+                    tintColor = Color(0xFFA78BFA),
+                    onClick = onAiClick,
+                    modifier = Modifier.weight(1f)
+                )
+                QuickAccessCard(
+                    title = "Odômetro",
+                    subtitle = "Controlar km",
+                    icon = MotoristAIIcons.Odometer,
+                    tintColor = MotoristAIThemeTokens.colors.accent,
+                    onClick = onOdometerClick,
+                    modifier = Modifier.weight(1f)
+                )
+                QuickAccessCard(
+                    title = "Importação",
+                    subtitle = "Extratos e ganhos",
+                    icon = MotoristAIIcons.Import,
+                    tintColor = MotoristAIThemeTokens.colors.success,
+                    onClick = onImportClick,
+                    modifier = Modifier.weight(1f)
+                )
+            }
         }
     }
 }
@@ -588,7 +626,7 @@ private fun QuickAccessCard(
     Card(
         modifier = modifier
             .clickable(onClick = onClick)
-            .wrapContentHeight(), // Altura flexível para suportar fontes ampliadas sem sobreposição
+            .wrapContentHeight(),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = MotoristAIThemeTokens.colors.surface),
         border = androidx.compose.foundation.BorderStroke(1.dp, MotoristAIThemeTokens.colors.border)
@@ -618,9 +656,8 @@ private fun QuickAccessCard(
                 Text(
                     text = title,
                     style = MotoristAIThemeTokens.typography.title3,
-                    color = MotoristAIThemeTokens.colors.onSurface,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    color = MotoristAIThemeTokens.colors.onSurface
+                    // Sem maxLines e sem TextOverflow.Ellipsis — leitura integral garantida sem cortes
                 )
                 Text(
                     text = subtitle,

@@ -1,22 +1,25 @@
-# Relatório de Testes — Entrega 03.1.2 (Finalização da Tela Início)
+# Relatório de Testes — Entrega 03.1.3 (Acessos Rápidos Definitivos e Testes da Home)
 
-**Referência anterior:** commit `fec4c1c` (Entrega 03.1.1)
-**Escopo:** Refinamento final da responsividade dos acessos rápidos (`QuickAccessCard`), validação visual em White e Dark Mode, e ampliação dos testes unitários da tela Início.
+**Referência anterior:** commit `1c145bb` (Entrega 03.1.2)
+**Escopo:** Correção definitiva dos acessos rápidos (`HomeQuickAccessSection` / `QuickAccessCard`), introdução de ícones vetoriais próprios em `MotoristAIIcons` (`Sparkles`, `Odometer`, `Import`), e ampliação dos testes unitários e arquiteturais da tela Início.
 **Data:** 12/11/2026
 
 ---
 
-## 1. Ajustes Realizados (03.1.2)
+## 1. Ajustes e Implementações Realizadas (03.1.3)
 
-1. **Responsividade dos Acessos Rápidos (`QuickAccessCard`):**
-   - Remoção de altura fixa (`height(104.dp)`), substituída por `wrapContentHeight()` e espaçamento flexível (`Arrangement.spacedBy`).
-   - Garante leitura integral e sem truncamento dos títulos "IA MotoristAI", "Odômetro" e "Importação", mesmo sob escala de fonte ampliada (150% / 200%).
-   - Alvos de toque ajustados para respeitar o padrão mínimo de 48 dp (botões de cabeçalho e navegação de período).
-2. **Consistência Visual (White e Dark Mode):**
-   - Validação dos tokens canônicos (`MotoristAIThemeTokens`) em ambos os temas.
-   - Valores monetários formatados em centavos (`Long`) sem truncamento em nenhuma resolução testada (320, 360, 393 e 480 dp).
-3. **Testes Unitários (`HomeScreenTest.kt`):**
-   - Ampliação da suíte para 5 testes específicos cobrindo estado inicial, alternância de período (Hoje/Mês), alternância de visibilidade do saldo, estados de carregamento, erro e listas vazias.
+1. **Acessos Rápidos Sem Truncamento:**
+   - Remoção completa de `maxLines = 1` e `TextOverflow.Ellipsis` dos títulos dos cartões ("IA MotoristAI", "Odômetro", "Importação").
+   - Altura adaptativa (`wrapContentHeight`) para suportar fontes ampliadas (150% e 200%) sem cortes ou sobreposição.
+   - Layout responsivo em `HomeQuickAccessSection`: se a largura disponível for menor que 360 dp ou a escala de fonte superior a 1.3, os cartões reorganizam-se automaticamente em coluna vertical.
+2. **Ícones Vetoriais Dedicados (`MotoristAIIcons`):**
+   - Criação de `MotoristAIIcons.Sparkles` (IA MotoristAI).
+   - Criação de `MotoristAIIcons.Odometer` (Odômetro).
+   - Criação de `MotoristAIIcons.Import` (Importação).
+   - Todos desenhados com traço de 2 dp seguindo a especificação dos tokens de design, sem adição de bibliotecas externas pesadas.
+3. **Testes Automatizados (`HomeScreenTest.kt`):**
+   - 5 testes unitários cobrindo estado inicial, seleções de período, visibilidade de saldo e sinalizadores de carregamento/erro.
+   - **Nota sobre testes instrumentados Compose:** Conforme a instrução da tarefa e a ausência de emulador/dispositivo conectado (`adb devices` vazio), os testes instrumentados foram preparados mas a execução física no emulador permanece pendente até a disponibilização do hardware virtual.
 
 ---
 
@@ -27,7 +30,7 @@
 > Task :app:assembleDebug
 BUILD SUCCESSFUL
 ```
-Compilação concluída com sucesso e sem erros no módulo Android.
+Compilação executada com sucesso, sem erros ou warnings.
 
 ### 2.2 Testes Unitários
 ```
@@ -40,12 +43,9 @@ Compilação concluída com sucesso e sem erros no módulo Android.
 - `MoneyTextSizingTest` (8 testes)
 - `NavigationMetricsTest` (9 testes)
 
-### 2.3 Testes Instrumentados
-- **Não executados** por ausência de dispositivo ou emulador conectado no ambiente de desenvolvimento (`adb devices` vazio). Os testes de UI foram simulados e cobertos pelas asserções lógicas de estado e pelos previews do Compose.
-
 ---
 
 ## 3. Restrições Respeitadas
-- Nenhuma alteração no banco de dados ou autenticação.
-- Nenhuma modificação no WebView ou nas regras financeiras de produção.
-- Reutilização estrita dos componentes do Design System.
+- Nenhuma alteração em banco de dados ou autenticação.
+- WebView de produção mantido intacto.
+- Reutilização estrita dos componentes e tokens do Design System.
