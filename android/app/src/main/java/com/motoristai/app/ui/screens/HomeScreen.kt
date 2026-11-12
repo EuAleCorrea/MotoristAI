@@ -5,6 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -43,15 +45,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.motoristai.app.ui.components.BalanceCard
+import com.motoristai.app.ui.components.EmptyState
+import com.motoristai.app.ui.components.ErrorState
 import com.motoristai.app.ui.components.IndicatorCard
+import com.motoristai.app.ui.components.LoadingState
 import com.motoristai.app.ui.components.MotoristAIListItem
-import com.motoristai.app.ui.components.MotoristAINavigationBar
-import com.motoristai.app.ui.components.NavDestination
+import com.motoristai.app.ui.navigation.NavigationMetrics
 import com.motoristai.app.ui.theme.MotoristAIThemeTokens
 import com.motoristai.app.ui.util.Money
 
@@ -89,8 +94,8 @@ data class HomeTransactionItem(
 )
 
 /**
- * Tela Início (Home) do MotoristAI.
- * Stateless: recebe todo o estado e dispara callbacks para ações de navegação e interações.
+ * Tela Início (Home) do MotoristAI — Refinada (Entrega 03.1.1).
+ * Gerencia estados (loading, erro, vazio, conteúdo), insets dinâmicos e responsividade.
  */
 @Composable
 fun HomeScreen(
@@ -105,104 +110,146 @@ fun HomeScreen(
     onImportClick: () -> Unit,
     onTransactionClick: (String) -> Unit,
     onViewAllTransactions: () -> Unit,
-    onFabClick: () -> Unit,
-    onDestinationSelected: (NavDestination) -> Unit,
+    onRetry: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val statusBarHeight = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
+    val bottomInset = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
+    val fontScale = LocalDensity.current.fontScale
 
     Surface(
         modifier = modifier.fillMaxSize(),
         color = MotoristAIThemeTokens.colors.background
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(top = statusBarHeight + 12.dp, bottom = 116.dp)
-                .padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            // 1. Cabeçalho
-            HomeHeader(
-                userName = state.userName,
-                onNotificationClick = onNotificationClick,
-                onProfileClick = onProfileClick
+        BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+            val metrics = NavigationMetrics.compute(
+                availableWidthDp = maxWidth.value,
+                bottomInsetDp = bottomInset.value,
+                fontScale = fontScale
             )
 
-            // Seletor de Período
-            PeriodSelectorRow(
-                selectedPeriod = state.selectedPeriod,
-                onPeriodSelected = onPeriodSelected,
-                monthLabel = state.currentMonthLabel,
-                onPreviousMonth = { onMonthChanged(-1) },
-                onNextMonth = { onMonthChanged(1) }
-            )
-
-            // 2 & 3. Card de Saldo
-            BalanceCard(
-                balanceCents = state.balanceCents,
-                isBalanceVisible = state.isBalanceVisible,
-                onToggleVisibility = onToggleBalanceVisibility,
-                subtitleText = state.balanceSubtitle
-            )
-
-            // 4. Indicadores (Receitas e Despesas)
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                Column(modifier = Modifier.weight(1f)) {
-                    IndicatorCard(
-                        title = "Receitas",
-                        cents = state.revenueCents,
-                        valueColor = MotoristAIThemeTokens.colors.successText,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                    Text(
-                        text = state.revenueSubtitle,
-                        style = MotoristAIThemeTokens.typography.caption,
-                        color = MotoristAIThemeTokens.colors.textMuted,
-                        modifier = Modifier.padding(start = 4.dp, top = 2.dp)
+            when {
+                state.isLoading -> {
+                    LoadingState(
+                        message = "Carregando operações do dia...",
+                        modifier = Modifier.padding(top = statusBarHeight)
                     )
                 }
+                state.hasError -> {
+                    ErrorState(
+                        title = "Falha ao sincronizar dados",
+                        message = "Não foi possível carregar as informações do seu painel financeiro.",
+                        onRetry = onRetry,
+                        modifier = Modifier.padding(top = statusBarHeight)
+                    )
+                }
+                else -> {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .verticalScroll(rememberScrollState())
+                            .padding(top = statusBarHeight + 12.dp, bottom = metrics.contentPaddingBottomDp.dp)
+                            .padding(horizontal = 16.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        // 1. Cabeçalho
+                        HomeHeader(
+                            userName = state.userName,
+                            onNotificationClick = onNotificationClick,
+                            onProfileClick = onProfileClick
+                        )
 
-                Column(modifier = Modifier.weight(1f)) {
-                    IndicatorCard(
-                        title = "Despesas",
-                        cents = state.expenseCents,
-                        valueColor = MotoristAIThemeTokens.colors.errorText,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                    Text(
-                        text = state.expenseSubtitle,
-                        style = MotoristAIThemeTokens.typography.caption,
-                        color = MotoristAIThemeTokens.colors.textMuted,
-                        modifier = Modifier.padding(start = 4.dp, top = 2.dp)
-                    )
+                        // 2. Seletor de Período
+                        PeriodSelectorRow(
+                            selectedPeriod = state.selectedPeriod,
+                            onPeriodSelected = onPeriodSelected,
+                            monthLabel = state.currentMonthLabel,
+                            onPreviousMonth = { onMonthChanged(-1) },
+                            onNextMonth = { onMonthChanged(1) }
+                        )
+
+                        // 3. Card de Saldo
+                        BalanceCard(
+                            balanceCents = state.balanceCents,
+                            isBalanceVisible = state.isBalanceVisible,
+                            onToggleVisibility = onToggleBalanceVisibility,
+                            subtitleText = state.balanceSubtitle
+                        )
+
+                        // 4. Indicadores (Receitas e Despesas)
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            Column(modifier = Modifier.weight(1f)) {
+                                IndicatorCard(
+                                    title = "Receitas",
+                                    cents = state.revenueCents,
+                                    valueColor = MotoristAIThemeTokens.colors.successText,
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                                Text(
+                                    text = state.revenueSubtitle,
+                                    style = MotoristAIThemeTokens.typography.caption,
+                                    color = MotoristAIThemeTokens.colors.textMuted,
+                                    modifier = Modifier.padding(start = 4.dp, top = 2.dp)
+                                )
+                            }
+
+                            Column(modifier = Modifier.weight(1f)) {
+                                IndicatorCard(
+                                    title = "Despesas",
+                                    cents = state.expenseCents,
+                                    valueColor = MotoristAIThemeTokens.colors.errorText,
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                                Text(
+                                    text = state.expenseSubtitle,
+                                    style = MotoristAIThemeTokens.typography.caption,
+                                    color = MotoristAIThemeTokens.colors.textMuted,
+                                    modifier = Modifier.padding(start = 4.dp, top = 2.dp)
+                                )
+                            }
+                        }
+
+                        // 5. Metas
+                        HomeGoalSection(
+                            title = state.goalTitle,
+                            currentCents = state.goalCurrentCents,
+                            targetCents = state.goalTargetCents
+                        )
+
+                        // 6. Acessos Rápidos
+                        HomeQuickAccessSection(
+                            onAiClick = onAiClick,
+                            onOdometerClick = onOdometerClick,
+                            onImportClick = onImportClick
+                        )
+
+                        // 7. Movimentações Recentes ou Estado Vazio
+                        if (state.recentTransactions.isEmpty()) {
+                            Card(
+                                modifier = Modifier.fillMaxWidth(),
+                                shape = RoundedCornerShape(16.dp),
+                                colors = CardDefaults.cardColors(containerColor = MotoristAIThemeTokens.colors.surface),
+                                border = androidx.compose.foundation.BorderStroke(1.dp, MotoristAIThemeTokens.colors.border)
+                            ) {
+                                EmptyState(
+                                    title = "Nenhuma movimentação hoje",
+                                    description = "Os lançamentos do dia aparecerão aqui assim que forem registrados.",
+                                    modifier = Modifier.height(180.dp)
+                                )
+                            }
+                        } else {
+                            HomeTransactionsSection(
+                                transactions = state.recentTransactions,
+                                onTransactionClick = onTransactionClick,
+                                onViewAll = onViewAllTransactions
+                            )
+                        }
+                    }
                 }
             }
-
-            // 5. Metas
-            HomeGoalSection(
-                title = state.goalTitle,
-                currentCents = state.goalCurrentCents,
-                targetCents = state.goalTargetCents
-            )
-
-            // 6. Acessos Rápidos (IA, Odômetro, Importação)
-            HomeQuickAccessSection(
-                onAiClick = onAiClick,
-                onOdometerClick = onOdometerClick,
-                onImportClick = onImportClick
-            )
-
-            // 7. Movimentações Recentes
-            HomeTransactionsSection(
-                transactions = state.recentTransactions,
-                onTransactionClick = onTransactionClick,
-                onViewAll = onViewAllTransactions
-            )
         }
     }
 }

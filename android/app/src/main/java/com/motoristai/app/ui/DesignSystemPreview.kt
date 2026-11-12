@@ -372,8 +372,7 @@ fun HomeScreenLightPreview() {
             onImportClick = {},
             onTransactionClick = {},
             onViewAllTransactions = {},
-            onFabClick = {},
-            onDestinationSelected = {}
+            onRetry = {}
         )
     }
 }
@@ -394,8 +393,7 @@ fun HomeScreenDarkPreview() {
             onImportClick = {},
             onTransactionClick = {},
             onViewAllTransactions = {},
-            onFabClick = {},
-            onDestinationSelected = {}
+            onRetry = {}
         )
     }
 }
