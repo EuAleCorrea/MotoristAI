@@ -1,7 +1,8 @@
-# Relatório de Testes — Entrega 02.1 (Correções do Design System)
+# Relatório de Testes — Entregas 02.1 e 02.2
 
-**Referência anterior:** commit `c373977`
-**Escopo:** correção da barra inferior, do Desfazer, dos indicadores financeiros e das dependências
+**Referência anterior:** commits `c373977` (02) e `c73179d` (02.1)
+**Escopo:** correções da barra inferior, do Desfazer, dos indicadores financeiros, das dependências
+(02.1) e endurecimento do `UndoController` (02.2)
 **Data:** 12/11/2026
 
 ---
@@ -159,6 +160,80 @@ cd android
 | `ui/components/MoneyText.kt` | Valor monetário sem truncamento |
 | `ui/icons/MotoristAIIcons.kt` | 7 vetores próprios |
 | `src/test/java/...` | 4 classes, 37 testes |
+
+---
+
+## 5-A. Entrega 02.2 — Correção do `UndoController`
+
+### 5-A.1 Defeitos encontrados no código de `c73179d`
+
+| # | Defeito | Evidência no código anterior |
+|--:|:--|:--|
+| 1 | Substituição de ação pendente chamava `previous.onConfirm()` **direto**, fora do `commit()` | Retorno `false` e exceções da ação substituída eram silenciados |
+| 2 | Todo commit rodava no escopo de UI | `scope.launch { delay(); commit() }` — cancelar o escopo matava a confirmação |
+| 3 | `confirmAndClear()` disparava no mesmo escopo | Se já cancelado, `launch` não executa e a confirmação era perdida |
+| 4 | Disparo único dependia só de `consumed` | Sem reivindicação atômica entre timeout, dispose e supersessão |
+
+### 5-A.2 Correções aplicadas (`ui/undo/UndoController.kt`)
+
+1. **Fluxo único de confirmação** — timeout, substituição, dispose e cancelamento do escopo
+   passam por `launchCommit()` → `commit()`, que trata `false` (via `onFailed`) e exceções.
+2. **Confirmação sobrevive à destruição da tela** — novo parâmetro `commitScope` (padrão:
+   `SupervisorJob + Dispatchers.Default`), independente do escopo de UI. O callback é
+   executado dentro de `withContext(NonCancellable)`.
+3. **Rede de segurança** — `scope.coroutineContext[Job]?.invokeOnCompletion { confirmAndClear() }`:
+   se o escopo for cancelado sem que o dono chame o dispose, a ação pendente ainda é confirmada.
+4. **Disparo único atômico** — dois estados distintos por ação: `settled` (janela encerrada,
+   não desfazível) e `confirmed` (confirmação reivindicada). `beginConfirm()` é a única porta
+   de confirmação e é atômica sob o mesmo lock.
+5. **Identidade preservada** — `undo(id)` só age no id pendente; `arm()` com id repetido
+   retorna `false` sem duplicar; supersessão fecha a janela anterior antes de abrir a nova.
+
+Nenhuma operação real de exclusão foi adicionada. O controlador apenas invoca callbacks.
+
+### 5-A.3 Testes do `UndoController` — 19 testes, todos aprovados
+
+| Grupo | Testes |
+|:--|--:|
+| Janela de 5.000 ms | 3 |
+| Desfazer e ids obsoletos | 4 |
+| Substituição de ação pendente | 3 |
+| Dispose, cancelamento de escopo e concorrência | 5 |
+| Falhas de confirmação | 2 |
+| Idempotência do dispose | 2 |
+
+Casos novos desta entrega:
+
+- substituição com `onConfirm` retornando `false` → `onFailed` é chamado, com o id correto;
+- substituição com `onConfirm` lançando exceção → `onFailed` recebe a exceção original;
+- **cancelamento do escopo de UI** sem chamada de dispose → confirmação executada uma vez;
+- cancelamento do escopo **após** a janela → nenhuma confirmação duplicada;
+- cancelamento do escopo **após** o desfazer → não confirma;
+- 50 ações em sequência rápida → 49 confirmações das substituídas + 1 da última, sem repetição;
+- corrida entre `undo()` e `confirmAndClear()` → apenas um dos dois prevalece.
+
+### 5-A.4 Resultado final
+
+```
+> Task :app:assembleDebug
+BUILD SUCCESSFUL
+
+> Task :app:testDebugUnitTest
+45 passed, 0 skipped, 0 failed
+```
+
+Distribuição: `UndoControllerTest` 19 · `MoneyTest` 9 · `MoneyTextSizingTest` 8 · `NavigationMetricsTest` 9.
+
+### 5-A.5 Iterações registradas (falhas reais durante o trabalho)
+
+| Execução | Resultado | Causa | Correção |
+|:--|:--|:--|:--|
+| 1ª | 9 passed / **10 failed** | Confirmações não executavam: o `backgroundScope` do `runTest` não é avançado por `advanceUntilIdle()` neste setup | Testes passaram a usar o próprio `TestScope` como `commitScope` |
+| 2ª | 17 passed / **2 failed** | `advanceUntilIdle()` avança também os 5 s da janela, confirmando a ação seguinte | Trocado por `runCurrent()` onde o objetivo era apenas escoar a substituição |
+| 3ª | **19 passed / 0 failed** | — | — |
+
+Nenhuma dessas falhas foi corrigida alterando produção: as duas eram erros de asserção/setup
+no próprio teste. O código de produção passou a mudar apenas por causa dos defeitos 1 a 4 listados.
 
 ---
 
