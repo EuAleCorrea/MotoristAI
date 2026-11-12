@@ -244,19 +244,14 @@ e passa a ser parte de um fluxo ou passo de formulário.
 Duas versões equivalentes: mesma estrutura de componentes, mesmas dimensões, mesmo
 comportamento. A identidade azul vem da paleta atual do app.
 
-| Token | Dark Mode | White Mode |
-|:--|:--|:--|
-| `background` | `#0B1929` | `#F2F2F7` |
-| `surface` | `#1C2B3A` | `#FFFFFF` |
-| `surface-variant` | `#162534` | `#F2F2F7` |
-| `border` / divisor | `rgba(255,255,255,0.08)` | `rgba(60,60,67,0.12)` |
-| `on-background` | `#FFFFFF` | `#000000` |
-| `on-surface-variant` | `rgba(235,235,245,0.60)` | `rgba(60,60,67,0.60)` |
-| `primary` | `#0A84FF` | `#007AFF` |
-| `primary-container` | `rgba(10,132,255,0.20)` | `rgba(0,122,255,0.12)` |
-| `positive` (receita) | `#30D158` | `#34C759` |
-| `negative` (despesa) | `#FF453A` | `#FF3B30` |
-| `warning` | `#FF9F0A` | `#FF9500` |
+> [!IMPORTANT]
+> **Os tokens de cor abaixo foram substituídos.** O documento canônico agora é
+> [`docs/ux/entrega-02/tokens.md`](../entrega-02/tokens.md), derivado das pranchas oficiais
+> de White e Dark Mode. A tabela que existia aqui (paleta iOS, superfície dark `#1C2B3A`,
+> borda em alfa) está revogada — mantê-la criaria duas verdades no repositório.
+>
+> Resumo do que mudou: superfície dark passa a `#112630`, borda dark a `#1E3A5F`, fundo light
+> a `#F1F5F9`, e todo par texto/fundo passa a ter contraste medido.
 
 **Regras**
 
