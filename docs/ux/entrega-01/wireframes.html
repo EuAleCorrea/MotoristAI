@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>MotoristAI — Wireframes baixa fidelidade</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:#EFF3F8;font-family:'Segoe UI',system-ui,sans-serif;color:#2B3A4A;padding:24px;}
+
+  .phone{position:relative;width:360px;height:800px;background:#fff;border:1px solid #C3CCD8;
+         border-radius:26px;overflow:hidden;display:none;}
+  .phone:target{display:block;}
+
+  .status{height:24px;display:flex;align-items:center;justify-content:space-between;
+          padding:0 16px;font-size:10px;color:#8794A3;border-bottom:1px dashed #EDF1F6;}
+  .appbar{height:56px;display:flex;align-items:center;gap:12px;padding:0 16px;border-bottom:1px solid #E4E9EF;}
+  .appbar .t{font-size:16px;font-weight:600;flex:1;}
+  .appbar .t small{display:block;font-size:9.5px;font-weight:400;color:#8794A3;margin-top:2px;}
+  .act{width:24px;height:24px;border:1.5px solid #A9B6C4;border-radius:6px;flex:0 0 auto;}
+  .act.txt{width:auto;border:0;font-size:12px;font-weight:600;color:#0A84FF;}
+
+  .body{position:absolute;top:80px;left:0;right:0;bottom:0;padding:10px 16px 116px;overflow:hidden;}
+
+  .navwrap{position:absolute;left:0;right:0;bottom:0;}
+  .nav{height:56px;display:flex;align-items:center;background:#fff;border-top:1px solid #E4E9EF;}
+  .slot{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+        font-size:8.5px;color:#8794A3;}
+  .slot.active{color:#0A84FF;font-weight:600;}
+  .slot.spacer{opacity:0;}
+  .ico{width:19px;height:19px;border:1.5px solid currentColor;border-radius:5px;}
+  .inset{height:24px;background:#fff;display:flex;align-items:center;justify-content:center;}
+
+  .pill{width:104px;height:4px;border-radius:2px;background:#C3CCD8;}
+  .fab{position:absolute;left:50%;transform:translateX(-50%);bottom:52px;width:56px;height:56px;
+       border-radius:28px;background:#0A84FF;color:#fff;display:flex;align-items:center;justify-content:center;
+       font-size:27px;font-weight:300;box-shadow:0 6px 16px rgba(10,132,255,.35);}
+
+  .card{border:1px solid #DCE3EC;border-radius:12px;padding:10px 12px;margin-bottom:9px;background:#FBFCFE;}
+  .card.plain{background:#fff;}
+  .h{font-size:11px;font-weight:600;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;}
+  .h span{font-size:9.5px;font-weight:400;color:#8794A3;}
+  .muted{font-size:9.5px;color:#8794A3;}
+  .line{height:7px;background:#EDF1F6;border-radius:4px;}
+
+  .cols{display:flex;gap:8px;}
+  .col{flex:1;}
+  .k{font-size:9px;color:#8794A3;margin-bottom:3px;}
+  .v{font-size:13px;font-weight:700;}
+  .pos{color:#2E9E5B;}
+  .neg{color:#D94A3D;}
+
+  .bar{height:6px;border-radius:3px;background:#EDF1F6;overflow:hidden;margin-top:5px;}
+  .bar i{display:block;height:100%;background:#0A84FF;border-radius:3px;}
+
+  .chips{display:flex;gap:6px;flex-wrap:wrap;}
+  .chip{border:1px solid #DCE3EC;border-radius:14px;padding:4px 10px;font-size:10px;color:#54687C;}
+  .chip.on{background:#E9F2FF;border-color:#0A84FF;color:#0A84FF;font-weight:600;}
+
+  .seg{display:flex;border:1px solid #DCE3EC;border-radius:9px;overflow:hidden;}
+  .seg div{flex:1;text-align:center;padding:7px 0;font-size:10.5px;color:#54687C;}
+  .seg div.on{background:#E9F2FF;color:#0A84FF;font-weight:600;}
+
+  .field{border:1px solid #DCE3EC;border-radius:9px;padding:8px 10px;margin-bottom:8px;}
+  .field.err{border-color:#D94A3D;background:#FDF4F3;}
+  .field .fl{font-size:9px;color:#8794A3;margin-bottom:3px;}
+  .field .fv{font-size:12px;font-weight:600;}
+  .req{color:#D94A3D;}
+  .errmsg{font-size:9px;color:#D94A3D;margin:-4px 0 8px 2px;}
+
+  .row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #F2F5F9;}
+  .row:last-child{border-bottom:0;}
+  .row .sq{width:26px;height:26px;border:1.5px solid #C3CCD8;border-radius:8px;flex:0 0 auto;}
+  .row .tx{flex:1;}
+  .row .tx b{display:block;font-size:11px;font-weight:600;}
+  .row .tx i{display:block;font-size:9px;color:#8794A3;font-style:normal;margin-top:2px;}
+  .row .vl{font-size:11.5px;font-weight:700;}
+  .chev{color:#B4C0CD;font-size:14px;}
+
+  .dayhdr{display:flex;justify-content:space-between;font-size:9.5px;color:#8794A3;
+          padding:7px 0 5px;border-bottom:1px solid #EDF1F6;margin-top:4px;}
+
+  .search{display:flex;align-items:center;gap:8px;border:1px solid #DCE3EC;border-radius:10px;
+          padding:8px 10px;font-size:10.5px;color:#8794A3;margin-bottom:8px;}
+
+  .bars{display:flex;align-items:flex-end;gap:9px;height:62px;padding-top:4px;}
+  .bars i{flex:1;background:#D7E6FB;border-radius:4px 4px 0 0;display:block;}
+
+  .hbar{display:flex;align-items:center;gap:8px;margin-bottom:7px;font-size:9.5px;color:#54687C;}
+  .hbar b{width:64px;font-weight:500;}
+  .hbar .track{flex:1;height:7px;background:#EDF1F6;border-radius:4px;overflow:hidden;}
+  .hbar .track i{display:block;height:100%;background:#8FBBF5;}
+  .hbar em{font-style:normal;width:34px;text-align:right;color:#8794A3;}
+
+  .btn{border-radius:10px;text-align:center;padding:10px;font-size:11px;font-weight:600;}
+  .btn.primary{background:#0A84FF;color:#fff;}
+  .btn.ghost{border:1px solid #DCE3EC;color:#54687C;margin-top:7px;}
+
+  /* Bottom sheet */
+  .dim{position:absolute;inset:0;padding:14px 16px;opacity:.55;}
+  .scrim{position:absolute;inset:0;background:rgba(11,25,41,.42);}
+  .sheet{position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:20px 20px 0 0;
+         padding:10px 16px 14px;box-shadow:0 -8px 24px rgba(11,25,41,.18);}
+  .handle{width:36px;height:4px;border-radius:2px;background:#DCE3EC;margin:0 auto 12px;}
+  .sheet .st{font-size:13px;font-weight:600;margin-bottom:2px;}
+  .sheet .ss{font-size:9.5px;color:#8794A3;margin-bottom:12px;}
+  .opt{display:flex;align-items:center;gap:11px;border:1px solid #E4E9EF;border-radius:11px;
+       padding:11px;margin-bottom:8px;}
+  .opt .sq{width:30px;height:30px;border:1.5px solid #0A84FF;border-radius:9px;flex:0 0 auto;background:#F4F9FF;}
+  .opt .tx b{display:block;font-size:11.5px;font-weight:600;}
+  .opt .tx i{display:block;font-size:9px;color:#8794A3;font-style:normal;margin-top:2px;}
+  .note{font-size:8.5px;color:#8794A3;text-align:center;margin-top:6px;}
+
+  /* Anatomia */
+  .spec{display:none;width:648px;background:#fff;border:1px solid #C3CCD8;border-radius:14px;padding:20px;}
+  .spec:target{display:flex;gap:26px;}
+  .spec h3{font-size:14px;margin-bottom:2px;}
+  .spec .sub{font-size:10.5px;color:#8794A3;margin-bottom:16px;}
+  .anat{position:relative;width:300px;height:420px;border:1px solid #C3CCD8;border-radius:12px;overflow:hidden;}
+  .anat .content{position:absolute;top:0;left:0;right:0;height:264px;background:#FBFCFE;
+                 border-bottom:1px dashed #A9B6C4;}
+  .anat .content span{position:absolute;top:12px;left:12px;font-size:9px;color:#8794A3;}
+  .anat .nav{position:absolute;left:0;right:0;bottom:24px;height:56px;background:#fff;border-top:1px solid #C3CCD8;
+             display:flex;align-items:center;}
+  .anat .nav div{flex:1;text-align:center;font-size:8px;color:#8794A3;}
+  .anat .nav div.f{color:#0A84FF;font-weight:700;}
+  .anat .inset{position:absolute;left:0;right:0;bottom:0;height:24px;background:#F4F7FB;display:flex;
+               align-items:center;justify-content:center;}
+  .anat .pill{width:88px;height:4px;border-radius:2px;background:#A9B6C4;}
+  .anat .fab{position:absolute;left:50%;transform:translateX(-50%);bottom:52px;width:56px;height:56px;
+             border-radius:28px;background:#0A84FF;color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;}
+  .meas{position:absolute;right:8px;font-size:8.5px;color:#D94A3D;background:rgba(255,255,255,.9);padding:1px 4px;border-radius:3px;}
+  .guide{position:absolute;left:0;right:0;border-top:1px dashed #D94A3D;}
+  .legend{width:266px;font-size:10px;color:#54687C;}
+  .legend table{width:100%;border-collapse:collapse;}
+  .legend td{padding:4px 0;border-bottom:1px solid #F2F5F9;vertical-align:top;}
+  .legend td:last-child{text-align:right;font-weight:600;color:#2B3A4A;white-space:nowrap;}
+  .legend p{font-size:9.5px;color:#8794A3;margin-top:10px;line-height:1.55;}
+  .anat .tag{position:absolute;left:8px;font-size:8.5px;color:#7A8797;background:rgba(255,255,255,.92);padding:1px 5px;border-radius:3px;}
+  .anat .guide2{position:absolute;left:0;right:0;border-top:1px dashed #D94A3D;}
+</style>
+</head>
+<body>
+
+<!-- 1 · INÍCIO -->
+<div class="phone" id="inicio">
+  <div class="status"><span>9:41</span><span>▮▮▮ ⌁ ▰</span></div>
+  <div class="appbar">
+    <div class="t">Olá, Alessandro<small>Quarta, 12 de novembro</small></div>
+    <div class="act"></div><div class="act"></div>
+  </div>
+  <div class="body">
+    <div class="card">
+      <div class="h">Resumo do dia <span>hoje</span></div>
+      <div class="cols">
+        <div class="col"><div class="k">Receitas</div><div class="v pos">R$ 320,00</div></div>
+        <div class="col"><div class="k">Despesas</div><div class="v neg">R$ 148,90</div></div>
+        <div class="col"><div class="k">Saldo</div><div class="v">R$ 171,10</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="h">Saldo do mês <span>novembro</span></div>
+      <div class="v pos" style="font-size:17px;">R$ 2.418,30</div>
+      <div class="muted" style="margin-top:3px;">+ 12% em relação a outubro</div>
+    </div>
+    <div class="card">
+      <div class="h">Metas <span>ver todas ›</span></div>
+      <div class="k">Reserva de emergência · 68%</div>
+      <div class="bar"><i style="width:68%"></i></div>
+      <div class="k" style="margin-top:8px;">Troca do veículo · 32%</div>
+      <div class="bar"><i style="width:32%"></i></div>
+    </div>
+    <div class="card">
+      <div class="h">Atalhos</div>
+      <div class="chips">
+        <div class="chip">Assistente IA</div>
+        <div class="chip">Odômetro</div>
+        <div class="chip">Importar</div>
+      </div>
+    </div>
+    <div class="h" style="margin:12px 0 0;">Últimas movimentações <span>ver todas ›</span></div>
+    <div class="row"><div class="sq"></div><div class="tx"><b>Uber</b><i>Receita · 08:42</i></div><div class="vl pos">+ R$ 128,00</div></div>
+    <div class="row"><div class="sq"></div><div class="tx"><b>Combustível</b><i>Veículo · 07:15</i></div><div class="vl neg">− R$ 148,90</div></div>
+    <div class="row"><div class="sq"></div><div class="tx"><b>99Pop</b><i>Receita · ontem</i></div><div class="vl pos">+ R$ 96,50</div></div>
+  </div>
+  <div class="navwrap">
+    <div class="nav">
+      <div class="slot active"><div class="ico"></div>Início</div>
+      <div class="slot"><div class="ico"></div>Movim.</div>
+      <div class="slot spacer"><div class="ico"></div>—</div>
+      <div class="slot"><div class="ico"></div>Relatórios</div>
+      <div class="slot"><div class="ico"></div>Ajustes</div>
+    </div>
+    <div class="inset"><div class="pill"></div></div>
+  </div>
+  <div class="fab">+</div>
+</div>
+
+<!-- 2 · MOVIMENTAÇÕES -->
+<div class="phone" id="movimentacoes">
+  <div class="status"><span>9:41</span><span>▮▮▮ ⌁ ▰</span></div>
+  <div class="appbar">
+    <div class="t">Movimentações</div>
+    <div class="act"></div><div class="act"></div>
+  </div>
+  <div class="body">
+    <div class="search">⌕ Buscar lançamento, categoria ou plataforma</div>
+    <div class="chips" style="margin-bottom:9px;">
+      <div class="chip on">Novembro 2026 ▾</div>
+      <div class="chip">Filtros</div>
+    </div>
+    <div class="seg" style="margin-bottom:9px;">
+      <div>Todas</div><div class="on">Receitas</div><div>Despesas</div>
+    </div>
+    <div class="chips" style="margin-bottom:6px;">
+      <div class="chip on">Por plataforma</div>
+      <div class="chip">Corridas</div>
+    </div>
+    <div class="dayhdr"><span>Hoje</span><span>R$ 320,00</span></div>
+    <div class="row"><div class="sq"></div><div class="tx"><b>Uber</b><i>Receita · 08:42</i></div><div class="vl pos">+ R$ 128,00</div></div>
+    <div class="row"><div class="sq"></div><div class="tx"><b>99Pop</b><i>Receita · 08:10</i></div><div class="vl pos">+ R$ 96,00</div></div>
+    <div class="row"><div class="sq"></div><div class="tx"><b>Particular</b><i>Receita · 07:30</i></div><div class="vl pos">+ R$ 96,00</div></div>
+    <div class="dayhdr"><span>Ontem</span><span>R$ 412,50</span></div>
+    <div class="row"><div class="sq"></div><div class="tx"><b>Uber</b><i>Receita · 18:20</i></div><div class="vl pos">+ R$ 210,50</div></div>
+    <div class="row"><div class="sq"></div><div class="tx"><b>InDrive</b><i>Receita · 17:05</i></div><div class="vl pos">+ R$ 202,00</div></div>
+  </div>
+  <div class="navwrap">
+    <div class="nav">
+      <div class="slot"><div class="ico"></div>Início</div>
+      <div class="slot active"><div class="ico"></div>Movim.</div>
+      <div class="slot spacer"><div class="ico"></div>—</div>
+      <div class="slot"><div class="ico"></div>Relatórios</div>
+      <div class="slot"><div class="ico"></div>Ajustes</div>
+    </div>
+    <div class="inset"><div class="pill"></div></div>
+  </div>
+  <div class="fab">+</div>
+</div>
+
+<!-- 3 · RELATÓRIOS -->
+<div class="phone" id="relatorios">
+  <div class="status"><span>9:41</span><span>▮▮▮ ⌁ ▰</span></div>
+  <div class="appbar">
+    <div class="t">Relatórios</div>
+    <div class="act"></div>
+  </div>
+  <div class="body">
+    <div class="chips" style="margin-bottom:9px;">
+      <div class="chip on">Novembro 2026 ▾</div>
+      <div class="chip">Comparar</div>
+    </div>
+    <div class="card">
+      <div class="h">Visão geral</div>
+      <div class="cols">
+        <div class="col"><div class="k">Receitas</div><div class="v pos">R$ 8.420</div></div>
+        <div class="col"><div class="k">Despesas</div><div class="v neg">R$ 6.002</div></div>
+        <div class="col"><div class="k">Saldo</div><div class="v">R$ 2.418</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="h">Indicadores</div>
+      <div class="cols">
+        <div class="col"><div class="k">Margem</div><div class="v">28,7%</div></div>
+        <div class="col"><div class="k">Receita por km</div><div class="v">R$ 2,14</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="h">Receitas por semana <span>Últimas 4 semanas</span></div>
+      <div class="bars"><i style="height:38%"></i><i style="height:62%"></i><i style="height:48%"></i><i style="height:86%"></i></div>
+    </div>
+    <div class="card">
+      <div class="h">Categorias <span>top 4</span></div>
+      <div class="hbar"><b>Combustível</b><div class="track"><i style="width:84%"></i></div><em>34%</em></div>
+      <div class="hbar"><b>Manutenção</b><div class="track"><i style="width:56%"></i></div><em>24%</em></div>
+      <div class="hbar"><b>Moradia</b><div class="track"><i style="width:52%"></i></div><em>22%</em></div>
+      <div class="hbar" style="margin-bottom:0;"><b>Alimentação</b><div class="track"><i style="width:42%"></i></div><em>20%</em></div>
+    </div>
+    <div class="card">
+      <div class="h">Custo por km <span>1.240 km</span></div>
+      <div class="v">R$ 1,73</div>
+      <div class="muted" style="margin-top:3px;">Base: odômetro + despesas do veículo</div>
+    </div>
+    <div class="card" style="display:flex;align-items:center;gap:7px;margin-bottom:0;">
+      <div style="flex:1;font-size:10.5px;color:#54687C;">Exportar</div>
+      <div class="chip on">Comprovante PDF</div>
+      <div class="chip">CSV</div>
+    </div>
+  </div>
+  <div class="navwrap">
+    <div class="nav">
+      <div class="slot"><div class="ico"></div>Início</div>
+      <div class="slot"><div class="ico"></div>Movim.</div>
+      <div class="slot spacer"><div class="ico"></div>—</div>
+      <div class="slot active"><div class="ico"></div>Relatórios</div>
+      <div class="slot"><div class="ico"></div>Ajustes</div>
+    </div>
+    <div class="inset"><div class="pill"></div></div>
+  </div>
+  <div class="fab">+</div>
+</div>
+
+<!-- 4 · AJUSTES -->
+<div class="phone" id="ajustes">
+  <div class="status"><span>9:41</span><span>▮▮▮ ⌁ ▰</span></div>
+  <div class="appbar"><div class="t">Ajustes</div></div>
+  <div class="body">
+    <div class="card plain" style="display:flex;align-items:center;gap:11px;">
+      <div class="sq" style="width:38px;height:38px;border:1.5px solid #C3CCD8;border-radius:19px;flex:0 0 auto;"></div>
+      <div style="flex:1;">
+        <b style="font-size:12px;">Alessandro Corrêa</b>
+        <div class="muted">alessandro@motoristai.app</div>
+      </div>
+      <div class="chev">›</div>
+    </div>
+    <div class="row"><div class="sq"></div><div class="tx"><b>Meu veículo</b><i>Veículos, odômetro, manutenção</i></div><div class="chev">›</div></div>
+    <div class="row"><div class="sq"></div><div class="tx"><b>Planejamento financeiro</b><i>Metas e objetivos</i></div><div class="chev">›</div></div>
+    <div class="row"><div class="sq"></div><div class="tx"><b>Plataformas e categorias</b><i>Origens e classificação</i></div><div class="chev">›</div></div>
+    <div class="row"><div class="sq"></div><div class="tx"><b>Recorrências e parcelas</b><i>Lançamentos automáticos</i></div><div class="chev">›</div></div>
+    <div class="row"><div class="sq"></div><div class="tx"><b>Preferências</b><i>Tema, notificações</i></div><div class="chev">›</div></div>
+    <div class="row"><div class="sq"></div><div class="tx"><b>Importação de extratos</b><i>Trazer lançamentos do banco</i></div><div class="chev">›</div></div>
+    <div class="row"><div class="sq"></div><div class="tx"><b>Ajuda e suporte</b><i>Dúvidas e contato</i></div><div class="chev">›</div></div>
+    <div class="row"><div class="sq"></div><div class="tx"><b>Privacidade e segurança</b><i>Biometria e dados</i></div><div class="chev">›</div></div>
+  </div>
+  <div class="navwrap">
+    <div class="nav">
+      <div class="slot"><div class="ico"></div>Início</div>
+      <div class="slot"><div class="ico"></div>Movim.</div>
+      <div class="slot spacer"><div class="ico"></div>—</div>
+      <div class="slot"><div class="ico"></div>Relatórios</div>
+      <div class="slot active"><div class="ico"></div>Ajustes</div>
+    </div>
+    <div class="inset"><div class="pill"></div></div>
+  </div>
+  <div class="fab">+</div>
+</div>
+
+<!-- 5 · BOTTOM SHEET (+) -->
+<div class="phone" id="sheet">
+  <div class="dim">
+    <div class="card"><div class="h">Resumo do dia</div>
+      <div class="cols"><div class="col"><div class="line"></div></div><div class="col"><div class="line"></div></div><div class="col"><div class="line"></div></div></div>
+    </div>
+    <div class="card"><div class="h">Saldo do mês</div><div class="line" style="width:60%"></div></div>
+    <div class="card"><div class="h">Metas</div><div class="line"></div><div class="line" style="margin-top:6px;width:80%"></div></div>
+    <div class="card"><div class="h">Últimas movimentações</div>
+      <div class="line" style="width:90%"></div><div class="line" style="margin-top:6px"></div><div class="line" style="margin-top:6px;width:70%"></div>
+    </div>
+  </div>
+  <div class="scrim"></div>
+  <div class="navwrap">
+    <div class="nav">
+      <div class="slot"><div class="ico"></div>Início</div>
+      <div class="slot"><div class="ico"></div>Movim.</div>
+      <div class="slot spacer"><div class="ico"></div>—</div>
+      <div class="slot"><div class="ico"></div>Relatórios</div>
+      <div class="slot"><div class="ico"></div>Ajustes</div>
+    </div>
+    <div class="inset"><div class="pill"></div></div>
+  </div>
+  <div class="fab">+</div>
+  <div class="sheet">
+    <div class="handle"></div>
+    <div class="st">Novo lançamento</div>
+    <div class="ss">Escolha o tipo de registro</div>
+    <div class="opt"><div class="sq"></div><div class="tx"><b>Nova receita</b><i>Corrida, plataforma ou outra entrada</i></div><div class="chev">›</div></div>
+    <div class="opt"><div class="sq"></div><div class="tx"><b>Nova despesa</b><i>Veículo ou família</i></div><div class="chev">›</div></div>
+    <div class="opt" style="margin-bottom:0;"><div class="sq"></div><div class="tx"><b>Lançamento por voz</b><i>Fale o valor e a categoria</i></div><div class="chev">›</div></div>
+    <div class="note">Arraste para baixo ou toque fora para fechar</div>
+  </div>
+</div>
+
+<!-- 6 · NOVA DESPESA -->
+<div class="phone" id="despesa">
+  <div class="status"><span>9:41</span><span>▮▮▮ ⌁ ▰</span></div>
+  <div class="appbar">
+    <div class="act" style="border:0;font-size:15px;color:#54687C;">✕</div>
+    <div class="t">Nova despesa</div>
+    <div class="act txt" style="color:#B4C0CD;">Salvar</div>
+  </div>
+  <div class="body" style="padding-bottom:16px;">
+    <div class="k" style="margin-bottom:5px;">Segmento <span class="req">obrigatório</span></div>
+    <div class="seg" style="margin-bottom:11px;"><div class="on">Veículo</div><div>Família</div></div>
+
+    <div class="k" style="margin-bottom:5px;">Categoria <span class="req">obrigatório</span></div>
+    <div class="chips" style="margin-bottom:11px;">
+      <div class="chip on">Energia</div><div class="chip">Manutenção</div>
+      <div class="chip">Pedágio</div><div class="chip">Financiamento</div>
+      <div class="chip">Depreciação</div>
+    </div>
+
+    <div class="field" style="padding:12px 10px;">
+      <div class="fl">Valor <span class="req">obrigatório</span></div>
+      <div class="fv" style="font-size:20px;">R$ 0,00</div>
+    </div>
+
+    <div class="k" style="margin-bottom:5px;">Tipo de combustível <span class="req">obrigatório para Energia</span></div>
+    <div class="field"><div class="fv" style="font-weight:400;color:#8794A3;">Selecionar ▾</div></div>
+
+    <div class="field err">
+      <div class="fl">Litros ou kWh <span class="req">obrigatório para Energia</span></div>
+      <div class="fv" style="font-weight:400;color:#8794A3;">0,00</div>
+    </div>
+    <div class="errmsg">Informe a quantidade abastecida</div>
+
+    <div class="field"><div class="fl">Data</div><div class="fv">Hoje · 12/11/2026</div></div>
+    <div class="field"><div class="fl">Forma de pagamento</div><div class="fv" style="font-weight:400;color:#8794A3;">Selecionar ▾</div></div>
+
+    <div class="card plain" style="margin-top:10px;">
+      <div class="h" style="margin-bottom:0;">Mais detalhes <span>opcional ▾</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- 7 · ANATOMIA DA BARRA -->
+<div class="spec" id="anatomia">
+  <div style="width:300px;">
+  <h3 style="font-size:13px;">Anatomia da barra inferior</h3>
+  <div class="sub" style="margin-bottom:12px;">360 × 800 dp · edge-to-edge · gestos</div>
+
+  <div class="anat">
+    <div class="content" style="height:340px;"><span>área de conteúdo (rolável)</span></div>
+
+    <div class="guide" style="top:264px;"></div>
+    <div class="tag" style="top:248px;">limite do conteúdo · 116 dp até o rodapé</div>
+
+    <div class="nav">
+      <div class="f">Início</div><div>Movim.</div><div style="opacity:0;">—</div><div>Relatórios</div><div>Ajustes</div>
+    </div>
+
+    <div class="fab">+</div>
+
+    <div class="inset"><div class="pill"></div></div>
+  </div>
+  </div>
+
+  <div class="legend">
+    <table>
+      <tr><td>Altura da barra</td><td>56 dp</td></tr>
+      <tr><td>Inset de gesto (transparente)</td><td>24 dp</td></tr>
+      <tr><td>Chrome inferior total</td><td>80 dp</td></tr>
+      <tr><td>FAB</td><td>56 dp</td></tr>
+      <tr><td>FAB · distância do rodapé</td><td>52 dp</td></tr>
+      <tr><td>Sobreposição do FAB na barra</td><td>28 dp</td></tr>
+      <tr><td>Folga conteúdo → FAB</td><td>8 dp</td></tr>
+      <tr><td>Padding inferior do conteúdo</td><td>116 dp</td></tr>
+      <tr><td>Largura de cada slot</td><td>72 dp</td></tr>
+      <tr><td>Alvo de toque mínimo</td><td>48 dp</td></tr>
+      <tr><td>Raio do FAB</td><td>28 dp</td></tr>
+      <tr><td>Elevação / sombra do FAB</td><td>6 dp</td></tr>
+    </table>
+    <p><b>Navegação por 3 botões:</b> o inset passa a 48 dp. Padding do conteúdo vai para 140 dp e o FAB sobe para 76 dp do rodapé. Nenhum outro valor muda.</p>
+    <p><b>Gestos:</b> a barra fica acima da zona de gesto do sistema, então o FAB não disputa o swipe. O back do sistema nunca é interceptado pelos destinos raiz.</p>
+  </div>
+</div>
+
+</body>
+</html>

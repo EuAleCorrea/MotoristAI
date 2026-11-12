@@ -1,7 +1,7 @@
 # MotoristAI — Entrega 01: Arquitetura e Navegação
 
 **Fase:** UX/UI Android nativo · **Etapa:** arquitetura (sem alta fidelidade)
-**Data:** 2026-11-12 · **Status:** aguardando validação
+**Data:** 2026-11-12 · **Status:** arquitetura aprovada com ajustes · revisão 02 aguardando validação final
 
 ---
 
@@ -14,6 +14,10 @@
 | `03-fluxo-nova-despesa.png` | Fluxo de nova despesa com preenchimento progressivo |
 | `matriz-preservacao.csv` | Matriz de preservação das funcionalidades existentes |
 | `mapa.html`, `fluxo-fab.html`, `fluxo-despesa.html` | Fontes editáveis dos diagramas |
+| `wireframes/01` a `wireframes/06` | Seis wireframes de baixa fidelidade |
+| `wireframes/07-anatomia-barra.png` | Anatomia da barra inferior com FAB central |
+| `wireframes.html` | Fonte editável dos sete wireframes |
+| `especificacao-formularios.md` | Obrigatoriedade por categoria e regra do Desfazer |
 
 O documento abaixo consolida os três entregáveis pedidos: mapa, fluxos e matriz.
 
@@ -265,7 +269,122 @@ comportamento. A identidade azul vem da paleta atual do app.
 
 ---
 
-## 7. Pendências para validação
+## 7. Wireframes de baixa fidelidade
+
+Todos em 360 × 800 dp, com barra de status, barra inferior e inset de gesto desenhados.
+
+### 7.1 Início
+
+![Início](wireframes/01-inicio.png)
+
+Faixas de conteúdo empilhadas, sem grade de cartões. FAB sobreposto à barra, conteúdo
+encerrando 116 dp acima do rodapé.
+
+### 7.2 Movimentações
+
+![Movimentações](wireframes/02-movimentacoes.png)
+
+Pesquisa, período, segmentação primária (Todas / Receitas / Despesas) e lente secundária
+(Por plataforma / Corridas). Lista agrupada por dia com subtotal.
+
+### 7.3 Relatórios
+
+![Relatórios](wireframes/03-relatorios.png)
+
+Período fixo no topo aplicado a todos os blocos, incluindo a área de exportação
+(comprovante de renda em PDF e CSV) ao final.
+
+### 7.4 Ajustes
+
+![Ajustes](wireframes/04-ajustes.png)
+
+Perfil no topo e oito grupos em lista, cada um com subtítulo de uma linha e chevron.
+
+### 7.5 Bottom Sheet (+)
+
+![Bottom Sheet](wireframes/05-bottom-sheet.png)
+
+Sheet modal sobre o destino atual. O scrim cobre inclusive a barra inferior — a barra
+e o FAB ficam inoperantes enquanto o sheet estiver aberto.
+
+### 7.6 Nova despesa
+
+![Nova despesa](wireframes/06-nova-despesa.png)
+
+Tela secundária: sem barra inferior e sem FAB, apenas TopAppBar com ✕ e Salvar.
+Exibe o caso de erro em campo obrigatório da categoria selecionada.
+
+---
+
+## 8. Barra inferior, FAB e área segura
+
+![Anatomia da barra inferior](wireframes/07-anatomia-barra.png)
+
+| Medida | Valor |
+|:--|:--|
+| Altura da barra | 56 dp |
+| Inset de gesto (transparente) | 24 dp |
+| Chrome inferior total | 80 dp |
+| FAB | 56 dp, raio 28 dp, elevação 6 dp |
+| Distância do FAB ao rodapé | 52 dp |
+| Sobreposição do FAB na barra | 28 dp |
+| Padding inferior do conteúdo | 116 dp |
+| Largura de cada slot | 72 dp (5 slots em 360 dp) |
+| Alvo de toque mínimo | 48 dp |
+
+**Regras**
+
+- Edge-to-edge: a barra desenha o próprio fundo e consome o inset de gesto abaixo dela,
+  em vez de deixar o sistema pintar uma faixa.
+- O FAB fica 28 dp acima da barra e 52 dp do rodapé, portanto fora da zona de gesto do
+  sistema — o swipe de navegação não disputa o botão.
+- O conteúdo recebe 116 dp de padding inferior para que o último item nunca fique sob o FAB.
+- Em navegação por 3 botões o inset passa a 48 dp: o padding do conteúdo vai a 140 dp e o
+  FAB sobe para 76 dp do rodapé. Nenhum outro valor muda.
+- O back do sistema não é interceptado nos quatro destinos raiz; sai do app.
+- O FAB e a barra ficam inoperantes sob qualquer sheet modal.
+
+---
+
+## 9. Validação de formulários
+
+Especificação completa em [`especificacao-formularios.md`](especificacao-formularios.md).
+
+Resumo:
+
+- **Comuns obrigatórios:** segmento, categoria e valor.
+- **Obrigatório por categoria é sempre visível** — nunca atrás de "Mais detalhes".
+  Exemplos: Energia exige tipo de combustível e litros ou kWh; Financiamento exige número
+  da parcela; Outras exige descrição.
+- **Recomendado ≠ obrigatório.** Odômetro em Energia e distância em Corrida avisam, mas não
+  bloqueiam; Relatórios declara a cobertura quando o dado falta.
+- **Erro no blur e ao salvar**, nunca a cada tecla. Salvar rola até o primeiro erro.
+- **Odômetro não retrocede**: até 5% de folga pede confirmação, acima disso bloqueia.
+
+---
+
+## 10. Desfazer após salvar
+
+Especificação completa em [`especificacao-formularios.md`](especificacao-formularios.md#5-ação-desfazer).
+
+| Ação | Desfazer | Janela |
+|:--|:--|:--|
+| Criar lançamento | Sim | 5 s |
+| Editar lançamento | Sim | 5 s |
+| Excluir lançamento | Sim | 5 s |
+| Importar extrato em lote | Sim | 5 s |
+| Exportar PDF ou CSV | Não | — |
+| Excluir veículo ou conta | Não — confirmação destrutiva | — |
+| Alterar tema ou preferências | Não — reversível no próprio controle | — |
+
+- Um Desfazer por vez; um novo snackbar substitui o anterior.
+- Trocar de tela ou de destino encerra a janela de 5 s.
+- Desfazer de exclusão restaura o registro com o mesmo id e os mesmos vínculos.
+- Desfazer não reverte efeitos externos (notificação, e-mail, link aberto).
+
+---
+
+## 11. Pendências para validação
 
 | # | Ponto | Situação |
 |:--|:--|:--|
@@ -275,11 +394,27 @@ comportamento. A identidade azul vem da paleta atual do app.
 | 4 | Assistente IA em tela cheia coberta, sem barra inferior, com X de retorno. | Confirmar |
 | 5 | Lente Corridas dentro de Receitas: sub-aba ou chip de filtro. | Confirmar |
 
+> A aprovação da arquitetura não respondeu a estes cinco pontos. Todos seguem
+> implementados conforme especificado acima; alterações aqui afetam apenas navegação,
+> não o restante da entrega.
+
+---
+
+## 12. Revisão 02 — ajustes atendidos
+
+| # | Ajuste solicitado | Onde foi atendido |
+|:--|:--|:--|
+| 1 | Validação com obrigatórios por categoria | [`especificacao-formularios.md`](especificacao-formularios.md) seção 3 |
+| 2 | Quando o Desfazer fica disponível | [`especificacao-formularios.md`](especificacao-formularios.md#5-ação-desfazer) seção 5 |
+| 3 | Seis wireframes de baixa fidelidade | `wireframes/01` a `wireframes/06` |
+| 4 | Barra inferior com FAB e área segura | `wireframes/07-anatomia-barra.png` e seção 8 |
+
+Código funcional permanece inalterado — esta revisão é apenas documental.
+
 ---
 
 ## Próximo passo
 
-Após aprovação desta arquitetura: wireframes visuais dos seis artefatos (Início,
-Movimentações, Relatórios, Ajustes, menu de novo lançamento e detalhe do lançamento),
-com especificações de medidas e componentes suficientes para reprodução na ferramenta
-de design. Alta fidelidade e implementação só depois dessa segunda aprovação.
+Arquitetura e wireframes de baixa fidelidade entregues. Aguardando validação final para
+iniciar a etapa de alta fidelidade (design visual nas duas versões de tema) e, somente
+depois dela, a migração para Kotlin + Jetpack Compose.
