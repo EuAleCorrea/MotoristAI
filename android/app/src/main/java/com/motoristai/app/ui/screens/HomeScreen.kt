@@ -14,11 +14,12 @@ import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,12 +27,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.Place
-import androidx.compose.material.icons.filled.Build
+import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -94,8 +95,8 @@ data class HomeTransactionItem(
 )
 
 /**
- * Tela Início (Home) do MotoristAI — Refinada (Entrega 03.1.1).
- * Gerencia estados (loading, erro, vazio, conteúdo), insets dinâmicos e responsividade.
+ * Tela Início (Home) do MotoristAI — Finalizada (Entrega 03.1.2).
+ * Contempla robustez contra fontes ampliadas, responsividade flexível e todos os estados.
  */
 @Composable
 fun HomeScreen(
@@ -219,7 +220,7 @@ fun HomeScreen(
                             targetCents = state.goalTargetCents
                         )
 
-                        // 6. Acessos Rápidos
+                        // 6. Acessos Rápidos (Flexíveis para fontes grandes)
                         HomeQuickAccessSection(
                             onAiClick = onAiClick,
                             onOdometerClick = onOdometerClick,
@@ -301,12 +302,12 @@ private fun HomeHeader(
             IconButton(
                 onClick = onNotificationClick,
                 modifier = Modifier
-                    .size(40.dp)
+                    .size(48.dp) // Alvo mínimo de 48 dp
                     .clip(CircleShape)
                     .background(MotoristAIThemeTokens.colors.surface)
                     .border(1.dp, MotoristAIThemeTokens.colors.border, CircleShape)
             ) {
-                Box {
+                Box(contentAlignment = Alignment.Center) {
                     Icon(
                         imageVector = Icons.Default.Notifications,
                         contentDescription = "Notificações",
@@ -326,7 +327,7 @@ private fun HomeHeader(
             IconButton(
                 onClick = onProfileClick,
                 modifier = Modifier
-                    .size(40.dp)
+                    .size(48.dp) // Alvo mínimo de 48 dp
                     .clip(CircleShape)
                     .background(MotoristAIThemeTokens.colors.surface)
                     .border(1.dp, MotoristAIThemeTokens.colors.border, CircleShape)
@@ -358,7 +359,7 @@ private fun PeriodSelectorRow(
         ) {
             Row(
                 modifier = Modifier
-                    .height(36.dp)
+                    .height(40.dp) // Alvo mínimo adequado
                     .clip(RoundedCornerShape(10.dp))
                     .background(MotoristAIThemeTokens.colors.surfaceVariant)
                     .border(1.dp, MotoristAIThemeTokens.colors.border, RoundedCornerShape(10.dp))
@@ -368,7 +369,7 @@ private fun PeriodSelectorRow(
                 Box(
                     modifier = Modifier
                         .weight(1f)
-                        .height(32.dp)
+                        .height(36.dp)
                         .clip(RoundedCornerShape(8.dp))
                         .background(if (isHoje) MotoristAIThemeTokens.colors.accentSubtle else Color.Transparent)
                         .clickable { onPeriodSelected(HomePeriod.HOJE) }
@@ -386,7 +387,7 @@ private fun PeriodSelectorRow(
                 Box(
                     modifier = Modifier
                         .weight(1f)
-                        .height(32.dp)
+                        .height(36.dp)
                         .clip(RoundedCornerShape(8.dp))
                         .background(if (isMes) MotoristAIThemeTokens.colors.accentSubtle else Color.Transparent)
                         .clickable { onPeriodSelected(HomePeriod.MES) }
@@ -404,13 +405,13 @@ private fun PeriodSelectorRow(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .height(36.dp)
+                    .height(40.dp)
                     .clip(RoundedCornerShape(10.dp))
                     .background(MotoristAIThemeTokens.colors.surface)
                     .border(1.dp, MotoristAIThemeTokens.colors.border, RoundedCornerShape(10.dp))
                     .padding(horizontal = 4.dp)
             ) {
-                IconButton(onClick = onPreviousMonth, modifier = Modifier.size(28.dp)) {
+                IconButton(onClick = onPreviousMonth, modifier = Modifier.size(36.dp)) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
                         contentDescription = "Mês anterior",
@@ -424,7 +425,7 @@ private fun PeriodSelectorRow(
                     color = MotoristAIThemeTokens.colors.onSurface,
                     modifier = Modifier.padding(horizontal = 4.dp)
                 )
-                IconButton(onClick = onNextMonth, modifier = Modifier.size(28.dp)) {
+                IconButton(onClick = onNextMonth, modifier = Modifier.size(36.dp)) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
                         contentDescription = "Próximo mês",
@@ -587,16 +588,16 @@ private fun QuickAccessCard(
     Card(
         modifier = modifier
             .clickable(onClick = onClick)
-            .height(104.dp),
+            .wrapContentHeight(), // Altura flexível para suportar fontes ampliadas sem sobreposição
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = MotoristAIThemeTokens.colors.surface),
         border = androidx.compose.foundation.BorderStroke(1.dp, MotoristAIThemeTokens.colors.border)
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .padding(12.dp),
-            verticalArrangement = Arrangement.SpaceBetween
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Box(
                 modifier = Modifier
@@ -613,7 +614,7 @@ private fun QuickAccessCard(
                 )
             }
 
-            Column {
+            Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
                 Text(
                     text = title,
                     style = MotoristAIThemeTokens.typography.title3,
@@ -625,7 +626,7 @@ private fun QuickAccessCard(
                     text = subtitle,
                     style = MotoristAIThemeTokens.typography.caption,
                     color = MotoristAIThemeTokens.colors.textMuted,
-                    maxLines = 1,
+                    maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
             }

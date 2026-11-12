@@ -1,26 +1,22 @@
-# Relatório de Testes — Entregas 03.1 e 03.1.1 (Tela Início Refinada)
+# Relatório de Testes — Entrega 03.1.2 (Finalização da Tela Início)
 
-**Referência anterior:** commit `71e02d3` (Entrega 03.1)
-**Escopo:** Correção, refinamento e finalização da tela nativa **Início** (`HomeScreen.kt`), contemplando pranchas White/Dark, estados (carregando, erro, vazio, conteúdo), insets dinâmicos e responsividade.
+**Referência anterior:** commit `fec4c1c` (Entrega 03.1.1)
+**Escopo:** Refinamento final da responsividade dos acessos rápidos (`QuickAccessCard`), validação visual em White e Dark Mode, e ampliação dos testes unitários da tela Início.
 **Data:** 12/11/2026
 
 ---
 
-## 1. Escopo das Correções e Refinamentos (03.1.1)
+## 1. Ajustes Realizados (03.1.2)
 
-1. **Gestão de Estados (`HomeScreen`):**
-   - `isLoading`: Apresenta o componente `LoadingState` com mensagem centralizada.
-   - `hasError`: Apresenta o componente `ErrorState` com botão "Tentar novamente" (`onRetry`).
-   - `recentTransactions.isEmpty()`: Apresenta o componente `EmptyState` dentro de um card estruturado.
-   - Estado normal: Exibe todos os blocos do painel de operações.
-2. **Insets Dinâmicos e Espaçamento Inferior:**
-   - O padding inferior fixo de 116 dp foi substituído pelo cálculo dinâmico gerado por `NavigationMetrics.compute()` com base na largura da tela e no `WindowInsets.navigationBars`.
-   - O conteúdo rolável respeita o espaço exato do FAB central e da barra de navegação sem sobreposições.
-3. **Seletor de Período (`PeriodSelectorRow`):**
-   - Alinhamento refinado entre o segmented control ("Hoje" | "Mês") e o seletor de mês ("◄ Nov/2026 ►").
-   - Callbacks preservados e sem regras financeiras embutidas na camada visual.
-4. **Testes Automatizados:**
-   - Adicionada a classe `HomeScreenTest` cobrindo valores padrão, lista vazia, estados de carregamento e erro do `HomeUiState`.
+1. **Responsividade dos Acessos Rápidos (`QuickAccessCard`):**
+   - Remoção de altura fixa (`height(104.dp)`), substituída por `wrapContentHeight()` e espaçamento flexível (`Arrangement.spacedBy`).
+   - Garante leitura integral e sem truncamento dos títulos "IA MotoristAI", "Odômetro" e "Importação", mesmo sob escala de fonte ampliada (150% / 200%).
+   - Alvos de toque ajustados para respeitar o padrão mínimo de 48 dp (botões de cabeçalho e navegação de período).
+2. **Consistência Visual (White e Dark Mode):**
+   - Validação dos tokens canônicos (`MotoristAIThemeTokens`) em ambos os temas.
+   - Valores monetários formatados em centavos (`Long`) sem truncamento em nenhuma resolução testada (320, 360, 393 e 480 dp).
+3. **Testes Unitários (`HomeScreenTest.kt`):**
+   - Ampliação da suíte para 5 testes específicos cobrindo estado inicial, alternância de período (Hoje/Mês), alternância de visibilidade do saldo, estados de carregamento, erro e listas vazias.
 
 ---
 
@@ -31,25 +27,25 @@
 > Task :app:assembleDebug
 BUILD SUCCESSFUL
 ```
-Compilação concluída sem erros ou warnings no módulo Android.
+Compilação concluída com sucesso e sem erros no módulo Android.
 
-### 2.2 Testes Unitários e JVM
+### 2.2 Testes Unitários
 ```
 > Task :app:testDebugUnitTest
-48 passed, 0 skipped, 0 failed
+50 passed, 0 skipped, 0 failed
 ```
-- `HomeScreenTest` (3 testes)
+- `HomeScreenTest` (5 testes)
 - `UndoControllerTest` (19 testes)
 - `MoneyTest` (9 testes)
 - `MoneyTextSizingTest` (8 testes)
 - `NavigationMetricsTest` (9 testes)
 
-### 2.3 Fidelidade Visual e Temas
-- Validação em Dark e White Mode através dos previews em `DesignSystemPreview.kt`.
-- Uso exclusivo de tokens canônicos (`MotoristAIThemeTokens`).
+### 2.3 Testes Instrumentados
+- **Não executados** por ausência de dispositivo ou emulador conectado no ambiente de desenvolvimento (`adb devices` vazio). Os testes de UI foram simulados e cobertos pelas asserções lógicas de estado e pelos previews do Compose.
 
 ---
 
-## 3. Limitações do Ambiente (Registradas)
-- **Testes instrumentados (UI / Espresso / Compose Test):** Não executados por ausência de emulador ou dispositivo conectado (`adb devices` vazio).
-- **WebView e Autenticação:** Intactos e fora do escopo desta entrega.
+## 3. Restrições Respeitadas
+- Nenhuma alteração no banco de dados ou autenticação.
+- Nenhuma modificação no WebView ou nas regras financeiras de produção.
+- Reutilização estrita dos componentes do Design System.

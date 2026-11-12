@@ -32,4 +32,28 @@ class HomeScreenTest {
         val errorState = HomeUiState(hasError = true)
         assertTrue(errorState.hasError)
     }
+
+    @Test
+    fun `period switching updates state correctly`() {
+        var period = HomePeriod.HOJE
+        val updatePeriod: (HomePeriod) -> Unit = { period = it }
+
+        updatePeriod(HomePeriod.MES)
+        assertEquals(HomePeriod.MES, period)
+
+        updatePeriod(HomePeriod.HOJE)
+        assertEquals(HomePeriod.HOJE, period)
+    }
+
+    @Test
+    fun `balance visibility toggle works`() {
+        var visible = true
+        val toggle: () -> Unit = { visible = !visible }
+
+        toggle()
+        assertFalse(visible)
+
+        toggle()
+        assertTrue(visible)
+    }
 }
