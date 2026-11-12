@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'org.jetbrains.kotlin.plugin.compose'
 
 android {
     namespace = "com.motoristai.app"
@@ -16,6 +17,9 @@ android {
             ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+    buildFeatures {
+        compose true
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -30,10 +34,41 @@ dependencies {
     implementation "androidx.coordinatorlayout:coordinatorlayout:$androidxCoordinatorLayoutVersion"
     implementation "androidx.core:core-splashscreen:$coreSplashScreenVersion"
     implementation project(':capacitor-android')
+
+    // Jetpack Compose BOM
+    implementation platform('androidx.compose:compose-bom:2025.02.00')
+    implementation 'androidx.compose.ui:ui'
+    implementation 'androidx.compose.ui:ui-graphics'
+    implementation 'androidx.compose.ui:ui-tooling-preview'
+    implementation 'androidx.compose.material3:material3'
+    implementation 'androidx.compose.material:material-icons-core'
+    implementation 'androidx.compose.material:material-icons-extended'
+    implementation 'androidx.activity:activity-compose:1.10.1'
+    implementation 'androidx.lifecycle:lifecycle-runtime-compose:2.8.7'
+    debugImplementation 'androidx.compose.ui:ui-tooling'
+
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
     implementation project(':capacitor-cordova-android-plugins')
+}
+
+configurations.all {
+    resolutionStrategy {
+        // Apache Commons Lang3 3.17.0 corrige CVE-2024-47554 (Uncontrolled Recursion)
+        force "org.apache.commons:commons-lang3:3.17.0"
+        // Bouncy Castle 1.79 corrige vulnerabilidades: Timing Attack, LDAP Injection, Broken/Risky Crypto
+        force "org.bouncycastle:bcprov-jdk18on:1.79"
+        // Bouncy Castle PKIX 1.79 corrige Improper Verification of Cryptographic Signature
+        force "org.bouncycastle:bcpkix-jdk18on:1.79"
+        // Netty 4.1.119.Final - versão corrigida para vulnerabilidades Snyk
+        force "io.netty:netty-handler:4.1.119.Final"
+        force "io.netty:netty-handler-proxy:4.1.119.Final"
+        force "io.netty:netty-codec-http:4.1.119.Final"
+        force "io.netty:netty-codec-http2:4.1.119.Final"
+        force "io.netty:netty-codec:4.1.119.Final"
+        force "io.netty:netty-transport-native-unix-common:4.1.119.Final"
+    }
 }
 
 apply from: 'capacitor.build.gradle'

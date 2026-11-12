@@ -198,14 +198,44 @@ Todos os componentes acima existem nos dois temas. O que muda:
 
 ---
 
-## J. Critérios de aceite da implementação
+## K. Correções técnicas obrigatórias (Revisão de Arquitetura)
 
-- [ ] Cada componente tem preview nos dois temas (`uiMode = UI_MODE_NIGHT_YES`)
+### K1. Especificação de Insets do Android
+
+| Inset / API | Tratamento em Compose |
+|:--|:--|
+| Edge-to-Edge | `enableEdgeToEdge()` na Activity principal. Superfícies de fundo e barras estendem até as bordas da tela |
+| Barra de status | `WindowInsets.statusBars` ou `Modifier.statusBarsPadding()` na TopAppBar |
+| Barra de navegação inferior | `WindowInsets.navigationBars` consumido dinamicamente. Substitui o cálculo estático de 116 dp pelo padding real retornado pelo sistema (`56.dp + WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()`) |
+| Navegação por gestos vs. 3 botões | Em navegação por gestos o inset retornado é ~24 dp; em 3 botões é ~48 dp. A barra e o padding do conteúdo adaptam-se automaticamente sem hardcode |
+| Recorte de tela (notch / cutout) | `WindowInsets.displayCutout` em orientações ou telas cheias com recorte |
+| Teclado virtual (IME) | `Modifier.imePadding()` nos formulários. O botão Salvar na TopAppBar permanece visível e o campo ativo rola acima do teclado |
+
+### K2. Responsividade dos Indicadores Financeiros
+
+- **Valores grandes:** Valores até R$ 99.999,99 usam a fonte padrão (`title1` / `title2`). Valores entre R$ 100.000,00 e R$ 999.999,99 reduzem automaticamente a fonte para `title3`. Valores acima de R$ 1.000.000,00 aplicam `TextOverflow.Ellipsis` com tooltip/toque para expansão.
+- **Formatação:** Sempre com prefixo de moeda (`R$ `), separador de milhar com ponto e decimal com vírgula (padrão pt-BR). Valores negativos usam sinal de menos antes do R$ (`− R$ 150,00`).
+- **Comportamento em telas estreitas (< 340 dp):** O grid de 3 colunas de indicadores do Início (`Receitas · Despesas · Saldo`) quebra automaticamente para um layout de 2 linhas ou carrossel horizontal em vez de comprimir os valores.
+- **Acessibilidade com escala de fonte (150% - 200%):** Os containers aumentam de altura dinamicamente (`minHeight` em vez de `height` fixo) e os textos de valor usam `maxLines = 1` com fator de escala mínimo de 0.75x antes de truncar.
+
+### K3. Segurança e Isolamento da Ação Desfazer
+
+- **Isolamento transacional:** A exclusão/edição com Desfazer não executa o hard-delete imediato no banco de dados. O registro entra em estado `pending_deletion` ou buffer local por 5 segundos. Se o Desfazer for acionado, o estado local é restaurado sem requisição destrutiva ao servidor.
+- **Proteção contra Replay / UUID:** Cada ação de Desfazer gera um identificador único de execução (`actionUuid`) vinculado ao id do registro e ao id da sessão do usuário ativo. O token é invalidado imediatamente após ser consumido ou expirado.
+- **Fronteira de sessão / Logout:** Se o usuário fizer logout ou a sessão expirar durante a janela de 5 segundos do Desfazer, a ação pendente é confirmada (ou descartada com segurança) e o token é destruído. Nenhuma ação de Desfazer pode ser executada por outra sessão.
+- **Isolamento de efeitos colaterais:** Webhooks, notificações push, atualização de relatórios agregados e sincronizações com servidor só são disparados após o encerramento da janela de 5 segundos sem acionamento do Desfazer.
+
+---
+
+## L. Critérios de aceite da implementação
+
+- [ ] Cada componente tem preview nos dois temas (`uiMode = UI_MODE_NIGHT_YES` e `UI_MODE_NIGHT_NO`)
 - [ ] Nenhum hex fora de `ui/theme/`
 - [ ] Todo alvo de toque ≥ 48 dp
 - [ ] Todo par texto/fundo conforme a tabela 2.4 de `tokens.md`
 - [ ] Todo ícone acionável com `contentDescription`
 - [ ] Escala de fonte do sistema em 200% não quebra layout de card de saldo nem de lista
-- [ ] Barra inferior não cobre conteúdo em nenhuma tela
-- [ ] Snackbar de Desfazer expira em 5 s e cancela ao trocar de tela
+- [ ] Insets do Android consumidos dinamicamente via `WindowInsets`
+- [ ] Indicadores financeiros responsivos em telas de 320 dp a 480 dp
+- [ ] Ação Desfazer segura, isolada por UUID de sessão e com buffer de 5 s
 - [ ] Nenhuma cor só como portadora de significado
