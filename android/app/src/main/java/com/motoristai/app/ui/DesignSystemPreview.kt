@@ -38,7 +38,6 @@ import com.motoristai.app.ui.components.IndicatorCard
 import com.motoristai.app.ui.components.IndicatorCardData
 import com.motoristai.app.ui.components.IndicatorGroup
 import com.motoristai.app.ui.components.LineChart
-import com.motoristai.app.ui.components.MoneyText
 import com.motoristai.app.ui.components.MotoristAICheckbox
 import com.motoristai.app.ui.components.MotoristAIDropdown
 import com.motoristai.app.ui.components.MotoristAIFab
@@ -61,6 +60,9 @@ import com.motoristai.app.ui.components.TextActionButton
 import com.motoristai.app.ui.components.TonalButton
 import com.motoristai.app.ui.components.UndoSnackbarHost
 import com.motoristai.app.ui.components.rememberUndoHostState
+import com.motoristai.app.ui.screens.HomePeriod
+import com.motoristai.app.ui.screens.HomeScreen
+import com.motoristai.app.ui.screens.HomeUiState
 import com.motoristai.app.ui.theme.MotoristAITheme
 import com.motoristai.app.ui.theme.MotoristAIThemeTokens
 
@@ -228,7 +230,7 @@ fun DesignSystemGallery() {
                 cents = -25_000L,
                 valueColor = MotoristAIThemeTokens.colors.errorText,
                 onClick = {},
-                icon = Icons.Filled.ShoppingCart
+                icon = Icons.Default.ShoppingCart
             )
 
             MotoristAIListItem(
@@ -237,7 +239,7 @@ fun DesignSystemGallery() {
                 cents = 7_800L,
                 valueColor = MotoristAIThemeTokens.colors.successText,
                 onClick = {},
-                icon = Icons.Filled.Place
+                icon = Icons.Default.Place
             )
 
             SectionDivider()
@@ -255,15 +257,6 @@ fun DesignSystemGallery() {
                     IndicatorCardData("Milhão", 987_654_321L, MotoristAIThemeTokens.colors.onSurface)
                 )
             )
-
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                IndicatorCard(
-                    title = "Estreito",
-                    cents = 1_234_567L,
-                    valueColor = MotoristAIThemeTokens.colors.onSurface,
-                    modifier = Modifier.weight(1f)
-                )
-            }
 
             SectionDivider()
 
@@ -347,7 +340,7 @@ fun DesignSystemGallery() {
     }
 }
 
-@Preview(name = "Light Mode", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO, widthDp = 360)
+@Preview(name = "Light Mode - Galeria", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO, widthDp = 360)
 @Composable
 fun DesignSystemGalleryLightPreview() {
     MotoristAITheme(darkTheme = false) {
@@ -355,7 +348,7 @@ fun DesignSystemGalleryLightPreview() {
     }
 }
 
-@Preview(name = "Dark Mode", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES, widthDp = 360)
+@Preview(name = "Dark Mode - Galeria", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES, widthDp = 360)
 @Composable
 fun DesignSystemGalleryDarkPreview() {
     MotoristAITheme(darkTheme = true) {
@@ -363,10 +356,46 @@ fun DesignSystemGalleryDarkPreview() {
     }
 }
 
-@Preview(name = "Fonte 200% (light)", showBackground = true, widthDp = 320, fontScale = 2f)
+@Preview(name = "Light Mode - Tela Início", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO, widthDp = 360, heightDp = 800)
 @Composable
-fun DesignSystemGalleryLargeFontPreview() {
+fun HomeScreenLightPreview() {
     MotoristAITheme(darkTheme = false) {
-        DesignSystemGallery()
+        HomeScreen(
+            state = HomeUiState(selectedPeriod = HomePeriod.HOJE),
+            onPeriodSelected = {},
+            onMonthChanged = {},
+            onToggleBalanceVisibility = {},
+            onNotificationClick = {},
+            onProfileClick = {},
+            onAiClick = {},
+            onOdometerClick = {},
+            onImportClick = {},
+            onTransactionClick = {},
+            onViewAllTransactions = {},
+            onFabClick = {},
+            onDestinationSelected = {}
+        )
+    }
+}
+
+@Preview(name = "Dark Mode - Tela Início", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES, widthDp = 360, heightDp = 800)
+@Composable
+fun HomeScreenDarkPreview() {
+    MotoristAITheme(darkTheme = true) {
+        HomeScreen(
+            state = HomeUiState(selectedPeriod = HomePeriod.MES, balanceCents = 284_650L),
+            onPeriodSelected = {},
+            onMonthChanged = {},
+            onToggleBalanceVisibility = {},
+            onNotificationClick = {},
+            onProfileClick = {},
+            onAiClick = {},
+            onOdometerClick = {},
+            onImportClick = {},
+            onTransactionClick = {},
+            onViewAllTransactions = {},
+            onFabClick = {},
+            onDestinationSelected = {}
+        )
     }
 }
