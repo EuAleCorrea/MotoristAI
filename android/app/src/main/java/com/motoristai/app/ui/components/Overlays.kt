@@ -1,6 +1,9 @@
 package com.motoristai.app.ui.components
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -23,9 +26,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Mic
-import androidx.compose.material.icons.filled.TrendingDown
-import androidx.compose.material.icons.filled.TrendingUp
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -37,10 +37,13 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,7 +51,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import com.motoristai.app.ui.icons.MotoristAIIcons
 import com.motoristai.app.ui.theme.MotoristAIThemeTokens
+import com.motoristai.app.ui.undo.UndoController
+import kotlinx.coroutines.CoroutineScope
 
 data class BottomSheetOption(
     val title: String,
@@ -59,7 +65,7 @@ data class BottomSheetOption(
 )
 
 /**
- * C22 - Modal Bottom Sheet de Ações Rápidas
+ * C22 - Modal Bottom Sheet de ações rápidas.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -110,15 +116,24 @@ fun MotoristAIBottomSheet(
             Spacer(modifier = Modifier.height(16.dp))
 
             val options = listOf(
-                BottomSheetOption("Nova receita", "Corrida, plataforma ou outra entrada", Icons.Default.TrendingUp, MotoristAIThemeTokens.colors.success) {
-                    onOptionSelected("receita")
-                },
-                BottomSheetOption("Nova despesa", "Veículo ou família", Icons.Default.TrendingDown, MotoristAIThemeTokens.colors.errorText) {
-                    onOptionSelected("despesa")
-                },
-                BottomSheetOption("Lançamento por voz", "Fale o valor e a categoria", Icons.Default.Mic, MotoristAIThemeTokens.colors.accent) {
-                    onOptionSelected("voz")
-                }
+                BottomSheetOption(
+                    "Nova receita",
+                    "Corrida, plataforma ou outra entrada",
+                    MotoristAIIcons.TrendingUp,
+                    MotoristAIThemeTokens.colors.success
+                ) { onOptionSelected("receita") },
+                BottomSheetOption(
+                    "Nova despesa",
+                    "Veículo ou família",
+                    MotoristAIIcons.TrendingDown,
+                    MotoristAIThemeTokens.colors.errorText
+                ) { onOptionSelected("despesa") },
+                BottomSheetOption(
+                    "Lançamento por voz",
+                    "Fale o valor e a categoria",
+                    MotoristAIIcons.Mic,
+                    MotoristAIThemeTokens.colors.accent
+                ) { onOptionSelected("voz") }
             )
 
             options.forEach { option ->
@@ -181,7 +196,7 @@ fun MotoristAIBottomSheet(
 }
 
 /**
- * C23 - Diálogo de Confirmação Destrutiva
+ * C23 - Diálogo de confirmação destrutiva.
  */
 @Composable
 fun DestructiveDialog(
@@ -232,54 +247,124 @@ fun DestructiveDialog(
             )
         },
         confirmButton = {
-            PrimaryButton(
-                text = confirmText,
-                onClick = onConfirm,
-                fullWidth = true
-            )
+            PrimaryButton(text = confirmText, onClick = onConfirm, fullWidth = true)
         },
         dismissButton = {
-            SecondaryButton(
-                text = dismissText,
-                onClick = onDismiss,
-                fullWidth = true
-            )
+            SecondaryButton(text = dismissText, onClick = onDismiss, fullWidth = true)
         },
         shape = RoundedCornerShape(20.dp)
     )
 }
 
 /**
- * C24 - Custom 5-Second Transactional Undo Snackbar State & Host
+ * Estado do host de Desfazer. Encapsula o [UndoController] e expõe o que a UI precisa.
  */
-data class UndoSnackbarData(
-    val actionUuid: String,
-    val message: String,
-    val onUndo: () -> Unit,
-    val onTimeout: () -> Unit
-)
+@Stable
+class UndoHostState(
+    scope: CoroutineScope,
+    windowMillis: Long = UndoController.DEFAULT_WINDOW_MILLIS
+) {
+    private val controller = UndoController(scope, windowMillis)
+
+    var message by mutableStateOf<String?>(null)
+        private set
+
+    var pendingId by mutableStateOf<String?>(null)
+        private set
+
+    val windowMillisValue: Long get() = controller.windowMillis
+
+    /**
+     * Arma uma ação desfazível. [onConfirm] devolve `true` quando a confirmação foi aplicada.
+     * Sempre chamado **uma única vez**, após a janela ou no dispose.
+     */
+    fun show(
+        id: String,
+        message: String,
+        onConfirm: suspend () -> Boolean,
+        onUndo: suspend () -> Unit,
+        onFailed: (Throwable) -> Unit = {}
+    ) {
+        val armed = controller.arm(
+            id = id,
+            onConfirm = {
+                val result = onConfirm()
+                clearIfCurrent(id)
+                result
+            },
+            onUndone = {
+                onUndo()
+                clearIfCurrent(id)
+            },
+            onFailed = onFailed
+        )
+        if (armed) {
+            this.message = message
+            this.pendingId = id
+        }
+    }
+
+    fun undo() {
+        pendingId?.let { controller.undo(it) }
+    }
+
+    /** Dispara a confirmação pendente (dispose, troca de tela, cancelamento). */
+    fun confirmAndClear() {
+        message = null
+        pendingId = null
+        controller.confirmAndClear()
+    }
+
+    private fun clearIfCurrent(id: String) {
+        if (pendingId == id) {
+            message = null
+            pendingId = null
+        }
+    }
+}
 
 @Composable
+fun rememberUndoHostState(
+    windowMillis: Long = UndoController.DEFAULT_WINDOW_MILLIS
+): UndoHostState {
+    val scope = rememberCoroutineScope()
+    return remember(windowMillis) { UndoHostState(scope, windowMillis) }
+}
+
+/**
+ * C24 - Snackbar de Desfazer com janela explícita de 5.000 ms.
+ *
+ * Não usa `SnackbarHostState.showSnackbar`, cuja menor duração é 4 s.
+ * Ao sair da composição (navegação / tela destruída), a ação pendente é confirmada.
+ */
+@Composable
 fun UndoSnackbarHost(
-    snackbarData: UndoSnackbarData?,
+    state: UndoHostState,
     modifier: Modifier = Modifier
 ) {
+    DisposableEffect(state) {
+        onDispose { state.confirmAndClear() }
+    }
+
     AnimatedVisibility(
-        visible = snackbarData != null,
+        visible = state.message != null,
         enter = slideInVertically(initialOffsetY = { it }) + fadeIn(),
         exit = slideOutVertically(targetOffsetY = { it }) + fadeOut(),
         modifier = modifier
     ) {
-        if (snackbarData != null) {
-            var progress by remember(snackbarData.actionUuid) { mutableFloatStateOf(1f) }
+        val currentMessage = state.message
+        if (currentMessage != null) {
+            val progress = remember(state.pendingId) { Animatable(1f) }
 
-            LaunchedEffect(snackbarData.actionUuid) {
-                val totalSteps = 50
-                for (step in totalSteps downTo 0) {
-                    progress = step / totalSteps.toFloat()
-                    kotlinx.coroutines.delay(100L)
-                }
-                snackbarData.onTimeout()
+            LaunchedEffect(state.pendingId) {
+                progress.snapTo(1f)
+                progress.animateTo(
+                    targetValue = 0f,
+                    animationSpec = tween(
+                        durationMillis = state.windowMillisValue.toInt(),
+                        easing = LinearEasing
+                    )
+                )
             }
 
             Surface(
@@ -298,7 +383,7 @@ fun UndoSnackbarHost(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
-                            text = snackbarData.message,
+                            text = currentMessage,
                             style = MotoristAIThemeTokens.typography.body,
                             color = MotoristAIThemeTokens.colors.onSurface,
                             modifier = Modifier.weight(1f)
@@ -306,13 +391,13 @@ fun UndoSnackbarHost(
 
                         TextActionButton(
                             text = "Desfazer",
-                            onClick = snackbarData.onUndo,
+                            onClick = { state.undo() },
                             color = MotoristAIThemeTokens.colors.accent
                         )
                     }
 
                     LinearProgressIndicator(
-                        progress = progress,
+                        progress = progress.value,
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(3.dp),

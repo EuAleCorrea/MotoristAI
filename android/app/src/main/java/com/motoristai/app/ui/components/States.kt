@@ -18,9 +18,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ErrorOutline
-import androidx.compose.material.icons.filled.Inbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
@@ -35,17 +32,18 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.motoristai.app.ui.icons.MotoristAIIcons
 import com.motoristai.app.ui.theme.MotoristAIThemeTokens
 
 /**
- * C25 - Estado Vazio
+ * C25 - Estado vazio.
  */
 @Composable
 fun EmptyState(
     title: String = "Nenhum lançamento encontrado",
     description: String = "Sua lista de lançamentos para este período está vazia.",
     modifier: Modifier = Modifier,
-    icon: ImageVector = Icons.Default.Inbox,
+    icon: ImageVector = MotoristAIIcons.Inbox,
     actionButton: @Composable (() -> Unit)? = null
 ) {
     Column(
@@ -95,7 +93,7 @@ fun EmptyState(
 }
 
 /**
- * C26 - Estado de Carregando
+ * C26 - Estado de carregamento.
  */
 @Composable
 fun LoadingState(
@@ -126,7 +124,7 @@ fun LoadingState(
 }
 
 /**
- * C27 - Estado de Erro
+ * C27 - Estado de erro.
  */
 @Composable
 fun ErrorState(
@@ -150,7 +148,7 @@ fun ErrorState(
             contentAlignment = Alignment.Center
         ) {
             Icon(
-                imageVector = Icons.Default.ErrorOutline,
+                imageVector = MotoristAIIcons.ErrorOutline,
                 contentDescription = null,
                 tint = MotoristAIThemeTokens.colors.errorText,
                 modifier = Modifier.size(36.dp)
@@ -185,7 +183,7 @@ fun ErrorState(
 }
 
 /**
- * C28 - Skeleton Item com Shimmer
+ * C28 - Skeleton com shimmer.
  */
 @Composable
 fun SkeletonItem(
@@ -227,7 +225,7 @@ fun SkeletonItem(
 }
 
 /**
- * C30 - Barra de Progresso
+ * C30 - Barra de progresso.
  */
 @Composable
 fun MotoristAIProgressBar(

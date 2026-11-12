@@ -12,8 +12,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DirectionsCar
-import androidx.compose.material.icons.filled.LocalGasStation
+import androidx.compose.material.icons.filled.Place
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,7 +35,10 @@ import com.motoristai.app.ui.components.DonutSliceData
 import com.motoristai.app.ui.components.EmptyState
 import com.motoristai.app.ui.components.GoalCard
 import com.motoristai.app.ui.components.IndicatorCard
+import com.motoristai.app.ui.components.IndicatorCardData
+import com.motoristai.app.ui.components.IndicatorGroup
 import com.motoristai.app.ui.components.LineChart
+import com.motoristai.app.ui.components.MoneyText
 import com.motoristai.app.ui.components.MotoristAICheckbox
 import com.motoristai.app.ui.components.MotoristAIDropdown
 import com.motoristai.app.ui.components.MotoristAIFab
@@ -56,8 +59,8 @@ import com.motoristai.app.ui.components.SectionDivider
 import com.motoristai.app.ui.components.SkeletonItem
 import com.motoristai.app.ui.components.TextActionButton
 import com.motoristai.app.ui.components.TonalButton
-import com.motoristai.app.ui.components.UndoSnackbarData
 import com.motoristai.app.ui.components.UndoSnackbarHost
+import com.motoristai.app.ui.components.rememberUndoHostState
 import com.motoristai.app.ui.theme.MotoristAITheme
 import com.motoristai.app.ui.theme.MotoristAIThemeTokens
 
@@ -75,6 +78,8 @@ fun DesignSystemGallery() {
     var currentNav by remember { mutableStateOf(NavDestination.INICIO) }
     var selectedCategory by remember { mutableStateOf("Veículo") }
 
+    val undoState = rememberUndoHostState()
+
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MotoristAIThemeTokens.colors.background
@@ -86,23 +91,21 @@ fun DesignSystemGallery() {
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Header
             Text(
                 text = "MotoristAI — Design System",
                 style = MotoristAIThemeTokens.typography.display,
                 color = MotoristAIThemeTokens.colors.onBackground
             )
             Text(
-                text = "Componentes nativos Android em Jetpack Compose / Material 3",
+                text = "Componentes nativos Material 3 · valor monetário sem truncamento",
                 style = MotoristAIThemeTokens.typography.bodySmall,
                 color = MotoristAIThemeTokens.colors.textMuted
             )
 
             SectionDivider()
 
-            // 1. Botões
             Text(
-                text = "1. Botões (Ações)",
+                text = "1. Botões",
                 style = MotoristAIThemeTokens.typography.title2,
                 color = MotoristAIThemeTokens.colors.onBackground
             )
@@ -120,7 +123,6 @@ fun DesignSystemGallery() {
 
             SectionDivider()
 
-            // 2. Formulário e Campos
             Text(
                 text = "2. Campos e Formulário",
                 style = MotoristAIThemeTokens.typography.title2,
@@ -148,10 +150,7 @@ fun DesignSystemGallery() {
                 label = "Senha de acesso"
             )
 
-            SearchTextField(
-                query = "",
-                onQueryChange = {}
-            )
+            SearchTextField(query = "", onQueryChange = {})
 
             MotoristAIDropdown(
                 label = "Categoria",
@@ -195,7 +194,6 @@ fun DesignSystemGallery() {
 
             SectionDivider()
 
-            // 3. Cards e Dados
             Text(
                 text = "3. Cards e Indicadores",
                 style = MotoristAIThemeTokens.typography.title2,
@@ -203,32 +201,22 @@ fun DesignSystemGallery() {
             )
 
             BalanceCard(
-                balanceFormatted = "R$ 2.480,00",
+                balanceCents = 248_000L,
                 isBalanceVisible = isBalanceVisible,
                 onToggleVisibility = { isBalanceVisible = !isBalanceVisible }
             )
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                IndicatorCard(
-                    title = "Receitas",
-                    amountFormatted = "R$ 1.650,00",
-                    valueColor = MotoristAIThemeTokens.colors.successText,
-                    modifier = Modifier.weight(1f)
+            IndicatorGroup(
+                items = listOf(
+                    IndicatorCardData("Receitas", 165_000L, MotoristAIThemeTokens.colors.successText),
+                    IndicatorCardData("Despesas", 83_000L, MotoristAIThemeTokens.colors.errorText),
+                    IndicatorCardData("Saldo", 82_000L, MotoristAIThemeTokens.colors.onSurface)
                 )
-                IndicatorCard(
-                    title = "Despesas",
-                    amountFormatted = "R$ 830,00",
-                    valueColor = MotoristAIThemeTokens.colors.errorText,
-                    modifier = Modifier.weight(1f)
-                )
-            }
+            )
 
             GoalCard(
                 title = "Reserva de emergência",
-                targetAmountFormatted = "R$ 9.000,00",
+                targetCents = 900_000L,
                 progressFraction = 0.68f
             )
 
@@ -237,26 +225,50 @@ fun DesignSystemGallery() {
             MotoristAIListItem(
                 title = "Combustível",
                 subtitle = "Posto Shell · Veículo",
-                valueFormatted = "− R$ 250,00",
+                cents = -25_000L,
                 valueColor = MotoristAIThemeTokens.colors.errorText,
                 onClick = {},
-                icon = Icons.Default.LocalGasStation
+                icon = Icons.Filled.ShoppingCart
             )
 
             MotoristAIListItem(
                 title = "Corrida (Uber)",
                 subtitle = "12,4 km · Receita",
-                valueFormatted = "+ R$ 78,00",
+                cents = 7_800L,
                 valueColor = MotoristAIThemeTokens.colors.successText,
                 onClick = {},
-                icon = Icons.Default.DirectionsCar
+                icon = Icons.Filled.Place
             )
 
             SectionDivider()
 
-            // 4. Gráficos
             Text(
-                text = "4. Gráficos (Canvas)",
+                text = "4. Valores extremos (sem truncamento)",
+                style = MotoristAIThemeTokens.typography.title2,
+                color = MotoristAIThemeTokens.colors.onBackground
+            )
+
+            IndicatorGroup(
+                items = listOf(
+                    IndicatorCardData("Negativo", -123_456L, MotoristAIThemeTokens.colors.errorText),
+                    IndicatorCardData("Centavos", 1L, MotoristAIThemeTokens.colors.onSurface),
+                    IndicatorCardData("Milhão", 987_654_321L, MotoristAIThemeTokens.colors.onSurface)
+                )
+            )
+
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                IndicatorCard(
+                    title = "Estreito",
+                    cents = 1_234_567L,
+                    valueColor = MotoristAIThemeTokens.colors.onSurface,
+                    modifier = Modifier.weight(1f)
+                )
+            }
+
+            SectionDivider()
+
+            Text(
+                text = "5. Gráficos (Canvas)",
                 style = MotoristAIThemeTokens.typography.title2,
                 color = MotoristAIThemeTokens.colors.onBackground
             )
@@ -283,27 +295,30 @@ fun DesignSystemGallery() {
 
             SectionDivider()
 
-            // 5. Feedbacks e Undo
             Text(
-                text = "5. Feedbacks e Ação Desfazer (5s)",
+                text = "6. Feedbacks (Desfazer 5.000 ms)",
                 style = MotoristAIThemeTokens.typography.title2,
                 color = MotoristAIThemeTokens.colors.onBackground
             )
 
-            UndoSnackbarHost(
-                snackbarData = UndoSnackbarData(
-                    actionUuid = "demo-action-123",
-                    message = "Lançamento salvo com sucesso!",
-                    onUndo = {},
-                    onTimeout = {}
-                )
+            PrimaryButton(
+                text = "Simular lançamento salvo",
+                onClick = {
+                    undoState.show(
+                        id = "demo-${System.currentTimeMillis()}",
+                        message = "Lançamento salvo com sucesso!",
+                        onConfirm = { true },
+                        onUndo = {}
+                    )
+                }
             )
+
+            UndoSnackbarHost(state = undoState)
 
             SectionDivider()
 
-            // 6. Estados e Skeleton
             Text(
-                text = "6. Estados e Skeleton",
+                text = "7. Estados e Skeleton",
                 style = MotoristAIThemeTokens.typography.title2,
                 color = MotoristAIThemeTokens.colors.onBackground
             )
@@ -311,15 +326,12 @@ fun DesignSystemGallery() {
             SkeletonItem(height = 64.dp)
             SkeletonItem(height = 96.dp)
 
-            EmptyState(
-                modifier = Modifier.height(220.dp)
-            )
+            EmptyState(modifier = Modifier.height(220.dp))
 
             SectionDivider()
 
-            // 7. Navegação Inferior Nátiva
             Text(
-                text = "7. Barra de Navegação + FAB Central",
+                text = "8. Barra de Navegação + FAB Central",
                 style = MotoristAIThemeTokens.typography.title2,
                 color = MotoristAIThemeTokens.colors.onBackground
             )
@@ -335,7 +347,7 @@ fun DesignSystemGallery() {
     }
 }
 
-@Preview(name = "Light Mode", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(name = "Light Mode", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO, widthDp = 360)
 @Composable
 fun DesignSystemGalleryLightPreview() {
     MotoristAITheme(darkTheme = false) {
@@ -343,10 +355,18 @@ fun DesignSystemGalleryLightPreview() {
     }
 }
 
-@Preview(name = "Dark Mode", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Dark Mode", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES, widthDp = 360)
 @Composable
 fun DesignSystemGalleryDarkPreview() {
     MotoristAITheme(darkTheme = true) {
+        DesignSystemGallery()
+    }
+}
+
+@Preview(name = "Fonte 200% (light)", showBackground = true, widthDp = 320, fontScale = 2f)
+@Composable
+fun DesignSystemGalleryLargeFontPreview() {
+    MotoristAITheme(darkTheme = false) {
         DesignSystemGallery()
     }
 }

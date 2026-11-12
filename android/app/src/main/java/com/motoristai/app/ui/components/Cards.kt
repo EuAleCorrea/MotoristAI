@@ -6,6 +6,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,8 +20,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -38,14 +37,18 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.motoristai.app.ui.icons.MotoristAIIcons
 import com.motoristai.app.ui.theme.MotoristAIThemeTokens
+import com.motoristai.app.ui.util.MoneyTextSizing
 
 /**
- * C15 - Card de Saldo com Gradiente e Toggle de Visibilidade
+ * C15 - Card de Saldo com gradiente e alternância de visibilidade.
+ * Quando oculto, mostra "R$ ••••" e mantém o valor real no rótulo de acessibilidade?
+ * Não: com o valor oculto o TalkBack anuncia apenas "Saldo oculto", para não vazar o dado.
  */
 @Composable
 fun BalanceCard(
-    balanceFormatted: String,
+    balanceCents: Long,
     isBalanceVisible: Boolean,
     onToggleVisibility: () -> Unit,
     modifier: Modifier = Modifier,
@@ -79,39 +82,40 @@ fun BalanceCard(
 
                 IconButton(
                     onClick = onToggleVisibility,
-                    modifier = Modifier.size(32.dp)
+                    modifier = Modifier.size(48.dp)
                 ) {
                     Icon(
-                        imageVector = if (isBalanceVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+                        imageVector = if (isBalanceVisible) MotoristAIIcons.Visibility else MotoristAIIcons.VisibilityOff,
                         contentDescription = if (isBalanceVisible) "Ocultar saldo" else "Mostrar saldo",
-                        tint = Color.White
+                        tint = Color.White,
+                        modifier = Modifier.size(22.dp)
                     )
                 }
             }
 
             Spacer(modifier = Modifier.height(4.dp))
 
-            val displayValue = if (isBalanceVisible) balanceFormatted else "R$ ••••"
-            val textStyle = if (displayValue.length > 13) {
-                MotoristAIThemeTokens.typography.title2
+            if (isBalanceVisible) {
+                MoneyText(
+                    cents = balanceCents,
+                    color = Color.White,
+                    label = "Saldo atual"
+                )
+                if (subtitleText.isNotEmpty()) {
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = subtitleText,
+                        style = MotoristAIThemeTokens.typography.caption,
+                        color = Color.White.copy(alpha = 0.8f)
+                    )
+                }
             } else {
-                MotoristAIThemeTokens.typography.display
-            }
-
-            Text(
-                text = displayValue,
-                style = textStyle,
-                color = Color.White,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-
-            if (subtitleText.isNotEmpty() && isBalanceVisible) {
-                Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = subtitleText,
-                    style = MotoristAIThemeTokens.typography.caption,
-                    color = Color.White.copy(alpha = 0.8f)
+                    text = "R$ ••••",
+                    style = MotoristAIThemeTokens.typography.display,
+                    color = Color.White,
+                    maxLines = 1,
+                    modifier = Modifier.semantics { contentDescription = "Saldo oculto" }
                 )
             }
         }
@@ -119,12 +123,13 @@ fun BalanceCard(
 }
 
 /**
- * C16 - Card de Indicador Financeiro (Receitas / Despesas / Saldo)
+ * C16 - Card de indicador financeiro. Recebe o valor em centavos e delega a
+ * apresentação ao [MoneyText], que nunca trunca.
  */
 @Composable
 fun IndicatorCard(
     title: String,
-    amountFormatted: String,
+    cents: Long,
     valueColor: Color,
     modifier: Modifier = Modifier,
     icon: ImageVector? = null
@@ -137,10 +142,7 @@ fun IndicatorCard(
         ),
         border = BorderStroke(1.dp, MotoristAIThemeTokens.colors.border)
     ) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.SpaceBetween
-        ) {
+        Column(modifier = Modifier.padding(16.dp)) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -149,7 +151,9 @@ fun IndicatorCard(
                 Text(
                     text = title,
                     style = MotoristAIThemeTokens.typography.caption,
-                    color = MotoristAIThemeTokens.colors.textMuted
+                    color = MotoristAIThemeTokens.colors.textMuted,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
                 if (icon != null) {
                     Icon(
@@ -163,29 +167,76 @@ fun IndicatorCard(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            Text(
-                text = amountFormatted,
-                style = if (amountFormatted.length > 11) MotoristAIThemeTokens.typography.title3 else MotoristAIThemeTokens.typography.title2,
+            MoneyText(
+                cents = cents,
                 color = valueColor,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                label = title
             )
         }
     }
 }
 
 /**
- * C17 - Card de Meta Financeira
+ * Grupo de indicadores responsivo.
+ * 3 colunas a partir de 360 dp, 2 colunas de 300 a 359 dp, empilhado abaixo disso.
+ */
+@Composable
+fun IndicatorGroup(
+    modifier: Modifier = Modifier,
+    items: List<IndicatorCardData>
+) {
+    BoxWithConstraints(modifier = modifier.fillMaxWidth()) {
+        val columns = MoneyTextSizing.indicatorColumns(this.maxWidth.value)
+
+        if (columns == 1) {
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                items.forEach { item ->
+                    IndicatorCard(
+                        title = item.title,
+                        cents = item.cents,
+                        valueColor = item.color,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            }
+        } else {
+            items.chunked(columns).forEach { row ->
+                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    row.forEach { item ->
+                        IndicatorCard(
+                            title = item.title,
+                            cents = item.cents,
+                            valueColor = item.color,
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+                    repeat(columns - row.size) {
+                        Spacer(modifier = Modifier.weight(1f))
+                    }
+                }
+            }
+        }
+    }
+}
+
+data class IndicatorCardData(
+    val title: String,
+    val cents: Long,
+    val color: Color
+)
+
+/**
+ * C17 - Card de meta financeira.
  */
 @Composable
 fun GoalCard(
     title: String,
-    targetAmountFormatted: String,
+    targetCents: Long,
     progressFraction: Float,
     modifier: Modifier = Modifier
 ) {
     val isCompleted = progressFraction >= 1.0f
-    val progressPercent = (progressFraction * 100).toInt().coerceAtMost(100)
+    val progressPercent = (progressFraction * 100).toInt().coerceIn(0, 100)
 
     Card(
         modifier = modifier.fillMaxWidth(),
@@ -204,7 +255,9 @@ fun GoalCard(
                 Text(
                     text = title,
                     style = MotoristAIThemeTokens.typography.title3,
-                    color = MotoristAIThemeTokens.colors.onSurface
+                    color = MotoristAIThemeTokens.colors.onSurface,
+                    modifier = Modifier.weight(1f),
+                    maxLines = 2
                 )
                 if (isCompleted) {
                     Icon(
@@ -224,10 +277,10 @@ fun GoalCard(
 
             Spacer(modifier = Modifier.height(4.dp))
 
-            Text(
-                text = targetAmountFormatted,
-                style = MotoristAIThemeTokens.typography.bodySmall,
-                color = MotoristAIThemeTokens.colors.textMuted
+            MoneyText(
+                cents = targetCents,
+                color = MotoristAIThemeTokens.colors.textMuted,
+                label = "Meta"
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -246,25 +299,29 @@ fun GoalCard(
 }
 
 /**
- * C18 - Item de Lista de Lançamento
+ * C18 - Item de lista de lançamento.
  */
 @Composable
 fun MotoristAIListItem(
     title: String,
     subtitle: String,
-    valueFormatted: String,
+    cents: Long,
     valueColor: Color,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     icon: ImageVector? = null,
     showChevron: Boolean = true
 ) {
+    val valueText = com.motoristai.app.ui.util.Money.format(cents)
+
     Row(
         modifier = modifier
             .fillMaxWidth()
             .clickable(onClick = onClick)
             .padding(horizontal = 16.dp, vertical = 12.dp)
-            .semantics { contentDescription = "$title, $subtitle, $valueFormatted" },
+            .semantics {
+                contentDescription = "$title, $subtitle, $valueText"
+            },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -311,9 +368,10 @@ fun MotoristAIListItem(
 
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                text = valueFormatted,
+                text = valueText,
                 style = MotoristAIThemeTokens.typography.title3,
-                color = valueColor
+                color = valueColor,
+                maxLines = 1
             )
             if (showChevron) {
                 Spacer(modifier = Modifier.width(4.dp))

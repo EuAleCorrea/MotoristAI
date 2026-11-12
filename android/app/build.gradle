@@ -41,13 +41,15 @@ dependencies {
     implementation 'androidx.compose.ui:ui-graphics'
     implementation 'androidx.compose.ui:ui-tooling-preview'
     implementation 'androidx.compose.material3:material3'
+    // Apenas o pacote core. Os icones que nao existem nele sao vetores proprios
+    // em ui/icons/MotoristAIIcons.kt, evitando o custo do material-icons-extended.
     implementation 'androidx.compose.material:material-icons-core'
-    implementation 'androidx.compose.material:material-icons-extended'
     implementation 'androidx.activity:activity-compose:1.10.1'
     implementation 'androidx.lifecycle:lifecycle-runtime-compose:2.8.7'
     debugImplementation 'androidx.compose.ui:ui-tooling'
 
     testImplementation "junit:junit:$junitVersion"
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.9.0'
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
     implementation project(':capacitor-cordova-android-plugins')

@@ -14,8 +14,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -34,6 +32,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.motoristai.app.ui.icons.MotoristAIIcons
 import com.motoristai.app.ui.theme.MotoristAIThemeTokens
 
 /**
@@ -116,7 +115,7 @@ fun PasswordTextField(
         trailingIcon = {
             IconButton(onClick = { passwordVisible = !passwordVisible }) {
                 Icon(
-                    imageVector = if (passwordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+                    imageVector = if (passwordVisible) MotoristAIIcons.Visibility else MotoristAIIcons.VisibilityOff,
                     contentDescription = if (passwordVisible) "Ocultar senha" else "Mostrar senha",
                     tint = MotoristAIThemeTokens.colors.textMuted,
                     modifier = Modifier.size(20.dp)
