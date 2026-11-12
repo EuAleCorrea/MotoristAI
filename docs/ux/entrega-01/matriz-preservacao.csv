@@ -1,0 +1,62 @@
+sep=;
+Área;Tela atual;Rota atual;Novo destino;Forma;Observação
+Entrada;Login e-mail e senha;/;Nível 0 - Login;TELA;
+Entrada;Login biométrico;-;Nível 0 - Login;TELA;Credenciais criptografadas em Preferences
+Entrada;Login Google;-;Nível 0 - Login;TELA;Deep link de retorno mantido
+Entrada;Recuperação de senha;/login;Nível 0 - Login;TELA;
+Entrada;Onboarding primeiro acesso;-;Nível 0 - após primeiro login;TELA;
+Transversal;Logout por inatividade e sessão 24h;-;Regra atual mantida;ABSORVIDA;Sem tela nova
+Transversal;Alternância de tema;-;Ajustes - Preferências + atalho no Início;TELA;Dois temas com os mesmos componentes
+Início;Dashboard;/dashboard;Início;TELA;Vira faixas de conteúdo, não grade de cards
+Início;Card de metas do Dashboard;/dashboard;Início - bloco Metas;ABSORVIDA;
+Início;Metas;/metas;Início - Metas;TELA;Acessível também por Ajustes - Planejamento financeiro
+Início;Assistente IA;/ai;Início - Assistente IA;TELA;Tela cheia coberta, sem barra inferior
+Início;Últimas movimentações;/dashboard;Início - bloco + destino Movimentações;ABSORVIDA;
+Início;Central de alertas;/alertas;Início - sino - Notificações;TELA;
+Movimentações;Receitas (entradas);/entradas;Movimentações - aba Receitas;TELA;
+Movimentações;Corridas;/corridas;Movimentações - Receitas - lente Corridas;TELA;Dados de corrida não se fundem com entradas
+Movimentações;Nova receita;/entradas/nova;FAB - Nova receita;TELA;
+Movimentações;Editar receita;/entradas/:id/editar;Detalhe - Editar;TELA;
+Movimentações;Despesas;/despesas;Movimentações - aba Despesas;TELA;
+Movimentações;Despesas do veículo (lista);/despesas/veiculo;Despesas - segmento Veículo;TELA;
+Movimentações;Despesas da família (lista);/despesas/familia;Despesas - segmento Família;TELA;
+Movimentações;Escolha de tipo de despesa;/despesas/nova;FAB - Nova despesa - seletor inline;ABSORVIDA;Deixa de ser tela
+Movimentações;Energia e combustível;/despesas/veiculo/energia-combustivel;Formulário de despesa - campos condicionais;ABSORVIDA;Campos de litros e kWh
+Movimentações;Manutenção;/despesas/veiculo/manutencao;Formulário de despesa - campos condicionais;ABSORVIDA;Campos de km e tipo de serviço
+Movimentações;Pedágio e estacionamento;/despesas/veiculo/pedagio-estacionamento;Formulário de despesa - campos condicionais;ABSORVIDA;
+Movimentações;Financiamento do veículo;/despesas/veiculo/financeiro;Formulário de despesa - campos condicionais;ABSORVIDA;
+Movimentações;Depreciação;/despesas/veiculo/depreciacao;Formulário de despesa - campos condicionais;ABSORVIDA;
+Movimentações;Despesa Moradia;/despesas/familia/moradia;Formulário de despesa - campos condicionais;ABSORVIDA;
+Movimentações;Despesa Alimentação;/despesas/familia/alimentacao;Formulário de despesa - campos condicionais;ABSORVIDA;
+Movimentações;Despesa Saúde;/despesas/familia/saude;Formulário de despesa - campos condicionais;ABSORVIDA;
+Movimentações;Despesa Educação;/despesas/familia/educacao;Formulário de despesa - campos condicionais;ABSORVIDA;
+Movimentações;Despesa Lazer;/despesas/familia/lazer;Formulário de despesa - campos condicionais;ABSORVIDA;
+Movimentações;Despesa Outras;/despesas/familia/outras;Formulário de despesa - campos condicionais;ABSORVIDA;
+Movimentações;Detalhe do lançamento;-;Detalhe do lançamento;TELA;Editar, duplicar, anexar foto, excluir
+Relatórios;Relatórios;/relatorios;Relatórios;TELA;
+Relatórios;Insights;/insights;Relatórios - seções de análise;ABSORVIDA;Blocos preservados
+Relatórios;Comprovante de renda PDF;/relatorios/comprovante-renda;Relatórios - Exportar;TELA;
+Relatórios;Custo por km;-;Relatórios - bloco Custo por km;ABSORVIDA;Consome registros de odômetro
+Relatórios;Custos com energia;-;Relatórios - bloco Energia;ABSORVIDA;
+Relatórios;Resumo mensal;-;Relatórios - bloco Resumo mensal;ABSORVIDA;
+Relatórios;Exportação CSV;-;Relatórios - Exportar;ABSORVIDA;
+Relatórios;Lista de depreciação;/despesas/veiculo/depreciacao/lista;Ajustes - Meu veículo - Depreciação;TELA;
+Relatórios;Lista de financiamento;/despesas/veiculo/financeiro/lista;Ajustes - Meu veículo - Financiamento;TELA;
+Ajustes;Ajustes (home);/ajustes;Ajustes;TELA;Oito grupos em lista
+Ajustes;Veículos;/cadastros/veiculos;Ajustes - Meu veículo;TELA;
+Ajustes;Odômetro;/lancamentos/odometro;Ajustes - Meu veículo - Registros de odômetro;TELA;Deixa de ser destino de primeiro nível
+Ajustes;Alertas de manutenção;/alertas/manutencao;Ajustes - Meu veículo;TELA;
+Ajustes;Metas (gestão);/metas;Ajustes - Planejamento financeiro;TELA;Mesma tela do Início
+Ajustes;Lembretes de despesas;/alertas/despesas;Ajustes - Recorrências e parcelas;TELA;
+Ajustes;Plataformas e Categorias;/cadastros/plataformas;Ajustes - Plataformas e categorias;TELA;
+Ajustes;Recorrências;/cadastros/recorrencias;Ajustes - Recorrências e parcelas;TELA;
+Ajustes;Preferências;/cadastros/preferencias;Ajustes - Preferências;TELA;
+Ajustes;Importar extrato;/importar-extrato;Ajustes - Importação de extratos;TELA;Parser de extrato preservado
+Ajustes;FAQ;/faq;Ajustes - Ajuda e suporte;TELA;
+Ajustes;Suporte;/suporte;Ajustes - Ajuda e suporte;TELA;
+Ajustes;Biometria;-;Ajustes - Privacidade e segurança;TELA;
+Ajustes;Política de Privacidade;/politicas/privacidade;Ajustes - Privacidade e segurança;TELA;
+Ajustes;Termos de Uso;/politicas/termos;Ajustes - Privacidade e segurança;TELA;
+Ajustes;LGPD;/politicas/lgpd;Ajustes - Privacidade e segurança;TELA;
+Ajustes;Nota por foto;/lancamentos/nota;Anexo dentro de qualquer lançamento;ABSORVIDA;Deixa de ser tela
+Ação global;Menu de novo lançamento;-;FAB (+) - Bottom Sheet;TELA;Nova receita, nova despesa, lançamento por voz

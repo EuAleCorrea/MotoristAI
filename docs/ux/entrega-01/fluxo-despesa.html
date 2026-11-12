@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>MotoristAI — Fluxo de nova despesa</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<style>
+  html,body{margin:0;padding:28px 32px;background:#ffffff;font-family:'Segoe UI',system-ui,sans-serif;}
+  h1{font-size:20px;margin:0 0 2px;color:#0B1929;font-weight:600}
+  .sub{font-size:12px;color:#5A6B80;margin-bottom:14px}
+  .mermaid{display:flex;justify-content:center}
+</style>
+</head>
+<body>
+<h1>Fluxo — Nova despesa com preenchimento progressivo</h1>
+<div class="sub">Entrega 01 · uma tela, três níveis de profundidade · salvar já habilitado no nível 1</div>
+<pre class="mermaid">
+flowchart TD
+  A["Formulário de despesa · tela única"] --> B["NÍVEL 1 · essencial<br/>Segmento · Categoria · Valor"]
+  B --> C["NÍVEL 2 · contexto<br/>Data (hoje por padrão) · Forma de pagamento"]
+  C --> D["NÍVEL 3 · detalhes opcionais<br/>Odômetro e km · Litros ou kWh · Parcela<br/>Plataforma · Observação · Anexo de foto"]
+  D --> E["Concluir"]
+  E --> F["Snackbar: despesa salva · Desfazer"]
+
+  B -.-> G["Segmento Veículo<br/>Energia · Manutenção · Pedágio<br/>Financiamento · Depreciação"]
+  B -.-> H["Segmento Família<br/>Moradia · Alimentação · Saúde<br/>Educação · Lazer · Outras"]
+</pre>
+<script>
+mermaid.initialize({
+  startOnLoad: true,
+  theme: 'base',
+  themeVariables: {
+    primaryColor: '#E9F2FF',
+    primaryTextColor: '#0B1929',
+    primaryBorderColor: '#0A84FF',
+    lineColor: '#93A5BC',
+    secondaryColor: '#F2F2F7',
+    tertiaryColor: '#FFFFFF',
+    fontSize: '15px',
+    fontFamily: 'Segoe UI, system-ui, sans-serif'
+  },
+  flowchart: { curve: 'basis', nodeSpacing: 30, rankSpacing: 50, padding: 10 }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>MotoristAI — Fluxo do botão de novo lançamento</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<style>
+  html,body{margin:0;padding:28px 32px;background:#ffffff;font-family:'Segoe UI',system-ui,sans-serif;}
+  h1{font-size:20px;margin:0 0 2px;color:#0B1929;font-weight:600}
+  .sub{font-size:12px;color:#5A6B80;margin-bottom:14px}
+  .mermaid{display:flex;justify-content:center}
+</style>
+</head>
+<body>
+<h1>Fluxo — FAB (+) e menu de novo lançamento</h1>
+<div class="sub">Entrega 01 · o sheet não é destino: fechar retorna ao estado anterior · voz nunca grava sem revisão</div>
+<pre class="mermaid">
+flowchart TD
+  A["Toque no FAB (+)"] --> B["Bottom Sheet de novo lançamento"]
+  B --> C{"Escolha"}
+  C -->|Nova receita| D["Formulário de receita"]
+  C -->|Nova despesa| E["Formulário de despesa"]
+  C -->|Lançamento por voz| F["Captura de voz"]
+  C -->|Toque fora ou arrastar| G["Fecha sem ação"]
+
+  F --> H["Gravando"]
+  H --> I["Transcrição revisável"]
+  I -->|Confirmar| J["Formulário pré-preenchido"]
+  D --> K["Salvar"]
+  E --> K
+  J --> K
+  K --> L["Retorna ao destino de origem"]
+  L --> M["Snackbar: lançamento salvo · Desfazer"]
+</pre>
+<script>
+mermaid.initialize({
+  startOnLoad: true,
+  theme: 'base',
+  themeVariables: {
+    primaryColor: '#E9F2FF',
+    primaryTextColor: '#0B1929',
+    primaryBorderColor: '#0A84FF',
+    lineColor: '#93A5BC',
+    secondaryColor: '#F2F2F7',
+    tertiaryColor: '#FFFFFF',
+    fontSize: '15px',
+    fontFamily: 'Segoe UI, system-ui, sans-serif'
+  },
+  flowchart: { curve: 'basis', nodeSpacing: 30, rankSpacing: 46, padding: 10 }
+});
+</script>
+</body>
+</html>

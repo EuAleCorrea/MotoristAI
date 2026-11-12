@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>MotoristAI — Mapa de Navegação</title>
+<style>
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:32px 36px 40px;background:#fff;font-family:'Segoe UI',system-ui,sans-serif;color:#0B1929;}
+  h1{font-size:22px;margin:0 0 4px;font-weight:600;}
+  .sub{font-size:12.5px;color:#5A6B80;margin-bottom:22px;}
+
+  .section{border:1px solid #D6E0EC;border-radius:14px;margin-bottom:16px;overflow:hidden;background:#fff;}
+  .sec-head{display:flex;align-items:center;gap:10px;background:#E9F2FF;padding:11px 16px;border-bottom:1px solid #D6E0EC;}
+  .badge{width:24px;height:24px;border-radius:7px;background:#0A84FF;color:#fff;font-size:13px;font-weight:700;
+         display:flex;align-items:center;justify-content:center;flex:0 0 auto;}
+  .sec-title{font-size:15px;font-weight:600;}
+  .sec-note{font-size:11.5px;color:#5A6B80;margin-left:auto;}
+  .sec-body{padding:12px 18px 14px;}
+
+  .row{display:grid;grid-template-columns:290px 36px 1fr;align-items:stretch;}
+  .row + .row{margin-top:5px;}
+  .conn{position:relative;}
+  .row.single .conn::before{content:'';position:absolute;left:0;right:0;top:50%;border-top:1px solid #C3D2E4;}
+  .row.multi .conn::before{content:'';position:absolute;left:0;top:24px;bottom:24px;border-left:1px solid #C3D2E4;}
+  .row.multi .conn::after{content:'';position:absolute;left:0;top:50%;width:36px;border-top:1px solid #C3D2E4;}
+
+  .lv2{align-self:center;background:#F4F8FF;border:1px solid #B9D4F5;border-radius:9px;
+        padding:8px 12px;font-size:13.5px;font-weight:600;text-align:center;}
+  .lv2.leaf{background:#F7F9FC;border-color:#DCE5EF;font-weight:500;}
+  .kv{display:block;font-size:11px;font-weight:500;color:#6B7F96;margin-top:2px;}
+
+  .children{display:flex;flex-direction:column;gap:6px;justify-content:center;padding:4px 0;}
+  .ch{position:relative;padding:7px 12px 7px 26px;border:1px dashed #C3D2E4;border-radius:8px;
+       font-size:12.5px;color:#33475C;background:#fff;}
+  .ch::before{content:'';position:absolute;left:0;top:50%;width:26px;border-top:1px solid #C3D2E4;}
+  .ch.plain{padding-left:12px;}
+  .ch.plain::before{display:none;}
+
+  .global{border-color:#0A84FF;background:#FBFDFF;}
+  .global .sec-head{background:#0A84FF;}
+  .global .sec-head .sec-title,.global .sec-head .sec-note{color:#fff;}
+  .global .sec-head .badge{background:#fff;color:#0A84FF;}
+
+  .legend{display:flex;gap:22px;font-size:11.5px;color:#5A6B80;margin-top:18px;}
+  .legend span{display:flex;align-items:center;gap:7px;}
+  .sw{width:26px;height:12px;border-radius:6px;}
+  .sw.a{background:#F4F8FF;border:1px solid #B9D4F5;}
+  .sw.b{background:#F7F9FC;border:1px solid #DCE5EF;}
+  .sw.c{background:#fff;border:1px dashed #C3D2E4;}
+</style>
+</head>
+<body>
+<h1>MotoristAI — Mapa de Navegação</h1>
+<div class="sub">Entrega 01 · Arquitetura e Navegação · quatro destinos fixos na barra inferior + ação global (+) · nenhuma tela existente fica sem destino</div>
+
+<div class="section">
+  <div class="sec-head"><div class="badge">0</div><div class="sec-title">ENTRADA</div><div class="sec-note">fora das abas · sem barra inferior</div></div>
+  <div class="sec-body">
+    <div class="row"><div class="lv2 leaf">Login<span class="kv">e-mail e senha · biometria · Google</span></div><div class="conn"></div><div></div></div>
+    <div class="row"><div class="lv2 leaf">Recuperação de senha</div><div class="conn"></div><div></div></div>
+    <div class="row"><div class="lv2 leaf">Onboarding<span class="kv">primeiro acesso</span></div><div class="conn"></div><div></div></div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="sec-head"><div class="badge">1</div><div class="sec-title">INÍCIO</div><div class="sec-note">resumo do dia · metas · últimos lançamentos</div></div>
+  <div class="sec-body">
+    <div class="row"><div class="lv2">Notificações<span class="kv">sino global</span></div><div class="conn"></div><div></div></div>
+    <div class="row"><div class="lv2">Assistente IA</div><div class="conn"></div><div></div></div>
+    <div class="row"><div class="lv2">Metas</div><div class="conn"></div><div></div></div>
+    <div class="row"><div class="lv2">Últimas movimentações<span class="kv">ver todas → destino 2</span></div><div class="conn"></div><div></div></div>
+    <div class="row"><div class="lv2">Atalhos rápidos<span class="kv">odômetro · importar extrato</span></div><div class="conn"></div><div></div></div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="sec-head"><div class="badge">2</div><div class="sec-title">MOVIMENTAÇÕES</div><div class="sec-note">lista unificada · filtros · detalhe</div></div>
+  <div class="sec-body">
+    <div class="row multi">
+      <div class="lv2">Receitas</div><div class="conn"></div>
+      <div class="children">
+        <div class="ch">Lente por plataforma</div>
+        <div class="ch">Lente Corridas</div>
+      </div>
+    </div>
+    <div class="row multi">
+      <div class="lv2">Despesas</div><div class="conn"></div>
+      <div class="children">
+        <div class="ch">Segmento Veículo</div>
+        <div class="ch">Segmento Família</div>
+      </div>
+    </div>
+    <div class="row multi">
+      <div class="lv2">Detalhe do lançamento</div><div class="conn"></div>
+      <div class="children">
+        <div class="ch">Editar e duplicar</div>
+        <div class="ch">Anexar foto ou nota</div>
+        <div class="ch">Excluir</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="sec-head"><div class="badge">3</div><div class="sec-title">RELATÓRIOS</div><div class="sec-note">análises · exportações · filtro de período</div></div>
+  <div class="sec-body">
+    <div class="row"><div class="lv2 leaf">Visão geral e indicadores</div><div class="conn"></div><div></div></div>
+    <div class="row"><div class="lv2 leaf">Gráficos e categorias</div><div class="conn"></div><div></div></div>
+    <div class="row"><div class="lv2 leaf">Custo por km</div><div class="conn"></div><div></div></div>
+    <div class="row"><div class="lv2 leaf">Custos com energia</div><div class="conn"></div><div></div></div>
+    <div class="row"><div class="lv2 leaf">Resumo mensal</div><div class="conn"></div><div></div></div>
+    <div class="row multi">
+      <div class="lv2">Exportar</div><div class="conn"></div>
+      <div class="children">
+        <div class="ch">Comprovante de renda (PDF)</div>
+        <div class="ch">CSV</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="sec-head"><div class="badge">4</div><div class="sec-title">AJUSTES</div><div class="sec-note">oito grupos · cada grupo abre suas telas secundárias</div></div>
+  <div class="sec-body">
+    <div class="row multi">
+      <div class="lv2">Meu veículo</div><div class="conn"></div>
+      <div class="children">
+        <div class="ch">Veículos</div>
+        <div class="ch">Registros de odômetro</div>
+        <div class="ch">Alertas de manutenção</div>
+        <div class="ch">Financiamento e depreciação</div>
+      </div>
+    </div>
+    <div class="row multi">
+      <div class="lv2">Planejamento financeiro</div><div class="conn"></div>
+      <div class="children"><div class="ch">Metas</div></div>
+    </div>
+    <div class="row multi">
+      <div class="lv2">Plataformas e categorias</div><div class="conn"></div>
+      <div class="children">
+        <div class="ch">Plataformas</div>
+        <div class="ch">Categorias</div>
+      </div>
+    </div>
+    <div class="row multi">
+      <div class="lv2">Recorrências e parcelas</div><div class="conn"></div>
+      <div class="children">
+        <div class="ch">Recorrências</div>
+        <div class="ch">Lembretes de despesas</div>
+      </div>
+    </div>
+    <div class="row multi">
+      <div class="lv2">Preferências</div><div class="conn"></div>
+      <div class="children">
+        <div class="ch">Tema</div>
+        <div class="ch">Notificações</div>
+      </div>
+    </div>
+    <div class="row"><div class="lv2 leaf">Importação de extratos</div><div class="conn"></div><div></div></div>
+    <div class="row multi">
+      <div class="lv2">Ajuda e suporte</div><div class="conn"></div>
+      <div class="children">
+        <div class="ch">FAQ</div>
+        <div class="ch">Suporte</div>
+      </div>
+    </div>
+    <div class="row multi">
+      <div class="lv2">Privacidade e segurança</div><div class="conn"></div>
+      <div class="children">
+        <div class="ch">Biometria</div>
+        <div class="ch">Políticas, Termos e LGPD</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section global">
+  <div class="sec-head"><div class="badge">+</div><div class="sec-title">AÇÃO GLOBAL — FAB CENTRAL</div><div class="sec-note">disponível nos quatro destinos · abre Bottom Sheet</div></div>
+  <div class="sec-body">
+    <div class="row"><div class="lv2">Nova receita</div><div class="conn"></div><div></div></div>
+    <div class="row"><div class="lv2">Nova despesa</div><div class="conn"></div><div></div></div>
+    <div class="row"><div class="lv2">Lançamento por voz</div><div class="conn"></div><div></div></div>
+  </div>
+</div>
+
+<div class="legend">
+  <span><i class="sw a"></i> nó de nível 1 e 2</span>
+  <span><i class="sw b"></i> tela folha</span>
+  <span><i class="sw c"></i> tela de nível 3</span>
+</div>
+</body>
+</html>
