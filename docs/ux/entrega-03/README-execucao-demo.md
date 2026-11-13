@@ -75,14 +75,43 @@ isola corretamente os testes desta entrega.
 ## 6. Evidências capturadas
 
 Todas em `docs/ux/entrega-03/`, capturadas em emulador (`emulator-5554`,
-Android 37, 1080×2400):
+Android 37, 1080×2400). Os links abaixo são relativos e funcionam no GitHub.
 
-| Arquivo | Cenário |
+| Cenário | Arquivo |
 |:--|:--|
-| `emulador-light-411dp.png` | White Mode, largura nativa (411 dp) |
-| `emulador-dark-411dp.png` | Dark Mode, largura nativa (411 dp) |
-| `emulador-dark-320dp.png` | Dark Mode, 320 dp |
-| `emulador-dark-360dp.png` | Dark Mode, 360 dp |
-| `emulador-light-480dp.png` | White Mode, 480 dp |
-| `emulador-light-font150.png` | 150 % de escala de fonte |
-| `emulador-light-font200.png` | 200 % de escala de fonte |
+| White Mode, largura nativa (411 dp) | [emulador-light-411dp.png](emulador-light-411dp.png) |
+| Dark Mode, largura nativa (411 dp) | [emulador-dark-411dp.png](emulador-dark-411dp.png) |
+| Dark Mode, 320 dp | [emulador-dark-320dp.png](emulador-dark-320dp.png) |
+| Dark Mode, 360 dp | [emulador-dark-360dp.png](emulador-dark-360dp.png) |
+| White Mode, 480 dp | [emulador-light-480dp.png](emulador-light-480dp.png) |
+| Fonte 150 % | [emulador-light-font150.png](emulador-light-font150.png) |
+| Fonte 200 % | [emulador-light-font200.png](emulador-light-font200.png) |
+
+### White Mode — 411 dp
+
+![White Mode 411dp](emulador-light-411dp.png)
+
+### Dark Mode — 411 dp
+
+![Dark Mode 411dp](emulador-dark-411dp.png)
+
+### Dark Mode — 320 dp
+
+![Dark Mode 320dp](emulador-dark-320dp.png)
+
+### Dark Mode — 360 dp
+
+![Dark Mode 360dp](emulador-dark-360dp.png)
+
+### White Mode — 480 dp
+
+![White Mode 480dp](emulador-light-480dp.png)
+
+### Escala de fonte 150 %
+
+![Fonte 150%](emulador-light-font150.png)
+
+### Escala de fonte 200 %
+
+![Fonte 200%](emulador-light-font200.png)
+

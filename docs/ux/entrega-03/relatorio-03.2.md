@@ -114,17 +114,45 @@ alterada** por estar fora do escopo autorizado.
 
 ## 5. Validação visual (capturas reais do emulador)
 
-Arquivos em `docs/ux/entrega-03/`.
+Arquivos em `docs/ux/entrega-03/` (links relativos — abrem no GitHub e no navegador local).
 
 | Cenário | Arquivo | Resultado observado |
 |:--|:--|:--|
-| White Mode, 411 dp | `emulador-light-411dp.png` | cabeçalho com carro, subtítulo, seletor em 1 linha, cards, metas, acessos, barra |
-| Dark Mode, 411 dp | `emulador-dark-411dp.png` | mesmos blocos, paleta escura consistente |
-| Dark Mode, 320 dp | `emulador-dark-320dp.png` | seletor empilha, sem corte de texto |
-| Dark Mode, 360 dp | `emulador-dark-360dp.png` | subtítulo quebra em 2 linhas sem truncar |
-| White Mode, 480 dp | `emulador-light-480dp.png` | rótulos completos na barra inferior |
-| Fonte 150 % | `emulador-light-font150.png` | nada truncado |
-| Fonte 200 % | `emulador-light-font200.png` | seletor empilha, barra em rótulo curto, valores monetários inteiros |
+| White Mode, 411 dp | [emulador-light-411dp.png](emulador-light-411dp.png) | cabeçalho com carro, subtítulo, seletor em 1 linha, cards, metas, acessos, barra |
+| Dark Mode, 411 dp | [emulador-dark-411dp.png](emulador-dark-411dp.png) | mesmos blocos, paleta escura consistente |
+| Dark Mode, 320 dp | [emulador-dark-320dp.png](emulador-dark-320dp.png) | seletor empilha, sem corte de texto |
+| Dark Mode, 360 dp | [emulador-dark-360dp.png](emulador-dark-360dp.png) | subtítulo quebra em 2 linhas sem truncar |
+| White Mode, 480 dp | [emulador-light-480dp.png](emulador-light-480dp.png) | rótulos completos na barra inferior |
+| Fonte 150 % | [emulador-light-font150.png](emulador-light-font150.png) | nada truncado |
+| Fonte 200 % | [emulador-light-font200.png](emulador-light-font200.png) | seletor empilha, barra em rótulo curto, valores monetários inteiros |
+
+### White Mode — 411 dp
+
+![White Mode 411dp](emulador-light-411dp.png)
+
+### Dark Mode — 411 dp
+
+![Dark Mode 411dp](emulador-dark-411dp.png)
+
+### Dark Mode — 320 dp
+
+![Dark Mode 320dp](emulador-dark-320dp.png)
+
+### Dark Mode — 360 dp
+
+![Dark Mode 360dp](emulador-dark-360dp.png)
+
+### White Mode — 480 dp
+
+![White Mode 480dp](emulador-light-480dp.png)
+
+### Escala de fonte 150 %
+
+![Fonte 150%](emulador-light-font150.png)
+
+### Escala de fonte 200 %
+
+![Fonte 200%](emulador-light-font200.png)
 
 > As imagens `preview-*.png` de entregas anteriores são renderizações HTML de
 > tokens. As imagens `emulador-*.png` desta entrega são **capturas reais** do
