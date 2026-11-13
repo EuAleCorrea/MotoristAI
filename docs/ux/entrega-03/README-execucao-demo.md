@@ -77,6 +77,12 @@ isola corretamente os testes desta entrega.
 Todas em `docs/ux/entrega-03/`, capturadas em emulador (`emulator-5554`,
 Android 37, 1080×2400). Os links abaixo são relativos e funcionam no GitHub.
 
+> [!WARNING]
+> Capturar com `adb exec-out screencap -p > arquivo.png` **no PowerShell 5.1 corrompe o
+> arquivo**: o `>` grava em UTF-16LE e o PNG vira texto. Use sempre
+> `adb shell screencap -p /sdcard/shot.png && adb pull /sdcard/shot.png <destino>`,
+> que é binário-seguro. Um PNG válido começa com `89 50 4E 47 0D 0A 1A 0A`.
+
 | Cenário | Arquivo |
 |:--|:--|
 | White Mode, largura nativa (411 dp) | [emulador-light-411dp.png](emulador-light-411dp.png) |
