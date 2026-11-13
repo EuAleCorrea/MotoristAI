@@ -1,0 +1,19 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="MotoristAI Demo Home" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
+    <module name="app" />
+    <option name="DEPLOY" value="true" />
+    <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
+    <option name="DEPLOY_APK_WITHOUT_UNINSTALL" value="true" />
+    <option name="PM_INSTALL_OPTIONS" value="" />
+    <option name="ACTIVITY_EXTRA_FLAGS" value="" />
+    <option name="MODE" value="specific_activity" />
+    <option name="ACTIVITY_CLASS" value="com.motoristai.app.ui.demo.DemoHomeActivity" />
+    <option name="TARGET_SELECTION_MODE" value="DEVICE_AND_SNAPSHOT_COMBO_BOX" />
+    <option name="CLEAR_LOGCAT" value="false" />
+    <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
+    <option name="FILTER_LOGCAT_AUTOMATICALLY" value="true" />
+    <method v="2">
+      <option name="AndroidGradleBuildConfiguration" />
+    </method>
+  </configuration>
+</component>

@@ -33,6 +33,20 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:exported="true" />
 
+        <!--
+            Activity exclusiva de demonstração da Home nativa (Entrega 03.2).
+            NÃO é a entrada do app: não declara MAIN/LAUNCHER e não substitui a MainActivity
+            nem o WebView de produção. Aberta via Android Studio (run configuration
+            "MotoristAI Demo Home") ou por:
+            adb shell am start -n com.motoristai.app/com.motoristai.app.ui.demo.DemoHomeActivity
+            exported=true apenas para permitir o launch por adb a partir do host de desenvolvimento.
+        -->
+        <activity
+            android:name=".ui.demo.DemoHomeActivity"
+            android:label="MotoristAI Demo Home"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:exported="true" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"

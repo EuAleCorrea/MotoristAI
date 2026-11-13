@@ -25,8 +25,13 @@ object NavigationMetrics {
     const val FAB_BOTTOM_GAP_DP = 28f
     const val CONTENT_BOTTOM_GAP_DP = 8f
 
-    /** Abaixo desta largura de slot, os rótulos passam para a forma curta. */
-    const val SHORT_LABEL_THRESHOLD_DP = 68f
+    /**
+     * Abaixo desta largura de slot, os rótulos passam para a forma curta.
+     *
+     * 92 dp é a largura necessária para "Movimentações" em `label` (12 sp) caber inteiro;
+     * abaixo disso o rótulo completo seria truncado por `TextOverflow.Ellipsis`.
+     */
+    const val SHORT_LABEL_THRESHOLD_DP = 92f
 
     /** Acima desta escala de fonte, rótulos longos não cabem com folga. */
     const val MAX_FULL_LABEL_FONT_SCALE = 1.25f

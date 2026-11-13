@@ -45,8 +45,10 @@ class NavigationMetricsTest {
 
     @Test
     fun `short labels are used only when needed`() {
+        // "Movimentações" em label (12 sp) precisa de ~92 dp: abaixo disso o texto é truncado.
         assertTrue(NavigationMetrics.compute(320f, gestureInset).useShortLabels)
-        assertFalse(NavigationMetrics.compute(360f, gestureInset).useShortLabels)
+        assertTrue(NavigationMetrics.compute(360f, gestureInset).useShortLabels)
+        assertTrue(NavigationMetrics.compute(393f, gestureInset).useShortLabels)
         assertFalse(NavigationMetrics.compute(480f, gestureInset).useShortLabels)
     }
 

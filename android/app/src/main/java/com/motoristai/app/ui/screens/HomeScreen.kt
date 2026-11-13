@@ -5,12 +5,14 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -47,6 +49,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
@@ -168,7 +171,8 @@ fun HomeScreen(
                             onPeriodSelected = onPeriodSelected,
                             monthLabel = state.currentMonthLabel,
                             onPreviousMonth = { onMonthChanged(-1) },
-                            onNextMonth = { onMonthChanged(1) }
+                            onNextMonth = { onMonthChanged(1) },
+                            fontScale = fontScale
                         )
 
                         // 3. Card de Saldo
@@ -180,6 +184,8 @@ fun HomeScreen(
                         )
 
                         // 4. Indicadores (Receitas e Despesas)
+                        // Nota: sem IntrinsicSize aqui — MoneyText usa BoxWithConstraints, que não
+                        // suporta medição por conteúdo intrínseco (SubcomposeLayout).
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -189,13 +195,15 @@ fun HomeScreen(
                                     title = "Receitas",
                                     cents = state.revenueCents,
                                     valueColor = MotoristAIThemeTokens.colors.successText,
+                                    icon = MotoristAIIcons.TrendingUp,
                                     modifier = Modifier.fillMaxWidth()
                                 )
                                 Text(
                                     text = state.revenueSubtitle,
                                     style = MotoristAIThemeTokens.typography.caption,
                                     color = MotoristAIThemeTokens.colors.textMuted,
-                                    modifier = Modifier.padding(start = 4.dp, top = 2.dp)
+                                    maxLines = 2,
+                                    modifier = Modifier.padding(start = 4.dp, top = 4.dp)
                                 )
                             }
 
@@ -204,13 +212,15 @@ fun HomeScreen(
                                     title = "Despesas",
                                     cents = state.expenseCents,
                                     valueColor = MotoristAIThemeTokens.colors.errorText,
+                                    icon = MotoristAIIcons.TrendingDown,
                                     modifier = Modifier.fillMaxWidth()
                                 )
                                 Text(
                                     text = state.expenseSubtitle,
                                     style = MotoristAIThemeTokens.typography.caption,
                                     color = MotoristAIThemeTokens.colors.textMuted,
-                                    modifier = Modifier.padding(start = 4.dp, top = 2.dp)
+                                    maxLines = 2,
+                                    modifier = Modifier.padding(start = 4.dp, top = 4.dp)
                                 )
                             }
                         }
@@ -267,10 +277,11 @@ private fun HomeHeader(
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Row(
+            modifier = Modifier.weight(1f),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
@@ -282,13 +293,13 @@ private fun HomeHeader(
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    imageVector = Icons.Default.Star,
+                    imageVector = MotoristAIIcons.Car,
                     contentDescription = null,
                     tint = Color.White,
                     modifier = Modifier.size(22.dp)
                 )
             }
-            Column {
+            Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = "MotoristAI",
                     style = MotoristAIThemeTokens.typography.caption,
@@ -297,12 +308,18 @@ private fun HomeHeader(
                 Text(
                     text = "Início",
                     style = MotoristAIThemeTokens.typography.title1,
-                    color = MotoristAIThemeTokens.colors.onBackground
+                    color = MotoristAIThemeTokens.colors.onBackground,
+                    modifier = Modifier.testTag("home_header_title")
+                )
+                Text(
+                    text = "Resumo das suas operações",
+                    style = MotoristAIThemeTokens.typography.bodySmall,
+                    color = MotoristAIThemeTokens.colors.textMuted
                 )
             }
         }
 
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
             IconButton(
                 onClick = onNotificationClick,
                 modifier = Modifier
@@ -347,97 +364,158 @@ private fun HomeHeader(
     }
 }
 
+/**
+ * Seletor de período: abas Hoje/Mês + navegador de mês.
+ *
+ * Em larguras apertadas ou fontes ampliadas os dois blocos passam a ocupar linhas
+ * separadas, evitando que o navegador de mês seja empurrado para fora da tela.
+ */
 @Composable
 private fun PeriodSelectorRow(
     selectedPeriod: HomePeriod,
     onPeriodSelected: (HomePeriod) -> Unit,
     monthLabel: String,
     onPreviousMonth: () -> Unit,
-    onNextMonth: () -> Unit
+    onNextMonth: () -> Unit,
+    fontScale: Float
 ) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Row(
-                modifier = Modifier
-                    .height(40.dp)
-                    .clip(RoundedCornerShape(10.dp))
-                    .background(MotoristAIThemeTokens.colors.surfaceVariant)
-                    .border(1.dp, MotoristAIThemeTokens.colors.border, RoundedCornerShape(10.dp))
-                    .padding(2.dp)
-            ) {
-                val isHoje = selectedPeriod == HomePeriod.HOJE
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(36.dp)
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(if (isHoje) MotoristAIThemeTokens.colors.accentSubtle else Color.Transparent)
-                        .clickable { onPeriodSelected(HomePeriod.HOJE) }
-                        .semantics { contentDescription = "Período Hoje, ${if (isHoje) "selecionado" else ""}" },
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "Hoje",
-                        style = MotoristAIThemeTokens.typography.label,
-                        color = if (isHoje) MotoristAIThemeTokens.colors.primary else MotoristAIThemeTokens.colors.onSurfaceVariant
-                    )
-                }
+    BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
+        val stacked = maxWidth < 300.dp || fontScale > 1.5f
 
-                val isMes = selectedPeriod == HomePeriod.MES
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(36.dp)
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(if (isMes) MotoristAIThemeTokens.colors.accentSubtle else Color.Transparent)
-                        .clickable { onPeriodSelected(HomePeriod.MES) }
-                        .semantics { contentDescription = "Período Mês, ${if (isMes) "selecionado" else ""}" },
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "Mês",
-                        style = MotoristAIThemeTokens.typography.label,
-                        color = if (isMes) MotoristAIThemeTokens.colors.primary else MotoristAIThemeTokens.colors.onSurfaceVariant
-                    )
-                }
-            }
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .height(40.dp)
-                    .clip(RoundedCornerShape(10.dp))
-                    .background(MotoristAIThemeTokens.colors.surface)
-                    .border(1.dp, MotoristAIThemeTokens.colors.border, RoundedCornerShape(10.dp))
-                    .padding(horizontal = 4.dp)
-            ) {
-                IconButton(onClick = onPreviousMonth, modifier = Modifier.size(36.dp)) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
-                        contentDescription = "Mês anterior",
-                        tint = MotoristAIThemeTokens.colors.textMuted,
-                        modifier = Modifier.size(18.dp)
-                    )
-                }
-                Text(
-                    text = monthLabel,
-                    style = MotoristAIThemeTokens.typography.label,
-                    color = MotoristAIThemeTokens.colors.onSurface,
-                    modifier = Modifier.padding(horizontal = 4.dp)
+        if (stacked) {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                PeriodTabs(
+                    selectedPeriod = selectedPeriod,
+                    onPeriodSelected = onPeriodSelected,
+                    modifier = Modifier.fillMaxWidth()
                 )
-                IconButton(onClick = onNextMonth, modifier = Modifier.size(36.dp)) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                        contentDescription = "Próximo mês",
-                        tint = MotoristAIThemeTokens.colors.textMuted,
-                        modifier = Modifier.size(18.dp)
-                    )
-                }
+                MonthNavigator(
+                    monthLabel = monthLabel,
+                    onPreviousMonth = onPreviousMonth,
+                    onNextMonth = onNextMonth,
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
+        } else {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                PeriodTabs(
+                    selectedPeriod = selectedPeriod,
+                    onPeriodSelected = onPeriodSelected,
+                    modifier = Modifier.weight(1f)
+                )
+                MonthNavigator(
+                    monthLabel = monthLabel,
+                    onPreviousMonth = onPreviousMonth,
+                    onNextMonth = onNextMonth
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun PeriodTabs(
+    selectedPeriod: HomePeriod,
+    onPeriodSelected: (HomePeriod) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .height(48.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .background(MotoristAIThemeTokens.colors.surfaceVariant)
+            .border(1.dp, MotoristAIThemeTokens.colors.border, RoundedCornerShape(12.dp))
+            .padding(4.dp)
+    ) {
+        PeriodTab(
+            label = "Hoje",
+            selected = selectedPeriod == HomePeriod.HOJE,
+            onClick = { onPeriodSelected(HomePeriod.HOJE) },
+            modifier = Modifier.weight(1f)
+        )
+        PeriodTab(
+            label = "Mês",
+            selected = selectedPeriod == HomePeriod.MES,
+            onClick = { onPeriodSelected(HomePeriod.MES) },
+            modifier = Modifier.weight(1f)
+        )
+    }
+}
+
+@Composable
+private fun PeriodTab(
+    label: String,
+    selected: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .height(40.dp)
+            .clip(RoundedCornerShape(9.dp))
+            .background(if (selected) MotoristAIThemeTokens.colors.accentSubtle else Color.Transparent)
+            .clickable(onClick = onClick)
+            .semantics {
+                contentDescription =
+                    "Período $label, ${if (selected) "selecionado" else "não selecionado"}"
+            },
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = label,
+            style = MotoristAIThemeTokens.typography.label,
+            color = if (selected) {
+                MotoristAIThemeTokens.colors.primary
+            } else {
+                MotoristAIThemeTokens.colors.onSurfaceVariant
+            },
+            maxLines = 1
+        )
+    }
+}
+
+@Composable
+private fun MonthNavigator(
+    monthLabel: String,
+    onPreviousMonth: () -> Unit,
+    onNextMonth: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .height(48.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .background(MotoristAIThemeTokens.colors.surface)
+            .border(1.dp, MotoristAIThemeTokens.colors.border, RoundedCornerShape(12.dp)),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        IconButton(onClick = onPreviousMonth, modifier = Modifier.size(48.dp)) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                contentDescription = "Mês anterior",
+                tint = MotoristAIThemeTokens.colors.textMuted,
+                modifier = Modifier.size(20.dp)
+            )
+        }
+        Text(
+            text = monthLabel,
+            style = MotoristAIThemeTokens.typography.label,
+            color = MotoristAIThemeTokens.colors.onSurface,
+            maxLines = 1,
+            modifier = Modifier.padding(horizontal = 2.dp)
+        )
+        IconButton(onClick = onNextMonth, modifier = Modifier.size(48.dp)) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                contentDescription = "Próximo mês",
+                tint = MotoristAIThemeTokens.colors.textMuted,
+                modifier = Modifier.size(20.dp)
+            )
         }
     }
 }
@@ -581,8 +659,12 @@ private fun HomeQuickAccessSection(
                 )
             }
         } else {
+            // Altura intrínseca mínima: todos os cartões ficam com a mesma altura do mais alto,
+            // sem altura fixa e sem sobreposição entre ícone, título e subtítulo.
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(IntrinsicSize.Min),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 QuickAccessCard(
@@ -591,7 +673,7 @@ private fun HomeQuickAccessSection(
                     icon = MotoristAIIcons.Sparkles,
                     tintColor = Color(0xFFA78BFA),
                     onClick = onAiClick,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f).fillMaxHeight()
                 )
                 QuickAccessCard(
                     title = "Odômetro",
@@ -599,7 +681,7 @@ private fun HomeQuickAccessSection(
                     icon = MotoristAIIcons.Odometer,
                     tintColor = MotoristAIThemeTokens.colors.accent,
                     onClick = onOdometerClick,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f).fillMaxHeight()
                 )
                 QuickAccessCard(
                     title = "Importação",
@@ -607,7 +689,7 @@ private fun HomeQuickAccessSection(
                     icon = MotoristAIIcons.Import,
                     tintColor = MotoristAIThemeTokens.colors.success,
                     onClick = onImportClick,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f).fillMaxHeight()
                 )
             }
         }
@@ -625,8 +707,7 @@ private fun QuickAccessCard(
 ) {
     Card(
         modifier = modifier
-            .clickable(onClick = onClick)
-            .wrapContentHeight(),
+            .clickable(onClick = onClick),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = MotoristAIThemeTokens.colors.surface),
         border = androidx.compose.foundation.BorderStroke(1.dp, MotoristAIThemeTokens.colors.border)
